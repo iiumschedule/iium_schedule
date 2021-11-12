@@ -8,6 +8,15 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  and:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: c148d733fd2ec2c95d88e1a7b0014382b21aeb82
+      url: "https://github.com/iqfareez/and.git"
+    source: git
+    version: "1.0.0"
   async:
     dependency: transitive
     description:
@@ -144,6 +153,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
+  recase:
+    dependency: "direct main"
+    description:
+      name: recase
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
