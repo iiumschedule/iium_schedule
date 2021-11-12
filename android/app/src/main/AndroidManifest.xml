@@ -1,7 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.iqfareez.flutter_iium_schedule">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    
    <application
-        android:label="flutter_iium_schedule"
+        android:label="IIUM Schedule"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
