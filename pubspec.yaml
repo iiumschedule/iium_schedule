@@ -38,6 +38,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  import_sorter: ^4.6.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -50,9 +51,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  # - assets/mock_imaalum_data.html
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/icons/explorer-dynamic-colorx.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

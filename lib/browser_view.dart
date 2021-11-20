@@ -1,9 +1,14 @@
-import 'package:albiruni/albiruni.dart';
-import 'package:and/and.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iium_schedule/util/enums.dart';
+
+// 📦 Package imports:
+import 'package:albiruni/albiruni.dart';
+import 'package:and/and.dart';
 import 'package:recase/recase.dart';
+
+// 🌎 Project imports:
+import 'util/enums.dart';
 
 class BrowserView extends StatefulWidget {
   const BrowserView({Key? key, required this.albiruni}) : super(key: key);
@@ -15,15 +20,38 @@ class BrowserView extends StatefulWidget {
 }
 
 class _BrowserViewState extends State<BrowserView> {
+  int _page = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "${widget.albiruni.kulliyah} ${widget.albiruni.session} Sem ${widget.albiruni.semester}"),
+            "${widget.albiruni.kulliyah} Sem ${widget.albiruni.semester} ${widget.albiruni.session}"),
+        actions: [
+          IconButton(
+              onPressed: _page <= 1
+                  ? null
+                  : () {
+                      setState(() {
+                        _page--;
+                      });
+                    },
+              icon: const Icon(Icons.navigate_before_outlined)),
+          Center(child: Text(_page.toString())),
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  setState(() {
+                    _page++;
+                  });
+                });
+              },
+              icon: const Icon(Icons.navigate_next_outlined))
+        ],
       ),
       body: FutureBuilder(
-        future: widget.albiruni.fetch(),
+        future: widget.albiruni.fetch(page: _page, useProxy: kIsWeb),
         builder: (BuildContext context, AsyncSnapshot<List<Subject>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             {
@@ -42,7 +70,20 @@ class _BrowserViewState extends State<BrowserView> {
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
+            if (snapshot.error is NoSubjectsException) {
+              return Center(
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  Image.asset(
+                    'assets/icons/explorer-dynamic-colorx.png',
+                  ),
+                  const Text("Oops, you may want to go back.")
+                ]),
+              );
+            } else {
+              return Center(
+                child: Text(snapshot.error.toString()),
+              );
+            }
           }
 
           return ListView.builder(

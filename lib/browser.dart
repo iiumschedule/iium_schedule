@@ -1,6 +1,11 @@
-import 'package:albiruni/albiruni.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+// 📦 Package imports:
+import 'package:albiruni/albiruni.dart';
+
+// 🌎 Project imports:
 import 'package:flutter_iium_schedule/browser_view.dart';
 
 class Browser extends StatefulWidget {
