@@ -1,19 +1,21 @@
-// 🐦 Flutter imports:
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-// 📦 Package imports:
 import 'package:albiruni/albiruni.dart';
 import 'package:and/and.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:recase/recase.dart';
 
-// 🌎 Project imports:
-import 'util/enums.dart';
+import '../../util/extensions.dart';
+import 'subject_screen.dart';
 
 class BrowserView extends StatefulWidget {
-  const BrowserView({Key? key, required this.albiruni}) : super(key: key);
+  const BrowserView({Key? key, required this.albiruni, this.courseCode})
+      : super(key: key);
 
   final Albiruni albiruni;
+  final String? courseCode;
 
   @override
   _BrowserViewState createState() => _BrowserViewState();
@@ -33,25 +35,22 @@ class _BrowserViewState extends State<BrowserView> {
               onPressed: _page <= 1
                   ? null
                   : () {
-                      setState(() {
-                        _page--;
-                      });
+                      setState(() => _page--);
                     },
               icon: const Icon(Icons.navigate_before_outlined)),
           Center(child: Text(_page.toString())),
           IconButton(
               onPressed: () {
                 setState(() {
-                  setState(() {
-                    _page++;
-                  });
+                  setState(() => _page++);
                 });
               },
               icon: const Icon(Icons.navigate_next_outlined))
         ],
       ),
       body: FutureBuilder(
-        future: widget.albiruni.fetch(page: _page, useProxy: kIsWeb),
+        future: widget.albiruni
+            .fetch(course: widget.courseCode, page: _page, useProxy: kIsWeb),
         builder: (BuildContext context, AsyncSnapshot<List<Subject>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             {
@@ -70,20 +69,46 @@ class _BrowserViewState extends State<BrowserView> {
           }
 
           if (snapshot.hasError) {
-            if (snapshot.error is NoSubjectsException) {
-              return Center(
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  Image.asset(
-                    'assets/icons/explorer-dynamic-colorx.png',
-                  ),
-                  const Text("Oops, you may want to go back.")
-                ]),
-              );
-            } else {
-              return Center(
-                child: Text(snapshot.error.toString()),
-              );
-            }
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Builder(builder: (_) {
+                  if (snapshot.error is NoSubjectsException) {
+                    return Column(mainAxisSize: MainAxisSize.min, children: [
+                      Image.asset(
+                        'assets/icons/explorer-dynamic-colorx.png',
+                      ),
+                      const Text(
+                        "Oops, you may want to go back.",
+                        textAlign: TextAlign.center,
+                      )
+                    ]);
+                  } else if (snapshot.error is EmptyBodyException) {
+                    return Column(mainAxisSize: MainAxisSize.min, children: [
+                      Image.asset(
+                        'assets/icons/file-dynamic-clay.png',
+                      ),
+                      const Text(
+                        "Oops. Subject you're looking for is nowhere to be found. Maybe the course is not offered. Please check for typo just in case.",
+                        textAlign: TextAlign.center,
+                      )
+                    ]);
+                  } else if (snapshot.error is SocketException) {
+                    return Column(mainAxisSize: MainAxisSize.min, children: [
+                      Image.asset(
+                        'assets/icons/wifi-dynamic-color.png',
+                      ),
+                      const Text(
+                        '* Insert apes meme * "Where Internet"',
+                        textAlign: TextAlign.center,
+                      )
+                    ]);
+                  } else {
+                    return Text(snapshot.error.toString());
+                  }
+                }),
+              ),
+            );
           }
 
           return ListView.builder(
@@ -110,10 +135,13 @@ class _BrowserViewState extends State<BrowserView> {
                     InkWell(
                       splashColor: Colors.purple.shade100,
                       onTap: () {
-                        // TODO: Make another screen for details
-                        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Not implemented')));
+                        Navigator.of(context).push(
+                          CupertinoPageRoute(
+                            builder: (_) => SubjectScreen(
+                              snapshot.data![index],
+                            ),
+                          ),
+                        );
                       },
                       child: Column(
                         children: [
@@ -144,10 +172,9 @@ class _BrowserViewState extends State<BrowserView> {
                                     and(
                                       snapshot.data![index].dayTime
                                           .map((e) => ReCase(
-                                                describeEnum(
-                                                  (Day.values[e!.day - 1]),
-                                                ),
+                                                e!.englishDay(),
                                               ).titleCase)
+                                          .toSet()
                                           .toList(),
                                     ),
                                   );
@@ -161,19 +188,26 @@ class _BrowserViewState extends State<BrowserView> {
                                 Icons.person_outline_outlined,
                               ),
                               const SizedBox(width: 5),
-                              Builder(builder: (_) {
-                                if (snapshot.data![index].lect.length > 1) {
-                                  return Text(
-                                    'Multiple lecturers (${snapshot.data![index].lect.length})',
-                                    style: const TextStyle(
-                                        fontStyle: FontStyle.italic),
-                                  );
-                                } else {
-                                  return Text(
+                              Flexible(
+                                child: Builder(builder: (_) {
+                                  if (snapshot.data![index].lect.length > 1) {
+                                    return Text(
+                                      'Multiple lecturers (${snapshot.data![index].lect.length})',
+                                      style: const TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    );
+                                  } else {
+                                    return Text(
                                       ReCase(snapshot.data![index].lect.first)
-                                          .titleCase);
-                                }
-                              })
+                                          .titleCase,
+                                      style: const TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    );
+                                  }
+                                }),
+                              )
                             ],
                           ),
                           Row(
@@ -204,9 +238,11 @@ class _BrowserViewState extends State<BrowserView> {
                               ),
                               const SizedBox(width: 5),
                               // https://stackoverflow.com/a/55173692
-                              Text(snapshot.data![index].chr
-                                  .toString()
-                                  .replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "")),
+                              Text(
+                                snapshot.data![index].chr
+                                    .toString()
+                                    .removeTrailingDotZero(),
+                              ),
                             ],
                           ),
                         ],

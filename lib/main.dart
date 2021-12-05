@@ -1,8 +1,7 @@
-// 🐦 Flutter imports:
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
-import 'package:flutter_iium_schedule/browser.dart';
+import 'body.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,12 +14,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'IIUM Schedule (Preview)',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: const Scaffold(
-        body: Browser(),
-      ),
+      home: const MyBody(),
     );
   }
 }

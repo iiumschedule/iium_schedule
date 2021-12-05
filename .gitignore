@@ -45,3 +45,5 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 .firebase/hosting.YnVpbGRcd2Vi.cache
+cmd.txt
+cubacuba.dart

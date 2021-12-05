@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0-pre.2+2
+version: 1.0.0-pre.3+3
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -34,11 +34,15 @@ dependencies:
   recase: ^4.0.0
   and:
     git: https://github.com/iqfareez/and.git # null-safe
+  flutter_timetable_view:
+    git: https://github.com/yamarkz/flutter_timetable_view.git
+  url_launcher: ^6.0.17
+  package_info_plus: ^1.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  import_sorter: ^4.6.0
+  msix: ^2.6.5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -52,7 +56,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/icons/explorer-dynamic-colorx.png
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -79,3 +83,13 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+msix_config:
+  display_name: IIUM Schedule
+  publisher_display_name: Muhammad Fareez Iqmal
+  identity_name: fareez.flutter.iiumschedule
+  msix_version: 0.1.0.0
+  logo_path: ".\\assets\\logo\\app-logo.png"
+  capabilities: "internetClient"
+  certificate_path: "C:\\Users\\Iqmal\\CERTIFICATE.pfx"
+  certificate_password: 1234
