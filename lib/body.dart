@@ -28,9 +28,9 @@ class MyBody extends StatelessWidget {
                   PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
                   showAboutDialog(
-                    context: context,
-                    applicationVersion: packageInfo.version,
-                  );
+                      context: context,
+                      applicationVersion: packageInfo.version,
+                      applicationLegalese: "2021 \u00a9 Fareez Iqmal");
                   break;
                 case "github":
                   LauncherUrl.open("https://github.com/iqfareez/iium_schedule");
