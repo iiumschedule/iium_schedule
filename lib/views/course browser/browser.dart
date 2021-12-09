@@ -1,12 +1,9 @@
-// 🐦 Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-// 📦 Package imports:
 import 'package:albiruni/albiruni.dart';
 
-// 🌎 Project imports:
-
+import '../../widgets/dropdown_fulltap.dart';
 import 'browser_view.dart';
 
 class Browser extends StatefulWidget {
@@ -71,32 +68,22 @@ class _BrowserState extends State<Browser> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    // https://github.com/flutter/flutter/issues/53634#issuecomment-889227826
-                    // After this issue is solved, we can refactor this code
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: openItemsList,
-                        child: DropdownButtonFormField(
-                          key: dropdownKey,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder()),
-                          value: _selectedKulliyah,
-                          hint: const Text('Select kulliyyah'),
-                          items: _kulliyahs
-                              .map(
-                                (e) =>
-                                    DropdownMenuItem(child: Text(e), value: e),
-                              )
-                              .toList(),
-                          onChanged: (String? value) {
-                            setState(() => _selectedKulliyah = value);
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: DropDownFullTap(
+                        items: _kulliyahs
+                            .map(
+                              (e) => DropdownMenuItem(child: Text(e), value: e),
+                            )
+                            .toList(),
+                        key: dropdownKey,
+                        decoration:
+                            const InputDecoration(border: OutlineInputBorder()),
+                        value: _selectedKulliyah,
+                        hint: const Text('Select kulliyyah'),
+                        onChanged: (String? value) {
+                          setState(() => _selectedKulliyah = value);
+                        },
+                      )),
                   const SizedBox(height: 10),
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
