@@ -1,13 +1,13 @@
 import 'dart:convert';
 
+import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:albiruni/albiruni.dart';
-import 'package:flutter_iium_schedule/util/launcher_url.dart';
 import 'package:url_launcher/link.dart';
-import '../../util/extensions.dart';
+
 import '../../model/basic_subject_model.dart';
+import '../../util/extensions.dart';
 import 'course_validator.dart';
 
 class InputCourse extends StatefulWidget {

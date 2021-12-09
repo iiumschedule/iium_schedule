@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iium_schedule/util/launcher_url.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/link.dart';
 
+import 'util/launcher_url.dart';
 import 'views/course browser/browser.dart';
 import 'views/scheduler/input_course.dart';
 
