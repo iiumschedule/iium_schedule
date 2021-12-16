@@ -1,21 +1,18 @@
+import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:albiruni/albiruni.dart';
-
+import 'input_course.dart';
 import '../../widgets/dropdown_fulltap.dart';
-import 'browser_view.dart';
 
-class Browser extends StatefulWidget {
-  const Browser({Key? key}) : super(key: key);
+class InputScope extends StatefulWidget {
+  const InputScope({Key? key}) : super(key: key);
 
   @override
-  _BrowserState createState() => _BrowserState();
+  _InputScopeState createState() => _InputScopeState();
 }
 
-class _BrowserState extends State<Browser> {
+class _InputScopeState extends State<InputScope> {
   final GlobalKey dropdownKey = GlobalKey();
-  final TextEditingController _searchController = TextEditingController();
   String _session = "2020/2021";
   int _semester = 1;
   String? _selectedKulliyah;
@@ -32,14 +29,13 @@ class _BrowserState extends State<Browser> {
     "KLM",
     "LAWS"
   ];
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Course Browser'),
+          title: const Text('Input Scope'),
         ),
         body: Center(
           child: Container(
@@ -95,21 +91,6 @@ class _BrowserState extends State<Browser> {
                   ),
                   const SizedBox(height: 10),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
-                    child: CupertinoTextField(
-                      maxLength: 9,
-                      controller: _searchController,
-                      placeholder: "Search subject",
-                      clearButtonMode: OverlayVisibilityMode.editing,
-                      selectionControls: MaterialTextSelectionControls(),
-                      onEditingComplete: () {
-                        FocusScope.of(context).unfocus();
-                        _searchController.text =
-                            _searchController.text.toAlbiruniFormat();
-                      },
-                    ),
-                  ),
-                  Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 10),
                     child: MouseRegion(
@@ -117,29 +98,22 @@ class _BrowserState extends State<Browser> {
                           ? SystemMouseCursors.forbidden
                           : SystemMouseCursors.click,
                       child: CupertinoButton.filled(
-                        child: const Text('Get'),
+                        child: const Text('Next'),
                         onPressed: _selectedKulliyah == null
                             ? null
                             : () {
                                 // Redo the same thing as in onEditingComplete above. Just in case.
                                 FocusScope.of(context).unfocus();
-                                String? courseCode;
-                                if (_searchController.text.isNotEmpty) {
-                                  _searchController.text = courseCode =
-                                      _searchController.text.toAlbiruniFormat();
-                                } else {
-                                  courseCode = null;
-                                }
 
                                 Albiruni albiruni = Albiruni(
                                     semester: _semester, session: _session);
                                 Navigator.push(
                                   context,
                                   CupertinoPageRoute(
-                                    builder: (_) => BrowserView(
-                                        kulliyah: _selectedKulliyah!,
-                                        albiruni: albiruni,
-                                        courseCode: courseCode),
+                                    builder: (_) => InputCourse(
+                                      albiruni,
+                                      _selectedKulliyah!,
+                                    ),
                                   ),
                                 );
                               },

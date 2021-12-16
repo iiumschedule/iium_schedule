@@ -11,10 +11,15 @@ import '../../util/extensions.dart';
 import 'subject_screen.dart';
 
 class BrowserView extends StatefulWidget {
-  const BrowserView({Key? key, required this.albiruni, this.courseCode})
+  const BrowserView(
+      {Key? key,
+      required this.albiruni,
+      required this.kulliyah,
+      this.courseCode})
       : super(key: key);
 
   final Albiruni albiruni;
+  final String kulliyah;
   final String? courseCode;
 
   @override
@@ -29,7 +34,7 @@ class _BrowserViewState extends State<BrowserView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "${widget.albiruni.kulliyah} Sem ${widget.albiruni.semester} ${widget.albiruni.session}"),
+            "${widget.kulliyah} Sem ${widget.albiruni.semester} ${widget.albiruni.session}"),
         actions: [
           IconButton(
               onPressed: _page <= 1
@@ -49,8 +54,8 @@ class _BrowserViewState extends State<BrowserView> {
         ],
       ),
       body: FutureBuilder(
-        future: widget.albiruni
-            .fetch(course: widget.courseCode, page: _page, useProxy: kIsWeb),
+        future: widget.albiruni.fetch(widget.kulliyah,
+            course: widget.courseCode, page: _page, useProxy: kIsWeb),
         builder: (BuildContext context, AsyncSnapshot<List<Subject>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             {
@@ -130,10 +135,10 @@ class _BrowserViewState extends State<BrowserView> {
                       ]),
                   childrenPadding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  backgroundColor: Colors.grey.shade100,
+                  // backgroundColor: Colors.grey.shade100,
                   children: [
                     InkWell(
-                      splashColor: Colors.purple.shade100,
+                      // splashColor: Colors.purple.shade100,
                       onTap: () {
                         Navigator.of(context).push(
                           CupertinoPageRoute(

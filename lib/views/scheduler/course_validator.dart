@@ -11,9 +11,16 @@ import '../../model/basic_subject_model.dart';
 late CourseValidatorPass _validatorPass;
 
 class CourseValidator extends StatefulWidget {
-  const CourseValidator({Key? key, required this.subjects}) : super(key: key);
+  const CourseValidator(
+      {Key? key,
+      required this.albiruni,
+      required this.kulliyah,
+      required this.subjects})
+      : super(key: key);
 
   final List<BasicSubjectModel> subjects;
+  final Albiruni albiruni;
+  final String kulliyah;
 
   @override
   _CourseValidatorState createState() => _CourseValidatorState();
@@ -61,7 +68,11 @@ class _CourseValidatorState extends State<CourseValidator> {
           child: ListView.builder(
               itemCount: widget.subjects.length,
               itemBuilder: (_, index) {
-                return SubjectCard(widget.subjects[index], index);
+                return SubjectCard(
+                    albiruni: widget.albiruni,
+                    kulliyah: widget.kulliyah,
+                    subject: widget.subjects[index],
+                    index: index);
               }),
         ),
       ),
@@ -70,22 +81,53 @@ class _CourseValidatorState extends State<CourseValidator> {
 }
 
 class SubjectCard extends StatefulWidget {
-  const SubjectCard(this.subject, this.index, {Key? key}) : super(key: key);
+  const SubjectCard({
+    Key? key,
+    required this.albiruni,
+    required this.kulliyah,
+    required this.subject,
+    required this.index,
+  }) : super(key: key);
 
   final BasicSubjectModel subject;
   final int index;
+  final String kulliyah;
+  final Albiruni albiruni;
 
   @override
   _SubjectCardState createState() => _SubjectCardState();
 }
 
 class _SubjectCardState extends State<SubjectCard> {
-  final Albiruni albirui =
-      Albiruni(kulliyah: 'ENGIN', semester: 1, session: "2021/2022");
+  final GlobalKey dropdownKey = GlobalKey();
 
-  Future<Subject> fetchSubjectData(String courseCode, int? section) async {
-    var fetchedSubjects =
-        await albirui.fetch(course: courseCode, useProxy: kIsWeb);
+  late String _selectedKulliyah;
+  final List<String> _kulliyahs = [
+    "AED",
+    "BRIDG",
+    "CFL",
+    "CCAC",
+    "EDUC",
+    "ENGIN",
+    "ECONS",
+    "KICT",
+    "IRKHS",
+    "KLM",
+    "LAWS"
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedKulliyah = widget.kulliyah;
+  }
+
+  final Albiruni albirui = Albiruni(semester: 1, session: "2021/2022");
+
+  Future<Subject> fetchSubjectData(
+      String kulliyah, String courseCode, int? section) async {
+    var fetchedSubjects = await albirui.fetch(_selectedKulliyah,
+        course: courseCode, useProxy: kIsWeb);
     return fetchedSubjects.firstWhere((element) => element.sect == section);
   }
 
@@ -93,21 +135,9 @@ class _SubjectCardState extends State<SubjectCard> {
   Widget build(BuildContext context) {
     return Card(
         child: FutureBuilder(
-      future:
-          fetchSubjectData(widget.subject.courseCode!, widget.subject.section),
+      future: fetchSubjectData(_selectedKulliyah, widget.subject.courseCode!,
+          widget.subject.section),
       builder: (context, AsyncSnapshot<Subject> snapshot) {
-        if (snapshot.hasError) {
-          return ListTile(
-              leading: MiniSubjectInfo(widget.subject),
-              title: const Text(
-                'Can\'t get subject info',
-              ),
-              subtitle: Text(snapshot.error.toString()),
-              trailing: Icon(
-                Icons.error_outline,
-                color: Colors.yellow.shade700,
-              ));
-        }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return ListTile(
             leading: MiniSubjectInfo(widget.subject),
@@ -121,6 +151,37 @@ class _SubjectCardState extends State<SubjectCard> {
               child: CircularProgressIndicator(),
             ),
           );
+        }
+        if (snapshot.hasError) {
+          return ListTile(
+              leading: MiniSubjectInfo(widget.subject),
+              title: const Text(
+                'Can\'t get subject info',
+              ),
+              subtitle: Row(
+                children: [
+                  const Expanded(child: Text("Override kulliyyah:")),
+                  Expanded(
+                    child: DropdownButton(
+                      items: _kulliyahs
+                          .map(
+                            (e) => DropdownMenuItem(child: Text(e), value: e),
+                          )
+                          .toList(),
+                      isDense: true,
+                      value: _selectedKulliyah,
+                      icon: const SizedBox.shrink(),
+                      onChanged: (String? value) {
+                        setState(() => _selectedKulliyah = value!);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              trailing: Icon(
+                Icons.error_outline,
+                color: Colors.yellow.shade700,
+              ));
         }
 
         // Check if every subjects is exist of the server

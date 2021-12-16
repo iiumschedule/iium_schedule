@@ -113,20 +113,21 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     }
   }
 
+  final bool _isFullScreen = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Schedule"),
-      ),
-      body: TimetableView(
-        timetableStyle: TimetableStyle(
-            timeItemTextColor: Colors.black38,
-            timeItemWidth: 50,
-            laneWidth: 80,
-            startHour: startHour,
-            endHour: endHour),
-        laneEventsList: _laneEventsList,
+      body: SafeArea(
+        child: TimetableView(
+          timetableStyle: TimetableStyle(
+              timeItemTextColor: Colors.black38,
+              timeItemWidth: 50,
+              laneWidth: 80,
+              startHour: startHour,
+              endHour: endHour),
+          laneEventsList: _laneEventsList,
+        ),
       ),
     );
   }

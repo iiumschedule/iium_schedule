@@ -14,11 +14,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'IIUM Schedule (Preview)',
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
       home: const MyBody(),
+      darkTheme: ThemeData.dark().copyWith(
+        cupertinoOverrideTheme:
+            const CupertinoThemeData(primaryColor: Colors.purple),
+      ),
+      themeMode: ThemeMode.system,
     );
   }
 }

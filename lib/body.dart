@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'views/scheduler/input_scope.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'util/launcher_url.dart';
 import 'views/course browser/browser.dart';
-import 'views/scheduler/input_course.dart';
 
 class MyBody extends StatelessWidget {
   const MyBody({
@@ -13,6 +13,11 @@ class MyBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _textStyle = TextStyle(
+      color: Theme.of(context).brightness == Brightness.light
+          ? Theme.of(context).primaryColor
+          : Colors.white,
+    );
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -62,10 +67,13 @@ class MyBody extends StatelessWidget {
           MouseRegion(
             cursor: SystemMouseCursors.click,
             child: CupertinoButton(
-              child: const Text('Schedule Maker'),
+              child: Text(
+                'Schedule Maker',
+                style: _textStyle,
+              ),
               onPressed: () {
                 Navigator.of(context).push(
-                    CupertinoPageRoute(builder: (_) => const InputCourse()));
+                    CupertinoPageRoute(builder: (_) => const InputScope()));
               },
             ),
           ),
@@ -73,7 +81,10 @@ class MyBody extends StatelessWidget {
           MouseRegion(
             cursor: SystemMouseCursors.click,
             child: CupertinoButton(
-              child: const Text('Browser'),
+              child: Text(
+                'Browser',
+                style: _textStyle,
+              ),
               onPressed: () {
                 Navigator.of(context)
                     .push(CupertinoPageRoute(builder: (_) => const Browser()));

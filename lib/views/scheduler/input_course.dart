@@ -11,7 +11,10 @@ import '../../util/extensions.dart';
 import 'course_validator.dart';
 
 class InputCourse extends StatefulWidget {
-  const InputCourse({Key? key}) : super(key: key);
+  const InputCourse(this.albiruni, this.kulliyah, {Key? key}) : super(key: key);
+
+  final Albiruni albiruni;
+  final String kulliyah;
 
   @override
   _InputCourseState createState() => _InputCourseState();
@@ -41,8 +44,10 @@ class _InputCourseState extends State<InputCourse> {
                   ? () {
                       Navigator.of(context).push(
                         CupertinoPageRoute(
-                          builder: (_) =>
-                              CourseValidator(subjects: _inputCourses),
+                          builder: (_) => CourseValidator(
+                              albiruni: widget.albiruni,
+                              kulliyah: widget.kulliyah,
+                              subjects: _inputCourses),
                         ),
                       );
                     }
