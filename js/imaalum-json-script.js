@@ -1,5 +1,5 @@
-var table = document.getElementsByClassName("table table-hover")[0];
-var data = table.getElementsByTagName("tr");
+var tableBody = document.getElementsByClassName("table table-hover")[0];
+var data = tableBody.getElementsByTagName("tr");
 
 var nullIndex = new Array();
 var courseCodes = new Array();
