@@ -17,12 +17,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: const MyBody(),
       darkTheme: ThemeData.dark().copyWith(
         cupertinoOverrideTheme:
             const CupertinoThemeData(primaryColor: Colors.purple),
       ),
       themeMode: ThemeMode.system,
+      home: const MyBody(),
     );
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:albiruni/albiruni.dart';
 
-import '../../widgets/dropdown_fulltap.dart';
 import 'browser_view.dart';
 
 class Browser extends StatefulWidget {
@@ -16,8 +15,8 @@ class Browser extends StatefulWidget {
 class _BrowserState extends State<Browser> {
   final GlobalKey dropdownKey = GlobalKey();
   final TextEditingController _searchController = TextEditingController();
-  String _session = "2020/2021";
-  int _semester = 1;
+  String _session = "2021/2022";
+  int _semester = 2;
   String? _selectedKulliyah;
   final List<String> _kulliyahs = [
     "AED",
@@ -52,7 +51,7 @@ class _BrowserState extends State<Browser> {
                 children: [
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: DropDownFullTap(
+                      child: DropdownButtonFormField(
                         items: _kulliyahs
                             .map(
                               (e) => DropdownMenuItem(child: Text(e), value: e),

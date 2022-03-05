@@ -1,3 +1,5 @@
+// Works on https://imaluum.iium.edu.my/MyAcademic/schedule
+
 var tableBody = document.getElementsByClassName("table table-hover")[0];
 var data = tableBody.getElementsByTagName("tr");
 
@@ -8,12 +10,15 @@ var combinedSubjectDatas = new Array();
 
 // section
 for (let i = 1; i < data.length; i++) {
-    if (data[i].cells[2].firstChild === null) nullIndex.push(i);
+    // add unnecessary rows to unwanted array
+    if (data[i].cells[2].getAttribute("rowspan") === null) nullIndex.push(i);
+    // only extract the correct rows
     else sections.push(parseInt(data[i].cells[2].innerText));
 }
 
 // course code
 for (let i = 1; i < data.length; i++) {
+    // extract course code except the rows in unwanted array
     if (!nullIndex.includes(i)) courseCodes.push(data[i].cells[0].innerText);
 }
 

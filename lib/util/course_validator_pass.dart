@@ -16,8 +16,7 @@ class CourseValidatorPass {
   }
 
 // Will return true if everything's fine
-  bool clearToProceed() {
-    print(_status);
+  bool isClearToProceed() {
     return !_status.contains(false);
   }
 

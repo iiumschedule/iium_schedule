@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:albiruni/albiruni.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../util/extensions.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
+
+import '../../constant.dart';
+import '../../util/extensions.dart';
 
 class ScheduleLayout extends StatefulWidget {
   const ScheduleLayout(this.subjects, {Key? key}) : super(key: key);
@@ -13,34 +18,23 @@ class ScheduleLayout extends StatefulWidget {
 }
 
 class _ScheduleLayoutState extends State<ScheduleLayout> {
-  final List<LaneEvents> _laneEventsList = [];
-  final _colorPallete = [
-    const Color(0xfff94144),
-    const Color(0xfff3722c),
-    const Color(0xfff8961e),
-    const Color(0xfff9844a),
-    const Color(0xfff9c74f),
-    const Color(0xff90be6d),
-    const Color(0xff43aa8b),
-    const Color(0xff4d908e),
-    const Color(0xff577590),
-    const Color(0xff277da1),
-  ];
+  final _colorPallete = [...ColourPallete.pallete1]; // add more
   int startHour = 10; // pukul 10 am
   int endHour = 17; // pukul 5 pm
 
   @override
   void initState() {
     super.initState();
-
     _colorPallete.shuffle();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<LaneEvents> _laneEventsList = [];
+    // var _brightness = SchedulerBinding.instance!.window.platformBrightness;
+    var _brightness = Theme.of(context).brightness;
     // Find if there any subject in each day
     for (var i = 1; i <= 7; i++) {
-      Lane _lane = Lane(
-          name: i.englishDay().substring(0, 3).toUpperCase(),
-          textStyle: const TextStyle(color: Colors.black38),
-          width: 80);
-
       List<Subject?> _extractedSubjects = [];
 
       // Seperate subject into their day and rebuild
@@ -93,10 +87,25 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
               hour: _end.hour,
               minute: _end.minute,
             ),
-            onTap: () => print(e.code),
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                content: Text(e.code),
+              ),
+            ),
           );
         },
       );
+      Lane _lane = Lane(
+          backgroundColor: _brightness == Brightness.light
+              ? const Color(0xfffafafa)
+              : const Color(0xff303030),
+          name: i.englishDay().substring(0, 3).toUpperCase(),
+          textStyle: TextStyle(
+              color: _brightness == Brightness.light
+                  ? Colors.black38
+                  : Colors.white38),
+          width: 80);
 
       var _laneEvents = LaneEvents(lane: _lane, events: _tableEvents.toList());
 
@@ -111,24 +120,55 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         break;
       }
     }
+    return Scaffold(
+      appBar: (kIsWeb || !Platform.isAndroid)
+          ? AppBar(
+              title: const Text("Timetable"),
+            )
+          : null,
+      body: SafeArea(
+        child: TimetableViewWidget(
+            startHour: startHour,
+            endHour: endHour,
+            laneEventsList: _laneEventsList),
+      ),
+    );
   }
+}
 
-  final bool _isFullScreen = false;
+class TimetableViewWidget extends StatelessWidget {
+  const TimetableViewWidget({
+    Key? key,
+    required this.startHour,
+    required this.endHour,
+    required List<LaneEvents> laneEventsList,
+  })  : _laneEventsList = laneEventsList,
+        super(key: key);
+
+  final int startHour;
+  final int endHour;
+  final List<LaneEvents> _laneEventsList;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: TimetableView(
-          timetableStyle: TimetableStyle(
-              timeItemTextColor: Colors.black38,
-              timeItemWidth: 50,
-              laneWidth: 80,
-              startHour: startHour,
-              endHour: endHour),
-          laneEventsList: _laneEventsList,
-        ),
-      ),
-    );
+    return LayoutBuilder(builder: (_, constraints) {
+      return TimetableView(
+        timetableStyle: TimetableStyle(
+            timeItemTextColor: Theme.of(context).brightness == Brightness.light
+                ? Colors.black38
+                : Colors.white38,
+            timeItemWidth: 50,
+            laneWidth: constraints.maxWidth /
+                (_laneEventsList.length +
+                    .8), // responsive layout while providing little padding at the end
+            laneColor: Theme.of(context).scaffoldBackgroundColor,
+            timelineColor: Theme.of(context).scaffoldBackgroundColor,
+            mainBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            timelineItemColor: Theme.of(context).scaffoldBackgroundColor,
+            startHour: startHour,
+            endHour: endHour),
+        laneEventsList: _laneEventsList,
+      );
+    });
   }
 }

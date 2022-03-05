@@ -1,8 +1,9 @@
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'input_course.dart';
-import '../../widgets/dropdown_fulltap.dart';
+
+import 'schedule_maker_data.dart';
+import 'schedule_steps.dart';
 
 class InputScope extends StatefulWidget {
   const InputScope({Key? key}) : super(key: key);
@@ -11,10 +12,11 @@ class InputScope extends StatefulWidget {
   _InputScopeState createState() => _InputScopeState();
 }
 
-class _InputScopeState extends State<InputScope> {
+class _InputScopeState extends State<InputScope>
+    with AutomaticKeepAliveClientMixin<InputScope> {
   final GlobalKey dropdownKey = GlobalKey();
-  String _session = "2020/2021";
-  int _semester = 1;
+  String _session = "2021/2022";
+  int _semester = 2;
   String? _selectedKulliyah;
   final List<String> _kulliyahs = [
     "AED",
@@ -31,12 +33,10 @@ class _InputScopeState extends State<InputScope> {
   ];
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Input Scope'),
-        ),
         body: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 500),
@@ -48,7 +48,7 @@ class _InputScopeState extends State<InputScope> {
                 children: [
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: DropDownFullTap(
+                      child: DropdownButtonFormField(
                         items: _kulliyahs
                             .map(
                               (e) => DropdownMenuItem(child: Text(e), value: e),
@@ -105,17 +105,18 @@ class _InputScopeState extends State<InputScope> {
                                 // Redo the same thing as in onEditingComplete above. Just in case.
                                 FocusScope.of(context).unfocus();
 
+                                ScheduleSteps.of(context)
+                                    .pageController
+                                    .nextPage(
+                                        duration:
+                                            const Duration(milliseconds: 200),
+                                        curve: Curves.bounceInOut);
+
                                 Albiruni albiruni = Albiruni(
                                     semester: _semester, session: _session);
-                                Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (_) => InputCourse(
-                                      albiruni,
-                                      _selectedKulliyah!,
-                                    ),
-                                  ),
-                                );
+
+                                ScheduleMakerData.albiruni = albiruni;
+                                ScheduleMakerData.kulliyah = _selectedKulliyah!;
                               },
                       ),
                     ),
@@ -128,4 +129,7 @@ class _InputScopeState extends State<InputScope> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

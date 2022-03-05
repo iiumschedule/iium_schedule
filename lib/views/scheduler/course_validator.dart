@@ -3,81 +3,90 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../util/course_validator_pass.dart';
+import 'schedule_maker_data.dart';
 import '../course%20browser/subject_screen.dart';
 import 'schedule_layout.dart';
 import 'package:recase/recase.dart';
 import '../../model/basic_subject_model.dart';
 
-late CourseValidatorPass _validatorPass;
+CourseValidatorPass? _validatorPass;
 
 class CourseValidator extends StatefulWidget {
-  const CourseValidator(
-      {Key? key,
-      required this.albiruni,
-      required this.kulliyah,
-      required this.subjects})
-      : super(key: key);
-
-  final List<BasicSubjectModel> subjects;
-  final Albiruni albiruni;
-  final String kulliyah;
+  const CourseValidator({Key? key}) : super(key: key);
 
   @override
   _CourseValidatorState createState() => _CourseValidatorState();
 }
 
-class _CourseValidatorState extends State<CourseValidator> {
-  @override
-  void initState() {
-    super.initState();
-    _validatorPass = CourseValidatorPass(widget.subjects.length);
-  }
-
+class _CourseValidatorState extends State<CourseValidator>
+    with AutomaticKeepAliveClientMixin<CourseValidator> {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    _validatorPass = CourseValidatorPass(ScheduleMakerData.subjects!.length);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Course Validator'),
-        actions: [
-          TextButton(
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-              ),
-              onPressed: () {
-                if (!_validatorPass.clearToProceed()) {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      content: Text(
-                          "${_validatorPass.countFailedToFetch()} subject failed to fetch. Please solve the error first"),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ListTile(
+              title:
+                  const Text("Please ensure all the subject data is available"),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () => setState(() {}),
+                    tooltip: "Refresh",
+                    icon: const Icon(Icons.refresh),
+                  ),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    style: TextButton.styleFrom(
+                      primary: Colors.white,
                     ),
-                  );
-                  return;
-                }
+                    onPressed: () {
+                      if (!_validatorPass!.isClearToProceed()) {
+                        showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            content: Text(
+                                "${_validatorPass!.countFailedToFetch()} subject failed to fetch. Please solve the error first"),
+                          ),
+                        );
+                        return;
+                      }
 
-                Navigator.of(context).push(CupertinoPageRoute(
-                    builder: (_) =>
-                        ScheduleLayout(_validatorPass.fetchedSubjects())));
-              },
-              child: const Icon(Icons.send_outlined))
-        ],
-      ),
-      body: Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 500),
-          child: ListView.builder(
-              itemCount: widget.subjects.length,
+                      Navigator.of(context).push(CupertinoPageRoute(
+                          builder: (_) => ScheduleLayout(
+                              _validatorPass!.fetchedSubjects())));
+                    },
+                    child: const Text("Proceed"),
+                  ),
+                ],
+              ),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: ScheduleMakerData.subjects!.length,
               itemBuilder: (_, index) {
                 return SubjectCard(
-                    albiruni: widget.albiruni,
-                    kulliyah: widget.kulliyah,
-                    subject: widget.subjects[index],
+                    albiruni: ScheduleMakerData.albiruni!,
+                    kulliyah: ScheduleMakerData.kulliyah!,
+                    subject: ScheduleMakerData.subjects![index],
                     index: index);
-              }),
+              },
+            )
+          ],
         ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class SubjectCard extends StatefulWidget {
@@ -122,11 +131,10 @@ class _SubjectCardState extends State<SubjectCard> {
     _selectedKulliyah = widget.kulliyah;
   }
 
-  final Albiruni albirui = Albiruni(semester: 1, session: "2021/2022");
-
   Future<Subject> fetchSubjectData(
       String kulliyah, String courseCode, int? section) async {
-    var fetchedSubjects = await albirui.fetch(_selectedKulliyah,
+    Albiruni albiruni = ScheduleMakerData.albiruni!;
+    var fetchedSubjects = await albiruni.fetch(_selectedKulliyah,
         course: courseCode, useProxy: kIsWeb);
     return fetchedSubjects.firstWhere((element) => element.sect == section);
   }
@@ -134,82 +142,91 @@ class _SubjectCardState extends State<SubjectCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-        child: FutureBuilder(
-      future: fetchSubjectData(_selectedKulliyah, widget.subject.courseCode!,
-          widget.subject.section),
-      builder: (context, AsyncSnapshot<Subject> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return ListTile(
-            leading: MiniSubjectInfo(widget.subject),
-            title: const Text(
-              'Waiting...',
-              style: TextStyle(fontStyle: FontStyle.italic),
-            ),
-            trailing: const SizedBox(
-              width: 25,
-              height: 25,
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-        if (snapshot.hasError) {
-          return ListTile(
+        child: Center(
+      child: FutureBuilder(
+        future: fetchSubjectData(_selectedKulliyah, widget.subject.courseCode!,
+            widget.subject.section),
+        builder: (context, AsyncSnapshot<Subject> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return ListTile(
               leading: MiniSubjectInfo(widget.subject),
               title: const Text(
-                'Can\'t get subject info',
+                'Waiting...',
+                style: TextStyle(fontStyle: FontStyle.italic),
               ),
-              subtitle: Row(
-                children: [
-                  const Expanded(child: Text("Override kulliyyah:")),
-                  Expanded(
-                    child: DropdownButton(
-                      items: _kulliyahs
-                          .map(
-                            (e) => DropdownMenuItem(child: Text(e), value: e),
-                          )
-                          .toList(),
-                      isDense: true,
-                      value: _selectedKulliyah,
-                      icon: const SizedBox.shrink(),
-                      onChanged: (String? value) {
-                        setState(() => _selectedKulliyah = value!);
-                      },
-                    ),
-                  ),
-                ],
+              trailing: const SizedBox(
+                width: 25,
+                height: 25,
+                child: CircularProgressIndicator(),
               ),
-              trailing: Icon(
-                Icons.error_outline,
-                color: Colors.yellow.shade700,
-              ));
-        }
-
-        // Check if every subjects is exist of the server
-        _validatorPass.subjectSuccess(widget.index, snapshot.data!);
-
-        return ListTile(
-          leading: MiniSubjectInfo(widget.subject),
-          title: Text(snapshot.data!.title,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-              )),
-          subtitle: Text(
-            ReCase(snapshot.data!.lect.join(', ')).titleCase,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: const Icon(
-            Icons.check,
-            color: Colors.green,
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              CupertinoPageRoute(builder: (_) => SubjectScreen(snapshot.data!)),
             );
-          },
-        );
-      },
+          }
+          if (snapshot.hasError) {
+            return ListTile(
+                leading: MiniSubjectInfo(widget.subject),
+                title: const Text(
+                  'Can\'t get subject info',
+                ),
+                subtitle: Row(
+                  children: [
+                    const Expanded(child: Text("Override kulliyyah:")),
+                    Expanded(
+                      child: Listener(
+                        onPointerDown: (_) {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
+                        child: DropdownButton(
+                          items: _kulliyahs
+                              .map(
+                                (e) =>
+                                    DropdownMenuItem(child: Text(e), value: e),
+                              )
+                              .toList(),
+                          isDense: true,
+                          value: _selectedKulliyah,
+                          icon: const SizedBox.shrink(),
+                          onChanged: (String? value) {
+                            setState(() => _selectedKulliyah = value!);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                trailing: Icon(
+                  Icons.error_outline,
+                  color: Colors.yellow.shade700,
+                ));
+          }
+
+          // Check if every subjects is exist of the server
+          _validatorPass!.subjectSuccess(widget.index, snapshot.data!);
+
+          return ListTile(
+            leading: MiniSubjectInfo(widget.subject),
+            title: Text(snapshot.data!.title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                )),
+            subtitle: Text(
+              ReCase(snapshot.data!.lect.join(', ')).titleCase,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: const Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                    builder: (_) => SubjectScreen(snapshot.data!)),
+              );
+            },
+          );
+        },
+      ),
     ));
   }
 }

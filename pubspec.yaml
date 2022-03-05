@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0-pre.3+3
+version: 1.0.0-rc.1+4
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -29,15 +29,23 @@ dependencies:
   cupertino_icons: ^1.0.2
   html: ^0.15.0
   flutter_lints: ^1.0.4
-  albiruni:
-    path: "../../Dart App/albiruni"
+  albiruni: any
   recase: ^4.0.0
   and:
     git: https://github.com/iqfareez/and.git # null-safe
-  flutter_timetable_view:
-    git: https://github.com/yamarkz/flutter_timetable_view.git
   url_launcher: ^6.0.17
   package_info_plus: ^1.3.0
+  flutter_timetable_view:
+    git: https://github.com/iqfareez/flutter_timetable_view.git
+  page_view_indicators: ^2.0.0
+
+# Comment this part if necessary
+dependency_overrides:
+  albiruni:
+    path: "../../Dart App/albiruni"
+  flutter_timetable_view:
+    path: "../Experiments/flutter_timetable_view-1"
+
 
 dev_dependencies:
   flutter_test:

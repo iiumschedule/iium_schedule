@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'views/scheduler/input_scope.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'util/launcher_url.dart';
 import 'views/course browser/browser.dart';
+import 'views/scheduler/schedule_maker.dart';
 
 class MyBody extends StatelessWidget {
   const MyBody({
@@ -24,21 +24,28 @@ class MyBody extends StatelessWidget {
         shadowColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.transparent,
+        titleTextStyle: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w300,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white),
+        title: FutureBuilder(
+            future: PackageInfo.fromPlatform(),
+            builder: (_, AsyncSnapshot<PackageInfo> snapshot) {
+              if (snapshot.hasData) {
+                return Text(snapshot.data!.version);
+              } else {
+                return const SizedBox.shrink();
+              }
+            }),
         actions: [
           PopupMenuButton(
             tooltip: "Menu",
             onSelected: (value) async {
               switch (value) {
-                case "about":
-                  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
-                  showAboutDialog(
-                      context: context,
-                      applicationVersion: packageInfo.version,
-                      applicationLegalese: "2021 \u00a9 Fareez Iqmal");
-                  break;
-                case "github":
-                  LauncherUrl.open("https://github.com/iqfareez/iium_schedule");
+                case "website":
+                  LauncherUrl.open("https://iiumschedule.vercel.app/");
                   break;
                 default:
               }
@@ -49,12 +56,8 @@ class MyBody extends StatelessWidget {
             ),
             itemBuilder: (context) => const [
               PopupMenuItem(
-                child: Text("GitHub"),
-                value: "github",
-              ),
-              PopupMenuItem(
-                child: Text("About"),
-                value: "about",
+                child: Text("Website"),
+                value: "website",
               ),
             ],
           ),
@@ -72,8 +75,8 @@ class MyBody extends StatelessWidget {
                 style: _textStyle,
               ),
               onPressed: () {
-                Navigator.of(context).push(
-                    CupertinoPageRoute(builder: (_) => const InputScope()));
+                Navigator.of(context)
+                    .push(CupertinoPageRoute(builder: (_) => ScheduleMaker()));
               },
             ),
           ),
@@ -82,7 +85,7 @@ class MyBody extends StatelessWidget {
             cursor: SystemMouseCursors.click,
             child: CupertinoButton(
               child: Text(
-                'Browser',
+                'Course Browser',
                 style: _textStyle,
               ),
               onPressed: () {
