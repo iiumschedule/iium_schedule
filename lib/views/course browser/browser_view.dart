@@ -37,6 +37,7 @@ class _BrowserViewState extends State<BrowserView> {
             "${widget.kulliyah} Sem ${widget.albiruni.semester} ${widget.albiruni.session}"),
         actions: [
           IconButton(
+              tooltip: "Prevous page",
               onPressed: _page <= 1
                   ? null
                   : () {
@@ -45,6 +46,7 @@ class _BrowserViewState extends State<BrowserView> {
               icon: const Icon(Icons.navigate_before_outlined)),
           Center(child: Text(_page.toString())),
           IconButton(
+              tooltip: "Next page",
               onPressed: () {
                 setState(() {
                   setState(() => _page++);

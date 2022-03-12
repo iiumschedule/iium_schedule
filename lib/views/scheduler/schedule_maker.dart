@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:page_view_indicators/page_view_indicators.dart';
 
 import 'appbar_title.dart';
@@ -45,6 +46,8 @@ class ScheduleMaker extends StatelessWidget {
         },
         child: Scaffold(
           appBar: AppBar(
+            systemOverlayStyle: SystemUiOverlayStyle.light
+                .copyWith(statusBarColor: Colors.transparent),
             centerTitle: true,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),

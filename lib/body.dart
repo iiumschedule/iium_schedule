@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 
+import 'providers/saved_schedule_provider.dart';
+import 'saved_schedule_selector.dart';
 import 'util/launcher_url.dart';
 import 'views/course browser/browser.dart';
 import 'views/scheduler/schedule_maker.dart';
@@ -21,6 +25,11 @@ class MyBody extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        systemOverlayStyle: Theme.of(context).brightness == Brightness.light
+            ? SystemUiOverlayStyle.dark
+                .copyWith(statusBarColor: Colors.grey.withAlpha(90))
+            : SystemUiOverlayStyle.light
+                .copyWith(statusBarColor: Colors.grey.withAlpha(90)),
         shadowColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.transparent,
@@ -50,9 +59,9 @@ class MyBody extends StatelessWidget {
                 default:
               }
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.more_vert_outlined,
-              color: Colors.black87,
+              color: Theme.of(context).iconTheme.color!,
             ),
             itemBuilder: (context) => const [
               PopupMenuItem(
@@ -74,9 +83,12 @@ class MyBody extends StatelessWidget {
                 'Schedule Maker',
                 style: _textStyle,
               ),
-              onPressed: () {
-                Navigator.of(context)
+              onPressed: () async {
+                // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+                await Navigator.of(context)
                     .push(CupertinoPageRoute(builder: (_) => ScheduleMaker()));
+
+                // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
               },
             ),
           ),
@@ -93,6 +105,42 @@ class MyBody extends StatelessWidget {
                     .push(CupertinoPageRoute(builder: (_) => const Browser()));
               },
             ),
+          ),
+          const Divider(),
+          Consumer<SavedScheduleProvider>(
+            builder: (_, value, __) {
+              if (value.data.isEmpty) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4),
+                  child: Text(
+                    "Your saved schedule will appear here",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.w300),
+                  ),
+                );
+              }
+              if (value.data.isNotEmpty) {
+                return Column(
+                  children: [
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: CupertinoButton(
+                        child: Text(
+                          'Saved Schedule',
+                          style: _textStyle,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(CupertinoPageRoute(
+                              builder: (_) => const SavedScheduleSelector()));
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
           ),
         ],
       ),

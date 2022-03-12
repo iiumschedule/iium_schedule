@@ -25,5 +25,6 @@ class CourseValidatorPass {
     return _status.where((element) => !element).length;
   }
 
+  //TODO: Why need map in this situation
   List<Subject> fetchedSubjects() => _subjects.map((e) => e!).toList();
 }

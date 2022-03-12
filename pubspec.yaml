@@ -1,5 +1,5 @@
 name: flutter_iium_schedule
-description: IIUM Schedule Parser with Flutter
+description: IIUM Schedule Maker
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0-rc.1+4
+version: 1.0.0-rc.2+5
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -38,19 +38,25 @@ dependencies:
   flutter_timetable_view:
     git: https://github.com/iqfareez/flutter_timetable_view.git
   page_view_indicators: ^2.0.0
+  hive: ^2.0.6
+  hive_flutter: ^1.1.0
+  provider: ^6.0.2
+  fluttertoast: ^8.0.9
 
 # Comment this part if necessary
 dependency_overrides:
   albiruni:
     path: "../../Dart App/albiruni"
   flutter_timetable_view:
-    path: "../Experiments/flutter_timetable_view-1"
+    path: "../Experiments/flutter_timetable_view"
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   msix: ^2.6.5
+  build_runner: ^2.1.7
+  hive_generator: ^1.1.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -96,7 +102,7 @@ msix_config:
   display_name: IIUM Schedule
   publisher_display_name: Muhammad Fareez Iqmal
   identity_name: fareez.flutter.iiumschedule
-  msix_version: 0.1.0.0
+  msix_version: 0.1.0.2
   logo_path: ".\\assets\\logo\\app-logo.png"
   capabilities: "internetClient"
   certificate_path: "C:\\Users\\Iqmal\\CERTIFICATE.pfx"

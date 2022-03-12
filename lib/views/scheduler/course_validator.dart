@@ -2,12 +2,13 @@ import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:recase/recase.dart';
+
+import '../../model/basic_subject_model.dart';
 import '../../util/course_validator_pass.dart';
-import 'schedule_maker_data.dart';
 import '../course%20browser/subject_screen.dart';
 import 'schedule_layout.dart';
-import 'package:recase/recase.dart';
-import '../../model/basic_subject_model.dart';
+import 'schedule_maker_data.dart';
 
 CourseValidatorPass? _validatorPass;
 
@@ -61,7 +62,10 @@ class _CourseValidatorState extends State<CourseValidator>
 
                       Navigator.of(context).push(CupertinoPageRoute(
                           builder: (_) => ScheduleLayout(
-                              _validatorPass!.fetchedSubjects())));
+                                initialName:
+                                    '${ScheduleMakerData.kulliyah} ${ScheduleMakerData.albiruni!.semester} ${ScheduleMakerData.albiruni!.session}',
+                                subjects: _validatorPass!.fetchedSubjects(),
+                              )));
                     },
                     child: const Text("Proceed"),
                   ),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:albiruni/albiruni.dart';
+import 'package:flutter/services.dart';
 
 import 'browser_view.dart';
 
@@ -38,6 +39,8 @@ class _BrowserState extends State<Browser> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle.light
+              .copyWith(statusBarColor: Colors.transparent),
           title: const Text('Course Browser'),
         ),
         body: Center(
@@ -98,6 +101,8 @@ class _BrowserState extends State<Browser> {
                     child: CupertinoTextField(
                       maxLength: 9,
                       controller: _searchController,
+                      // https://github.com/flutter/flutter/issues/48438#issuecomment-621262652
+                      style: CupertinoTheme.of(context).textTheme.textStyle,
                       placeholder: "Search subject",
                       clearButtonMode: OverlayVisibilityMode.editing,
                       selectionControls: MaterialTextSelectionControls(),
