@@ -20,10 +20,9 @@ extension DayName on int {
 }
 
 extension Utility on BuildContext {
-  void nextInputFocus() {
+  void nextEditableTextFocus() {
     do {
       FocusScope.of(this).nextFocus();
-    } while (
-        FocusScope.of(this).focusedChild?.context?.widget is! EditableText);
+    } while (FocusScope.of(this).focusedChild!.context == null);
   }
 }

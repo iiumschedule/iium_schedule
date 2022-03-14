@@ -158,9 +158,9 @@ class _InputCourseState extends State<InputCourse>
                                 ),
                                 onEditingComplete: () {
                                   context
-                                      .nextInputFocus(); // focus the json input
+                                      .nextEditableTextFocus(); // focus the json input
                                   context
-                                      .nextInputFocus(); // focus ke section input
+                                      .nextEditableTextFocus(); // focus ke section input
                                   if (_courseCodeInputController.text.isEmpty) {
                                     return;
                                   }
