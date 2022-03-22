@@ -26,5 +26,6 @@ class CourseValidatorPass {
   }
 
   //TODO: Why need map in this situation
+  // To cast to List<Subject?>
   List<Subject> fetchedSubjects() => _subjects.map((e) => e!).toList();
 }

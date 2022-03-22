@@ -109,15 +109,15 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         },
       );
       Lane _lane = Lane(
-          backgroundColor: _brightness == Brightness.light
-              ? const Color(0xfffafafa)
-              : const Color(0xff303030),
-          name: i.englishDay().substring(0, 3).toUpperCase(),
-          textStyle: TextStyle(
-              color: _brightness == Brightness.light
-                  ? Colors.black38
-                  : Colors.white38),
-          width: 80);
+        backgroundColor: _brightness == Brightness.light
+            ? const Color(0xfffafafa)
+            : const Color(0xff303030),
+        name: i.englishDay().substring(0, 3).toUpperCase(),
+        textStyle: TextStyle(
+          color:
+              _brightness == Brightness.light ? Colors.black38 : Colors.white38,
+        ),
+      );
 
       var _laneEvents = LaneEvents(lane: _lane, events: _tableEvents.toList());
 
@@ -267,21 +267,21 @@ class TimetableViewWidget extends StatelessWidget {
     return LayoutBuilder(builder: (_, constraints) {
       return TimetableView(
         timetableStyle: TimetableStyle(
-            timeItemTextColor: Theme.of(context).brightness == Brightness.light
-                ? Colors.black38
-                : Colors.white38,
-            timeItemWidth: 50,
-            laneHeight: 20,
-            timeItemHeight: itemHeight,
-            laneWidth: constraints.maxWidth /
-                (_laneEventsList.length +
-                    .8), // responsive layout while providing little padding at the end
-            laneColor: Theme.of(context).scaffoldBackgroundColor,
-            timelineColor: Theme.of(context).scaffoldBackgroundColor,
-            mainBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            timelineItemColor: Theme.of(context).scaffoldBackgroundColor,
-            startHour: startHour,
-            endHour: endHour),
+          timeItemTextColor: Theme.of(context).brightness == Brightness.light
+              ? Colors.black38
+              : Colors.white38,
+          timeItemWidth: 40,
+          laneHeight: 20,
+          timeItemHeight: itemHeight,
+          // responsive layout while providing little padding at the end
+          laneWidth: constraints.maxWidth / (_laneEventsList.length + .8),
+          laneColor: Theme.of(context).scaffoldBackgroundColor,
+          timelineColor: Theme.of(context).scaffoldBackgroundColor,
+          mainBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          timelineItemColor: Theme.of(context).scaffoldBackgroundColor,
+          startHour: startHour,
+          endHour: endHour,
+        ),
         laneEventsList: _laneEventsList,
       );
     });
