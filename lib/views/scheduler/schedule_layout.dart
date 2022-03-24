@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,6 +29,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
   int _endHour = 17; // pukul 5 pm
 
   double _itemHeight = 60.0;
+  double _fontSizeSubject = 10;
 
   late String name;
 
@@ -96,7 +99,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
               : Colors.white;
 
           return TableEvent(
-            textStyle: TextStyle(fontSize: 10, color: textColor),
+            textStyle: TextStyle(fontSize: _fontSizeSubject, color: textColor),
             title: e.title,
             backgroundColor: _colorPallete[subjIndex],
             start: TableEventTime(hour: _start.hour, minute: _start.minute),
@@ -152,12 +155,25 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                       setState(() => name = newName);
                       save();
                     },
-                    child: Text(name)),
+                    child: Text(
+                      name,
+                      overflow: TextOverflow.fade,
+                    )),
                 actions: [
+                  if (!Platform.isAndroid) ...[
+                    IconButton(
+                      onPressed: () => setState(() => _fontSizeSubject--),
+                      icon: const Icon(Icons.text_decrease_rounded),
+                    ),
+                    IconButton(
+                      onPressed: () => setState(() => _fontSizeSubject++),
+                      icon: const Icon(Icons.text_increase_rounded),
+                    ),
+                  ],
                   IconButton(
                     tooltip: "Save",
                     onPressed: save,
-                    icon: const Icon(Icons.save),
+                    icon: const Icon(Icons.save_rounded),
                   ),
                 ],
               ),
@@ -185,6 +201,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                         onPressed: () {
                           setState(() => _itemHeight += 2);
                         }),
+                  if (!Platform.isAndroid) const SizedBox(height: 5),
                   if (_itemHeight >= 52)
                     FloatingActionButton(
                         heroTag: "btnZoom-",
@@ -193,6 +210,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                         onPressed: () {
                           setState(() => _itemHeight -= 2);
                         }),
+                  if (!Platform.isAndroid) const SizedBox(height: 5),
                   FloatingActionButton(
                     heroTag: "btnFull",
                     mini: true,
