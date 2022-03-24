@@ -6,6 +6,7 @@ import 'package:recase/recase.dart';
 
 import '../../model/basic_subject_model.dart';
 import '../../util/course_validator_pass.dart';
+import '../../util/kulliyyahs.dart';
 import '../course%20browser/subject_screen.dart';
 import 'schedule_layout.dart';
 import 'schedule_maker_data.dart';
@@ -40,7 +41,7 @@ class _CourseValidatorState extends State<CourseValidator>
                 children: [
                   IconButton(
                     onPressed: () => setState(() {}),
-                    tooltip: "Refresh",
+                    tooltip: "Refresh All",
                     icon: const Icon(Icons.refresh),
                   ),
                   const SizedBox(width: 10),
@@ -82,7 +83,7 @@ class _CourseValidatorState extends State<CourseValidator>
                     subject: ScheduleMakerData.subjects![index],
                     index: index);
               },
-            )
+            ),
           ],
         ),
       ),
@@ -114,33 +115,20 @@ class SubjectCard extends StatefulWidget {
 class _SubjectCardState extends State<SubjectCard> {
   final GlobalKey dropdownKey = GlobalKey();
 
-  late String _selectedKulliyah;
-  final List<String> _kulliyahs = [
-    "AED",
-    "BRIDG",
-    "CFL",
-    "CCAC",
-    "EDUC",
-    "ENGIN",
-    "ECONS",
-    "KICT",
-    "IRKHS",
-    "KLM",
-    "LAWS"
-  ];
+  late Kuliyyah _selectedKulliyah;
 
   @override
   void initState() {
     super.initState();
-    _selectedKulliyah = widget.kulliyah;
+    _selectedKulliyah = Kuliyyahs.kuliyyahFromCode(widget.kulliyah);
   }
 
-  Future<Subject> fetchSubjectData(
-      String kulliyah, String courseCode, int? section) async {
+  Future<Subject> fetchSubjectData() async {
     Albiruni albiruni = ScheduleMakerData.albiruni!;
-    var fetchedSubjects = await albiruni.fetch(_selectedKulliyah,
-        course: courseCode, useProxy: kIsWeb);
-    return fetchedSubjects.firstWhere((element) => element.sect == section);
+    var fetchedSubjects = await albiruni.fetch(_selectedKulliyah.code,
+        course: widget.subject.courseCode!, useProxy: kIsWeb);
+    return fetchedSubjects
+        .firstWhere((element) => element.sect == widget.subject.section);
   }
 
   @override
@@ -148,8 +136,7 @@ class _SubjectCardState extends State<SubjectCard> {
     return Card(
         child: Center(
       child: FutureBuilder(
-        future: fetchSubjectData(_selectedKulliyah, widget.subject.courseCode!,
-            widget.subject.section),
+        future: fetchSubjectData(),
         builder: (context, AsyncSnapshot<Subject> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return ListTile(
@@ -171,34 +158,42 @@ class _SubjectCardState extends State<SubjectCard> {
                 title: const Text(
                   'Can\'t get subject info',
                 ),
-                subtitle: Row(
-                  children: [
-                    const Expanded(child: Text("Override kulliyyah:")),
-                    Expanded(
-                      child: Listener(
-                        onPointerDown: (_) {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
-                        child: DropdownButton(
-                          items: _kulliyahs
-                              .map(
-                                (e) =>
-                                    DropdownMenuItem(child: Text(e), value: e),
-                              )
-                              .toList(),
-                          isDense: true,
-                          value: _selectedKulliyah,
-                          icon: const SizedBox.shrink(),
-                          onChanged: (String? value) {
-                            setState(() => _selectedKulliyah = value!);
-                          },
-                        ),
-                      ),
+                subtitle: Align(
+                  alignment: Alignment.centerLeft,
+                  child: ActionChip(
+                    visualDensity:
+                        const VisualDensity(horizontal: 0.0, vertical: -4),
+                    avatar: const CircleAvatar(
+                      radius: 10,
+                      child: Icon(Icons.edit, size: 13),
                     ),
-                  ],
+                    label: Text(_selectedKulliyah.shortName),
+                    tooltip: "Change kuliyyah for this subject",
+                    onPressed: () async {
+                      var newKull = await showDialog(
+                        context: context,
+                        builder: (_) => SimpleDialog(
+                          title: Text(
+                              "${widget.subject.courseCode} belongs to which kulliyyah?"),
+                          children: Kuliyyahs.all
+                              .map((e) => SimpleDialogOption(
+                                    child: Text(e.fullName),
+                                    onPressed: () => Navigator.pop(context, e),
+                                  ))
+                              .toList(),
+                        ),
+                      );
+
+                      if (newKull != null) {
+                        setState(() {
+                          _selectedKulliyah = newKull;
+                        });
+                      }
+                    },
+                  ),
                 ),
                 trailing: Icon(
-                  Icons.error_outline,
+                  Icons.question_mark_outlined,
                   color: Colors.yellow.shade700,
                 ));
           }

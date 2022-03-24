@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/services.dart';
 
+import '../../util/kulliyyahs.dart';
 import 'browser_view.dart';
 
 class Browser extends StatefulWidget {
@@ -19,19 +20,6 @@ class _BrowserState extends State<Browser> {
   String _session = "2021/2022";
   int _semester = 2;
   String? _selectedKulliyah;
-  final List<String> _kulliyahs = [
-    "AED",
-    "BRIDG",
-    "CFL",
-    "CCAC",
-    "EDUC",
-    "ENGIN",
-    "ECONS",
-    "KICT",
-    "IRKHS",
-    "KLM",
-    "LAWS"
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -55,16 +43,18 @@ class _BrowserState extends State<Browser> {
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: DropdownButtonFormField(
-                        items: _kulliyahs
-                            .map(
-                              (e) => DropdownMenuItem(child: Text(e), value: e),
-                            )
+                        items: Kuliyyahs.all
+                            .map((e) => DropdownMenuItem(
+                                child: Text(e.fullName), value: e.code))
                             .toList(),
                         key: dropdownKey,
                         decoration:
                             const InputDecoration(border: OutlineInputBorder()),
                         value: _selectedKulliyah,
                         hint: const Text('Select kulliyyah'),
+                        selectedItemBuilder: (_) => Kuliyyahs.all
+                            .map((e) => Text(e.shortName))
+                            .toList(),
                         onChanged: (String? value) {
                           setState(() => _selectedKulliyah = value);
                         },

@@ -34,7 +34,9 @@ class _BrowserViewState extends State<BrowserView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "${widget.kulliyah} Sem ${widget.albiruni.semester} ${widget.albiruni.session}"),
+          "${widget.kulliyah} Sem ${widget.albiruni.semester} (${widget.albiruni.sesShort})",
+          overflow: TextOverflow.fade,
+        ),
         actions: [
           IconButton(
               tooltip: "Prevous page",
@@ -48,9 +50,7 @@ class _BrowserViewState extends State<BrowserView> {
           IconButton(
               tooltip: "Next page",
               onPressed: () {
-                setState(() {
-                  setState(() => _page++);
-                });
+                setState(() => _page++);
               },
               icon: const Icon(Icons.navigate_next_outlined))
         ],

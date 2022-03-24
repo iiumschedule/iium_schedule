@@ -2,6 +2,7 @@ import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../util/kulliyyahs.dart';
 import 'schedule_maker_data.dart';
 import 'schedule_steps.dart';
 
@@ -18,19 +19,6 @@ class _InputScopeState extends State<InputScope>
   String _session = "2021/2022";
   int _semester = 2;
   String? _selectedKulliyah;
-  final List<String> _kulliyahs = [
-    "AED",
-    "BRIDG",
-    "CFL",
-    "CCAC",
-    "EDUC",
-    "ENGIN",
-    "ECONS",
-    "KICT",
-    "IRKHS",
-    "KLM",
-    "LAWS"
-  ];
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -49,15 +37,17 @@ class _InputScopeState extends State<InputScope>
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: DropdownButtonFormField(
-                        items: _kulliyahs
-                            .map(
-                              (e) => DropdownMenuItem(child: Text(e), value: e),
-                            )
+                        items: Kuliyyahs.all
+                            .map((e) => DropdownMenuItem(
+                                child: Text(e.fullName), value: e.code))
                             .toList(),
                         key: dropdownKey,
                         decoration:
                             const InputDecoration(border: OutlineInputBorder()),
                         value: _selectedKulliyah,
+                        selectedItemBuilder: (_) => Kuliyyahs.all
+                            .map((e) => Text(e.shortName))
+                            .toList(),
                         hint: const Text('Select kulliyyah'),
                         onChanged: (String? value) {
                           setState(() => _selectedKulliyah = value);
