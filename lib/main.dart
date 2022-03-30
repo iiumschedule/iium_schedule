@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -10,6 +12,8 @@ import 'providers/saved_schedule_provider.dart';
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox(kHiveSavedSchedule);
+
+  HttpOverrides.global = MyHttpOverrides();
 
   runApp(const MyApp());
 }
@@ -36,5 +40,17 @@ class MyApp extends StatelessWidget {
         home: const MyBody(),
       ),
     );
+  }
+}
+
+/// To avoid invalid Cert Error
+/// https://github.com/iqfareez/iium_schedule/issues/10
+/// https://stackoverflow.com/q/54285172/13617136
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
