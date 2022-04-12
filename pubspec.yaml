@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0-rc.3+6
+version: 1.0.0-rc.4+7
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -50,11 +50,10 @@ dependency_overrides:
   flutter_timetable_view:
     path: "../Experiments/flutter_timetable_view"
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  msix: ^2.6.5
+  msix: ^3.5.1
   build_runner: ^2.1.7
   hive_generator: ^1.1.2
 

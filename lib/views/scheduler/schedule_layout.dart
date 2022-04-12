@@ -227,6 +227,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
 
   void fullscreenFabHandler() {
     if (!_isFullScreen) {
+      // make full screen
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
       setState(() {
         _isFullScreen = true;

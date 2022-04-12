@@ -2,6 +2,7 @@ import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:recase/recase.dart';
 
 import '../../model/basic_subject_model.dart';
@@ -49,7 +50,7 @@ class _CourseValidatorState extends State<CourseValidator>
                     style: TextButton.styleFrom(
                       primary: Colors.white,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (!_validatorPass!.isClearToProceed()) {
                         showDialog(
                           context: context,
@@ -61,12 +62,15 @@ class _CourseValidatorState extends State<CourseValidator>
                         return;
                       }
 
-                      Navigator.of(context).push(CupertinoPageRoute(
+                      await Navigator.of(context).push(CupertinoPageRoute(
                           builder: (_) => ScheduleLayout(
                                 initialName:
                                     '${ScheduleMakerData.kulliyah} ${ScheduleMakerData.albiruni!.semester} ${ScheduleMakerData.albiruni!.session}',
                                 subjects: _validatorPass!.fetchedSubjects(),
                               )));
+                      // reset full screen when it come back
+                      SystemChrome.setEnabledSystemUIMode(
+                          SystemUiMode.edgeToEdge);
                     },
                     child: const Text("Proceed"),
                   ),

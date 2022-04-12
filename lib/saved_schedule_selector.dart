@@ -81,6 +81,8 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
                   ),
                 );
 
+                SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
                 // refresh page when come back to thus screen
                 setState(() {});
               },
