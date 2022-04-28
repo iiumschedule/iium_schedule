@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:albiruni/albiruni.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
@@ -160,7 +161,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                       overflow: TextOverflow.fade,
                     )),
                 actions: [
-                  if (!Platform.isAndroid) ...[
+                  if (kIsWeb || !Platform.isAndroid) ...[
                     IconButton(
                       onPressed: () => setState(() => _fontSizeSubject--),
                       icon: const Icon(Icons.text_decrease_rounded),
@@ -201,7 +202,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                         onPressed: () {
                           setState(() => _itemHeight += 2);
                         }),
-                  if (!Platform.isAndroid) const SizedBox(height: 5),
+                  if (kIsWeb || !Platform.isAndroid) const SizedBox(height: 5),
                   if (_itemHeight >= 52)
                     FloatingActionButton(
                         heroTag: "btnZoom-",
@@ -210,7 +211,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                         onPressed: () {
                           setState(() => _itemHeight -= 2);
                         }),
-                  if (!Platform.isAndroid) const SizedBox(height: 5),
+                  if (kIsWeb || !Platform.isAndroid) const SizedBox(height: 5),
                   FloatingActionButton(
                     heroTag: "btnFull",
                     mini: true,
