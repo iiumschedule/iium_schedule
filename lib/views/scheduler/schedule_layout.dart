@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../../colour_palletes.dart';
 import '../../providers/saved_schedule_provider.dart';
 import '../../util/extensions.dart';
+import '../course browser/subject_screen.dart';
 
 class ScheduleLayout extends StatefulWidget {
   const ScheduleLayout(
@@ -25,7 +26,7 @@ class ScheduleLayout extends StatefulWidget {
 }
 
 class _ScheduleLayoutState extends State<ScheduleLayout> {
-  final _colorPallete = [...ColourPallete.pallete1]; // add more
+  final _colorPallete = [...ColourPalletes.pallete1]; // add more
   int _startHour = 10; // pukul 10 am
   int _endHour = 17; // pukul 5 pm
 
@@ -107,7 +108,12 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
             end: TableEventTime(hour: _end.hour, minute: _end.minute),
             onTap: () => showDialog(
               context: context,
-              builder: (_) => AlertDialog(content: Text(e.code)),
+              builder: (_) => SubjectDialog(
+                subject: e,
+                color: _colorPallete[subjIndex],
+                start: _start,
+                end: _end,
+              ),
             ),
           );
         },
@@ -238,6 +244,75 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       setState(() => _isFullScreen = false);
     }
+  }
+}
+
+class SubjectDialog extends StatelessWidget {
+  const SubjectDialog({
+    Key? key,
+    required Subject subject,
+    required MaterialColor color,
+    required TimeOfDay start,
+    required TimeOfDay end,
+  })  : _subject = subject,
+        _color = color,
+        _start = start,
+        _end = end,
+        super(key: key);
+
+  final Subject _subject;
+  final MaterialColor _color;
+  final TimeOfDay _start;
+  final TimeOfDay _end;
+
+  @override
+  Widget build(BuildContext context) {
+    var _actionButtonColour = Theme.of(context).textTheme.bodyLarge!.color;
+
+    var _duration = _end.difference(_start);
+    return AlertDialog(
+      backgroundColor: _color.shade50,
+      title: Text(_subject.title),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.pin_drop_outlined),
+              title: Text(_subject.venue ?? "No venue")),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(
+              Icons.schedule_outlined,
+            ),
+            title: Text(
+                "Starts ${_start.toRealString()}, ends ${_end.toRealString()}"),
+            subtitle: Text(_duration.minute == 0
+                ? 'Duration ${_duration.hour}h'
+                : 'Duration ${_duration.hour}h ${_duration.minute}m'),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => SubjectScreen(_subject)));
+            },
+            child: Text(
+              'View details',
+              style: TextStyle(color: _actionButtonColour),
+            )),
+        TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(
+              'Close',
+              style: TextStyle(color: _actionButtonColour),
+            ))
+      ],
+    );
   }
 }
 
