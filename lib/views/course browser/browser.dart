@@ -111,7 +111,7 @@ class _BrowserState extends State<Browser> {
                           ? SystemMouseCursors.forbidden
                           : SystemMouseCursors.click,
                       child: CupertinoButton.filled(
-                        child: const Text('Get'),
+                        child: const Text('Search'),
                         onPressed: _selectedKulliyah == null
                             ? null
                             : () {
