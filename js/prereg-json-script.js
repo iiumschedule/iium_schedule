@@ -18,7 +18,7 @@ for (let index = 2; index < bodyChildren.length - 1; index++) {
 
 // combine code & section
 for (i = 0; i < sections.length; i++) {
-    combinedSubjectDatas.push({ courseCode: courseCodes[i], section: sections[i] });
+    combinedSubjectDatas.push({ courseCode: courseCodes[i], section: parseInt(sections[i]) });
 }
 
 var json = JSON.stringify(combinedSubjectDatas);

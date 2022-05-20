@@ -22,7 +22,7 @@ class ScheduleLayout extends StatefulWidget {
   final List<Subject> subjects;
 
   @override
-  _ScheduleLayoutState createState() => _ScheduleLayoutState();
+  State<ScheduleLayout> createState() => _ScheduleLayoutState();
 }
 
 class _ScheduleLayoutState extends State<ScheduleLayout> {
@@ -55,19 +55,19 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
 
   @override
   Widget build(BuildContext context) {
-    List<LaneEvents> _laneEventsList = [];
+    List<LaneEvents> laneEventsList = [];
     // var _brightness = SchedulerBinding.instance!.window.platformBrightness;
-    var _brightness = Theme.of(context).brightness;
+    var brightness = Theme.of(context).brightness;
     // Find if there any subject in each day
     for (var i = 1; i <= 7; i++) {
-      List<Subject?> _extractedSubjects = [];
+      List<Subject?> extractedSubjects = [];
 
       // Seperate subject into their day and rebuild
 
       for (var subject in widget.subjects) {
-        var _dayTimes = subject.dayTime.where((element) => element?.day == i);
-        _extractedSubjects.addAll(
-          _dayTimes.map((e) => Subject(
+        var dayTimes = subject.dayTime.where((element) => element?.day == i);
+        extractedSubjects.addAll(
+          dayTimes.map((e) => Subject(
                 code: subject.code,
                 sect: subject.sect,
                 title: subject.title,
@@ -79,18 +79,18 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         );
       }
 
-      var _tableEvents = _extractedSubjects.map(
+      var tableEvents = extractedSubjects.map(
         (e) {
-          var _start = TimeOfDay(
+          var start = TimeOfDay(
               hour: int.parse(e!.dayTime.first!.startTime.split(":").first),
               minute: int.parse(e.dayTime.first!.startTime.split(":").last));
-          var _end = TimeOfDay(
+          var end = TimeOfDay(
               hour: int.parse(e.dayTime.first!.endTime.split(":").first),
               minute: int.parse(e.dayTime.first!.endTime.split(":").last));
 
-          if (_start.hour < _startHour) _startHour = _start.hour;
+          if (start.hour < _startHour) _startHour = start.hour;
 
-          if (_end.hour > _endHour) _endHour = _end.hour;
+          if (end.hour > _endHour) _endHour = end.hour;
 
           // choose same and unique colour to each subject
           var subjIndex =
@@ -104,40 +104,40 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
             textStyle: TextStyle(fontSize: _fontSizeSubject, color: textColor),
             title: e.title,
             backgroundColor: _colorPallete[subjIndex],
-            start: TableEventTime(hour: _start.hour, minute: _start.minute),
-            end: TableEventTime(hour: _end.hour, minute: _end.minute),
+            start: TableEventTime(hour: start.hour, minute: start.minute),
+            end: TableEventTime(hour: end.hour, minute: end.minute),
             onTap: () => showDialog(
               context: context,
               builder: (_) => SubjectDialog(
                 subject: e,
                 color: _colorPallete[subjIndex],
-                start: _start,
-                end: _end,
+                start: start,
+                end: end,
               ),
             ),
           );
         },
       );
-      Lane _lane = Lane(
-        backgroundColor: _brightness == Brightness.light
+      Lane lane = Lane(
+        backgroundColor: brightness == Brightness.light
             ? const Color(0xfffafafa)
             : const Color(0xff303030),
         name: i.englishDay().substring(0, 3).toUpperCase(),
         textStyle: TextStyle(
           color:
-              _brightness == Brightness.light ? Colors.black38 : Colors.white38,
+              brightness == Brightness.light ? Colors.black38 : Colors.white38,
         ),
       );
 
-      var _laneEvents = LaneEvents(lane: _lane, events: _tableEvents.toList());
+      var laneEvents = LaneEvents(lane: lane, events: tableEvents.toList());
 
-      _laneEventsList.add(_laneEvents);
+      laneEventsList.add(laneEvents);
     }
 
     // Remove day without classes from last day
     for (var i = 6; i > 0; i--) {
-      if (_laneEventsList[i].events.isEmpty) {
-        _laneEventsList.removeLast();
+      if (laneEventsList[i].events.isEmpty) {
+        laneEventsList.removeLast();
       } else {
         break;
       }
@@ -150,12 +150,12 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
             : AppBar(
                 title: InkWell(
                     onTap: () async {
-                      final _scheduleNameController =
+                      final scheduleNameController =
                           TextEditingController(text: name);
                       String? newName = await showDialog(
                           context: context,
                           builder: (_) => RenameDialog(
-                              scheduleNameController: _scheduleNameController));
+                              scheduleNameController: scheduleNameController));
 
                       if ((newName == null) || (newName.isEmpty)) return;
 
@@ -190,7 +190,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
             child: TimetableViewWidget(
               startHour: _startHour,
               endHour: _endHour,
-              laneEventsList: _laneEventsList,
+              laneEventsList: laneEventsList,
               itemHeight: _itemHeight,
             ),
           ),
@@ -209,7 +209,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                           setState(() => _itemHeight += 2);
                         }),
                   if (kIsWeb || !Platform.isAndroid) const SizedBox(height: 5),
-                  if (_itemHeight >= 52)
+                  if (_itemHeight >= 44)
                     FloatingActionButton(
                         heroTag: "btnZoom-",
                         mini: true,
@@ -267,9 +267,9 @@ class SubjectDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _actionButtonColour = Theme.of(context).textTheme.bodyLarge!.color;
+    var actionButtonColour = Theme.of(context).textTheme.bodyLarge!.color;
 
-    var _duration = _end.difference(_start);
+    var duration = _end.difference(_start);
     return AlertDialog(
       backgroundColor: _color.shade50,
       title: Text(_subject.title),
@@ -287,9 +287,9 @@ class SubjectDialog extends StatelessWidget {
             ),
             title: Text(
                 "Starts ${_start.toRealString()}, ends ${_end.toRealString()}"),
-            subtitle: Text(_duration.minute == 0
-                ? 'Duration ${_duration.hour}h'
-                : 'Duration ${_duration.hour}h ${_duration.minute}m'),
+            subtitle: Text(duration.minute == 0
+                ? 'Duration ${duration.hour}h'
+                : 'Duration ${duration.hour}h ${duration.minute}m'),
           ),
         ],
       ),
@@ -301,7 +301,7 @@ class SubjectDialog extends StatelessWidget {
             },
             child: Text(
               'View details',
-              style: TextStyle(color: _actionButtonColour),
+              style: TextStyle(color: actionButtonColour),
             )),
         TextButton(
             onPressed: () {
@@ -309,7 +309,7 @@ class SubjectDialog extends StatelessWidget {
             },
             child: Text(
               'Close',
-              style: TextStyle(color: _actionButtonColour),
+              style: TextStyle(color: actionButtonColour),
             ))
       ],
     );

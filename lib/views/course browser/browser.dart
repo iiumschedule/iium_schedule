@@ -11,14 +11,14 @@ class Browser extends StatefulWidget {
   const Browser({Key? key}) : super(key: key);
 
   @override
-  _BrowserState createState() => _BrowserState();
+  State<Browser> createState() => _BrowserState();
 }
 
 class _BrowserState extends State<Browser> {
   final GlobalKey dropdownKey = GlobalKey();
   final TextEditingController _searchController = TextEditingController();
-  String _session = "2021/2022";
-  int _semester = 2;
+  String _session = "2022/2023";
+  int _semester = 1;
   String? _selectedKulliyah;
 
   @override
@@ -45,7 +45,9 @@ class _BrowserState extends State<Browser> {
                       child: DropdownButtonFormField(
                         items: Kuliyyahs.all
                             .map((e) => DropdownMenuItem(
-                                child: Text(e.fullName), value: e.code))
+                                  value: e.code,
+                                  child: Text(e.fullName),
+                                ))
                             .toList(),
                         key: dropdownKey,
                         decoration:
@@ -65,8 +67,8 @@ class _BrowserState extends State<Browser> {
                     child: CupertinoSegmentedControl(
                         groupValue: _session,
                         children: const {
-                          "2020/2021": Text("2020/2021"),
-                          "2021/2022": Text("2021/2022")
+                          "2021/2022": Text("2021/2022"),
+                          "2022/2023": Text("2022/2023"),
                         },
                         onValueChanged: (String value) {
                           setState(() => _session = value);
@@ -111,7 +113,6 @@ class _BrowserState extends State<Browser> {
                           ? SystemMouseCursors.forbidden
                           : SystemMouseCursors.click,
                       child: CupertinoButton.filled(
-                        child: const Text('Search'),
                         onPressed: _selectedKulliyah == null
                             ? null
                             : () {
@@ -137,6 +138,7 @@ class _BrowserState extends State<Browser> {
                                   ),
                                 );
                               },
+                        child: const Text('Search'),
                       ),
                     ),
                   )

@@ -15,7 +15,7 @@ class InputCourse extends StatefulWidget {
   const InputCourse({Key? key}) : super(key: key);
 
   @override
-  _InputCourseState createState() => _InputCourseState();
+  State<InputCourse> createState() => _InputCourseState();
 }
 
 class _InputCourseState extends State<InputCourse>
@@ -197,12 +197,12 @@ class _InputCourseState extends State<InputCourse>
                             TextButton(
                               onPressed: () {
                                 FocusScope.of(context).unfocus();
-                                var _courseCode =
+                                var courseCode =
                                     _courseCodeInputController.text;
-                                var _section =
+                                var section =
                                     int.tryParse(_sectionInputController.text);
 
-                                if (_courseCode.isEmpty) {
+                                if (courseCode.isEmpty) {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(const SnackBar(
                                     content: Text(
@@ -214,12 +214,12 @@ class _InputCourseState extends State<InputCourse>
                                 }
 
                                 // to make sure the format is <string><space><number>
-                                _courseCode = _courseCode.toAlbiruniFormat();
+                                courseCode = courseCode.toAlbiruniFormat();
 
                                 // Check if the code already exist in table
                                 bool subjectExist = _inputCourses.every(
                                     (element) =>
-                                        element.courseCode != _courseCode);
+                                        element.courseCode != courseCode);
 
                                 if (!subjectExist && _editingIndex == null) {
                                   ScaffoldMessenger.of(context)
@@ -233,7 +233,7 @@ class _InputCourseState extends State<InputCourse>
                                 }
 
                                 var inputedCourse = BasicSubjectModel(
-                                    courseCode: _courseCode, section: _section);
+                                    courseCode: courseCode, section: section);
                                 setState(() {
                                   if (_editingIndex != null) {
                                     _inputCourses[_editingIndex!] =

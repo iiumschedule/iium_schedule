@@ -56,7 +56,7 @@ class SubjectScreen extends StatelessWidget {
                   TextBubble(
                     text:
                         'Chr ${subject.chr.toString().removeTrailingDotZero()}',
-                    icon: Icons.class__outlined,
+                    icon: Icons.class_outlined,
                     backgroundColor: Colors.deepPurple,
                   ),
                   TextBubble(
@@ -78,7 +78,7 @@ class SubjectScreen extends StatelessWidget {
               ...List.generate(
                 subject.lect.length,
                 (index) => Text(
-                    '${index + 1}. ' + ReCase(subject.lect[index]).titleCase),
+                    '${index + 1}. ${ReCase(subject.lect[index]).titleCase}'),
               ),
               const Text(
                 '\nVenue',

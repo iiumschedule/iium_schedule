@@ -10,14 +10,14 @@ class InputScope extends StatefulWidget {
   const InputScope({Key? key}) : super(key: key);
 
   @override
-  _InputScopeState createState() => _InputScopeState();
+  State<InputScope> createState() => _InputScopeState();
 }
 
 class _InputScopeState extends State<InputScope>
     with AutomaticKeepAliveClientMixin<InputScope> {
   final GlobalKey dropdownKey = GlobalKey();
-  String _session = "2021/2022";
-  int _semester = 2;
+  String _session = "2022/2023";
+  int _semester = 1;
   String? _selectedKulliyah;
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,9 @@ class _InputScopeState extends State<InputScope>
                       child: DropdownButtonFormField(
                         items: Kuliyyahs.all
                             .map((e) => DropdownMenuItem(
-                                child: Text(e.fullName), value: e.code))
+                                  value: e.code,
+                                  child: Text(e.fullName),
+                                ))
                             .toList(),
                         key: dropdownKey,
                         decoration:
@@ -59,8 +61,8 @@ class _InputScopeState extends State<InputScope>
                     child: CupertinoSegmentedControl(
                         groupValue: _session,
                         children: const {
-                          "2020/2021": Text("2020/2021"),
-                          "2021/2022": Text("2021/2022")
+                          "2021/2022": Text("2021/2022"),
+                          "2022/2023": Text("2022/2023"),
                         },
                         onValueChanged: (String value) {
                           setState(() => _session = value);
@@ -88,7 +90,6 @@ class _InputScopeState extends State<InputScope>
                           ? SystemMouseCursors.forbidden
                           : SystemMouseCursors.click,
                       child: CupertinoButton.filled(
-                        child: const Text('Next'),
                         onPressed: _selectedKulliyah == null
                             ? null
                             : () {
@@ -108,6 +109,7 @@ class _InputScopeState extends State<InputScope>
                                 ScheduleMakerData.albiruni = albiruni;
                                 ScheduleMakerData.kulliyah = _selectedKulliyah!;
                               },
+                        child: const Text('Next'),
                       ),
                     ),
                   )

@@ -17,7 +17,7 @@ class MyBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _textStyle = TextStyle(
+    var textStyle = TextStyle(
       color: Theme.of(context).brightness == Brightness.light
           ? Theme.of(context).primaryColor
           : Colors.white,
@@ -65,8 +65,8 @@ class MyBody extends StatelessWidget {
             ),
             itemBuilder: (context) => const [
               PopupMenuItem(
-                child: Text("Website"),
                 value: "website",
+                child: Text("Website"),
               ),
             ],
           ),
@@ -81,7 +81,7 @@ class MyBody extends StatelessWidget {
             child: CupertinoButton(
               child: Text(
                 'Schedule Maker',
-                style: _textStyle,
+                style: textStyle,
               ),
               onPressed: () async {
                 // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
@@ -98,7 +98,7 @@ class MyBody extends StatelessWidget {
             child: CupertinoButton(
               child: Text(
                 'Course Browser',
-                style: _textStyle,
+                style: textStyle,
               ),
               onPressed: () {
                 Navigator.of(context)
@@ -127,7 +127,7 @@ class MyBody extends StatelessWidget {
                       child: CupertinoButton(
                         child: Text(
                           'Saved Schedule',
-                          style: _textStyle,
+                          style: textStyle,
                         ),
                         onPressed: () {
                           Navigator.of(context).push(CupertinoPageRoute(

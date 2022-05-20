@@ -18,7 +18,7 @@ class CourseValidator extends StatefulWidget {
   const CourseValidator({Key? key}) : super(key: key);
 
   @override
-  _CourseValidatorState createState() => _CourseValidatorState();
+  State<CourseValidator> createState() => _CourseValidatorState();
 }
 
 class _CourseValidatorState extends State<CourseValidator>
@@ -113,7 +113,7 @@ class SubjectCard extends StatefulWidget {
   final Albiruni albiruni;
 
   @override
-  _SubjectCardState createState() => _SubjectCardState();
+  State<SubjectCard> createState() => _SubjectCardState();
 }
 
 class _SubjectCardState extends State<SubjectCard> {

@@ -15,9 +15,7 @@ class AppbarTitle extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AppbarTitleState createState() {
-    return _AppbarTitleState();
-  }
+  State<AppbarTitle> createState() => _AppbarTitleState();
 }
 
 class _AppbarTitleState extends State<AppbarTitle> {

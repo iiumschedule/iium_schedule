@@ -23,7 +23,7 @@ class BrowserView extends StatefulWidget {
   final String? courseCode;
 
   @override
-  _BrowserViewState createState() => _BrowserViewState();
+  State<BrowserView> createState() => _BrowserViewState();
 }
 
 class _BrowserViewState extends State<BrowserView> {
@@ -241,7 +241,7 @@ class _BrowserViewState extends State<BrowserView> {
                           Row(
                             children: [
                               const Icon(
-                                Icons.class__outlined,
+                                Icons.class_outlined,
                               ),
                               const SizedBox(width: 5),
                               // https://stackoverflow.com/a/55173692
