@@ -1,5 +1,6 @@
 import 'dart:io';
-
+import 'dart:ui' as ui;
+import 'dart:typed_data';
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +8,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter/rendering.dart';
 import '../../colour_palletes.dart';
 import '../../providers/saved_schedule_provider.dart';
 import '../../util/extensions.dart';
 import '../course browser/subject_screen.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ScheduleLayout extends StatefulWidget {
   const ScheduleLayout(
@@ -29,7 +31,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
   final _colorPallete = [...ColourPalletes.pallete1]; // add more
   int _startHour = 10; // pukul 10 am
   int _endHour = 17; // pukul 5 pm
-
+  final GlobalKey _globalKey = GlobalKey();
   double _itemHeight = 60.0;
   double _fontSizeSubject = 10;
 
@@ -45,9 +47,27 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     name = widget.initialName;
   }
 
-  void save() {
-    var scheduleData = widget.subjects.map((e) => e.toJson()).toList();
+  void takeScreenshot() async {
+    RenderRepaintBoundary boundary =
+        _globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary;
+    if (boundary.debugNeedsPaint) {
+      print("Waiting for boundary to be painted.");
+      await Future.delayed(const Duration(milliseconds: 20));
+      ui.Image image = await boundary.toImage();
+    }
+    ui.Image image = await boundary.toImage();
+    final directory = (await getApplicationDocumentsDirectory()).path;
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List pngBytes = byteData!.buffer.asUint8List();
+    print(pngBytes);
+    File imgFile = File('$directory/screenshot.png');
+    print(directory);
+    imgFile.writeAsBytes(pngBytes);
+  }
 
+  void save() async{
+    var scheduleData = widget.subjects.map((e) => e.toJson()).toList();
+    takeScreenshot();
     Provider.of<SavedScheduleProvider>(context, listen: false).setSchedule(
         name: name, data: scheduleData, oldName: widget.initialName);
     Fluttertoast.showToast(msg: "Saved");
@@ -142,92 +162,98 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         break;
       }
     }
-    return GestureDetector(
-      onTap: _hideFab ? () => setState(() => _hideFab = !_hideFab) : null,
-      child: Scaffold(
-        appBar: _isFullScreen
-            ? null
-            : AppBar(
-                title: InkWell(
-                    onTap: () async {
-                      final scheduleNameController =
-                          TextEditingController(text: name);
-                      String? newName = await showDialog(
-                          context: context,
-                          builder: (_) => RenameDialog(
-                              scheduleNameController: scheduleNameController));
+    return RepaintBoundary(
+      key: _globalKey,
+      child: GestureDetector(
+        onTap: _hideFab ? () => setState(() => _hideFab = !_hideFab) : null,
+        child: Scaffold(
+          appBar: _isFullScreen
+              ? null
+              : AppBar(
+                  title: InkWell(
+                      onTap: () async {
+                        final scheduleNameController =
+                            TextEditingController(text: name);
+                        String? newName = await showDialog(
+                            context: context,
+                            builder: (_) => RenameDialog(
+                                scheduleNameController:
+                                    scheduleNameController));
 
-                      if ((newName == null) || (newName.isEmpty)) return;
+                        if ((newName == null) || (newName.isEmpty)) return;
 
-                      setState(() => name = newName);
-                      save();
-                    },
-                    child: Text(
-                      name,
-                      overflow: TextOverflow.fade,
-                    )),
-                actions: [
-                  if (kIsWeb || !Platform.isAndroid) ...[
+                        setState(() => name = newName);
+                        save();
+                      },
+                      child: Text(
+                        name,
+                        overflow: TextOverflow.fade,
+                      )),
+                  actions: [
+                    if (kIsWeb || !Platform.isAndroid) ...[
+                      IconButton(
+                        onPressed: () => setState(() => _fontSizeSubject--),
+                        icon: const Icon(Icons.text_decrease_rounded),
+                      ),
+                      IconButton(
+                        onPressed: () => setState(() => _fontSizeSubject++),
+                        icon: const Icon(Icons.text_increase_rounded),
+                      ),
+                    ],
                     IconButton(
-                      onPressed: () => setState(() => _fontSizeSubject--),
-                      icon: const Icon(Icons.text_decrease_rounded),
-                    ),
-                    IconButton(
-                      onPressed: () => setState(() => _fontSizeSubject++),
-                      icon: const Icon(Icons.text_increase_rounded),
+                      tooltip: "Save",
+                      onPressed: save,
+                      icon: const Icon(Icons.save_rounded),
                     ),
                   ],
-                  IconButton(
-                    tooltip: "Save",
-                    onPressed: save,
-                    icon: const Icon(Icons.save_rounded),
-                  ),
-                ],
+                ),
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: TimetableViewWidget(
+                startHour: _startHour,
+                endHour: _endHour,
+                laneEventsList: laneEventsList,
+                itemHeight: _itemHeight,
               ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: TimetableViewWidget(
-              startHour: _startHour,
-              endHour: _endHour,
-              laneEventsList: laneEventsList,
-              itemHeight: _itemHeight,
             ),
           ),
+          floatingActionButton: _hideFab
+              ? null
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (_itemHeight <= 90)
+                      FloatingActionButton(
+                          heroTag: "btnZoom+",
+                          mini: true,
+                          child: const Icon(Icons.zoom_in),
+                          onPressed: () {
+                            setState(() => _itemHeight += 2);
+                          }),
+                    if (kIsWeb || !Platform.isAndroid)
+                      const SizedBox(height: 5),
+                    if (_itemHeight >= 44)
+                      FloatingActionButton(
+                          heroTag: "btnZoom-",
+                          mini: true,
+                          child: const Icon(Icons.zoom_out),
+                          onPressed: () {
+                            setState(() => _itemHeight -= 2);
+                          }),
+                    if (kIsWeb || !Platform.isAndroid)
+                      const SizedBox(height: 5),
+                    FloatingActionButton(
+                      heroTag: "btnFull",
+                      mini: true,
+                      onPressed: fullscreenFabHandler,
+                      child: Icon(_isFullScreen
+                          ? Icons.fullscreen_exit
+                          : Icons.fullscreen),
+                    ),
+                  ],
+                ),
         ),
-        floatingActionButton: _hideFab
-            ? null
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (_itemHeight <= 90)
-                    FloatingActionButton(
-                        heroTag: "btnZoom+",
-                        mini: true,
-                        child: const Icon(Icons.zoom_in),
-                        onPressed: () {
-                          setState(() => _itemHeight += 2);
-                        }),
-                  if (kIsWeb || !Platform.isAndroid) const SizedBox(height: 5),
-                  if (_itemHeight >= 44)
-                    FloatingActionButton(
-                        heroTag: "btnZoom-",
-                        mini: true,
-                        child: const Icon(Icons.zoom_out),
-                        onPressed: () {
-                          setState(() => _itemHeight -= 2);
-                        }),
-                  if (kIsWeb || !Platform.isAndroid) const SizedBox(height: 5),
-                  FloatingActionButton(
-                    heroTag: "btnFull",
-                    mini: true,
-                    onPressed: fullscreenFabHandler,
-                    child: Icon(_isFullScreen
-                        ? Icons.fullscreen_exit
-                        : Icons.fullscreen),
-                  ),
-                ],
-              ),
       ),
     );
   }

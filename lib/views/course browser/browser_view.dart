@@ -39,7 +39,7 @@ class _BrowserViewState extends State<BrowserView> {
         ),
         actions: [
           IconButton(
-              tooltip: "Prevous page",
+              tooltip: "Previous page",
               onPressed: _page <= 1
                   ? null
                   : () {

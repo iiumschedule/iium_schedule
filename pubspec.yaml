@@ -44,11 +44,11 @@ dependencies:
   fluttertoast: ^8.0.9
 
 # Comment this part if necessary
-dependency_overrides:
-  albiruni:
-    path: "../../Dart App/albiruni"
-  flutter_timetable_view:
-    path: "../Experiments/flutter_timetable_view"
+# dependency_overrides:
+#   albiruni:
+#     path: "../../Dart App/albiruni"
+#   flutter_timetable_view:
+#     path: "../Experiments/flutter_timetable_view"
 
 dev_dependencies:
   flutter_test:
