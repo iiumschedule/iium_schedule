@@ -8,7 +8,7 @@ Generate IIUM Schedule quickly with automatic subject data fetching. Plus, view 
 
 **THIS APP IS UNDER DEVELOPMENT. YOUR FEEDBACK IS VERY MUCH APPRECIATED**
 
-Feel free to open up [issues](https://github.com/iqfareez/iium_schedule/issues) etc.
+Feel free to open up [issues](https://github.com/iqfareez/iium_schedule/issues) and/or submit [pull requests](https://github.com/iqfareez/iium_schedule/pulls).
 
 ## Release ETA
 
