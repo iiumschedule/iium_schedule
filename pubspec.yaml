@@ -1,8 +1,6 @@
 name: flutter_iium_schedule
 description: IIUM Schedule Maker
 
-# The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -26,9 +24,8 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  # cupertino_icons: ^1.0.2
   html: ^0.15.0
-  flutter_lints: ^2.0.1
   albiruni: any
   recase: ^4.0.0
   and:
@@ -44,11 +41,11 @@ dependencies:
   fluttertoast: ^8.0.9
 
 # Comment this part if necessary
-# dependency_overrides:
-#   albiruni:
-#     path: "../../Dart App/albiruni"
-#   flutter_timetable_view:
-#     path: "../Experiments/flutter_timetable_view"
+dependency_overrides:
+  albiruni:
+    path: "../../Dart App/albiruni"
+  flutter_timetable_view:
+    path: "../Experiments/flutter_timetable_view"
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +53,7 @@ dev_dependencies:
   msix: ^3.5.1
   build_runner: ^2.1.7
   hive_generator: ^1.1.2
+  flutter_lints: ^2.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
