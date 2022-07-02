@@ -1,19 +1,20 @@
 import 'dart:io';
-import 'dart:ui' as ui;
 import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/rendering.dart';
+
 import '../../colour_palletes.dart';
 import '../../providers/saved_schedule_provider.dart';
 import '../../util/extensions.dart';
 import '../course browser/subject_screen.dart';
-import 'package:path_provider/path_provider.dart';
 
 class ScheduleLayout extends StatefulWidget {
   const ScheduleLayout(
@@ -50,22 +51,28 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
   void takeScreenshot() async {
     RenderRepaintBoundary boundary =
         _globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary;
-    if (boundary.debugNeedsPaint) {
+    // TODO: Sometimes error !debugNeedsPaint': is not true
+    if (kDebugMode ? boundary.debugNeedsPaint : false) {
       print("Waiting for boundary to be painted.");
       await Future.delayed(const Duration(milliseconds: 20));
-      ui.Image image = await boundary.toImage();
+      //   ui.Image image = await boundary.toImage();
     }
     ui.Image image = await boundary.toImage();
-    final directory = (await getApplicationDocumentsDirectory()).path;
+    // TODO: Saves to gallery
+    // TODO: Handle Windows and the web
+    final folderDirectory =
+        await Directory('/storage/emulated/0/Pictures/IIUM Schedule').create();
+    final directory = folderDirectory.path;
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData!.buffer.asUint8List();
-    print(pngBytes);
-    File imgFile = File('$directory/screenshot.png');
+    // sanitize file name
+    final fileName = name.replaceAll(RegExp(r'[^\w\s]+'), '');
+    File imgFile = File('$directory/$fileName.png');
     print(directory);
     imgFile.writeAsBytes(pngBytes);
   }
 
-  void save() async{
+  void save() async {
     var scheduleData = widget.subjects.map((e) => e.toJson()).toList();
     takeScreenshot();
     Provider.of<SavedScheduleProvider>(context, listen: false).setSchedule(
