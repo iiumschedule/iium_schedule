@@ -9,7 +9,7 @@ import '../../model/basic_subject_model.dart';
 import '../../util/course_validator_pass.dart';
 import '../../util/kulliyyahs.dart';
 import '../course%20browser/subject_screen.dart';
-import 'schedule_layout.dart';
+import 'schedule_view/schedule_layout.dart';
 import 'schedule_maker_data.dart';
 
 CourseValidatorPass? _validatorPass;

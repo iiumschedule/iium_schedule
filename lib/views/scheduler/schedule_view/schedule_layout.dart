@@ -11,10 +11,13 @@ import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-import '../../colour_palletes.dart';
-import '../../providers/saved_schedule_provider.dart';
-import '../../util/extensions.dart';
-import '../course browser/subject_screen.dart';
+import '../../../colour_palletes.dart';
+import '../../../providers/saved_schedule_provider.dart';
+import '../../../util/extensions.dart';
+import '../../../util/save_file.dart';
+import 'rename_dialog.dart';
+import 'subject_dialog.dart';
+import 'timetable_view_widget.dart';
 
 class ScheduleLayout extends StatefulWidget {
   const ScheduleLayout(
@@ -33,6 +36,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
   int _startHour = 10; // pukul 10 am
   int _endHour = 17; // pukul 5 pm
   final GlobalKey _globalKey = GlobalKey();
+  final FToast fToast = FToast();
   double _itemHeight = 60.0;
   double _fontSizeSubject = 10;
 
@@ -46,38 +50,57 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     super.initState();
     _colorPallete.shuffle();
     name = widget.initialName;
+    fToast.init(context);
   }
 
   void takeScreenshot() async {
+    SaveFile sf = SaveFile();
     RenderRepaintBoundary boundary =
         _globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary;
-    // TODO: Sometimes error !debugNeedsPaint': is not true
+    // In debug mode Android sometimes will return !debugNeedsPrint error
     if (kDebugMode ? boundary.debugNeedsPaint : false) {
       print("Waiting for boundary to be painted.");
       await Future.delayed(const Duration(milliseconds: 20));
-      //   ui.Image image = await boundary.toImage();
     }
-    ui.Image image = await boundary.toImage();
+    ui.Image image = await boundary.toImage(pixelRatio: 2);
     // TODO: Saves to gallery
-    // TODO: Handle Windows and the web
-    final folderDirectory =
-        await Directory('/storage/emulated/0/Pictures/IIUM Schedule').create();
-    final directory = folderDirectory.path;
+
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData!.buffer.asUint8List();
-    // sanitize file name
-    final fileName = name.replaceAll(RegExp(r'[^\w\s]+'), '');
-    File imgFile = File('$directory/$fileName.png');
-    print(directory);
-    imgFile.writeAsBytes(pngBytes);
+    // sanitize file name and change space to dash
+    final filename =
+        name.replaceAll(RegExp(r'[^\w\s]+'), '').replaceAll(' ', '-');
+
+    String? path = await sf.save(pngBytes, filename);
+
+    if (kIsWeb) {
+      Fluttertoast.showToast(
+          msg: "Schedule will be downloaded shortly..",
+          webPosition: "left",
+          timeInSecForIosWeb: 3);
+      return;
+    }
+
+    // show toast for windows and android
+    fToast.showToast(
+      toastDuration: const Duration(seconds: 3),
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        color: Colors
+            .grey[Theme.of(context).brightness == Brightness.dark ? 800 : 300],
+        child: Text('Saved to $path'),
+      ),
+    );
   }
 
+  // Save the generated schedule data to the database (Hive)
+  // Also take screenshot and save to device
   void save() async {
     var scheduleData = widget.subjects.map((e) => e.toJson()).toList();
     takeScreenshot();
     Provider.of<SavedScheduleProvider>(context, listen: false).setSchedule(
         name: name, data: scheduleData, oldName: widget.initialName);
-    Fluttertoast.showToast(msg: "Saved");
+    // Fluttertoast.showToast(msg: "Saved");
   }
 
   @override
@@ -199,19 +222,45 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                   actions: [
                     if (kIsWeb || !Platform.isAndroid) ...[
                       IconButton(
+                        tooltip: 'Increase text sizes',
                         onPressed: () => setState(() => _fontSizeSubject--),
                         icon: const Icon(Icons.text_decrease_rounded),
                       ),
                       IconButton(
+                        tooltip: 'Reduce text sizes',
                         onPressed: () => setState(() => _fontSizeSubject++),
                         icon: const Icon(Icons.text_increase_rounded),
                       ),
                     ],
-                    IconButton(
-                      tooltip: "Save",
-                      onPressed: save,
-                      icon: const Icon(Icons.save_rounded),
-                    ),
+                    PopupMenuButton(
+                        itemBuilder: (context) {
+                          return <PopupMenuEntry>[
+                            const PopupMenuItem(
+                              value: 'save',
+                              child: ListTile(
+                                  trailing: Icon(Icons.file_download_outlined),
+                                  title: Text('Save')),
+                            ),
+                            const PopupMenuItem(
+                              // TODO: Implement share
+                              value: 'share',
+                              child: ListTile(
+                                  trailing: Icon(Icons.send_outlined),
+                                  title: Text('Share')),
+                            ),
+                            const PopupMenuDivider(),
+                            const PopupMenuItem(
+                              // Implement delete
+                              value: 'delete',
+                              child: ListTile(
+                                  trailing: Icon(
+                                    Icons.delete_outline,
+                                  ),
+                                  title: Text('Delete')),
+                            ),
+                          ];
+                        },
+                        onSelected: popupMenuHandler),
                   ],
                 ),
           body: SafeArea(
@@ -233,6 +282,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                     if (_itemHeight <= 90)
                       FloatingActionButton(
                           heroTag: "btnZoom+",
+                          tooltip: "Zoom in (increase height)",
                           mini: true,
                           child: const Icon(Icons.zoom_in),
                           onPressed: () {
@@ -243,6 +293,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                     if (_itemHeight >= 44)
                       FloatingActionButton(
                           heroTag: "btnZoom-",
+                          tooltip: "Zoom out (decrease height)",
                           mini: true,
                           child: const Icon(Icons.zoom_out),
                           onPressed: () {
@@ -253,6 +304,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                     FloatingActionButton(
                       heroTag: "btnFull",
                       mini: true,
+                      tooltip: "Go full screen",
                       onPressed: fullscreenFabHandler,
                       child: Icon(_isFullScreen
                           ? Icons.fullscreen_exit
@@ -263,6 +315,22 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         ),
       ),
     );
+  }
+
+  void popupMenuHandler(value) {
+    switch (value) {
+      case 'save':
+        save();
+        break;
+      case 'share':
+        // TODO: Implement share
+        Fluttertoast.showToast(msg: "Not implemented yet");
+        break;
+      case 'delete':
+        // TODO: Implement delete
+        Fluttertoast.showToast(msg: "Not implemented yet");
+        break;
+    }
   }
 
   void fullscreenFabHandler() {
@@ -277,141 +345,5 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       setState(() => _isFullScreen = false);
     }
-  }
-}
-
-class SubjectDialog extends StatelessWidget {
-  const SubjectDialog({
-    Key? key,
-    required Subject subject,
-    required MaterialColor color,
-    required TimeOfDay start,
-    required TimeOfDay end,
-  })  : _subject = subject,
-        _color = color,
-        _start = start,
-        _end = end,
-        super(key: key);
-
-  final Subject _subject;
-  final MaterialColor _color;
-  final TimeOfDay _start;
-  final TimeOfDay _end;
-
-  @override
-  Widget build(BuildContext context) {
-    var actionButtonColour = Theme.of(context).textTheme.bodyLarge!.color;
-
-    var duration = _end.difference(_start);
-    return AlertDialog(
-      backgroundColor: _color.shade50,
-      title: Text(_subject.title),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.pin_drop_outlined),
-              title: Text(_subject.venue ?? "No venue")),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: const Icon(
-              Icons.schedule_outlined,
-            ),
-            title: Text(
-                "Starts ${_start.toRealString()}, ends ${_end.toRealString()}"),
-            subtitle: Text(duration.minute == 0
-                ? 'Duration ${duration.hour}h'
-                : 'Duration ${duration.hour}h ${duration.minute}m'),
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => SubjectScreen(_subject)));
-            },
-            child: Text(
-              'View details',
-              style: TextStyle(color: actionButtonColour),
-            )),
-        TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(
-              'Close',
-              style: TextStyle(color: actionButtonColour),
-            ))
-      ],
-    );
-  }
-}
-
-class RenameDialog extends StatelessWidget {
-  const RenameDialog({
-    Key? key,
-    required TextEditingController scheduleNameController,
-  })  : _scheduleNameController = scheduleNameController,
-        super(key: key);
-
-  final TextEditingController _scheduleNameController;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text("Rename"),
-      content: TextField(controller: _scheduleNameController),
-      actions: [
-        TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel")),
-        TextButton(
-          onPressed: () => Navigator.pop(context, _scheduleNameController.text),
-          child: const Text("Rename"),
-        ),
-      ],
-    );
-  }
-}
-
-class TimetableViewWidget extends StatelessWidget {
-  const TimetableViewWidget(
-      {Key? key,
-      required this.startHour,
-      required this.endHour,
-      required List<LaneEvents> laneEventsList,
-      required this.itemHeight})
-      : _laneEventsList = laneEventsList,
-        super(key: key);
-
-  final int startHour;
-  final int endHour;
-  final List<LaneEvents> _laneEventsList;
-  final double itemHeight;
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (_, constraints) {
-      return TimetableView(
-        timetableStyle: TimetableStyle(
-          timeItemTextColor: Theme.of(context).brightness == Brightness.light
-              ? Colors.black38
-              : Colors.white38,
-          timeItemWidth: 40,
-          laneHeight: 20,
-          timeItemHeight: itemHeight,
-          // responsive layout while providing little padding at the end
-          laneWidth: constraints.maxWidth / (_laneEventsList.length + .8),
-          laneColor: Theme.of(context).scaffoldBackgroundColor,
-          timelineColor: Theme.of(context).scaffoldBackgroundColor,
-          mainBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          timelineItemColor: Theme.of(context).scaffoldBackgroundColor,
-          startHour: startHour,
-          endHour: endHour,
-        ),
-        laneEventsList: _laneEventsList,
-      );
-    });
   }
 }

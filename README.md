@@ -12,4 +12,12 @@ Feel free to open up [issues](https://github.com/iqfareez/iium_schedule/issues) 
 
 ## Release ETA
 
-Sem 1, 22/23
+Sem 1, 22/23 (After my internship)
+
+## Website
+
+http://iiumschedule.iqfareez.com/
+
+## Honourable mentions
+
+- Conditional importing that allows compilation to all platforms - https://gpalma.pt/blog/conditional-importing/
