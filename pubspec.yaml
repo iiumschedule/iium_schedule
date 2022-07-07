@@ -39,6 +39,8 @@ dependencies:
   hive_flutter: ^1.1.0
   provider: ^6.0.2
   fluttertoast: ^8.0.9
+  path_provider: ^2.0.11
+  permission_handler: ^10.0.0
 
 # Comment this part if necessary
 dependency_overrides:
