@@ -341,7 +341,7 @@ class _InputCourseState extends State<InputCourse>
                     if (_inputIndex == 1)
                       Link(
                         uri: Uri.parse(
-                            "https://iiumschedule.vercel.app/docs/extract/imaluum"),
+                            "https://iiumschedule.iqfareez.com/docs/extract/imaluum"),
                         target: LinkTarget.blank,
                         builder: (_, followLink) => TextButton(
                           onPressed: followLink,

@@ -54,7 +54,7 @@ class MyBody extends StatelessWidget {
             onSelected: (value) async {
               switch (value) {
                 case "website":
-                  LauncherUrl.open("https://iiumschedule.vercel.app/");
+                  LauncherUrl.open("https://iiumschedule.iqfareez.com/");
                   break;
                 default:
               }
