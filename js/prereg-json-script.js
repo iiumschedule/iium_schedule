@@ -22,4 +22,7 @@ for (i = 0; i < sections.length; i++) {
 }
 
 var json = JSON.stringify(combinedSubjectDatas);
-alert("Copy -----> " + json);
+const myUrl = new URL('https://iiumschedule.iqfareez.com/qrcode');
+myUrl.searchParams.append('data', json);
+console.log(myUrl.href); // log target url
+window.open(myUrl.href); // go to target url

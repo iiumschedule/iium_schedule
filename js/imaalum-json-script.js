@@ -24,8 +24,14 @@ for (let i = 1; i < data.length; i++) {
 
 // combine code & section
 for (i = 0; i < sections.length; i++) {
-    combinedSubjectDatas.push({ courseCode: courseCodes[i], section: sections[i] });
+    combinedSubjectDatas.push({
+        courseCode: courseCodes[i],
+        section: sections[i],
+    });
 }
 
-var json = JSON.stringify(combinedSubjectDatas);
-alert("Copy -----> " + json);
+var json = JSON.stringify(combinedSubjectDatas); // data
+const myUrl = new URL('https://iiumschedule.iqfareez.com/qrcode');
+myUrl.searchParams.append('data', json);
+console.log(myUrl.href); // log target url
+window.open(myUrl.href); // go to target url
