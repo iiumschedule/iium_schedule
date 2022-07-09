@@ -3,7 +3,7 @@
     "short_name": "IIUM Schedule",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#9c27b0",
+    "background_color": "#fffeee",
     "theme_color": "#9c27b0",
     "description": "IIUM Schedule Parser",
     "orientation": "portrait-primary",
