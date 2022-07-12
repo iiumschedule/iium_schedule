@@ -27,7 +27,8 @@ dependencies:
   # cupertino_icons: ^1.0.2
   html: ^0.15.0
   albiruni: any
-  recase: ^4.0.0
+  recase:
+    git: https://github.com/iqfareez/recase.git # Issue #2
   and:
     git: https://github.com/iqfareez/and.git # null-safe
   url_launcher: ^6.0.17
