@@ -13,9 +13,11 @@ import 'package:provider/provider.dart';
 
 import '../../../colour_palletes.dart';
 import '../../../providers/saved_schedule_provider.dart';
+import '../../../providers/schedule_layout_setting_provider.dart';
 import '../../../util/extensions.dart';
 import '../../../util/save_file.dart';
 import 'rename_dialog.dart';
+import 'setting_bottom_sheet.dart';
 import 'subject_dialog.dart';
 import 'timetable_view_widget.dart';
 
@@ -152,7 +154,11 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
 
           return TableEvent(
             textStyle: TextStyle(fontSize: _fontSizeSubject, color: textColor),
-            title: e.title,
+            title: Provider.of<ScheduleLayoutSettingProvider>(context)
+                        .subjectTitleSetting ==
+                    SubjectTitleSetting.title
+                ? e.title
+                : e.code,
             backgroundColor: _colorPallete[subjIndex],
             start: TableEventTime(hour: start.hour, minute: start.minute),
             end: TableEventTime(hour: end.hour, minute: end.minute),
@@ -232,6 +238,14 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                         icon: const Icon(Icons.text_increase_rounded),
                       ),
                     ],
+                    IconButton(
+                        onPressed: () {
+                          // ooen bottomsheet
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (_) => const SettingBottomSheet());
+                        },
+                        icon: const Icon(Icons.settings_outlined)),
                     PopupMenuButton(
                         itemBuilder: (context) {
                           return <PopupMenuEntry>[

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'body.dart';
 import 'constants.dart';
 import 'providers/saved_schedule_provider.dart';
+import 'providers/schedule_layout_setting_provider.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SavedScheduleProvider()),
+        ChangeNotifierProvider(create: (_) => ScheduleLayoutSettingProvider()),
       ],
       child: MaterialApp(
         title: 'IIUM Schedule (Preview)',
