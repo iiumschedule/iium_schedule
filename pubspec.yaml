@@ -49,6 +49,8 @@ dependency_overrides:
     path: "../../Dart App/albiruni"
   flutter_timetable_view:
     path: "../Experiments/flutter_timetable_view"
+  recase:
+    path: "../../Dart App/recase"
 
 dev_dependencies:
   flutter_test:
