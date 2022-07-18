@@ -28,7 +28,8 @@ class SubjectDialog extends StatelessWidget {
 
     var duration = _end.difference(_start);
     return AlertDialog(
-      backgroundColor: _color.shade50,
+      backgroundColor:
+          _color[Theme.of(context).brightness == Brightness.light ? 50 : 900],
       title: Text(_subject.title),
       content: Column(
         mainAxisSize: MainAxisSize.min,

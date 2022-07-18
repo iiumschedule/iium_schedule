@@ -110,19 +110,19 @@ class ColourPalletes {
   static const MaterialColor orange = MaterialColor(
     _orangePrimaryValue,
     <int, Color>{
-      50: Color(0xfffff7e3),
-      100: Color(0xffffeab7),
-      200: Color(0xffffdd8b),
-      300: Color(0xfffed15f),
-      400: Color(0xfffec643),
-      500: Color(0xfffcbc38),
-      600: Color(0xfffbaf33),
-      700: Color(0xfff99e31),
-      800: Color(0xfff78e2f),
-      900: Color(_orangePrimaryValue),
+      50: Color(0xfffff3e1),
+      100: Color(0xfffee0b3),
+      200: Color(0xfffdcc83),
+      300: Color(0xfffdb652),
+      400: Color(0xfffca72e),
+      500: Color(_orangePrimaryValue),
+      600: Color(0xfff88c13),
+      700: Color(0xfff17c12),
+      800: Color(0xffeb6d10),
+      900: Color(0xffe1540e),
     },
   );
-  static const int _orangePrimaryValue = 0xfff3722c;
+  static const int _orangePrimaryValue = 0xfffc9815;
 
   static const MaterialColor tamarind = MaterialColor(
     _tamarindPrimaryValue,
