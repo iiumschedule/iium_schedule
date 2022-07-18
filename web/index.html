@@ -148,7 +148,7 @@
     window.addEventListener('load', function (ev) {
       var loadingstatus = document.querySelector('#loadingstatus > span');
       var loading = document.querySelector('#loading');
-      loadingstatus.textContent = "Loading entrypoint...";
+      loadingstatus.textContent = "Loading...";
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
@@ -156,7 +156,7 @@
         }
       }).then(function (engineInitializer) {
         loading.classList.add('main_done');
-        loadingstatus.textContent = "Initializing engine...";
+        loadingstatus.textContent = "Initializing app... (This may take some time)";
         return engineInitializer.initializeEngine();
       }).then(function (appRunner) {
         loading.classList.add('init_done');
