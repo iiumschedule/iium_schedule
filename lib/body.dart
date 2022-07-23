@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
@@ -17,11 +18,37 @@ class MyBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Show material banner if app is launched from schedule.iium.online
+      // TODO: Remember to just rmeove this implementation
+      // after the domain expires
+      if (Uri.base.host == 'schedule.iium.online') {
+        ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
+          content: const Text(
+              "The domain 'schedule.iium.online' will expire soon in September. Please use 'iiumschedule.iqfareez.com/web' instead."),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Clipboard.setData(const ClipboardData(
+                          text: 'iiumschedule.iqfareez.com/web'))
+                      .then((value) => Fluttertoast.showToast(msg: 'Copied'));
+                },
+                child: const Text('Copy new URL')),
+            TextButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+                },
+                child: const Text('OK')),
+          ],
+        ));
+      }
+    });
     var textStyle = TextStyle(
       color: Theme.of(context).brightness == Brightness.light
           ? Theme.of(context).primaryColor
           : Colors.white,
     );
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
