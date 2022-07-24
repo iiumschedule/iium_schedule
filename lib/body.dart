@@ -4,11 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:quick_actions/quick_actions.dart';
 
 import 'providers/saved_schedule_provider.dart';
 import 'saved_schedule_selector.dart';
 import 'util/launcher_url.dart';
 import 'views/course browser/browser.dart';
+import 'views/scheduler/input_scope.dart';
 import 'views/scheduler/schedule_maker.dart';
 
 class MyBody extends StatelessWidget {
@@ -18,6 +20,7 @@ class MyBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    configureQuickAction(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Show material banner if app is launched from schedule.iium.online
       // TODO: Remember to just rmeove this implementation
@@ -173,4 +176,43 @@ class MyBody extends StatelessWidget {
       ),
     );
   }
+}
+
+void configureQuickAction(BuildContext context) {
+  const QuickActions quickActions = QuickActions();
+
+  // callback for quick actions
+  quickActions.initialize((shortcutType) {
+    if (shortcutType == 'action_browser') {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (_) => const Browser()));
+    }
+    if (shortcutType == 'action_create') {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (_) => const InputScope()));
+    }
+
+    if (shortcutType == 'action_view_saved') {
+      print("hheehe");
+      Navigator.push(context,
+          MaterialPageRoute(builder: (_) => const SavedScheduleSelector()));
+    }
+  });
+  // setup quick actions
+  quickActions.setShortcutItems(
+    <ShortcutItem>[
+      const ShortcutItem(
+          type: 'action_browser',
+          localizedTitle: 'Browse course',
+          icon: 'ic_shortcut_search_outline'),
+      const ShortcutItem(
+          type: 'action_create',
+          localizedTitle: 'Create new',
+          icon: 'ic_shortcut_plus_square_outline'),
+      const ShortcutItem(
+          type: 'action_view_saved',
+          localizedTitle: 'View saved schedule',
+          icon: 'ic_shortcut_layout_outline')
+    ],
+  );
 }

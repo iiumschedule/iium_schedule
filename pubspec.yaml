@@ -42,6 +42,7 @@ dependencies:
   fluttertoast: ^8.0.9
   path_provider: ^2.0.11
   permission_handler: ^10.0.0
+  quick_actions: ^0.6.0+11
 
 # Comment this part if necessary
 dependency_overrides:
