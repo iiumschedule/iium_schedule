@@ -49,6 +49,16 @@ class SubjectDialog extends StatelessWidget {
                 ? 'Duration ${duration.hour}h'
                 : 'Duration ${duration.hour}h ${duration.minute}m'),
           ),
+          const Divider(),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.edit_outlined),
+            title: Text("Edit display title"),
+            subtitle: Text('TODO'),
+            onTap: () {
+              // TODO: implement edit title
+            },
+          )
         ],
       ),
       actions: [
