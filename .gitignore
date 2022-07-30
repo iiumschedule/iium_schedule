@@ -44,6 +44,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Others
 .firebase/hosting.YnVpbGRcd2Vi.cache
 cmd.txt
 cubacuba.dart
+Inno/*.exe

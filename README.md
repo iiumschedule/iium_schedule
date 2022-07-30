@@ -21,3 +21,4 @@ http://iiumschedule.iqfareez.com/
 ## Honourable mentions
 
 - Conditional importing that allows compilation to all platforms - https://gpalma.pt/blog/conditional-importing/
+- Inno installer setup - https://retroportalstudio.medium.com/creating-exe-executable-file-for-flutter-desktop-apps-windows-ea7c338465e
