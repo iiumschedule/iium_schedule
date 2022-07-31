@@ -1,6 +1,12 @@
+import 'dart:io';
+
 import 'package:albiruni/albiruni.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:recase/recase.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../util/extensions.dart';
 
@@ -14,17 +20,26 @@ class SubjectScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Subject details'),
-        // backgroundColor: Colors.transparent,
-        // foregroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
+        // shadowColor: Colors.transparent,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Fluttertoast.showToast(msg: "not implemented");
+              throw UnimplementedError();
+            },
             icon: const Icon(Icons.favorite_outline),
             tooltip: "Add this subject to favourite",
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              String text = '${subject.title} (${subject.code})';
+              text += '\n';
+              text += '\nSection: ${subject.sect}';
+              text += '\nCredit hour: ${subject.chr}';
+              text += '\nLecturer(s): ${subject.lect.join(', ')}';
+              text += '\nVenue: ${subject.venue ?? '-'}';
+              Share.share(text);
+            },
             icon: const Icon(Icons.share_outlined),
             tooltip: "Share this subject",
           )
@@ -150,14 +165,38 @@ class TextBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Chip(
-        avatar: Icon(icon, size: 18),
-        labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-        backgroundColor: backgroundColor.withAlpha(40),
-        label: Text(
-          text,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: (() {
+          // on Windows or Web, tap to copy
+          if (kIsWeb || Platform.isWindows) {
+            Clipboard.setData(ClipboardData(text: text)).then((_) {
+              Fluttertoast.showToast(msg: 'Copied');
+              HapticFeedback.lightImpact();
+            });
+          }
+        }),
+        onLongPress: () {
+          // for Android, long press to copy
+          if (!kIsWeb || Platform.isAndroid) {
+            Clipboard.setData(ClipboardData(text: text)).then((_) {
+              Fluttertoast.showToast(msg: 'Copied');
+              HapticFeedback.lightImpact();
+            });
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Chip(
+            avatar: Icon(icon, size: 18),
+            labelStyle:
+                const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            backgroundColor: backgroundColor.withAlpha(40),
+            label: Text(
+              text,
+            ),
+          ),
         ),
       ),
     );
