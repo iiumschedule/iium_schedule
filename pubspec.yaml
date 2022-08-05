@@ -13,7 +13,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0-pre.6+9
+version: 1.0.0-pre.7+10
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -106,7 +106,7 @@ msix_config:
   display_name: IIUM Schedule
   publisher_display_name: Muhammad Fareez Iqmal
   identity_name: fareez.flutter.iiumschedule
-  msix_version: 0.1.0.6
+  msix_version: 0.1.0.7
   logo_path: ".\\assets\\logo\\app-logo.png"
   capabilities: "internetClient"
   certificate_path: "C:\\Users\\Iqmal\\CERTIFICATE.pfx"

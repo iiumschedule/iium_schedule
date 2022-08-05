@@ -12,6 +12,7 @@ import '../../model/saved_schedule.dart';
 import '../../model/saved_subject.dart';
 import '../../providers/schedule_layout_setting_provider.dart';
 import '../../util/extensions.dart';
+import '../../util/my_ftoast.dart';
 import '../../util/screenshot_widget.dart';
 import '../scheduler/schedule_view/rename_dialog.dart';
 import '../scheduler/schedule_view/setting_bottom_sheet.dart';
@@ -30,7 +31,6 @@ class SavedScheduleLayout extends StatefulWidget {
 
 class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
   final GlobalKey _globalKey = GlobalKey();
-  final FToast fToast = FToast();
 
   late List<SavedSubject> savedSubject;
   late String name;
@@ -47,7 +47,6 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
     super.initState();
     savedSubject = widget.savedSchedule.subjects!;
     name = widget.savedSchedule.title ?? "";
-    fToast.init(context);
   }
 
   void takeScreenshot() async {
@@ -63,14 +62,9 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
     }
 
     // show toast for windows and android
-    fToast.showToast(
-      toastDuration: const Duration(seconds: 3),
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        color: Colors.grey[brightness == Brightness.dark ? 800 : 300],
-        child: Text('Saved to $path'),
-      ),
-    );
+    if (mounted) {
+      MyFtoast.show(context, 'Saved to $path', brightness);
+    }
   }
 
   @override

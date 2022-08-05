@@ -16,6 +16,7 @@ import '../../../model/saved_schedule.dart';
 import '../../../model/saved_subject.dart';
 import '../../../providers/schedule_layout_setting_provider.dart';
 import '../../../util/extensions.dart';
+import '../../../util/my_ftoast.dart';
 import '../../../util/screenshot_widget.dart';
 import '../../saved_schedule/saved_schedule_layout.dart';
 import 'rename_dialog.dart';
@@ -38,7 +39,6 @@ class ScheduleLayout extends StatefulWidget {
 class _ScheduleLayoutState extends State<ScheduleLayout> {
   final _colorPallete = [...ColourPalletes.pallete1]; // add more
   final GlobalKey _globalKey = GlobalKey();
-  final FToast fToast = FToast();
   final box = Hive.box<SavedSchedule>(kHiveSavedSchedule);
 
   int _startHour = 10; // pukul 10 am
@@ -58,10 +58,10 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     super.initState();
     _colorPallete.shuffle();
     name = widget.initialName;
-    fToast.init(context);
   }
 
   void takeScreenshot() async {
+    Brightness brightness = Theme.of(context).brightness;
     String? path = await ScreenshotWidget.screenshot(_globalKey, name);
 
     if (kIsWeb) {
@@ -73,15 +73,9 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     }
 
     // show toast for windows and android
-    fToast.showToast(
-      toastDuration: const Duration(seconds: 3),
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        color: Colors
-            .grey[Theme.of(context).brightness == Brightness.dark ? 800 : 300],
-        child: Text('Saved to $path'),
-      ),
-    );
+    if (mounted) {
+      MyFtoast.show(context, 'Saved to $path', brightness);
+    }
   }
 
   // Save the generated schedule data to the database (Hive)
@@ -348,9 +342,11 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     switch (value) {
       case 'save':
         var key = await save();
-        Fluttertoast.showToast(
-            msg: "Saved. The schedule can the found from the main menu.");
         if (!mounted) return;
+        MyFtoast.show(
+            context,
+            'Saved. The schedule can the found from the main menu.',
+            Theme.of(context).brightness);
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
