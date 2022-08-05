@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "IIUM Schedule (Preview)"
-#define MyAppVersion "0.1.0.6"
+#define MyAppVersion "0.1.0.7"
 #define MyAppPublisher "Muhammad Fareez Iqmal"
 #define MyAppURL "https://iiumschedule.iqfareez.com/"
 #define MyAppExeName "flutter_iium_schedule.exe"
