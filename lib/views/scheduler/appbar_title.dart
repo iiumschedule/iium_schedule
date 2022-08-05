@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Taken and modified from StepPageIndicator class
+/// Display title and the indicator dots based on the current page
 class AppbarTitle extends StatefulWidget {
   /// The current page index ValueNotifier
   final ValueNotifier<int> currentPageNotifier;
@@ -47,7 +48,6 @@ class _AppbarTitleState extends State<AppbarTitle> {
         return "Course codes";
       case 3:
         return "Almost there";
-
       default:
         return "";
     }

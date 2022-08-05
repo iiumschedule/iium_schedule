@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
+/// To be used together with the [NavigationController]
 class ScheduleSteps extends InheritedWidget {
   const ScheduleSteps(
       {Key? key,

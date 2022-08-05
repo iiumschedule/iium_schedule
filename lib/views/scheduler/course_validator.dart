@@ -62,12 +62,15 @@ class _CourseValidatorState extends State<CourseValidator>
                         return;
                       }
 
-                      await Navigator.of(context).push(CupertinoPageRoute(
-                          builder: (_) => ScheduleLayout(
-                                initialName:
-                                    '${ScheduleMakerData.kulliyah} ${ScheduleMakerData.albiruni!.semester} ${ScheduleMakerData.albiruni!.session}',
-                                subjects: _validatorPass!.fetchedSubjects(),
-                              )));
+                      await Navigator.of(context)
+                          .push(CupertinoPageRoute(builder: (_) {
+                        var title =
+                            '${ScheduleMakerData.kulliyah} ${ScheduleMakerData.albiruni!.semester} ${ScheduleMakerData.albiruni!.session}';
+                        return ScheduleLayout(
+                          initialName: title,
+                          subjects: _validatorPass!.fetchedSubjects(),
+                        );
+                      }));
                       // reset full screen when it come back
                       SystemChrome.setEnabledSystemUIMode(
                           SystemUiMode.edgeToEdge);

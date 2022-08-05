@@ -1,45 +1,39 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
-import 'package:albiruni/albiruni.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
-import '../../../colour_palletes.dart';
-import '../../../constants.dart';
-import '../../../model/saved_daytime.dart';
-import '../../../model/saved_schedule.dart';
-import '../../../model/saved_subject.dart';
-import '../../../providers/schedule_layout_setting_provider.dart';
-import '../../../util/extensions.dart';
-import '../../../util/screenshot_widget.dart';
-import '../../saved_schedule/saved_schedule_layout.dart';
-import 'rename_dialog.dart';
-import 'setting_bottom_sheet.dart';
-import 'subject_dialog.dart';
-import 'timetable_view_widget.dart';
+import '../../model/saved_schedule.dart';
+import '../../model/saved_subject.dart';
+import '../../providers/schedule_layout_setting_provider.dart';
+import '../../util/extensions.dart';
+import '../../util/screenshot_widget.dart';
+import '../scheduler/schedule_view/rename_dialog.dart';
+import '../scheduler/schedule_view/setting_bottom_sheet.dart';
+import '../scheduler/schedule_view/timetable_view_widget.dart';
+import 'saved_subject_dialog.dart';
 
-class ScheduleLayout extends StatefulWidget {
-  const ScheduleLayout(
-      {Key? key, required this.initialName, required this.subjects})
+class SavedScheduleLayout extends StatefulWidget {
+  const SavedScheduleLayout({Key? key, required this.savedSchedule})
       : super(key: key);
 
-  final String initialName;
-  final List<Subject> subjects;
+  final SavedSchedule savedSchedule;
 
   @override
-  State<ScheduleLayout> createState() => _ScheduleLayoutState();
+  State<SavedScheduleLayout> createState() => _SavedScheduleLayoutState();
 }
 
-class _ScheduleLayoutState extends State<ScheduleLayout> {
-  final _colorPallete = [...ColourPalletes.pallete1]; // add more
+class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
   final GlobalKey _globalKey = GlobalKey();
   final FToast fToast = FToast();
-  final box = Hive.box<SavedSchedule>(kHiveSavedSchedule);
+
+  late List<SavedSubject> savedSubject;
+  late String name;
 
   int _startHour = 10; // pukul 10 am
   int _endHour = 17; // pukul 5 pm
@@ -48,20 +42,16 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
   bool _isFullScreen = false;
   bool _hideFab = false;
 
-  // Saved the hex colour value mapped to its subject
-  Map<String, int> tempHexColour = {};
-
-  late String name;
-
   @override
   void initState() {
     super.initState();
-    _colorPallete.shuffle();
-    name = widget.initialName;
+    savedSubject = widget.savedSchedule.subjects!;
+    name = widget.savedSchedule.title ?? "";
     fToast.init(context);
   }
 
   void takeScreenshot() async {
+    var brightness = Theme.of(context).brightness;
     String? path = await ScreenshotWidget.screenshot(_globalKey, name);
 
     if (kIsWeb) {
@@ -77,36 +67,10 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
       toastDuration: const Duration(seconds: 3),
       child: Container(
         padding: const EdgeInsets.all(8),
-        color: Colors
-            .grey[Theme.of(context).brightness == Brightness.dark ? 800 : 300],
+        color: Colors.grey[brightness == Brightness.dark ? 800 : 300],
         child: Text('Saved to $path'),
       ),
     );
-  }
-
-  // Save the generated schedule data to the database (Hive)
-  Future<int> save() async {
-    int key = await box.add(SavedSchedule(
-      title: name,
-      lastModified: DateTime.now().toString(),
-      subjects: widget.subjects
-          .map((e) => SavedSubject(
-              code: e.code,
-              sect: e.sect,
-              title: e.title,
-              chr: e.chr,
-              venue: e.venue,
-              lect: e.lect,
-              dayTime: e.dayTime
-                  .map((e) => SavedDaytime(
-                      day: e!.day, startTime: e.startTime, endTime: e.endTime))
-                  .toList(),
-              subjectName: e.title,
-              hexColor: tempHexColour[e.code]))
-          .toList(),
-    ));
-    print('Saved to key $key');
-    return key;
   }
 
   @override
@@ -116,14 +80,14 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     var brightness = Theme.of(context).brightness;
     // Find if there any subject in each day
     for (var i = 1; i <= 7; i++) {
-      List<Subject?> extractedSubjects = [];
+      List<SavedSubject?> extractedSubjects = [];
 
-      // Seperate subject into their day and rebuild
-
-      for (var subject in widget.subjects) {
+      // Seperate subject into their day and rebuild the list
+      for (var subject in savedSubject) {
         var dayTimes = subject.dayTime.where((element) => element?.day == i);
         extractedSubjects.addAll(
-          dayTimes.map((e) => Subject(
+          dayTimes.map((e) => SavedSubject(
+                subjectName: subject.subjectName,
                 code: subject.code,
                 sect: subject.sect,
                 title: subject.title,
@@ -131,6 +95,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                 venue: subject.venue,
                 lect: subject.lect,
                 dayTime: [e],
+                hexColor: subject.hexColor,
               )),
         );
       }
@@ -148,17 +113,10 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
 
           if (end.hour > _endHour) _endHour = end.hour;
 
-          // choose same and unique colour to each subject
-          var subjIndex =
-              widget.subjects.indexWhere((element) => element.code == e.code);
-
-          Color textColor = _colorPallete[subjIndex].computeLuminance() > 0.5
+          // saved colour  - compute luminance & bg colour
+          Color textColor = ui.Color(e.hexColor!).computeLuminance() > 0.5
               ? Colors.black
               : Colors.white;
-
-          tempHexColour.addAll({
-            e.code: _colorPallete[subjIndex].value,
-          });
 
           return TableEvent(
             textStyle: TextStyle(fontSize: _fontSizeSubject, color: textColor),
@@ -167,14 +125,14 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                     SubjectTitleSetting.title
                 ? e.title
                 : e.code,
-            backgroundColor: _colorPallete[subjIndex],
+            backgroundColor: ui.Color(e.hexColor!),
             start: TableEventTime(hour: start.hour, minute: start.minute),
             end: TableEventTime(hour: end.hour, minute: end.minute),
             onTap: () => showDialog(
               context: context,
-              builder: (_) => SubjectDialog(
+              builder: (_) => SavedSubjectDialog(
                 subject: e,
-                color: _colorPallete[subjIndex],
+                color: ui.Color(e.hexColor!),
                 start: start,
                 end: end,
               ),
@@ -225,8 +183,13 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                                     scheduleNameController));
 
                         if ((newName == null) || (newName.isEmpty)) return;
-
                         setState(() => name = newName);
+
+                        // save the new name and record the last modified
+                        widget.savedSchedule.title = newName;
+                        widget.savedSchedule.lastModified =
+                            DateTime.now().toString();
+                        widget.savedSchedule.save();
                       },
                       child: Text(
                         name,
@@ -247,7 +210,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                     ],
                     IconButton(
                         onPressed: () {
-                          // open bottomsheet
+                          // ooen bottomsheet
                           showModalBottomSheet(
                               context: context,
                               builder: (_) => const SettingBottomSheet());
@@ -257,16 +220,10 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                         itemBuilder: (context) {
                           return <PopupMenuEntry>[
                             const PopupMenuItem(
-                              value: 'save',
-                              child: ListTile(
-                                  trailing: Icon(Icons.save_outlined),
-                                  title: Text('Save')),
-                            ),
-                            const PopupMenuItem(
                               value: 'screenshot',
                               child: ListTile(
-                                  trailing: Icon(Icons.file_download_outlined),
-                                  title: Text('Screenshot')),
+                                  trailing: Icon(Icons.save_alt_outlined),
+                                  title: Text('Save image')),
                             ),
                             const PopupMenuItem(
                               // TODO: Implement share
@@ -278,12 +235,12 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                             const PopupMenuDivider(),
                             const PopupMenuItem(
                               // Implement delete
-                              value: 'discard',
+                              value: 'delete',
                               child: ListTile(
                                   trailing: Icon(
                                     Icons.delete_outline,
                                   ),
-                                  title: Text('Discard')),
+                                  title: Text('Delete')),
                             ),
                           ];
                         },
@@ -344,34 +301,21 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     );
   }
 
-  void popupMenuHandler(value) async {
+  void popupMenuHandler(value) {
     switch (value) {
-      case 'save':
-        var key = await save();
-        Fluttertoast.showToast(
-            msg: "Saved. The schedule can the found from the main menu.");
-        if (!mounted) return;
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SavedScheduleLayout(
-              savedSchedule: box.get(key)!,
-            ),
-          ),
-          (route) => route.isFirst,
-        );
-        break;
       case 'screenshot':
         takeScreenshot();
         break;
       case 'share':
         // TODO: Implement share
         Fluttertoast.showToast(msg: "Not implemented yet");
-        break;
-      case 'discard':
+        throw UnimplementedError();
+      // break;
+      case 'delete':
         // TODO: Implement delete
         Fluttertoast.showToast(msg: "Not implemented yet");
-        break;
+        throw UnimplementedError();
+      // break;
     }
   }
 

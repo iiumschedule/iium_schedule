@@ -1,22 +1,26 @@
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../../util/extensions.dart';
-import '../../course browser/subject_screen.dart';
+import '../../model/saved_subject.dart';
+import '../../util/extensions.dart';
+import '../course browser/subject_screen.dart';
 
-class SubjectDialog extends StatelessWidget {
-  const SubjectDialog({
+class SavedSubjectDialog extends StatelessWidget {
+  const SavedSubjectDialog({
     Key? key,
-    required Subject subject,
+    required SavedSubject subject,
     required Color color,
     required TimeOfDay start,
     required TimeOfDay end,
   })  : _subject = subject,
+        _color = color,
         _start = start,
         _end = end,
         super(key: key);
 
-  final Subject _subject;
+  final SavedSubject _subject;
+  final Color _color;
   final TimeOfDay _start;
   final TimeOfDay _end;
 
@@ -51,8 +55,10 @@ class SubjectDialog extends StatelessWidget {
       actions: [
         TextButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => SubjectScreen(_subject)));
+              Fluttertoast.showToast(msg: "not implemeneted yet");
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (_) => SubjectScreen(_subject)));
+              //TODO: Cast to subject
             },
             child: Text(
               'View details',

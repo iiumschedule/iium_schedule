@@ -7,12 +7,17 @@ import 'package:provider/provider.dart';
 
 import 'body.dart';
 import 'constants.dart';
-import 'providers/saved_schedule_provider.dart';
+import 'model/saved_daytime.dart';
+import 'model/saved_schedule.dart';
+import 'model/saved_subject.dart';
 import 'providers/schedule_layout_setting_provider.dart';
 
 void main() async {
   await Hive.initFlutter();
-  await Hive.openBox(kHiveSavedSchedule);
+  Hive.registerAdapter(SavedScheduleAdapter());
+  Hive.registerAdapter(SavedSubjectAdapter());
+  Hive.registerAdapter(SavedDaytimeAdapter());
+  await Hive.openBox<SavedSchedule>(kHiveSavedSchedule);
 
   HttpOverrides.global = MyHttpOverrides();
 
@@ -26,7 +31,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => SavedScheduleProvider()),
         ChangeNotifierProvider(create: (_) => ScheduleLayoutSettingProvider()),
       ],
       child: MaterialApp(
@@ -47,7 +51,7 @@ class MyApp extends StatelessWidget {
 
 /// To avoid invalid Cert Error
 /// https://github.com/iqfareez/iium_schedule/issues/10
-/// https://stackoverflow.com/q/54285172/13617136
+/// https://stackoverflow.com/a/61312927/13617136
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {

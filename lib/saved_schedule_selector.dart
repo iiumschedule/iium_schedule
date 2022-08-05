@@ -1,13 +1,11 @@
-import 'dart:convert';
-
-import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
 import 'constants.dart';
-import 'views/scheduler/schedule_view/schedule_layout.dart';
+import 'model/saved_schedule.dart';
+import 'views/saved_schedule/saved_schedule_layout.dart';
 
 class SavedScheduleSelector extends StatefulWidget {
   const SavedScheduleSelector({Key? key}) : super(key: key);
@@ -17,7 +15,7 @@ class SavedScheduleSelector extends StatefulWidget {
 }
 
 class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
-  final box = Hive.box(kHiveSavedSchedule);
+  final box = Hive.box<SavedSchedule>(kHiveSavedSchedule);
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +27,16 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
         systemOverlayStyle: SystemUiOverlayStyle.light
             .copyWith(statusBarColor: Colors.transparent),
       ),
+      // TODO: Letak animated listview
       body: ListView.builder(
         padding: const EdgeInsets.all(8),
         itemCount: box.length,
         itemBuilder: (context, index) {
-          var name = box.keyAt(index);
-          var data = box.getAt(index);
+          var item = box.getAt(index);
           return Card(
             child: ListTile(
-              title: Text(name),
+              title: Text(item!.title!),
+              subtitle: Text('Last modified: ${item.lastModified}'),
               trailing: IconButton(
                 icon: const Icon(
                   Icons.delete_outline,
@@ -56,9 +55,10 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               primary: Colors.redAccent),
-                          onPressed: () {
+                          onPressed: () async {
                             Navigator.pop(context);
-                            setState(() => box.deleteAt(index));
+                            await box.deleteAt(index);
+                            setState(() {});
                           },
                           child: const Text("Delete"),
                         ),
@@ -68,15 +68,11 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
                 },
               ),
               onTap: () async {
-                List<dynamic> parsedListJson = jsonDecode(data);
                 await Navigator.push(
                   context,
                   CupertinoPageRoute(
-                    builder: (_) => ScheduleLayout(
-                      initialName: name,
-                      subjects: List<Subject>.from(
-                        parsedListJson.map((e) => Subject.fromJson(e)),
-                      ),
+                    builder: (_) => SavedScheduleLayout(
+                      savedSchedule: item,
                     ),
                   ),
                 );

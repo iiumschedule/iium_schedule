@@ -2,16 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:provider/provider.dart';
 import 'package:quick_actions/quick_actions.dart';
 
-import 'providers/saved_schedule_provider.dart';
+import 'constants.dart';
+import 'model/saved_schedule.dart';
 import 'saved_schedule_selector.dart';
 import 'util/launcher_url.dart';
 import 'views/course browser/browser.dart';
 import 'views/scheduler/input_scope.dart';
-import 'views/scheduler/schedule_maker.dart';
+import 'views/scheduler/navigation_controller.dart';
 
 class MyBody extends StatelessWidget {
   const MyBody({
@@ -23,7 +24,7 @@ class MyBody extends StatelessWidget {
     configureQuickAction(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Show material banner if app is launched from schedule.iium.online
-      // TODO: Remember to just rmeove this implementation
+      // TODO: Remember to remove this implementation later
       // after the domain expires
       if (Uri.base.host == 'schedule.iium.online') {
         ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
@@ -115,8 +116,8 @@ class MyBody extends StatelessWidget {
               ),
               onPressed: () async {
                 // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-                await Navigator.of(context)
-                    .push(CupertinoPageRoute(builder: (_) => ScheduleMaker()));
+                await Navigator.of(context).push(
+                    CupertinoPageRoute(builder: (_) => NavigationController()));
 
                 // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
               },
@@ -137,19 +138,20 @@ class MyBody extends StatelessWidget {
             ),
           ),
           const Divider(),
-          Consumer<SavedScheduleProvider>(
-            builder: (_, value, __) {
-              if (value.data.isEmpty) {
-                return const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    "Your saved schedule will appear here",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.w300),
-                  ),
-                );
-              }
-              if (value.data.isNotEmpty) {
+          ValueListenableBuilder(
+              valueListenable:
+                  Hive.box<SavedSchedule>(kHiveSavedSchedule).listenable(),
+              builder: (context, Box<SavedSchedule> box, _) {
+                if (box.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4),
+                    child: Text(
+                      "Your saved schedule will appear here",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.w300),
+                    ),
+                  );
+                }
                 return Column(
                   children: [
                     MouseRegion(
@@ -167,11 +169,7 @@ class MyBody extends StatelessWidget {
                     ),
                   ],
                 );
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
-          ),
+              }),
         ],
       ),
     );
