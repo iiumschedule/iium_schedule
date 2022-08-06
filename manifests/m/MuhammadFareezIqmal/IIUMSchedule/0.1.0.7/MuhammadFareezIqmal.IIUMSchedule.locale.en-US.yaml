@@ -5,9 +5,8 @@ PackageIdentifier: MuhammadFareezIqmal.IIUMSchedule
 PackageVersion: 0.1.0.7
 PackageLocale: en-US
 Publisher: Muhammad Fareez Iqmal
-PackageName: IIUM Schedule
+PackageName: IIUM Schedule (Preview)
 License: MIT License
 ShortDescription: A simple and easy to use app that helps you create a schedule for your classes for the International Islamic University Malaysia students.
 ManifestType: defaultLocale
 ManifestVersion: 1.1.0
-
