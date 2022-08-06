@@ -8,8 +8,8 @@ import 'input_course.dart';
 import 'input_scope.dart';
 import 'schedule_steps.dart';
 
-class NavigationController extends StatelessWidget {
-  NavigationController({Key? key}) : super(key: key);
+class ScheduleMakerEntry extends StatelessWidget {
+  ScheduleMakerEntry({Key? key}) : super(key: key);
 
   final _pageController = PageController();
   final _currentPageNotifier = ValueNotifier<int>(0);

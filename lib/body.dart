@@ -11,8 +11,7 @@ import 'model/saved_schedule.dart';
 import 'saved_schedule_selector.dart';
 import 'util/launcher_url.dart';
 import 'views/course browser/browser.dart';
-import 'views/scheduler/input_scope.dart';
-import 'views/scheduler/navigation_controller.dart';
+import 'views/scheduler/schedule_maker_entry.dart';
 
 class MyBody extends StatelessWidget {
   const MyBody({
@@ -117,7 +116,7 @@ class MyBody extends StatelessWidget {
               onPressed: () async {
                 // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
                 await Navigator.of(context).push(
-                    CupertinoPageRoute(builder: (_) => NavigationController()));
+                    CupertinoPageRoute(builder: (_) => ScheduleMakerEntry()));
 
                 // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
               },
@@ -187,7 +186,7 @@ void configureQuickAction(BuildContext context) {
     }
     if (shortcutType == 'action_create') {
       Navigator.push(
-          context, MaterialPageRoute(builder: (_) => const InputScope()));
+          context, MaterialPageRoute(builder: (_) => ScheduleMakerEntry()));
     }
 
     if (shortcutType == 'action_view_saved') {
