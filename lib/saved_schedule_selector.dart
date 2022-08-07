@@ -21,71 +21,110 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Saved schedule",
-        ),
+        title: const Text("Saved schedule"),
         systemOverlayStyle: SystemUiOverlayStyle.light
             .copyWith(statusBarColor: Colors.transparent),
       ),
-      // TODO: Letak animated listview
-      body: ListView.builder(
+      body: AnimatedList(
         padding: const EdgeInsets.all(8),
-        itemCount: box.length,
-        itemBuilder: (context, index) {
+        initialItemCount: box.length,
+        itemBuilder: (context, index, animation) {
           var item = box.getAt(index);
-          return Card(
-            child: ListTile(
-              title: Text(item!.title!),
-              subtitle: Text('Last modified: ${item.lastModified}'),
-              trailing: IconButton(
-                icon: const Icon(
-                  Icons.delete_outline,
-                  color: Colors.redAccent,
-                ),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: const Text("Confirm delete"),
-                      actions: [
-                        OutlinedButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text("Cancel"),
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.redAccent),
-                          onPressed: () async {
-                            Navigator.pop(context);
-                            await box.deleteAt(index);
-                            setState(() {});
-                          },
-                          child: const Text("Delete"),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-              onTap: () async {
-                await Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (_) => SavedScheduleLayout(
-                      savedSchedule: item,
-                    ),
-                  ),
-                );
+          return _CardItem(
+            item: item!,
+            animation: animation,
+            onTap: () async {
+              var res = await showDialog(
+                context: context,
+                builder: (_) => const _DeleteDialog(),
+              );
 
-                SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-
-                // refresh page when come back to thus screen
-                setState(() {});
-              },
-            ),
+              if (res ?? false) {
+                await box.deleteAt(index);
+                // ignore: use_build_context_synchronously
+                AnimatedList.of(context).removeItem(
+                    index,
+                    (context, animation) => _CardItem(
+                          item: item,
+                          animation: animation,
+                        ));
+              }
+            },
           );
         },
       ),
+    );
+  }
+}
+
+class _CardItem extends StatelessWidget {
+  const _CardItem({
+    Key? key,
+    required this.item,
+    required this.animation,
+    this.onTap,
+  }) : super(key: key);
+
+  final SavedSchedule item;
+  final VoidCallback? onTap;
+  final Animation<double> animation;
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: animation,
+      child: Card(
+        child: ListTile(
+          title: Text(item.title!),
+          subtitle: Text('Last modified: ${item.lastModified}'),
+          trailing: IconButton(
+            icon: const Icon(
+              Icons.delete_outline,
+              color: Colors.redAccent,
+            ),
+            onPressed: onTap,
+          ),
+          onTap: () async {
+            await Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (_) => SavedScheduleLayout(
+                  savedSchedule: item,
+                ),
+              ),
+            );
+
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+            // refresh page when come back to this screen
+            // setState(() {});
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _DeleteDialog extends StatelessWidget {
+  const _DeleteDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text("Confirm delete"),
+      actions: [
+        OutlinedButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text("Cancel"),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(primary: Colors.redAccent),
+          onPressed: () async {
+            Navigator.pop(context, true);
+          },
+          child: const Text("Delete"),
+        ),
+      ],
     );
   }
 }
