@@ -46,13 +46,13 @@ dependencies:
   share_plus: ^4.0.10
 
 # Comment this part if necessary
-dependency_overrides:
-  albiruni:
-    path: "../../Dart App/albiruni"
-  flutter_timetable_view:
-    path: "../Experiments/flutter_timetable_view"
-  recase:
-    path: "../../Dart App/recase"
+# dependency_overrides:
+#   albiruni:
+#     path: "../../Dart App/albiruni"
+#   flutter_timetable_view:
+#     path: "../Experiments/flutter_timetable_view"
+#   recase:
+#     path: "../../Dart App/recase"
 
 dev_dependencies:
   flutter_test:
