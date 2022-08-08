@@ -13,7 +13,7 @@ import 'model/saved_subject.dart';
 import 'providers/schedule_layout_setting_provider.dart';
 
 void main() async {
-  await Hive.initFlutter();
+  await Hive.initFlutter('IIUM Schedule Data');
   Hive.registerAdapter(SavedScheduleAdapter());
   Hive.registerAdapter(SavedSubjectAdapter());
   Hive.registerAdapter(SavedDaytimeAdapter());
