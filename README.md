@@ -1,3 +1,9 @@
+![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
+[![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://play.google.com/store/apps/details?id=com.iqfareez.iiumschedule)
+[![Web](<https://img.shields.io/badge/WEB%20(PWA)-5a0fc8?style=for-the-badge&logo=GoogleChrome&logoColor=white>)](https://iiumschedule-af71a.web.app/#/)
+[![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://iiumschedule.iqfareez.com/downloads/stable#windows)
+![License](https://img.shields.io/github/license/iqfareez/iium_schedule?style=for-the-badge)
+
 # IIUM Schedule App
 
 Generate IIUM Schedule quickly with automatic subject data fetching. Plus, view what courses are available to register at your fingertips.
@@ -12,11 +18,18 @@ Feel free to open up [issues](https://github.com/iqfareez/iium_schedule/issues) 
 
 ## Release ETA
 
-Sem 1, 22/23 (After my internship)
+Sem 1, 22/23 (In **October** inshallah, after my internship)
 
 ## Website
 
-http://iiumschedule.iqfareez.com/
+To learn about extracting subjects to JSON, release notes, privacy policy etc. Go to the website at:
+
+https://iiumschedule.iqfareez.com/
+
+## Devlog
+
+[![Part 1](https://img.shields.io/badge/part%201-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTAxOTkzNjUzNDk0NDQ3)
+[![Part 2](https://img.shields.io/badge/part%202-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQ4MjM3NzQzNjk4NjMy)
 
 ## Honourable mentions
 
