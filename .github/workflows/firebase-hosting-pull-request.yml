@@ -24,8 +24,3 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_IIUMSCHEDULE_AF71A }}"
           projectId: iiumschedule-af71a
-      - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v1
-        with:
-          message: "Deploy successfully: ${{ steps.firebase.outputs.urls }} :rocket:. Expired at ${{ steps.firebase.outputs.expire_time }}"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
