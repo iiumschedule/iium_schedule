@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ScheduleLayoutSettingProvider()),
       ],
       child: MaterialApp(
-        title: 'IIUM JAJJAJJA (Preview)',
+        title: 'iiiiiiiiii JAJJAJJA (Preview)',
         theme: ThemeData(
           primarySwatch: Colors.purple,
         ),
