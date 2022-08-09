@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.iqfareez" "\0"
-            VALUE "FileDescription", "IIUM Schedule Parser with Flutter" "\0"
+            VALUE "FileDescription", "Semi-auto IIUM Schedule" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "flutter_iium_schedule" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2021 com.iqfareez. All rights reserved." "\0"
-            VALUE "OriginalFilename", "flutter_iium_schedule.exe" "\0"
-            VALUE "ProductName", "flutter_iium_schedule" "\0"
+            VALUE "InternalName", "iium_schedule" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2022 com.iqfareez. All rights reserved." "\0"
+            VALUE "OriginalFilename", "iium_schedule.exe" "\0"
+            VALUE "ProductName", "IIUM Schedule" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
