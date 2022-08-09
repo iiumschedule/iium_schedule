@@ -1,0 +1,34 @@
+name: Package installer (Inno setup)
+
+"on":
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+        run: |
+          flutter --version
+          flutter pub get
+      - name: Flutter build for Windows
+        run: flutter build windows
+
+      - name: Building the installer
+        run: |
+          "%programfiles(x86)%\Inno Setup 6\iscc.exe" "Inno\setup-script.iss"
+        shell: cmd
+
+      - name: Upload the installer as an artifact
+        uses: actions/upload-artifact@v2
+        with:
+          path: "Inno/iiumschedulesetup.exe"
