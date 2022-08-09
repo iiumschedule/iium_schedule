@@ -6,6 +6,7 @@
 #define MyAppPublisher "Muhammad Fareez Iqmal"
 #define MyAppURL "https://iiumschedule.iqfareez.com/"
 #define MyAppExeName "flutter_iium_schedule.exe"
+#define MyAppUpdatesURL "https://github.com/iqfareez/iium_schedule/releases"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -17,9 +18,10 @@ AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
-AppUpdatesURL={#MyAppURL}
+AppUpdatesURL={#MyAppUpdatesURL}
 DefaultDirName={autopf}\IIUM Schedule
 DisableProgramGroupPage=yes
+;DisableWelcomePage=no
 LicenseFile=..\LICENSE.txt
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
