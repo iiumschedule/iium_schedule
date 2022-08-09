@@ -9,16 +9,29 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v2
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Setup Flutter stable
+        uses: subosito/flutter-action@v2
         with:
           channel: "stable"
-      - run: flutter --version
-      - run: flutter pub get
-      - run: flutter build web --web-renderer canvaskit
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Flutter prepare to build
+        run: |
+          flutter --version
+          flutter pub get
+      - name: Flutter build for web (canvaskit)
+        run: flutter build web --web-renderer canvaskit
+      - name: Determine Hosting channel
+        uses: haya14busa/action-cond@v1
+        id: hostingChannel
+        with:
+          cond: github.event.release.prerelease
+          if_true: "staging"
+          if_false: "live" # prod
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_IIUMSCHEDULE_AF71A }}"
-          channelId: live
+          channelId: ${{ steps.hostingChannel.outputs.value }}
           projectId: iiumschedule-af71a
