@@ -5,7 +5,7 @@
 #define MyAppVersion "0.1.0.7"
 #define MyAppPublisher "Muhammad Fareez Iqmal"
 #define MyAppURL "https://iiumschedule.iqfareez.com/"
-#define MyAppExeName "flutter_iium_schedule.exe"
+#define MyAppExeName "iium_schedule.exe"
 #define MyAppUpdatesURL "https://github.com/iqfareez/iium_schedule/releases"
 
 [Setup]
@@ -41,9 +41,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "..\build\windows\runner\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build\windows\runner\Release\flutter_windows.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build\windows\runner\Release\permission_handler_windows_plugin.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\build\windows\runner\Release\url_launcher_windows_plugin.dll"; DestDir: "{app}"; Flags: ignoreversion
+; Collect all dll files
+Source: "..\build\windows\runner\Release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\build\windows\runner\Release\data\*"; DestDir: "{app}\data"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
