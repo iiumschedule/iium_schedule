@@ -16,7 +16,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0-pre.7+10
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -44,15 +44,6 @@ dependencies:
   permission_handler: ^10.0.0
   quick_actions: ^0.6.0+11
   share_plus: ^4.0.10
-
-# Comment this part if necessary
-# dependency_overrides:
-#   albiruni:
-#     path: "../../Dart App/albiruni"
-#   flutter_timetable_view:
-#     path: "../Experiments/flutter_timetable_view"
-#   recase:
-#     path: "../../Dart App/recase"
 
 dev_dependencies:
   flutter_test:

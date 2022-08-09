@@ -30,9 +30,11 @@
 .pub-cache/
 .pub/
 /build/
+pubspec_overrides.yaml
 
 # Web related
 lib/generated_plugin_registrant.dart
+.firebase/hosting.YnVpbGRcd2Vi.cache
 
 # Symbolication related
 app.*.symbols
@@ -46,7 +48,6 @@ app.*.map.json
 /android/app/release
 
 # Others
-.firebase/hosting.YnVpbGRcd2Vi.cache
 cmd.txt
 cubacuba.dart
 Inno/*.exe
