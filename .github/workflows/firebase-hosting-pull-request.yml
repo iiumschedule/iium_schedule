@@ -17,7 +17,6 @@ jobs:
       - run: flutter pub get
       - run: flutter build web --web-renderer canvaskit
       - name: Deploy to Firebase hosting (preview channel)
-        id: firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
