@@ -25,7 +25,7 @@ jobs:
         uses: haya14busa/action-cond@v1
         id: hostingChannel
         with:
-          cond: github.event.release.prerelease
+          cond: ${{github.event.release.prerelease}}
           if_true: "staging"
           if_false: "live" # prod
       - name: Deploy to Firebase Hosting
