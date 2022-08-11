@@ -41,3 +41,8 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: "Inno/iiumschedulesetup.exe"
+
+      - name: Write summary
+        run: |
+          echo "Build setup"
+          echo ":blue_heart: Using **Flutter ${{ inputs.flutterChannel }}**" >> $GITHUB_STEP_SUMMARY

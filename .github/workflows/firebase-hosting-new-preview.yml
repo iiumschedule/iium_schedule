@@ -2,19 +2,11 @@
 # https://github.com/firebase/firebase-tools
 
 # Deploy to Firebase manually
-name: Deploy to Firebase Hosting (Live/Staging channel)
+name: Deploy to Firebase Hosting (New preview channel)
 
 "on":
   workflow_dispatch:
     inputs:
-      deployChannel:
-        description: "Channel which Firebase will deploy into"
-        default: ""
-        type: choice
-        options:
-          - live
-          - staging
-          -
       flutterChannel:
         description: "Channel which Firebase will deploy into"
         default: stable
@@ -58,12 +50,10 @@ jobs:
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_IIUMSCHEDULE_AF71A }}"
-          channelId: ${{ inputs.deployChannel }}
           projectId: iiumschedule-af71a
 
       - name: Write summary
         run: |
           echo ":blue_heart: Using **Flutter ${{ inputs.flutterChannel }}**" >> $GITHUB_STEP_SUMMARY
           echo ":spider_web: Web renderer **${{ inputs.webRenderer }}**" >> $GITHUB_STEP_SUMMARY
-          echo ":traffic_light: Firebase hosting channel **${{ inputs.deployChannel }}**" >> $GITHUB_STEP_SUMMARY
           echo "## :rocket: Deployment URL **${{ steps.firebaseHost.outputs.details_url }}**" >> $GITHUB_STEP_SUMMARY
