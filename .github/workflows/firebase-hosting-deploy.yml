@@ -16,10 +16,19 @@ name: Deploy to Firebase Hosting
           - live
           - staging
           -
+      flutterChannel:
+        description: "Channel which Firebase will deploy into"
+        default: stable
+        type: choice
+        options:
+          - master
+          - beta
+          - stable
       webRenderer:
         description: Flutter web renderer
         required: true
         default: "canvaskit"
+        type: choice
         options:
           - canvaskit
           - html
@@ -32,7 +41,8 @@ jobs:
       - name: Setup Flutter stable
         uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
+          channel: ${{ inputs.flutterChannel }}
+
       - name: Flutter prepare to build
         run: |
           flutter --version
@@ -42,8 +52,16 @@ jobs:
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
+        id: firebaseHost
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_IIUMSCHEDULE_AF71A }}"
           channelId: ${{ inputs.deployChannel }}
           projectId: iiumschedule-af71a
+
+      - name: Write summary
+        run: |
+          echo ":blue_heart: Using Flutter ${{ inputs.flutterChannel }}" >> $GITHUB_STEP_SUMMARY
+          echo ":spider_web: Web renderer ${{ inputs.webRenderer }}" >> $GITHUB_STEP_SUMMARY
+          echo ":traffic_light: Firebase hosting channel ${{ inputs.deployChannel }}" >> $GITHUB_STEP_SUMMARY
+          echo ":rocket: Deployment URL ${{ steps.firebaseHost.outputs.details_url }}" >> $GITHUB_STEP_SUMMARY
