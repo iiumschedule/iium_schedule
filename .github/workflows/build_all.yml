@@ -1,0 +1,169 @@
+name: Build release app & deploy
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build_android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: "zulu"
+          java-version: "11"
+
+      - name: Setup Flutter stable
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - name: Decoding android/key.properties
+        run: echo "${{ secrets.KEY_PROP }}" | base64 --decode > android/key.properties
+
+      - name: Decoding android/key.jks
+        run: echo "${{ secrets.KEY_JKS }}" | base64 --decode > android/key.jks
+
+      - name: Build release appbundle
+        if: "!github.event.release.prerelease"
+        run: flutter build appbundle
+
+      - name: Upload aab
+        uses: actions/upload-artifact@v2
+        if: "!github.event.release.prerelease"
+        with:
+          path: build/app/outputs/bundle/release/app-release.aab
+
+      - name: Adding markdown
+        if: "!github.event.release.prerelease"
+        run: echo :white_check_mark: Build appbundle **todo: Publish to Google Play** >> $GITHUB_STEP_SUMMARY
+
+      - name: Build release APK(s)
+        run: |
+          flutter pub get
+          flutter build apk --split-per-abi
+
+      - name: Adding markdown
+        run: echo :white_check_mark: Build split apk >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload file to the assets release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/app/outputs/apk/release/*.apk
+
+      - name: Adding markdown
+        run: echo :rocket: Added release apk(s) to assets >> $GITHUB_STEP_SUMMARY
+
+  build_web:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter stable
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - name: Build release web
+        run: |
+          flutter pub get
+          flutter build web --web-renderer canvaskit
+
+      - name: Adding markdown
+        run: echo 'Build **web** :white_check_mark:' >> $GITHUB_STEP_SUMMARY
+
+      - name: Determine Hosting channel
+        uses: haya14busa/action-cond@v1
+        id: hostingChannel
+        with:
+          cond: ${{github.event.release.prerelease}}
+          if_true: "staging"
+          if_false: "live" # prod
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        id: firebaseDeploy
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_IIUMSCHEDULE_AF71A }}"
+          channelId: ${{ steps.hostingChannel.outputs.value }}
+          projectId: iiumschedule-af71a
+
+      - name: Adding markdown
+        run: echo ':rocket: Deployed to Firebase **${{ steps.hostingChannel.outputs.value }} channel**. URL **${{ steps.firebaseDeploy.outputs.details_url }}**' >> $GITHUB_STEP_SUMMARY
+
+  build_windows:
+    name: Build windows and package exe
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - name: Flutter build for Windows
+        run: |
+          flutter pub get
+          flutter build windows
+
+      # package the executable using Inno Setup
+      - name: Building the installer (Inno)
+        run: |
+          "%programfiles(x86)%\Inno Setup 6\iscc.exe" "Inno\setup-script.iss"
+        shell: cmd
+
+      - name: Adding markdown
+        run: echo :white_check_mark: Packaged into .exe file >> $GITHUB_STEP_SUMMARY
+
+      - name: Decoding CERTIFICATE.pfx
+        shell: cmd 
+        # certutil [options] -decode infile outfile
+        # Read cert base64 from env secrets, write it in a file
+        # The, use the certutil command the decode and save in the cert file (pfx)
+        run: |
+          echo ${{ secrets.CERT_PFX }} > certBase64.txt 
+          certutil -decode certBase64.txt windows/CERTIFICATE.pfx
+
+      - name: Packaging to msix
+        # Pipe 'Y' (positive), preceeding command
+        # will ask if comfirmation to install certificate
+        run: echo 'Y' | flutter pub run msix:create
+
+      - name: Adding markdown
+        run: echo :white_check_mark: Packaged into .msix file >> $GITHUB_STEP_SUMMARY
+
+      # Upload the file to the released release
+      - name: Upload file to the assets release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            Inno\iiumschedulesetup.exe
+            build\windows\runner\Release\iium_schedule.msix
+
+      - name: Adding markdown
+        run: echo :rocket: **Added outputs** to release assets **todo: Publish to winget** >> $GITHUB_STEP_SUMMARY
+
+  # After all builds successfully completed, notify me thru Telegram
+  notify:
+    needs: [build_android, build_web, build_windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Telegram notify
+        uses: fjogeleit/http-request-action@v1.10.0
+        with:
+          url: "https://api.telegram.org/bot${{secrets.TELE_BOT_API_KEY}}/sendMessage"
+          method: "POST"
+          data: '{
+            "chat_id": 320195187,
+            "parse_mode": "MarkdownV2",
+            "disable_web_page_preview": true,
+            "text": "IIUM Schedule ${{github.workflow}} *completed* 🛰 \\. View [action runs](https:\/\/github.com\/${{github.repository}}\/actions\/runs\/${{github.run_id}})\\."
+            }'
