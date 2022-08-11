@@ -40,7 +40,8 @@ jobs:
 
       - name: Adding markdown
         if: "!github.event.release.prerelease"
-        run: echo :white_check_mark: Build appbundle **todo: Publish to Google Play** >> $GITHUB_STEP_SUMMARY
+        run: |
+          cho :white_check_mark: Build appbundle **todo: Publish to Google Play** >> $GITHUB_STEP_SUMMARY
 
       - name: Build release APK(s)
         run: |
@@ -56,7 +57,8 @@ jobs:
           files: build/app/outputs/apk/release/*.apk
 
       - name: Adding markdown
-        run: echo :rocket: Added release apk(s) to assets >> $GITHUB_STEP_SUMMARY
+        run: |
+          echo :rocket: Added release apk(s) to assets >> $GITHUB_STEP_SUMMARY
 
   build_web:
     runs-on: ubuntu-latest
@@ -95,7 +97,8 @@ jobs:
           projectId: iiumschedule-af71a
 
       - name: Adding markdown
-        run: echo ':rocket: Deployed to Firebase **${{ steps.hostingChannel.outputs.value }} channel**. URL **${{ steps.firebaseDeploy.outputs.details_url }}**' >> $GITHUB_STEP_SUMMARY
+        run: |
+          echo ':rocket: Deployed to Firebase **${{ steps.hostingChannel.outputs.value }} channel**. URL **${{ steps.firebaseDeploy.outputs.details_url }}**' >> $GITHUB_STEP_SUMMARY
 
   build_windows:
     name: Build windows and package exe
@@ -121,7 +124,8 @@ jobs:
         shell: cmd
 
       - name: Adding markdown
-        run: echo :white_check_mark: Packaged into .exe file >> $GITHUB_STEP_SUMMARY
+        run: |
+          echo :white_check_mark: Packaged into .exe file >> $GITHUB_STEP_SUMMARY
 
       - name: Decoding CERTIFICATE.pfx
         shell: cmd 
@@ -138,7 +142,8 @@ jobs:
         run: echo 'Y' | flutter pub run msix:create
 
       - name: Adding markdown
-        run: echo :white_check_mark: Packaged into .msix file >> $GITHUB_STEP_SUMMARY
+        run: |
+          echo :white_check_mark: Packaged into .msix file >> $GITHUB_STEP_SUMMARY
 
       # Upload the file to the released release
       - name: Upload file to the assets release
@@ -149,7 +154,8 @@ jobs:
             build\windows\runner\Release\iium_schedule.msix
 
       - name: Adding markdown
-        run: echo :rocket: **Added outputs** to release assets **todo: Publish to winget** >> $GITHUB_STEP_SUMMARY
+        run: |
+          echo :rocket: **Added outputs** to release assets **todo: Publish to winget** >> $GITHUB_STEP_SUMMARY
 
   # After all builds successfully completed, notify me thru Telegram
   notify:

@@ -44,4 +44,5 @@ jobs:
           path: build/app/outputs/apk/release/*.apk
 
       - name: Write summary
-        run: echo :blue_heart: Using **Flutter ${{ inputs.flutterChannel }}** >> $GITHUB_STEP_SUMMARY
+        run: |
+          echo :blue_heart: Using **Flutter ${{ inputs.flutterChannel }}** >> $GITHUB_STEP_SUMMARY
