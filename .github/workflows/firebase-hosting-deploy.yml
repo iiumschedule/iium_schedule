@@ -9,11 +9,13 @@ name: Deploy to Firebase Hosting
     inputs:
       deployChannel:
         description: "Channel which Firebase will deploy into"
-        required: false
+        required: true
+        default: staging
         type: choice
         options:
           - live
           - staging
+          -
       webRenderer:
         description: Flutter web renderer
         required: true
