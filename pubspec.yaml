@@ -97,7 +97,7 @@ msix_config:
   display_name: IIUM Schedule
   publisher_display_name: Muhammad Fareez Iqmal
   identity_name: fareez.flutter.iiumschedule
-  msix_version: 0.1.0.7
+  msix_version: 0.1.0.7 # Also as publishing version for inno
   logo_path: ".\\assets\\logo\\app-logo.png"
   capabilities: "internetClient"
   certificate_path: "C:\\Users\\Iqmal\\CERTIFICATE.pfx"

@@ -1,0 +1,47 @@
+name: Build release apk
+# release apk but not using key.jks
+# which means, not deployable to Google Play
+
+"on":
+  workflow_dispatch:
+    inputs:
+      flutterChannel:
+        description: "Channel which Firebase will deploy into"
+        default: stable
+        required: true
+        type: choice
+        options:
+          - master
+          - beta
+          - stable
+
+jobs:
+  build_android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: "zulu"
+          java-version: "11"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ inputs.flutterChannel }}
+
+      - name: Build release APK(s)
+        run: |
+          flutter pub get
+          flutter build apk --split-per-abi --release
+
+      - name: Upload apk(s)
+        uses: actions/upload-artifact@v2
+        with:
+          path: build/app/outputs/apk/release/*.apk
+
+      - name: Write summary
+        run: echo ":blue_heart: Using **Flutter ${{ inputs.flutterChannel }}**" >> $GITHUB_STEP_SUMMARY
