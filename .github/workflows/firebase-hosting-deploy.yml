@@ -9,8 +9,7 @@ name: Deploy to Firebase Hosting
     inputs:
       deployChannel:
         description: "Channel which Firebase will deploy into"
-        required: true
-        default: staging
+        default: ""
         type: choice
         options:
           - live
@@ -19,6 +18,7 @@ name: Deploy to Firebase Hosting
       flutterChannel:
         description: "Channel which Firebase will deploy into"
         default: stable
+        required: true
         type: choice
         options:
           - master
@@ -38,7 +38,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      - name: Setup Flutter stable
+
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ inputs.flutterChannel }}
@@ -47,6 +48,7 @@ jobs:
         run: |
           flutter --version
           flutter pub get
+
       - name: Flutter build for web
         run: flutter build web --web-renderer ${{ inputs.webRenderer }}
 
@@ -61,7 +63,7 @@ jobs:
 
       - name: Write summary
         run: |
-          echo ":blue_heart: Using Flutter ${{ inputs.flutterChannel }}" >> $GITHUB_STEP_SUMMARY
-          echo ":spider_web: Web renderer ${{ inputs.webRenderer }}" >> $GITHUB_STEP_SUMMARY
-          echo ":traffic_light: Firebase hosting channel ${{ inputs.deployChannel }}" >> $GITHUB_STEP_SUMMARY
-          echo ":rocket: Deployment URL ${{ steps.firebaseHost.outputs.details_url }}" >> $GITHUB_STEP_SUMMARY
+          echo ":blue_heart: Using **Flutter ${{ inputs.flutterChannel }}**" >> $GITHUB_STEP_SUMMARY
+          echo ":spider_web: Web renderer **${{ inputs.webRenderer }}**" >> $GITHUB_STEP_SUMMARY
+          echo ":traffic_light: Firebase hosting channel **${{ inputs.deployChannel }}**" >> $GITHUB_STEP_SUMMARY
+          echo ":rocket: Deployment URL **${{ steps.firebaseHost.outputs.details_url }}**" >> $GITHUB_STEP_SUMMARY
