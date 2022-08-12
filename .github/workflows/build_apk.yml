@@ -1,19 +1,17 @@
 name: Build release apk
-# release apk but not using key.jks
-# which means, not deployable to Google Play
 
 "on":
   workflow_dispatch:
     inputs:
       flutterChannel:
-        description: "Channel which Firebase will deploy into"
+        description: "Flutter channel"
         default: stable
         required: true
         type: choice
         options:
-          - master
-          - beta
           - stable
+          - beta
+          - master
 
 jobs:
   build_android:
@@ -33,12 +31,18 @@ jobs:
         with:
           channel: ${{ inputs.flutterChannel }}
 
-      - name: Build release APK(s)
+      - name: Decoding android/key.properties
+        run: echo "${{ secrets.KEY_PROP }}" | base64 --decode > android/key.properties
+
+      - name: Decoding android/key.jks
+        run: echo "${{ secrets.KEY_JKS }}" | base64 --decode > android/key.jks
+
+      - name: Build fat apk
         run: |
           flutter pub get
-          flutter build apk --split-per-abi --release
+          flutter build apk --release
 
-      - name: Upload apk(s)
+      - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           path: build/app/outputs/apk/release/*.apk

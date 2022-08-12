@@ -5,14 +5,14 @@ name: Package installer (Inno setup)
   workflow_dispatch:
     inputs:
       flutterChannel:
-        description: "Channel which Firebase will deploy into"
+        description: "Flutter channel"
         default: stable
         required: true
         type: choice
         options:
-          - master
-          - beta
           - stable
+          - beta
+          - master
 
 jobs:
   build:

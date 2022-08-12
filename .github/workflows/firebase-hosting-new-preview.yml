@@ -2,20 +2,20 @@
 # https://github.com/firebase/firebase-tools
 
 # Deploy to Firebase manually
-name: Deploy to Firebase Hosting (New preview channel)
+name: Deploy to hosting (New preview channel)
 
 "on":
   workflow_dispatch:
     inputs:
       flutterChannel:
-        description: "Channel which Firebase will deploy into"
+        description: "Flutter channel"
         default: stable
         required: true
         type: choice
         options:
-          - master
-          - beta
           - stable
+          - beta
+          - master
       webRenderer:
         description: Flutter web renderer
         required: true
