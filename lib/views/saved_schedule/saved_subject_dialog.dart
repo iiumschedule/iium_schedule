@@ -55,10 +55,10 @@ class SavedSubjectDialog extends StatelessWidget {
       actions: [
         TextButton(
             onPressed: () {
-              Fluttertoast.showToast(msg: "not implemeneted yet");
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (_) => SubjectScreen(_subject)));
-              //TODO: Cast to subject
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => SubjectScreen(_subject.toSubject())));
             },
             child: Text(
               'View details',

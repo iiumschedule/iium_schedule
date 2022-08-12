@@ -1,3 +1,4 @@
+import 'package:albiruni/albiruni.dart';
 import 'package:hive/hive.dart';
 
 import 'saved_daytime.dart';
@@ -57,4 +58,38 @@ class SavedSubject extends HiveObject {
   @override
   String toString() =>
       "{title: $title, subjectName: $subjectName ,venue : $venue, colour : $hexColor}";
+
+  /// Input [Subject] and return [SavedSubject]
+  SavedSubject.fromSubject(
+      {required Subject subject, String? subjectName, int? hexColor})
+      : this(
+          code: subject.code,
+          sect: subject.sect,
+          title: subject.title,
+          chr: subject.chr,
+          venue: subject.venue,
+          lect: subject.lect,
+          dayTime: subject.dayTime
+              .map((e) => SavedDaytime(
+                  day: e!.day, startTime: e.startTime, endTime: e.endTime))
+              .toList(),
+          subjectName: subjectName,
+          hexColor: hexColor,
+        );
+
+  /// Return [Subject] from [SavedSubject]
+  Subject toSubject() {
+    return Subject(
+      title: title,
+      venue: venue,
+      lect: lect,
+      sect: sect,
+      dayTime: dayTime
+          .map((e) =>
+              DayTime(day: e!.day, startTime: e.startTime, endTime: e.endTime))
+          .toList(),
+      code: code,
+      chr: chr,
+    );
+  }
 }

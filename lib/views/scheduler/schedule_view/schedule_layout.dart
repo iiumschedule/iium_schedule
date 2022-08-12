@@ -84,17 +84,8 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
       title: name,
       lastModified: DateTime.now().toString(),
       subjects: widget.subjects
-          .map((e) => SavedSubject(
-              code: e.code,
-              sect: e.sect,
-              title: e.title,
-              chr: e.chr,
-              venue: e.venue,
-              lect: e.lect,
-              dayTime: e.dayTime
-                  .map((e) => SavedDaytime(
-                      day: e!.day, startTime: e.startTime, endTime: e.endTime))
-                  .toList(),
+          .map((e) => SavedSubject.fromSubject(
+              subject: e,
               subjectName: e.title,
               hexColor: tempHexColour[e.code]))
           .toList(),
