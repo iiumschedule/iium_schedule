@@ -22,6 +22,7 @@ name: Deploy to Firebase Hosting (New preview channel)
         default: "canvaskit"
         type: choice
         options:
+          - auto
           - canvaskit
           - html
 jobs:
@@ -44,6 +45,9 @@ jobs:
       - name: Flutter build for web
         run: flutter build web --web-renderer ${{ inputs.webRenderer }}
 
+      - name: generate RANDIN (RANDom ID) based on timestamp
+        run: echo RANDID=$(date +%s) >> $GITHUB_ENV
+
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         id: firebaseHost
@@ -51,6 +55,7 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_IIUMSCHEDULE_AF71A }}"
           projectId: iiumschedule-af71a
+          channelId: ${{ env.RANDID }}
 
       - name: Write summary
         run: |

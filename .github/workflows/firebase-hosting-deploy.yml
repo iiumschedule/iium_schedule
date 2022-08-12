@@ -14,7 +14,6 @@ name: Deploy to Firebase Hosting (Live/Staging channel)
         options:
           - live
           - staging
-          -
       flutterChannel:
         description: "Channel which Firebase will deploy into"
         default: stable
@@ -32,6 +31,7 @@ name: Deploy to Firebase Hosting (Live/Staging channel)
         options:
           - canvaskit
           - html
+          - auto
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
