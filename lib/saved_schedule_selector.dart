@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 
 import 'constants.dart';
 import 'model/saved_schedule.dart';
@@ -71,12 +72,14 @@ class _CardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String formattedDate =
+        DateFormat('d/M/yy').format(DateTime.parse(item.lastModified));
     return ScaleTransition(
       scale: animation,
       child: Card(
         child: ListTile(
           title: Text(item.title!),
-          subtitle: Text('Last modified: ${item.lastModified}'),
+          subtitle: Text('Last modified: $formattedDate'),
           trailing: IconButton(
             icon: const Icon(
               Icons.delete_outline,
