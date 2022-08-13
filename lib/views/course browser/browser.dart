@@ -87,17 +87,27 @@ class _BrowserState extends State<Browser> {
                           setState(() => _semester = value + 1);
                         }),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 14),
-                    child: CupertinoTextField(
+                    // Removed [CupertinoTextField] to prevent the usage of
+                    // [CupertinoIcons] as they are not tree shaken when publish
+                    // to the web. https://github.com/flutter/flutter/issues/57181
+                    child: TextField(
                       maxLength: 9,
                       controller: _searchController,
-                      // https://github.com/flutter/flutter/issues/48438#issuecomment-621262652
-                      style: CupertinoTheme.of(context).textTheme.textStyle,
-                      placeholder: "Search subject",
-                      clearButtonMode: OverlayVisibilityMode.editing,
-                      selectionControls: MaterialTextSelectionControls(),
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        // TODO: Buat dia tukar2 course code tu
+                        labelText: 'Search (Eg: MCTE 3100)',
+                        isDense: true,
+                        helperText: 'Leave empty to load all',
+                        counter: const SizedBox.shrink(),
+                        suffixIcon: IconButton(
+                          onPressed: () => _searchController.clear(),
+                          icon: const Icon(Icons.clear_outlined),
+                        ),
+                      ),
                       onEditingComplete: () {
                         FocusScope.of(context).unfocus();
                         _searchController.text =
@@ -105,9 +115,9 @@ class _BrowserState extends State<Browser> {
                       },
                     ),
                   ),
+                  const SizedBox(height: 20),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
                     child: MouseRegion(
                       cursor: _selectedKulliyah == null
                           ? SystemMouseCursors.forbidden
@@ -138,7 +148,7 @@ class _BrowserState extends State<Browser> {
                                   ),
                                 );
                               },
-                        child: const Text('Search'),
+                        child: const Text('Go'),
                       ),
                     ),
                   )

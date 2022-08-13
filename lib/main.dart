@@ -35,9 +35,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'IIUM Schedule (Preview)',
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-        ),
+        theme: ThemeData(primarySwatch: Colors.purple),
         darkTheme: ThemeData.dark().copyWith(
           cupertinoOverrideTheme:
               const CupertinoThemeData(primaryColor: Colors.purple),
