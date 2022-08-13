@@ -49,4 +49,4 @@ jobs:
 
       - name: Write summary
         run: |
-          echo :blue_heart: Using **Flutter ${{ inputs.flutterChannel }}** >> $GITHUB_STEP_SUMMARY
+          echo ":blue_heart: Using **`flutter --version`**" >> $GITHUB_STEP_SUMMARY

@@ -60,6 +60,8 @@ jobs:
       - name: Adding markdown
         run: |
           echo :rocket: Added release apk(s) to assets >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo ":blue_heart: Using **`flutter --version`**" >> $GITHUB_STEP_SUMMARY
 
   build_web:
     runs-on: ubuntu-latest

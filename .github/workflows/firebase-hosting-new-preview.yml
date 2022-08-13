@@ -59,6 +59,7 @@ jobs:
 
       - name: Write summary
         run: |
-          echo ":blue_heart: Using **Flutter ${{ inputs.flutterChannel }}**" >> $GITHUB_STEP_SUMMARY
+          echo ":blue_heart: Using **`flutter --version`**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
           echo ":spider_web: Web renderer **${{ inputs.webRenderer }}**" >> $GITHUB_STEP_SUMMARY
           echo "## :rocket: Deployment URL **${{ steps.firebaseHost.outputs.details_url }}**" >> $GITHUB_STEP_SUMMARY
