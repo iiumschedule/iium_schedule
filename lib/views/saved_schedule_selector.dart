@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
-import 'constants.dart';
-import 'model/saved_schedule.dart';
-import 'views/saved_schedule/saved_schedule_layout.dart';
+import '../constants.dart';
+import '../hive_model/saved_schedule.dart';
+import 'saved_schedule/saved_schedule_layout.dart';
 
 class SavedScheduleSelector extends StatefulWidget {
   const SavedScheduleSelector({Key? key}) : super(key: key);
