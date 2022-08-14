@@ -5,19 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'body.dart';
+import 'hive_model/gh_responses.dart';
+import 'hive_model/saved_daytime.dart';
+import 'hive_model/saved_schedule.dart';
+import 'hive_model/saved_subject.dart';
+import 'views/body.dart';
 import 'constants.dart';
-import 'model/saved_daytime.dart';
-import 'model/saved_schedule.dart';
-import 'model/saved_subject.dart';
 import 'providers/schedule_layout_setting_provider.dart';
 
 void main() async {
   await Hive.initFlutter('IIUM Schedule Data');
-  Hive.registerAdapter(SavedScheduleAdapter());
-  Hive.registerAdapter(SavedSubjectAdapter());
-  Hive.registerAdapter(SavedDaytimeAdapter());
+  Hive
+    ..registerAdapter(SavedScheduleAdapter())
+    ..registerAdapter(SavedSubjectAdapter())
+    ..registerAdapter(SavedDaytimeAdapter())
+    ..registerAdapter(GhResponsesAdapter());
   await Hive.openBox<SavedSchedule>(kHiveSavedSchedule);
+  await Hive.openBox<GhResponses>(kHiveGhResponse);
 
   HttpOverrides.global = MyHttpOverrides();
 

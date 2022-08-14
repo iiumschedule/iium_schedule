@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -6,12 +9,13 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quick_actions/quick_actions.dart';
 
-import 'constants.dart';
-import 'model/saved_schedule.dart';
+import '../constants.dart';
+import '../hive_model/saved_schedule.dart';
+import 'check_update_page.dart';
 import 'saved_schedule_selector.dart';
-import 'util/launcher_url.dart';
-import 'views/course browser/browser.dart';
-import 'views/scheduler/schedule_maker_entry.dart';
+import '../util/launcher_url.dart';
+import 'course browser/browser.dart';
+import 'scheduler/schedule_maker_entry.dart';
 
 class MyBody extends StatelessWidget {
   const MyBody({
@@ -60,6 +64,8 @@ class MyBody extends StatelessWidget {
                 .copyWith(statusBarColor: Colors.grey.withAlpha(90))
             : SystemUiOverlayStyle.light
                 .copyWith(statusBarColor: Colors.grey.withAlpha(90)),
+        // systemOverlayStyle: SystemUiOverlayStyle.light
+        //     .copyWith(statusBarColor: Colors.transparent),
         shadowColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.transparent,
@@ -72,11 +78,21 @@ class MyBody extends StatelessWidget {
         title: FutureBuilder(
             future: PackageInfo.fromPlatform(),
             builder: (_, AsyncSnapshot<PackageInfo> snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data!.version);
-              } else {
-                return const SizedBox.shrink();
-              }
+              return TextButton(
+                // don't want to be as attractive like a button
+                style: TextButton.styleFrom(
+                    textStyle: Theme.of(context).textTheme.caption,
+                    primary: Theme.of(context).textTheme.caption!.color),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => const _SimpleAboutDialog(),
+                  );
+                },
+                child: Text(
+                  'v${snapshot.data?.version}',
+                ),
+              );
             }),
         actions: [
           PopupMenuButton(
@@ -175,7 +191,56 @@ class MyBody extends StatelessWidget {
   }
 }
 
+class _SimpleAboutDialog extends StatelessWidget {
+  const _SimpleAboutDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+        title: const SimpleDialogOption(child: Text('About')),
+        children: [
+          const SimpleDialogOption(
+            child: Text(
+                'This app enables students to make & check their schedules, specially tailoired for IIUM Students.'),
+          ),
+          SimpleDialogOption(
+            child: const Text('\u00a9 2022 Muhammad Fareez'),
+            onPressed: () => LauncherUrl.open('https://iqfareez.com'),
+          ),
+          SimpleDialogOption(
+            child: const Text('Available on Android/Windows/Web'),
+            onPressed: () => LauncherUrl.open(
+                'https://iiumscheddule.iqfareez.com/downloads'),
+          ),
+          const Divider(),
+          if (!kIsWeb) // don't show this option when on web
+            SimpleDialogOption(
+              child: const Text('Check for updates...'),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    fullscreenDialog: true,
+                    builder: (_) => const CheckUpdatePage(),
+                  ),
+                );
+              },
+            ),
+          SimpleDialogOption(
+            child: const Text('View licenses'),
+            onPressed: () => showLicensePage(
+                context: context,
+                applicationLegalese: '\u{a9} 2022 Muhammad Fareez'),
+          ),
+        ]);
+  }
+}
+
+/// COnfigure the quick action if running on Android only
 void configureQuickAction(BuildContext context) {
+  // check if running on Android only
+  if (kIsWeb || !Platform.isAndroid) return;
+
   const QuickActions quickActions = QuickActions();
 
   // callback for quick actions

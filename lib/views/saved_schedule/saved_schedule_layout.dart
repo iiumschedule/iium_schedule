@@ -8,8 +8,8 @@ import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-import '../../model/saved_schedule.dart';
-import '../../model/saved_subject.dart';
+import '../../hive_model/saved_schedule.dart';
+import '../../hive_model/saved_subject.dart';
 import '../../providers/schedule_layout_setting_provider.dart';
 import '../../util/extensions.dart';
 import '../../util/my_ftoast.dart';
@@ -17,6 +17,7 @@ import '../../util/screenshot_widget.dart';
 import '../scheduler/schedule_view/rename_dialog.dart';
 import '../scheduler/schedule_view/setting_bottom_sheet.dart';
 import '../scheduler/schedule_view/timetable_view_widget.dart';
+import 'metadata_dialog.dart';
 import 'saved_subject_dialog.dart';
 
 class SavedScheduleLayout extends StatefulWidget {
@@ -228,7 +229,15 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                             ),
                             const PopupMenuDivider(),
                             const PopupMenuItem(
-                              // Implement delete
+                              value: 'metadata',
+                              child: ListTile(
+                                  trailing: Icon(
+                                    Icons.info_outline,
+                                  ),
+                                  title: Text('Metadata')),
+                            ),
+                            const PopupMenuItem(
+                              // TODO: Implement delete
                               value: 'delete',
                               child: ListTile(
                                   trailing: Icon(
@@ -305,6 +314,13 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
         Fluttertoast.showToast(msg: "Not implemented yet");
         throw UnimplementedError();
       // break;
+      case 'metadata':
+        showModalBottomSheet(
+            context: context,
+            builder: (_) => MetadataSheet(
+                  savedSchedule: widget.savedSchedule,
+                ));
+        break;
       case 'delete':
         // TODO: Implement delete
         Fluttertoast.showToast(msg: "Not implemented yet");

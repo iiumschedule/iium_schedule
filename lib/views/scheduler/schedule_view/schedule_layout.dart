@@ -9,11 +9,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
-import '../../../colour_palletes.dart';
+import '../../../util/colour_palletes.dart';
 import '../../../constants.dart';
-import '../../../model/saved_daytime.dart';
-import '../../../model/saved_schedule.dart';
-import '../../../model/saved_subject.dart';
+import '../../../hive_model/saved_schedule.dart';
+import '../../../hive_model/saved_subject.dart';
 import '../../../providers/schedule_layout_setting_provider.dart';
 import '../../../util/extensions.dart';
 import '../../../util/my_ftoast.dart';
