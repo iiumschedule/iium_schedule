@@ -209,8 +209,8 @@ class _SimpleAboutDialog extends StatelessWidget {
           ),
           SimpleDialogOption(
             child: const Text('Available on Android/Windows/Web'),
-            onPressed: () => LauncherUrl.open(
-                'https://iiumscheddule.iqfareez.com/downloads'),
+            onPressed: () =>
+                LauncherUrl.open('https://iiumschedule.iqfareez.com/downloads'),
           ),
           const Divider(),
           if (!kIsWeb) // don't show this option when on web
