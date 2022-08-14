@@ -1,5 +1,5 @@
 # Bundle the app to exe installer (usually no need to use this workflow)
-name: Package installer (Inno setup)
+name: Windows installer (Inno setup)
 
 "on":
   workflow_dispatch:
