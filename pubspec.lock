@@ -675,7 +675,7 @@ packages:
       path: "../../Dart App/recase"
       relative: true
     source: path
-    version: "4.0.2"
+    version: "4.0.3"
   share_plus:
     dependency: "direct main"
     description:
