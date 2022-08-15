@@ -103,5 +103,5 @@ msix_config:
   msix_version: 0.1.0.8 # Also as publishing version for inno
   logo_path: ".\\assets\\logo\\app-logo.png"
   capabilities: "internetClient"
-  certificate_path: "C:\\Users\\Iqmal\\CERTIFICATE.pfx"
+  certificate_path: ".\\windows\\CERTIFICATE.pfx"
   certificate_password: 1234

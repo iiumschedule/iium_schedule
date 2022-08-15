@@ -1,0 +1,67 @@
+name: Build for Windows and package as msix
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_windows:
+    name: Build windows and package exe
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - name: Flutter build for Windows
+        run: |
+          flutter pub get
+          flutter build windows
+
+      - name: Decoding CERTIFICATE.pfx
+        shell: cmd
+        # certutil [options] -decode infile outfile
+        # Read cert base64 from env secrets, write it in a file
+        # The, use the certutil command the decode and save in the cert file (pfx)
+        run: |
+          echo ${{ secrets.CERT_PFX }} > certBase64.txt 
+          certutil -decode certBase64.txt windows/CERTIFICATE.pfx
+
+      - name: Packaging to msix
+        # Pipe 'Y' (positive), preceeding command
+        # will ask if comfirmation to install certificate
+        run: echo 'Y' | flutter pub run msix:create
+
+      - name: Adding markdown
+        run: |
+          echo :white_check_mark: Packaged into .msix file >> $GITHUB_STEP_SUMMARY
+
+      # Upload the file to the released release
+      - name: Upload file to the assets release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build\windows\runner\Release\iium_schedule.msix
+
+      - name: Adding markdown
+        run: |
+          echo :rocket: **Added outputs** to release assets **todo: Publish to winget** >> $GITHUB_STEP_SUMMARY
+
+  # After all builds successfully completed, notify me thru Telegram
+  notify:
+    needs: [build_android, build_web, build_windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Telegram notify
+        uses: fjogeleit/http-request-action@v1.10.0
+        with:
+          url: "https://api.telegram.org/bot${{secrets.TELE_BOT_API_KEY}}/sendMessage"
+          method: "POST"
+          data: '{
+            "chat_id": 320195187,
+            "parse_mode": "MarkdownV2",
+            "disable_web_page_preview": true,
+            "text": "IIUM Schedule ${{github.workflow}} *completed* 🛰 \\. View [action runs](https:\/\/github.com\/${{github.repository}}\/actions\/runs\/${{github.run_id}})\\."
+            }'

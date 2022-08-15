@@ -59,7 +59,7 @@ jobs:
 
       - name: Adding markdown
         run: |
-          echo :rocket: Added release apk(s) to assets >> $GITHUB_STEP_SUMMARY
+          echo ":rocket: Added release apk(s) to assets" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo ":blue_heart: Using **`flutter --version`**" >> $GITHUB_STEP_SUMMARY
 
@@ -105,7 +105,6 @@ jobs:
           echo ':rocket: Deployed to Firebase **${{ steps.hostingChannel.outputs.value }} channel**. URL **${{ steps.firebaseDeploy.outputs.details_url }}**' >> $GITHUB_STEP_SUMMARY
 
   build_windows:
-    name: Build windows and package exe
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -126,6 +125,12 @@ jobs:
         run: |
           "%programfiles(x86)%\Inno Setup 6\iscc.exe" "Inno\setup-script.iss"
         shell: cmd
+
+      # Upload the exe to the released release
+      - name: Upload file to the assets release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: Inno\iiumschedulesetup.exe
 
       - name: Adding markdown
         run: |
@@ -149,13 +154,11 @@ jobs:
         run: |
           echo :white_check_mark: Packaged into .msix file >> $GITHUB_STEP_SUMMARY
 
-      # Upload the file to the released release
+      # Upload the msix to the released release
       - name: Upload file to the assets release
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            Inno\iiumschedulesetup.exe
-            build\windows\runner\Release\iium_schedule.msix
+          files: build\windows\runner\Release\iium_schedule.msix
 
       - name: Adding markdown
         run: |
