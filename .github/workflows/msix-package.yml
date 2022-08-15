@@ -35,33 +35,7 @@ jobs:
         # will ask if comfirmation to install certificate
         run: echo 'Y' | flutter pub run msix:create
 
-      - name: Adding markdown
-        run: |
-          echo :white_check_mark: Packaged into .msix file >> $GITHUB_STEP_SUMMARY
-
-      # Upload the file to the released release
-      - name: Upload file to the assets release
-        uses: softprops/action-gh-release@v1
+      - name: Upload msix
+        uses: actions/upload-artifact@v2
         with:
-          files: build\windows\runner\Release\iium_schedule.msix
-
-      - name: Adding markdown
-        run: |
-          echo :rocket: **Added outputs** to release assets **todo: Publish to winget** >> $GITHUB_STEP_SUMMARY
-
-  # After all builds successfully completed, notify me thru Telegram
-  notify:
-    needs: [build_android, build_web, build_windows]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Telegram notify
-        uses: fjogeleit/http-request-action@v1.10.0
-        with:
-          url: "https://api.telegram.org/bot${{secrets.TELE_BOT_API_KEY}}/sendMessage"
-          method: "POST"
-          data: '{
-            "chat_id": 320195187,
-            "parse_mode": "MarkdownV2",
-            "disable_web_page_preview": true,
-            "text": "IIUM Schedule ${{github.workflow}} *completed* 🛰 \\. View [action runs](https:\/\/github.com\/${{github.repository}}\/actions\/runs\/${{github.run_id}})\\."
-            }'
+          path: build\windows\runner\Release\iium_schedule.msix
