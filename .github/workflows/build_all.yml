@@ -22,6 +22,7 @@ jobs:
         with:
           channel: "stable"
 
+      # File can be encoded to base64 on https://base64.guru/converter/encode/file
       - name: Decoding android/key.properties
         run: echo "${{ secrets.KEY_PROP }}" | base64 --decode > android/key.properties
 
