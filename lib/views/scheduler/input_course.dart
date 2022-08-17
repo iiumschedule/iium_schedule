@@ -341,7 +341,7 @@ class _InputCourseState extends State<InputCourse>
                     if (_inputIndex == 1)
                       Link(
                         uri: Uri.parse(
-                            "https://iiumschedule.iqfareez.com/docs/extract/imaluum"),
+                            "https://iiumschedule.iqfareez.com/docs/extract"),
                         target: LinkTarget.blank,
                         builder: (_, followLink) => TextButton(
                           onPressed: followLink,
