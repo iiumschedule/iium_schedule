@@ -60,7 +60,6 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
   }
 
   void takeScreenshot() async {
-    Brightness brightness = Theme.of(context).brightness;
     String? path = await ScreenshotWidget.screenshot(_globalKey, name);
 
     if (kIsWeb) {
@@ -73,7 +72,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
 
     // show toast for windows and android
     if (mounted) {
-      MyFtoast.show(context, 'Saved to $path', brightness);
+      MyFtoast.show(context, 'Saved to $path');
     }
   }
 
@@ -334,9 +333,9 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         var key = await save();
         if (!mounted) return;
         MyFtoast.show(
-            context,
-            'Saved. The schedule can the found from the main menu.',
-            Theme.of(context).brightness);
+          context,
+          'Saved. The schedule can the found from the main menu.',
+        );
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(

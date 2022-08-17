@@ -64,7 +64,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
 
     // show toast for windows and android
     if (mounted) {
-      MyFtoast.show(context, 'Saved to $path', brightness);
+      MyFtoast.show(context, 'Saved to $path');
     }
   }
 
