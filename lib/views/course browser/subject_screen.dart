@@ -9,6 +9,7 @@ import 'package:recase/recase.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../util/extensions.dart';
+import '../../util/my_ftoast.dart';
 
 class SubjectScreen extends StatelessWidget {
   const SubjectScreen(this.subject, {Key? key}) : super(key: key);
@@ -45,6 +46,7 @@ class SubjectScreen extends StatelessWidget {
           )
         ],
       ),
+      // TODO: Maybe boleh letak SelectionArea widget to the whole child
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 500),
@@ -85,14 +87,14 @@ class SubjectScreen extends StatelessWidget {
                 '\nSession(s)',
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
-              DayTimeTable(subject.dayTime),
+              _DayTimeTable(subject.dayTime),
               const Text(
                 '\nLecturer(s)',
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
               ...List.generate(
                 subject.lect.length,
-                (index) => Text(
+                (index) => SelectableText(
                     '${index + 1}. ${ReCase(subject.lect[index]).titleCase}'),
               ),
               const Text(
@@ -108,8 +110,8 @@ class SubjectScreen extends StatelessWidget {
   }
 }
 
-class DayTimeTable extends StatelessWidget {
-  const DayTimeTable(
+class _DayTimeTable extends StatelessWidget {
+  const _DayTimeTable(
     this.dayTimes, {
     Key? key,
   }) : super(key: key);
@@ -125,11 +127,12 @@ class DayTimeTable extends StatelessWidget {
           .map(
             (e) => DataColumn(
                 label: Expanded(
-                    child: Text(
-              e,
-              style: const TextStyle(fontWeight: FontWeight.w600),
-              textAlign: TextAlign.center,
-            ))),
+              child: Text(
+                e,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+                textAlign: TextAlign.center,
+              ),
+            )),
           )
           .toList(),
       headingRowHeight: 32,
@@ -138,10 +141,10 @@ class DayTimeTable extends StatelessWidget {
             (e) => DataRow(
               cells: [
                 DataCell(
-                  Text(ReCase(e!.englishDay()).titleCase),
+                  SelectableText(ReCase(e!.englishDay()).titleCase),
                 ),
                 DataCell(
-                  Text('${e.startTime} - ${e.endTime}'),
+                  SelectableText('${e.startTime} - ${e.endTime}'),
                 )
               ],
             ),
@@ -165,38 +168,40 @@ class TextBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: (() {
-          // on Windows or Web, tap to copy
-          if (kIsWeb || Platform.isWindows) {
-            Clipboard.setData(ClipboardData(text: text)).then((_) {
-              Fluttertoast.showToast(msg: 'Copied');
-              HapticFeedback.lightImpact();
-            });
-          }
-        }),
-        onLongPress: () {
-          // for Android, long press to copy
-          if (!kIsWeb || Platform.isAndroid) {
-            Clipboard.setData(ClipboardData(text: text)).then((_) {
-              Fluttertoast.showToast(msg: 'Copied');
-              HapticFeedback.lightImpact();
-            });
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Chip(
-            avatar: Icon(icon, size: 18),
-            labelStyle:
-                const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            backgroundColor: backgroundColor.withAlpha(40),
-            label: Text(
-              text,
-            ),
-          ),
+    return GestureDetector(
+      onLongPress: () {
+        // for Android, long press to copy
+        if (!kIsWeb || Platform.isAndroid) {
+          Clipboard.setData(ClipboardData(text: text)).then((_) {
+            Fluttertoast.showToast(msg: 'Copied');
+            HapticFeedback.lightImpact();
+          });
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: ActionChip(
+          onPressed: () {
+            // on Windows or Web, tap to copy
+            if (kIsWeb || Platform.isWindows) {
+              Clipboard.setData(ClipboardData(text: text)).then((_) {
+                HapticFeedback.lightImpact();
+
+                // handle toast based on platform
+                if (kIsWeb) {
+                  Fluttertoast.showToast(msg: 'Copied');
+                } else {
+                  MyFtoast.show(context, 'Copied');
+                }
+              });
+            }
+          },
+          pressElevation: 2,
+          avatar: Icon(icon, size: 18),
+          labelStyle:
+              const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+          backgroundColor: backgroundColor.withAlpha(40),
+          label: Text(text),
         ),
       ),
     );
