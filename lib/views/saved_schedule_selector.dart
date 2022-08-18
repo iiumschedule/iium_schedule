@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
 import '../constants.dart';
@@ -16,7 +16,7 @@ class SavedScheduleSelector extends StatefulWidget {
 }
 
 class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
-  final box = Hive.box<SavedSchedule>(kHiveSavedSchedule);
+  final _box = Hive.box<SavedSchedule>(kHiveSavedSchedule);
 
   @override
   Widget build(BuildContext context) {
@@ -26,30 +26,35 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
         systemOverlayStyle: SystemUiOverlayStyle.light
             .copyWith(statusBarColor: Colors.transparent),
       ),
-      body: AnimatedList(
-        padding: const EdgeInsets.all(8),
-        initialItemCount: box.length,
-        itemBuilder: (context, index, animation) {
-          var item = box.getAt(index);
-          return _CardItem(
-            item: item!,
-            animation: animation,
-            onTap: () async {
-              var res = await showDialog(
-                context: context,
-                builder: (_) => const _DeleteDialog(),
-              );
+      body: ValueListenableBuilder(
+        valueListenable: _box.listenable(),
+        builder: (_, Box<SavedSchedule> value, __) {
+          return AnimatedList(
+            padding: const EdgeInsets.all(8),
+            initialItemCount: value.length,
+            itemBuilder: (context, index, animation) {
+              var item = value.getAt(index);
+              return _CardItem(
+                item: item!,
+                animation: animation,
+                onTap: () async {
+                  var res = await showDialog(
+                    context: context,
+                    builder: (_) => const _DeleteDialog(),
+                  );
 
-              if (res ?? false) {
-                await box.deleteAt(index);
-                // ignore: use_build_context_synchronously
-                AnimatedList.of(context).removeItem(
-                    index,
-                    (context, animation) => _CardItem(
-                          item: item,
-                          animation: animation,
-                        ));
-              }
+                  if (res ?? false) {
+                    await value.deleteAt(index);
+                    // ignore: use_build_context_synchronously
+                    AnimatedList.of(context).removeItem(
+                        index,
+                        (context, animation) => _CardItem(
+                              item: item,
+                              animation: animation,
+                            ));
+                  }
+                },
+              );
             },
           );
         },
@@ -98,9 +103,6 @@ class _CardItem extends StatelessWidget {
             );
 
             SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-
-            // refresh page when come back to this screen
-            // setState(() {});
           },
         ),
       ),
