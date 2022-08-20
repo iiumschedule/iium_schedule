@@ -25,9 +25,9 @@ Sem 1, 22/23 (In **October** inshallah, after my internship)
 
 ## Website
 
-To learn about extracting subjects to JSON, release notes, privacy policy etc. Go to the website at:
+For guides extracting subjects, release notes, privacy policy etc. Go to the website at:
 
-https://iiumschedule.iqfareez.com/
+https://iiumschedule.iqfareez.com
 
 ## Devlog
 
@@ -45,7 +45,14 @@ To make a tool that can generate a beautiful, lockscreen-worthy schedule for IIU
 
 Usually, students will use ClassUp app to make a schedule, but they have to enter the information manually. It cost time & energy, and prone to error.
 
-## Honourable mentions
+## Similar project like this one
+
+- https://github.com/asdacap/iiumschedule
+- https://github.com/PlashSpeed-Aiman/IIUMCourseScheduleApp 
+
+*Open PR to add your project here*
+
+## Acknowledgement
 
 - Conditional importing that allows compilation to all platforms - https://gpalma.pt/blog/conditional-importing/
 - Inno installer setup - https://retroportalstudio.medium.com/creating-exe-executable-file-for-flutter-desktop-apps-windows-ea7c338465e
