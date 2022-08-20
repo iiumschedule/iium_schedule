@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:url_launcher/link.dart';
 
 import '../../model/basic_subject_model.dart';
@@ -28,6 +30,16 @@ class _InputCourseState extends State<InputCourse>
 
   int? _editingIndex;
   int _inputIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    if (kIsWeb) {
+      // Load the proxy early due to cold start
+      // This is the proxy used for albiruni when passing useProxy to true
+      http.get(Uri.parse('https://cors-anywhere-iium.herokuapp.com'));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

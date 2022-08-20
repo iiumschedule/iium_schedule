@@ -1,14 +1,12 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-
 import 'package:albiruni/albiruni.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import '../../util/kulliyyahs.dart';
 import 'browser_view.dart';
-
-// TODO: Sort imports
 
 class Browser extends StatefulWidget {
   const Browser({Key? key}) : super(key: key);
@@ -27,8 +25,11 @@ class _BrowserState extends State<Browser> {
   @override
   void initState() {
     super.initState();
-    http.get(Uri.parse('http://cors-anywhere-iium.herokuapp.com'));
-
+    if (kIsWeb) {
+      // Load the proxy early due to cold start
+      // This is the proxy used for albiruni when passing useProxy to true
+      http.get(Uri.parse('https://cors-anywhere-iium.herokuapp.com'));
+    }
   }
 
   @override
