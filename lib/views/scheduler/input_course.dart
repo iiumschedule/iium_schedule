@@ -105,6 +105,7 @@ class _InputCourseState extends State<InputCourse>
                               Row(
                                 children: [
                                   IconButton(
+                                      tooltip: 'Edit',
                                       onPressed: () {
                                         setState(
                                           () {
@@ -126,6 +127,7 @@ class _InputCourseState extends State<InputCourse>
                                       },
                                       icon: const Icon(Icons.edit_outlined)),
                                   IconButton(
+                                    tooltip: 'Delete',
                                     onPressed: () {
                                       setState(() {
                                         _inputCourses.removeAt(index);
