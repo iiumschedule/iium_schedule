@@ -29,6 +29,20 @@ For guides extracting subjects, release notes, privacy policy etc. Go to the web
 
 https://iiumschedule.iqfareez.com
 
+## Features
+
+* Generate schedule (ClassUp style)
+* Save schedule in app.
+* Export as image (so you can set as lockscreen)
+* Browse for subjects.
+
+## Features TODO
+
+* Subject add to cart [#11](https://github.com/iqfareez/iium_schedule/issues/11)
+* Export as PDF
+* etc.
+
+
 ## Devlog
 
 [![Part 1](https://img.shields.io/badge/part%201-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTAxOTkzNjUzNDk0NDQ3)
