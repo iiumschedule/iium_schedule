@@ -19,6 +19,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppUpdatesURL}
+UninstallDisplayName={#MyAppName}
 DefaultDirName={autopf}\IIUM Schedule
 DisableProgramGroupPage=yes
 ;DisableWelcomePage=no
