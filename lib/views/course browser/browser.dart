@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 import '../../util/kulliyyahs.dart';
 import 'browser_view.dart';
+
+// TODO: Sort imports
 
 class Browser extends StatefulWidget {
   const Browser({Key? key}) : super(key: key);
@@ -20,6 +23,13 @@ class _BrowserState extends State<Browser> {
   String _session = "2022/2023";
   int _semester = 1;
   String? _selectedKulliyah;
+
+  @override
+  void initState() {
+    super.initState();
+    http.get(Uri.parse('http://cors-anywhere-iium.herokuapp.com'));
+
+  }
 
   @override
   Widget build(BuildContext context) {
