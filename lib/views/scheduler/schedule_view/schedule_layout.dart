@@ -81,12 +81,15 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     int key = await box.add(SavedSchedule(
       title: name,
       lastModified: DateTime.now().toString(),
+      dateCreated: DateTime.now().toString(),
       subjects: widget.subjects
           .map((e) => SavedSubject.fromSubject(
               subject: e,
               subjectName: e.title,
               hexColor: tempHexColour[e.code]))
           .toList(),
+      fontSize: _fontSizeSubject,
+      heightFactor: _itemHeight,
     ));
     print('Saved to key $key');
     return key;

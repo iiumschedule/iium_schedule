@@ -16,13 +16,32 @@ class SavedSchedule extends HiveObject {
   @HiveField(2)
   String lastModified;
 
-  SavedSchedule(
-      {required this.title,
-      required this.subjects,
-      required this.lastModified});
+  @HiveField(3)
+  String dateCreated;
+
+  @HiveField(4)
+  double fontSize;
+
+  @HiveField(5)
+  double heightFactor;
+
+  SavedSchedule({
+    required this.title,
+    required this.subjects,
+    required this.lastModified,
+    required this.dateCreated,
+    required this.fontSize,
+    required this.heightFactor,
+  });
 
   @override
   String toString() {
-    return '{title: $title, subjects: $subjects}';
+    return '{title: $title, subjects count: ${subjects?.length}, lastModified: $lastModified, dateCreated: $dateCreated, fontSize: $fontSize, heightFactor: $heightFactor}';
+  }
+
+  @override
+  Future<void> save() {
+    lastModified = DateTime.now().toString(); // update last modified time
+    return super.save();
   }
 }

@@ -13,6 +13,7 @@ class MetadataSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime lastModifiedDate = DateTime.parse(savedSchedule.lastModified);
+    DateTime createdDate = DateTime.parse(savedSchedule.dateCreated);
     return MyBottomSheet(
       title: 'Metadata',
       content: [
@@ -24,7 +25,13 @@ class MetadataSheet extends StatelessWidget {
           leading: const _LeadingTextWidget('Last modified:'),
           title: Text(DateFormat('d/M/yy').format(lastModifiedDate)),
           subtitle: Text(
-              '${DateFormat('hh:mm').format(lastModifiedDate)} (${DateFormat('EEEE').format(lastModifiedDate)})'),
+              '${DateFormat('hh:mm:ss').format(lastModifiedDate)} (${DateFormat('EEEE').format(lastModifiedDate)})'),
+        ),
+        ListTile(
+          leading: const _LeadingTextWidget('Created on:'),
+          title: Text(DateFormat('d/M/yy').format(createdDate)),
+          subtitle: Text(
+              '${DateFormat('hh:mm:ss').format(createdDate)} (${DateFormat('EEEE').format(createdDate)})'),
         ),
       ],
     );

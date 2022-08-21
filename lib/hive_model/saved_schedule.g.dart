@@ -20,19 +20,28 @@ class SavedScheduleAdapter extends TypeAdapter<SavedSchedule> {
       title: fields[0] as String?,
       subjects: (fields[1] as List?)?.cast<SavedSubject>(),
       lastModified: fields[2] as String,
+      dateCreated: fields[3] as String,
+      fontSize: fields[4] as double,
+      heightFactor: fields[5] as double,
     );
   }
 
   @override
   void write(BinaryWriter writer, SavedSchedule obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
       ..write(obj.subjects)
       ..writeByte(2)
-      ..write(obj.lastModified);
+      ..write(obj.lastModified)
+      ..writeByte(3)
+      ..write(obj.dateCreated)
+      ..writeByte(4)
+      ..write(obj.fontSize)
+      ..writeByte(5)
+      ..write(obj.heightFactor);
   }
 
   @override

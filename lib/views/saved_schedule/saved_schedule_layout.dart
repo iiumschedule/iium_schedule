@@ -38,8 +38,6 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
 
   int _startHour = 10; // pukul 10 am
   int _endHour = 17; // pukul 5 pm
-  double _itemHeight = 60.0;
-  double _fontSizeSubject = 10;
   bool _isFullScreen = false;
   bool _hideFab = false;
 
@@ -114,7 +112,8 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
               : Colors.white;
 
           return TableEvent(
-            textStyle: TextStyle(fontSize: _fontSizeSubject, color: textColor),
+            textStyle: TextStyle(
+                fontSize: widget.savedSchedule.fontSize, color: textColor),
             title: Provider.of<ScheduleLayoutSettingProvider>(context)
                         .subjectTitleSetting ==
                     SubjectTitleSetting.title
@@ -182,8 +181,6 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
 
                         // save the new name and record the last modified
                         widget.savedSchedule.title = newName;
-                        widget.savedSchedule.lastModified =
-                            DateTime.now().toString();
                         widget.savedSchedule.save();
                       },
                       child: Text(
@@ -194,12 +191,18 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                     if (kIsWeb || !Platform.isAndroid) ...[
                       IconButton(
                         tooltip: 'Increase text sizes',
-                        onPressed: () => setState(() => _fontSizeSubject--),
+                        onPressed: () {
+                          setState(() => widget.savedSchedule.fontSize--);
+                          widget.savedSchedule.save();
+                        },
                         icon: const Icon(Icons.text_decrease_rounded),
                       ),
                       IconButton(
                         tooltip: 'Reduce text sizes',
-                        onPressed: () => setState(() => _fontSizeSubject++),
+                        onPressed: () {
+                          setState(() => widget.savedSchedule.fontSize++);
+                          widget.savedSchedule.save();
+                        },
                         icon: const Icon(Icons.text_increase_rounded),
                       ),
                     ],
@@ -257,7 +260,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                 startHour: _startHour,
                 endHour: _endHour,
                 laneEventsList: laneEventsList,
-                itemHeight: _itemHeight,
+                itemHeight: widget.savedSchedule.heightFactor,
               ),
             ),
           ),
@@ -266,25 +269,29 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
               : Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (_itemHeight <= 90)
+                    if (widget.savedSchedule.heightFactor <= 90)
                       FloatingActionButton(
                           heroTag: "btnZoom+",
                           tooltip: "Zoom in (increase height)",
                           mini: true,
                           child: const Icon(Icons.zoom_in),
                           onPressed: () {
-                            setState(() => _itemHeight += 2);
+                            setState(
+                                () => widget.savedSchedule.heightFactor += 2);
+                            widget.savedSchedule.save();
                           }),
                     if (kIsWeb || !Platform.isAndroid)
                       const SizedBox(height: 5),
-                    if (_itemHeight >= 44)
+                    if (widget.savedSchedule.heightFactor >= 44)
                       FloatingActionButton(
                           heroTag: "btnZoom-",
                           tooltip: "Zoom out (decrease height)",
                           mini: true,
                           child: const Icon(Icons.zoom_out),
                           onPressed: () {
-                            setState(() => _itemHeight -= 2);
+                            setState(
+                                () => widget.savedSchedule.heightFactor -= 2);
+                            widget.savedSchedule.save();
                           }),
                     if (kIsWeb || !Platform.isAndroid)
                       const SizedBox(height: 5),
