@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'constants.dart';
 import 'hive_model/gh_responses.dart';
 import 'hive_model/saved_daytime.dart';
 import 'hive_model/saved_schedule.dart';
 import 'hive_model/saved_subject.dart';
-import 'views/body.dart';
-import 'constants.dart';
+import 'providers/saved_subjects_provider.dart';
 import 'providers/schedule_layout_setting_provider.dart';
+import 'views/body.dart';
 
 void main() async {
   await Hive.initFlutter('IIUM Schedule Data');
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ScheduleLayoutSettingProvider()),
+        ChangeNotifierProvider(create: (_) => SavedSubjectsProvider()),
       ],
       child: MaterialApp(
         title: 'IIUM Schedule (Preview)',

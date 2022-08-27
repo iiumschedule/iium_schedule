@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
+import '../../../providers/saved_subjects_provider.dart';
 import '../../../util/colour_palletes.dart';
 import '../../../constants.dart';
 import '../../../hive_model/saved_schedule.dart';
@@ -36,7 +37,10 @@ class ScheduleLayout extends StatefulWidget {
 }
 
 class _ScheduleLayoutState extends State<ScheduleLayout> {
-  final _colorPallete = [...ColourPalletes.pallete1]; // add more
+  final _colorPallete = [
+    // ...ColourPalletes.pallete3,
+    ...ColourPalletes.pallete1
+  ]; // colour pallete to be included in initial generation
   final GlobalKey _globalKey = GlobalKey();
   final box = Hive.box<SavedSchedule>(kHiveSavedSchedule);
 
@@ -339,6 +343,10 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
           context,
           'Saved. The schedule can the found from the main menu.',
         );
+        // Need this provider call or otherwise, it open the previosly open
+        // schedule
+        Provider.of<SavedSubjectsProvider>(context, listen: false)
+            .savedSubjects = box.get(key)!.subjects;
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(

@@ -3,17 +3,11 @@ description: IIUM Schedule Maker
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0-pre.8+11 # remember to change msix version
+# When changing this version, also change the versions in
+# - Runner.rc file (FLUTTER_BUILD_NUMBER & FLUTTER_BUILD_NAME)
+# - msix block (msix_version)
+# - Inno setup (MyAppVersion)
+version: 1.0.0-pre.9+12
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -101,7 +95,7 @@ msix_config:
   display_name: IIUM Schedule
   publisher_display_name: Muhammad Fareez Iqmal
   identity_name: fareez.flutter.iiumschedule
-  msix_version: 0.1.0.8 # Then, copy this value for to Inno setup script
+  msix_version: 0.1.0.9 # same as inno setup (MyAppVersion)
   logo_path: ".\\assets\\logo\\app-logo.png"
   capabilities: "internetClient"
   certificate_path: ".\\windows\\CERTIFICATE.pfx"

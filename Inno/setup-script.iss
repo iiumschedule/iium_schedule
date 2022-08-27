@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "IIUM Schedule (Preview)"
-#define MyAppVersion "0.1.0.8"
+#define MyAppVersion "0.1.0.9"
 #define MyAppPublisher "Muhammad Fareez Iqmal"
 #define MyAppURL "https://iiumschedule.iqfareez.com/"
 #define MyAppExeName "iium_schedule.exe"

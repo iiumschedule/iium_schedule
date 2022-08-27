@@ -11,10 +11,10 @@ import 'package:quick_actions/quick_actions.dart';
 
 import '../constants.dart';
 import '../hive_model/saved_schedule.dart';
-import 'check_update_page.dart';
-import 'saved_schedule_selector.dart';
 import '../util/launcher_url.dart';
+import 'check_update_page.dart';
 import 'course browser/browser.dart';
+import 'saved_schedule_selector.dart';
 import 'scheduler/schedule_maker_entry.dart';
 
 class MyBody extends StatelessWidget {
@@ -69,6 +69,8 @@ class MyBody extends StatelessWidget {
         shadowColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.transparent,
+        centerTitle:
+            false, // prevent the version render at the center of the screen for iphon/ipad
         titleTextStyle: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w300,
@@ -123,7 +125,8 @@ class MyBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           MouseRegion(
-            cursor: SystemMouseCursors.click,
+            cursor:
+                kIsWeb ? SystemMouseCursors.click : SystemMouseCursors.basic,
             child: CupertinoButton(
               child: Text(
                 'Schedule Maker',
@@ -140,7 +143,8 @@ class MyBody extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           MouseRegion(
-            cursor: SystemMouseCursors.click,
+            cursor:
+                kIsWeb ? SystemMouseCursors.click : SystemMouseCursors.basic,
             child: CupertinoButton(
               child: Text(
                 'Course Browser',
@@ -170,7 +174,9 @@ class MyBody extends StatelessWidget {
                 return Column(
                   children: [
                     MouseRegion(
-                      cursor: SystemMouseCursors.click,
+                      cursor: kIsWeb
+                          ? SystemMouseCursors.click
+                          : SystemMouseCursors.basic,
                       child: CupertinoButton(
                         child: Text(
                           'Saved Schedule',

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import '../hive_model/saved_schedule.dart';
+import '../providers/saved_subjects_provider.dart';
 import 'saved_schedule/saved_schedule_layout.dart';
 
 class SavedScheduleSelector extends StatefulWidget {
@@ -44,7 +46,6 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
                   );
 
                   if (res ?? false) {
-                    await value.deleteAt(index);
                     // ignore: use_build_context_synchronously
                     AnimatedList.of(context).removeItem(
                         index,
@@ -52,6 +53,7 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
                               item: item,
                               animation: animation,
                             ));
+                    await value.deleteAt(index);
                   }
                 },
               );
@@ -93,6 +95,9 @@ class _CardItem extends StatelessWidget {
             onPressed: onTap,
           ),
           onTap: () async {
+            // set data to provider
+            Provider.of<SavedSubjectsProvider>(context, listen: false)
+                .savedSubjects = item.subjects;
             await Navigator.push(
               context,
               CupertinoPageRoute(
@@ -118,7 +123,7 @@ class _DeleteDialog extends StatelessWidget {
     return AlertDialog(
       title: const Text("Confirm delete"),
       actions: [
-        OutlinedButton(
+        TextButton(
           onPressed: () => Navigator.pop(context),
           child: const Text("Cancel"),
         ),
