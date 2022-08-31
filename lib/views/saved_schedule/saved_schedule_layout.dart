@@ -45,6 +45,8 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
   void initState() {
     super.initState();
     name = widget.savedSchedule.title ?? "";
+    Provider.of<SavedSubjectsProvider>(context, listen: false).savedSubjects =
+        widget.savedSchedule.subjects;
   }
 
   void takeScreenshot() async {

@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import '../hive_model/saved_schedule.dart';
-import '../providers/saved_subjects_provider.dart';
 import 'saved_schedule/saved_schedule_layout.dart';
 
 class SavedScheduleSelector extends StatefulWidget {
@@ -95,9 +93,6 @@ class _CardItem extends StatelessWidget {
             onPressed: onTap,
           ),
           onTap: () async {
-            // set data to provider
-            Provider.of<SavedSubjectsProvider>(context, listen: false)
-                .savedSubjects = item.subjects;
             await Navigator.push(
               context,
               CupertinoPageRoute(
@@ -122,13 +117,14 @@ class _DeleteDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text("Confirm delete"),
+      content: const Text('Deleted schedule can\'t be recover'),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
           child: const Text("Cancel"),
         ),
         ElevatedButton(
-          style: ElevatedButton.styleFrom(primary: Colors.redAccent),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
           onPressed: () async {
             Navigator.pop(context, true);
           },

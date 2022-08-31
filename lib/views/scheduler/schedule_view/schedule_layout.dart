@@ -342,11 +342,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         MyFtoast.show(
           context,
           'Saved. The schedule can the found from the main menu.',
-        );
-        // Need this provider call or otherwise, it open the previosly open
-        // schedule
-        Provider.of<SavedSubjectsProvider>(context, listen: false)
-            .savedSubjects = box.get(key)!.subjects;
+        );        
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
