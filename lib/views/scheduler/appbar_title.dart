@@ -43,7 +43,7 @@ class _AppbarTitleState extends State<AppbarTitle> {
   String _appbarTitle() {
     switch (_currentPageIndex + 1) {
       case 1:
-        return "Kulliyah and session";
+        return "Kulliyah & session";
       case 2:
         return "Course codes";
       case 3:

@@ -48,7 +48,6 @@ class ScheduleMakerEntry extends StatelessWidget {
           appBar: AppBar(
             systemOverlayStyle: SystemUiOverlayStyle.light
                 .copyWith(statusBarColor: Colors.transparent),
-            centerTitle: true,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
@@ -61,21 +60,21 @@ class ScheduleMakerEntry extends StatelessWidget {
                 }
               },
             ),
-            title: Row(
-              children: [
-                AppbarTitle(
-                  currentPageNotifier: _currentPageNotifier,
-                  itemCount: _itemCount,
-                ),
-                const Spacer(),
-                StepPageIndicator(
+            title: AppbarTitle(
+              currentPageNotifier: _currentPageNotifier,
+              itemCount: _itemCount,
+            ),
+            actions: [
+              Center(
+                child: StepPageIndicator(
                   stepColor: Colors.white,
                   size: 16,
                   currentPageNotifier: _currentPageNotifier,
                   itemCount: _itemCount,
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(width: 4),
+            ],
           ),
           body: PageView.builder(
             controller: _pageController,
