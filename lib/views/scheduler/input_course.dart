@@ -32,16 +32,6 @@ class _InputCourseState extends State<InputCourse>
   int _inputIndex = 0;
 
   @override
-  void initState() {
-    super.initState();
-    if (kIsWeb) {
-      // Load the proxy early due to cold start
-      // This is the proxy used for albiruni when passing useProxy to true
-      http.get(Uri.parse('https://cors-anywhere-iium.herokuapp.com'));
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(

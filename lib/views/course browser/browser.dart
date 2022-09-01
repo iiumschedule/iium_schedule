@@ -23,16 +23,6 @@ class _BrowserState extends State<Browser> {
   String? _selectedKulliyah;
 
   @override
-  void initState() {
-    super.initState();
-    if (kIsWeb) {
-      // Load the proxy early due to cold start
-      // This is the proxy used for albiruni when passing useProxy to true
-      http.get(Uri.parse('https://cors-anywhere-iium.herokuapp.com'));
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
