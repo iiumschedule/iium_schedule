@@ -20,7 +20,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   # cupertino_icons: ^1.0.2
   html: ^0.15.0
-  albiruni: any
+  albiruni: ^1.1.6
   recase:
     git: https://github.com/iqfareez/recase.git # Issue #2
   and:
@@ -36,7 +36,7 @@ dependencies:
   fluttertoast: ^8.0.9
   path_provider: ^2.0.11
   permission_handler: ^10.0.0
-  quick_actions: ^0.6.0+11
+  quick_actions: ^1.0.0
   share_plus: ^4.0.10
   intl: ^0.17.0
   http: ^0.13.5
