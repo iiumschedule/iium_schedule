@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'constants.dart';
+import 'enums/subject_title_setting_enum.dart';
 import 'hive_model/gh_responses.dart';
 import 'hive_model/saved_daytime.dart';
 import 'hive_model/saved_schedule.dart';
@@ -20,7 +21,8 @@ void main() async {
     ..registerAdapter(SavedScheduleAdapter())
     ..registerAdapter(SavedSubjectAdapter())
     ..registerAdapter(SavedDaytimeAdapter())
-    ..registerAdapter(GhResponsesAdapter());
+    ..registerAdapter(GhResponsesAdapter())
+    ..registerAdapter(SubjectTitleSettingAdapter());
   await Hive.openBox<SavedSchedule>(kHiveSavedSchedule);
   await Hive.openBox<GhResponses>(kHiveGhResponse);
 

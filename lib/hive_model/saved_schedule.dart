@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 
+import '../enums/subject_title_setting_enum.dart';
 import 'saved_subject.dart';
 
 part 'saved_schedule.g.dart';
@@ -25,6 +26,9 @@ class SavedSchedule extends HiveObject {
   @HiveField(5)
   double heightFactor;
 
+  @HiveField(6, defaultValue: SubjectTitleSetting.title)
+  SubjectTitleSetting subjectTitleSetting;
+
   SavedSchedule({
     required this.title,
     required this.subjects,
@@ -32,6 +36,7 @@ class SavedSchedule extends HiveObject {
     required this.dateCreated,
     required this.fontSize,
     required this.heightFactor,
+    required this.subjectTitleSetting,
   });
 
   @override

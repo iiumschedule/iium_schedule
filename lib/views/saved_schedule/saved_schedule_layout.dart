@@ -8,6 +8,7 @@ import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import '../../enums/subject_title_setting_enum.dart';
 import '../../hive_model/saved_schedule.dart';
 import '../../hive_model/saved_subject.dart';
 import '../../providers/saved_subjects_provider.dart';
@@ -47,10 +48,12 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
     name = widget.savedSchedule.title ?? "";
     Provider.of<SavedSubjectsProvider>(context, listen: false).savedSubjects =
         widget.savedSchedule.subjects;
+
+    Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)
+        .initialConditionSubjectTitle(widget.savedSchedule.subjectTitleSetting);
   }
 
   void takeScreenshot() async {
-    var brightness = Theme.of(context).brightness;
     String? path = await ScreenshotWidget.screenshot(_globalKey, name);
 
     if (kIsWeb) {
@@ -211,10 +214,12 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                         ],
                         IconButton(
                             onPressed: () {
-                              // ooen bottomsheet
+                              // open bottomsheet
                               showModalBottomSheet(
                                   context: context,
-                                  builder: (_) => const SettingBottomSheet());
+                                  builder: (_) => SettingBottomSheet(
+                                        savedSchedule: widget.savedSchedule,
+                                      ));
                             },
                             icon: const Icon(Icons.settings_outlined)),
                         PopupMenuButton(

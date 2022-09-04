@@ -84,7 +84,8 @@ class MyBody extends StatelessWidget {
                 // don't want to be as attractive like a button
                 style: TextButton.styleFrom(
                     textStyle: Theme.of(context).textTheme.caption,
-                    primary: Theme.of(context).textTheme.caption!.color),
+                    foregroundColor:
+                        Theme.of(context).textTheme.caption!.color),
                 onPressed: () {
                   showDialog(
                     context: context,

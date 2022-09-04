@@ -23,13 +23,16 @@ class SavedScheduleAdapter extends TypeAdapter<SavedSchedule> {
       dateCreated: fields[3] as String,
       fontSize: fields[4] as double,
       heightFactor: fields[5] as double,
+      subjectTitleSetting: fields[6] == null
+          ? SubjectTitleSetting.title
+          : fields[6] as SubjectTitleSetting,
     );
   }
 
   @override
   void write(BinaryWriter writer, SavedSchedule obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
@@ -41,7 +44,9 @@ class SavedScheduleAdapter extends TypeAdapter<SavedSchedule> {
       ..writeByte(4)
       ..write(obj.fontSize)
       ..writeByte(5)
-      ..write(obj.heightFactor);
+      ..write(obj.heightFactor)
+      ..writeByte(6)
+      ..write(obj.subjectTitleSetting);
   }
 
   @override

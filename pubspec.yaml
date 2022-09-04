@@ -7,7 +7,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # - Runner.rc file (FLUTTER_BUILD_NUMBER & FLUTTER_BUILD_NAME)
 # - msix block (msix_version)
 # - Inno setup (MyAppVersion)
-version: 1.0.0-pre.9+12
+version: 1.0.0-pre.10+13
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -95,7 +95,7 @@ msix_config:
   display_name: IIUM Schedule
   publisher_display_name: Muhammad Fareez Iqmal
   identity_name: fareez.flutter.iiumschedule
-  msix_version: 0.1.0.9 # same as inno setup (MyAppVersion)
+  msix_version: 0.1.0.10 # same as inno setup (MyAppVersion)
   logo_path: ".\\assets\\logo\\app-logo.png"
   capabilities: "internetClient"
   certificate_path: ".\\windows\\CERTIFICATE.pfx"

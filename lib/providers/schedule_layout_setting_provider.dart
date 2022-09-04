@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
 
-enum SubjectTitleSetting { title, courseCode }
+import '../enums/subject_title_setting_enum.dart';
 
 class ScheduleLayoutSettingProvider extends ChangeNotifier {
-  SubjectTitleSetting _subjectTitleSetting = SubjectTitleSetting.title;
+  SubjectTitleSetting? _subjectTitleSetting;
 
-  SubjectTitleSetting get subjectTitleSetting => _subjectTitleSetting;
+  SubjectTitleSetting? get subjectTitleSetting => _subjectTitleSetting;
 
-  set subjectTitleSetting(SubjectTitleSetting value) {
+  void initialConditionSubjectTitle(SubjectTitleSetting setting) {
+    _subjectTitleSetting = setting;
+  }
+
+  set subjectTitleSetting(SubjectTitleSetting? value) {
     _subjectTitleSetting = value;
     notifyListeners();
   }

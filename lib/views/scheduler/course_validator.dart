@@ -48,7 +48,7 @@ class _CourseValidatorState extends State<CourseValidator>
                   const SizedBox(width: 10),
                   ElevatedButton(
                     style: TextButton.styleFrom(
-                      primary: Colors.white,
+                      foregroundColor: Colors.white,
                     ),
                     onPressed: () async {
                       if (!_validatorPass!.isClearToProceed()) {

@@ -1,16 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../enums/subject_title_setting_enum.dart';
+import '../../../hive_model/saved_schedule.dart';
 import '../../../providers/schedule_layout_setting_provider.dart';
 
+/// Pass `savedSchedule` for saved schedule layout only
+/// For save to the hive object
 class SettingBottomSheet extends StatelessWidget {
-  const SettingBottomSheet({Key? key}) : super(key: key);
+  const SettingBottomSheet({Key? key, this.savedSchedule}) : super(key: key);
+
+  final SavedSchedule? savedSchedule;
 
   @override
   Widget build(BuildContext context) {
-    return BottomSheet(
-      builder: (_) => Consumer<ScheduleLayoutSettingProvider>(
-        builder: (_, value, __) => Padding(
+    return Consumer<ScheduleLayoutSettingProvider>(
+      builder: (_, value, __) {
+        return Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,27 +32,33 @@ class SettingBottomSheet extends StatelessWidget {
                 "Subject display",
                 style: Theme.of(context).textTheme.bodyText1!,
               ),
-              RadioListTile(
-                  contentPadding: EdgeInsets.zero,
-                  value: SubjectTitleSetting.title,
-                  title: const Text('Show title'),
-                  groupValue: value.subjectTitleSetting,
-                  onChanged: (SubjectTitleSetting? newValue) {
-                    value.subjectTitleSetting = newValue!;
-                  }),
-              RadioListTile(
-                  contentPadding: EdgeInsets.zero,
-                  value: SubjectTitleSetting.courseCode,
-                  title: const Text('Show course code'),
-                  groupValue: value.subjectTitleSetting,
-                  onChanged: (SubjectTitleSetting? newValue) {
-                    value.subjectTitleSetting = newValue!;
-                  }),
+              const SizedBox(height: 10),
+              CupertinoSegmentedControl<SubjectTitleSetting>(
+                padding: EdgeInsets.zero,
+                groupValue: value.subjectTitleSetting,
+                onValueChanged: (SubjectTitleSetting newValue) {
+                  value.subjectTitleSetting = newValue;
+
+                  // save to hive for saved schedule layout
+                  savedSchedule?.subjectTitleSetting = newValue;
+                  savedSchedule?.save();
+                },
+                children: const <SubjectTitleSetting, Widget>{
+                  SubjectTitleSetting.title: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text('Course name'),
+                  ),
+                  SubjectTitleSetting.courseCode: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text('Course code'),
+                  ),
+                },
+              ),
+              const SizedBox(height: 40),
             ],
           ),
-        ),
-      ),
-      onClosing: () {},
+        );
+      },
     );
   }
 }

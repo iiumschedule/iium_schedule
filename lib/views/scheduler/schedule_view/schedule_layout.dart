@@ -9,7 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/saved_subjects_provider.dart';
+import '../../../enums/subject_title_setting_enum.dart';
 import '../../../util/colour_palletes.dart';
 import '../../../constants.dart';
 import '../../../hive_model/saved_schedule.dart';
@@ -61,6 +61,9 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     super.initState();
     _colorPallete.shuffle();
     name = widget.initialName;
+
+    Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)
+        .initialConditionSubjectTitle(SubjectTitleSetting.title);
   }
 
   void takeScreenshot() async {
@@ -94,6 +97,9 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
           .toList(),
       fontSize: _fontSizeSubject,
       heightFactor: _itemHeight,
+      subjectTitleSetting:
+          Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)
+              .subjectTitleSetting!,
     ));
     print('Saved to key $key');
     return key;
@@ -342,7 +348,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         MyFtoast.show(
           context,
           'Saved. The schedule can the found from the main menu.',
-        );        
+        );
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
