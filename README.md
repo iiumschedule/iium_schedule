@@ -19,6 +19,8 @@ Just provide the app with your kuliyyah, course codes and section. It'll handle 
 
 Feel free to open up [issues](https://github.com/iqfareez/iium_schedule/issues) and/or submit [pull requests](https://github.com/iqfareez/iium_schedule/pulls).
 
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/iqfareez/iium_schedule)
+
 ## Release ETA
 
 Sem 1, 22/23 (In **October** inshallah, after my internship)
@@ -31,17 +33,17 @@ https://iiumschedule.iqfareez.com
 
 ## Features
 
-* Generate schedule (ClassUp style)
-* Save schedule in app.
-* Export as image (so you can set as lockscreen)
-* Browse for subjects.
+- Generate schedule (ClassUp style)
+- Save schedule in app.
+- Export as image (so you can set as lockscreen)
+- Customize schedule (ie: Change colours etc.)
+- Browse for subjects.
 
 ## Features TODO
 
-* Subject add to cart [#11](https://github.com/iqfareez/iium_schedule/issues/11)
-* Export as PDF
-* etc.
-
+- Subject add to cart [#11](https://github.com/iqfareez/iium_schedule/issues/11)
+- Export as PDF
+- etc.
 
 ## Devlog
 
@@ -55,18 +57,18 @@ Please refer [wiki](https://github.com/iqfareez/iium_schedule/wiki).
 
 ## Motivation
 
-To make a tool that can generate a beautiful, lockscreen-worthy schedule for IIUM Student.
+To make a tool that can generate a beautiful, lockscreen-worthy schedule for IIUM students.
 
-Usually, students will use ClassUp app to make a schedule, but they have to enter the information manually. It cost time & energy, and prone to error.
+Usually, students will use ClassUp app to make a schedule, but they have to enter the information manually. IIUM Schedule app only needs minimal information, as it will fetch from IIUM databases to fill the rest of the required information.
 
 ## Similar project like this one
 
 - https://github.com/asdacap/iiumschedule
-- https://github.com/PlashSpeed-Aiman/IIUMCourseScheduleApp 
+- https://github.com/PlashSpeed-Aiman/IIUMCourseScheduleApp
 
-*Open PR to add your project here*
+_Open PR to add your project here_
 
-## Acknowledgement
+# Acknowledgment
 
 - Conditional importing that allows compilation to all platforms - https://gpalma.pt/blog/conditional-importing/
 - Inno installer setup - https://retroportalstudio.medium.com/creating-exe-executable-file-for-flutter-desktop-apps-windows-ea7c338465e
