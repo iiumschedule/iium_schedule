@@ -2,6 +2,7 @@ import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../constants.dart' as constants;
 import '../../util/kulliyyahs.dart';
 import 'schedule_maker_data.dart';
 import 'schedule_steps.dart';
@@ -16,8 +17,8 @@ class InputScope extends StatefulWidget {
 class _InputScopeState extends State<InputScope>
     with AutomaticKeepAliveClientMixin<InputScope> {
   final GlobalKey dropdownKey = GlobalKey();
-  String _session = "2022/2023";
-  int _semester = 1;
+  String _session = constants.kDefaultSession;
+  int _semester = constants.kDefaultSemester;
   String? _selectedKulliyah;
   @override
   Widget build(BuildContext context) {
@@ -60,9 +61,9 @@ class _InputScopeState extends State<InputScope>
                     cursor: SystemMouseCursors.click,
                     child: CupertinoSegmentedControl(
                         groupValue: _session,
-                        children: const {
-                          "2021/2022": Text("2021/2022"),
-                          "2022/2023": Text("2022/2023"),
+                        children: {
+                          for (var session in constants.kSessions)
+                            session: Text(session)
                         },
                         onValueChanged: (String value) {
                           setState(() => _session = value);

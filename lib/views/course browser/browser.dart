@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../constants.dart' as constants;
 import '../../util/kulliyyahs.dart';
 import 'browser_view.dart';
 
@@ -16,8 +17,8 @@ class Browser extends StatefulWidget {
 class _BrowserState extends State<Browser> {
   final GlobalKey dropdownKey = GlobalKey();
   final TextEditingController _searchController = TextEditingController();
-  String _session = "2022/2023";
-  int _semester = 1;
+  String _session = constants.kDefaultSession;
+  int _semester = constants.kDefaultSemester;
   String? _selectedKulliyah;
 
   @override
@@ -65,9 +66,9 @@ class _BrowserState extends State<Browser> {
                     cursor: SystemMouseCursors.click,
                     child: CupertinoSegmentedControl(
                         groupValue: _session,
-                        children: const {
-                          "2021/2022": Text("2021/2022"),
-                          "2022/2023": Text("2022/2023"),
+                        children: {
+                          for (var session in constants.kSessions)
+                            session: Text(session)
                         },
                         onValueChanged: (String value) {
                           setState(() => _session = value);
