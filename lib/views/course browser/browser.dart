@@ -103,7 +103,10 @@ class _BrowserState extends State<Browser> {
                         helperText: 'Leave empty to load all',
                         counter: const SizedBox.shrink(),
                         suffixIcon: IconButton(
-                          onPressed: () => _searchController.clear(),
+                          onPressed: () {
+                            _searchController.clear();
+                            FocusScope.of(context).unfocus();
+                          },
                           icon: const Icon(Icons.clear_outlined),
                         ),
                       ),
