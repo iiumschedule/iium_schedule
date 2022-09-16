@@ -15,4 +15,9 @@ class BasicSubjectModel {
     data["section"] = section;
     return data;
   }
+
+  @override
+  String toString() {
+    return '{courseCode: $courseCode, section: $section}';
+  }
 }
