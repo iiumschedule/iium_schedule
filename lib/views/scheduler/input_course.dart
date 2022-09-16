@@ -150,8 +150,10 @@ class _InputCourseState extends State<InputCourse>
                               flex: 2,
                               child: TextField(
                                 controller: _courseCodeInputController,
+                                maxLength: 8,
                                 decoration: InputDecoration(
                                   labelText: 'Course Code',
+                                  counterText: '', // disable counter text
                                   filled: true,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
@@ -293,7 +295,8 @@ class _InputCourseState extends State<InputCourse>
                                 } on FormatException catch (e) {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
-                                    content: Text(e.toString()),
+                                    content: Text(
+                                        'Failed to decode JSON (${e.message})'),
                                     backgroundColor: Colors.red,
                                     behavior: SnackBarBehavior.floating,
                                   ));
