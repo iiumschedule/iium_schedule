@@ -4,7 +4,6 @@ description: IIUM Schedule Maker
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # When changing this version, also change the versions in
-# - Runner.rc file (FLUTTER_BUILD_NUMBER & FLUTTER_BUILD_NAME)
 # - msix block (msix_version)
 # - Inno setup (MyAppVersion)
 version: 1.0.0-pre.10+13
