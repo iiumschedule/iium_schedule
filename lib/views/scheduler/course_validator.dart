@@ -30,9 +30,7 @@ class _CourseValidatorState extends State<CourseValidator>
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: ListView(
           children: [
             ListTile(
               title:
@@ -83,6 +81,7 @@ class _CourseValidatorState extends State<CourseValidator>
             ListView.builder(
               shrinkWrap: true,
               itemCount: ScheduleMakerData.subjects!.length,
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (_, index) {
                 return SubjectCard(
                     albiruni: ScheduleMakerData.albiruni!,
