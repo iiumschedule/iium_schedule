@@ -301,19 +301,51 @@ class _InputCourseState extends State<InputCourse>
                                     behavior: SnackBarBehavior.floating,
                                   ));
                                   return;
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text('Failed to decode JSON'),
+                                    backgroundColor: Colors.red,
+                                    behavior: SnackBarBehavior.floating,
+                                  ));
+                                  return;
                                 }
 
                                 var jsonSubjects = decodedJson.map(
                                     (item) => BasicSubjectModel.fromJson(item));
 
-                                setState(() {
-                                  _inputCourses.addAll(jsonSubjects);
-                                });
+                                int itemCountAdded = 0;
+
+                                if (_inputCourses.isEmpty) {
+                                  // if the list was still empty, just add it
+                                  itemCountAdded = jsonSubjects.length;
+                                  setState(() {
+                                    _inputCourses.addAll(jsonSubjects);
+                                  });
+                                } else {
+                                  // check the subject by its course code,
+                                  // if it already exist, don't add it
+                                  var newSubjects = jsonSubjects.where(
+                                    (element) => !_inputCourses.any((subject) =>
+                                        subject.courseCode ==
+                                        element.courseCode),
+                                  );
+                                  itemCountAdded = newSubjects.length;
+                                  setState(() {
+                                    _inputCourses.addAll(newSubjects);
+                                  });
+                                }
+
+                                String itemSkippkedMessage = '';
+                                if (itemCountAdded < jsonSubjects.length) {
+                                  itemSkippkedMessage =
+                                      ' (${jsonSubjects.length - itemCountAdded} subject(s) already exists)';
+                                }
 
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                   content: Text(
-                                      'Added ${jsonSubjects.length} subjects'),
+                                      'Added $itemCountAdded subjects. $itemSkippkedMessage'),
                                   behavior: SnackBarBehavior.floating,
                                   backgroundColor: Colors.green,
                                 ));
