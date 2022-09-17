@@ -141,7 +141,7 @@ class _DayTimeTable extends StatelessWidget {
             (e) => DataRow(
               cells: [
                 DataCell(
-                  SelectableText(ReCase(e!.englishDay()).titleCase),
+                  SelectableText(ReCase(e!.day.englishDay()).titleCase),
                 ),
                 DataCell(
                   SelectableText('${e.startTime} - ${e.endTime}'),

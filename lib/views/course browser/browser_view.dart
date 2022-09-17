@@ -179,7 +179,7 @@ class _BrowserViewState extends State<BrowserView> {
                                     and(
                                       snapshot.data![index].dayTime
                                           .map((e) => ReCase(
-                                                e!.englishDay(),
+                                                e!.day.englishDay(),
                                               ).titleCase)
                                           .toSet()
                                           .toList(),

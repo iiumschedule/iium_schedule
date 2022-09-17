@@ -6,17 +6,13 @@ import '../enums/day_enum.dart';
 
 extension TextBeautify on String {
   /// Remove dot zero. Ezample: `3.0` become `3`
+  /// Not supprted for more than one trailing zero. For eg: `3.00` will become `3.0`.
   String removeTrailingDotZero() => replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "");
-}
-
-extension AlbiruniDayTime on DayTime {
-  /// Convert int to human readable day name
-  String englishDay() => describeEnum(Day.values[day - 1]);
 }
 
 extension DayName on int {
   /// Convert int to human readable day name
-  String englishDay() => describeEnum(Day.values[this - 1]);
+  String englishDay() => Day.values[this - 1].name;
 }
 
 extension Utility on BuildContext {
