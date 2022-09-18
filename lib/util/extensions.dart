@@ -1,5 +1,3 @@
-import 'package:albiruni/albiruni.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../enums/day_enum.dart';
