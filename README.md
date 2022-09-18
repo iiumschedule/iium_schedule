@@ -43,6 +43,7 @@ https://iiumschedule.iqfareez.com
 
 - Subject add to cart [#11](https://github.com/iqfareez/iium_schedule/issues/11)
 - Export as PDF
+- Cloud saves
 - etc.
 
 ## Devlog
