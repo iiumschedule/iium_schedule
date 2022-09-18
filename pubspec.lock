@@ -235,9 +235,11 @@ packages:
   flutter_colorpicker:
     dependency: "direct main"
     description:
-      name: flutter_colorpicker
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "38c24d67e3e67cc32d2fbee109e4e9d2cea03028"
+      url: "https://github.com/SayuruSandaru/flutter_colorpicker.git"
+    source: git
     version: "1.0.3"
   flutter_lints:
     dependency: "direct dev"

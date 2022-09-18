@@ -5,7 +5,7 @@ import '../../hive_model/saved_subject.dart';
 import '../../providers/saved_subjects_provider.dart';
 import '../../util/extensions.dart';
 import '../course browser/subject_screen.dart';
-import 'subject_colour_picker.dart';
+import 'subject_colour_dialog.dart';
 
 class SavedSubjectDialog extends StatefulWidget {
   const SavedSubjectDialog({
@@ -76,28 +76,14 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
                     color: value.subjectColour(widget._subject.code)),
                 title: const Text("Change colour"),
                 onTap: () async {
-                  ColourChooserOptions? res = await showDialog(
-                    context: context,
-                    builder: (_) => const _ColourOptionChooser(),
+                  var selectedColour = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => SubjectColourDialog(
+                        subjectName: widget._subject.code,
+                        color: subjectColour,
+                      ),
+                    ),
                   );
-
-                  if (res == null) return;
-
-                  Color? selectedColour;
-
-                  switch (res) {
-                    case ColourChooserOptions.predefined:
-                      selectedColour = await showDialog(
-                          context: context,
-                          builder: (_) =>
-                              ColourPickerFromPallets(subjectColour));
-                      break;
-                    case ColourChooserOptions.custom:
-                      selectedColour = await showDialog(
-                          context: context,
-                          builder: (_) => ColourPickerCustom(subjectColour));
-                      break;
-                  }
 
                   if (selectedColour == null) return;
 
@@ -132,27 +118,6 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
           ],
         );
       },
-    );
-  }
-}
-
-class _ColourOptionChooser extends StatelessWidget {
-  const _ColourOptionChooser({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialog(
-      children: [
-        SimpleDialogOption(
-          child: const Text('Pre-defined palletes'),
-          onPressed: () =>
-              Navigator.pop(context, ColourChooserOptions.predefined),
-        ),
-        SimpleDialogOption(
-          child: const Text('Custom'),
-          onPressed: () => Navigator.pop(context, ColourChooserOptions.custom),
-        ),
-      ],
     );
   }
 }
