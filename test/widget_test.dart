@@ -5,30 +5,36 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-// 🐦 Flutter imports:
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-// 📦 Package imports:
 import 'package:flutter_test/flutter_test.dart';
-
-// 🌎 Project imports:
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:iium_schedule/constants.dart';
+import 'package:iium_schedule/enums/subject_title_setting_enum.dart';
+import 'package:iium_schedule/hive_model/saved_daytime.dart';
+import 'package:iium_schedule/hive_model/saved_schedule.dart';
+import 'package:iium_schedule/hive_model/saved_subject.dart';
 import 'package:iium_schedule/main.dart';
 
-void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+void main() async {
+  setUp(() async {
+    await Hive.initFlutter('IIUM Schedule Data');
+    Hive
+      ..registerAdapter(SavedScheduleAdapter())
+      ..registerAdapter(SavedSubjectAdapter())
+      ..registerAdapter(SavedDaytimeAdapter())
+      ..registerAdapter(SubjectTitleSettingAdapter());
+    await Hive.openBox<SavedSchedule>(kHiveSavedSchedule);
+  });
+
+  testWidgets('Smoke test Homepage', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify the buttons are there
+    expect(
+        find.widgetWithText(CupertinoButton, 'Schedule Maker'), findsOneWidget);
+    expect(
+        find.widgetWithText(CupertinoButton, 'Course Browser'), findsOneWidget);
   });
 }
