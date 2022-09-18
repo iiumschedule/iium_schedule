@@ -99,7 +99,8 @@ class _BrowserState extends State<Browser> {
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         // TODO: Buat dia tukar2 course code tu
-                        labelText: 'Search (Eg: MCTE 3100)',
+                        labelText: 'Search',
+                        hintText: 'Eg: MCTE 3100',
                         isDense: true,
                         helperText: 'Leave empty to load all',
                         counter: const SizedBox.shrink(),
