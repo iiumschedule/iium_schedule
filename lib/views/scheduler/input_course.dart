@@ -325,6 +325,9 @@ class _InputCourseState extends State<InputCourse>
                                 } else {
                                   // check the subject by its course code,
                                   // if it already exist, don't add it
+                                  // I maybe can use set here, but I want to track how
+                                  // many items added/removed, and provide visual
+                                  // feedback to users
                                   var newSubjects = jsonSubjects.where(
                                     (element) => !_inputCourses.any((subject) =>
                                         subject.courseCode ==
