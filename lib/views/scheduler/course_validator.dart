@@ -41,7 +41,7 @@ class _CourseValidatorState extends State<CourseValidator>
                   IconButton(
                     onPressed: () => setState(() {}),
                     tooltip: "Refresh All",
-                    icon: const Icon(Icons.refresh),
+                    icon: const Icon(Icons.restart_alt),
                   ),
                   const SizedBox(width: 10),
                   ElevatedButton(
@@ -151,10 +151,13 @@ class _SubjectCardState extends State<SubjectCard> {
                 'Waiting...',
                 style: TextStyle(fontStyle: FontStyle.italic),
               ),
-              trailing: const SizedBox(
-                width: 25,
-                height: 25,
-                child: CircularProgressIndicator(),
+              trailing: const Padding(
+                padding: EdgeInsets.all(6.0), // to match refresh icon button
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(),
+                ),
               ),
             );
           }
@@ -198,8 +201,9 @@ class _SubjectCardState extends State<SubjectCard> {
                     },
                   ),
                 ),
-                trailing: Icon(
-                  Icons.question_mark_outlined,
+                trailing: IconButton(
+                  icon: const Icon(Icons.refresh_outlined),
+                  onPressed: () => setState(() {}),
                   color: Colors.yellow.shade700,
                 ));
           }
@@ -218,9 +222,12 @@ class _SubjectCardState extends State<SubjectCard> {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            trailing: const Icon(
-              Icons.check,
-              color: Colors.green,
+            trailing: const Padding(
+              padding: EdgeInsets.all(6.0), // to match refresh icon button
+              child: Icon(
+                Icons.check,
+                color: Colors.green,
+              ),
             ),
             onTap: () {
               Navigator.push(
