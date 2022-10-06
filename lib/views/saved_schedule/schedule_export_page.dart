@@ -10,8 +10,8 @@ import '../../util/schedule_share.dart';
 import '../../util/screenshot_widget.dart';
 import '../scheduler/schedule_view/timetable_view_widget.dart';
 
-class ScreenshotPage extends StatefulWidget {
-  const ScreenshotPage(
+class ScheduleExportPage extends StatefulWidget {
+  const ScheduleExportPage(
       {super.key,
       required this.laneEventsResponse,
       required this.scheduleTitle,
@@ -21,10 +21,10 @@ class ScreenshotPage extends StatefulWidget {
   final String scheduleTitle;
 
   @override
-  State<ScreenshotPage> createState() => _ScreenshotPageState();
+  State<ScheduleExportPage> createState() => _ScheduleExportPageState();
 }
 
-class _ScreenshotPageState extends State<ScreenshotPage> {
+class _ScheduleExportPageState extends State<ScheduleExportPage> {
   final GlobalKey _globalKey = GlobalKey();
 
   @override

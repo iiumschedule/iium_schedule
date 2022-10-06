@@ -3,24 +3,24 @@ import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:provider/provider.dart';
 
 import '../enums/subject_title_setting_enum.dart';
-import '../hive_model/saved_schedule.dart';
 import '../hive_model/saved_subject.dart';
 import '../providers/schedule_layout_setting_provider.dart';
 import '../views/saved_schedule/saved_subject_dialog.dart';
 import 'extensions.dart';
 
+// Perhaps this will no longer neede when Dart's new Records are landed
 class LaneEventsUtil {
   final BuildContext context;
-  final SavedSchedule savedSchedule;
   final List<SavedSubject> savedSubjectList;
+  final double fontSize;
   int _startHour = 10; // pukul 10 am;
   int _endHour = 17; // pukul 5 pm
 
   // constructor
   LaneEventsUtil({
     required this.context,
-    required this.savedSchedule,
     required this.savedSubjectList,
+    required this.fontSize,
   });
 
   LaneEventsResponse laneEvents() {
@@ -68,8 +68,7 @@ class LaneEventsUtil {
               : Colors.white;
 
           return TableEvent(
-            textStyle:
-                TextStyle(fontSize: savedSchedule.fontSize, color: textColor),
+            textStyle: TextStyle(fontSize: fontSize, color: textColor),
             title: Provider.of<ScheduleLayoutSettingProvider>(context)
                         .subjectTitleSetting ==
                     SubjectTitleSetting.title

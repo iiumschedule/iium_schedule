@@ -14,7 +14,7 @@ import '../scheduler/schedule_view/rename_dialog.dart';
 import '../scheduler/schedule_view/setting_bottom_sheet.dart';
 import '../scheduler/schedule_view/timetable_view_widget.dart';
 import 'metadata_dialog.dart';
-import 'schedule_export.dart';
+import 'schedule_export_page.dart';
 
 class SavedScheduleLayout extends StatefulWidget {
   const SavedScheduleLayout({Key? key, required this.savedSchedule})
@@ -49,7 +49,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
       builder: (context, value, _) {
         LaneEventsResponse laneEventsList = LaneEventsUtil(
                 context: context,
-                savedSchedule: widget.savedSchedule,
+                fontSize: widget.savedSchedule.fontSize,
                 savedSubjectList: value.savedSubjects)
             .laneEvents();
         return GestureDetector(
@@ -113,6 +113,9 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                             return <PopupMenuEntry>[
                               PopupMenuItem(
                                 value: 'save',
+                                // when changing the item below
+                                // don't forget to also change
+                                // in schedule_layout.dart
                                 child: Text(kIsWeb
                                     ? 'Export'
                                     : Platform.isAndroid
@@ -197,11 +200,11 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => ScreenshotPage(
+            builder: (_) => ScheduleExportPage(
                 scheduleTitle: name,
                 laneEventsResponse: LaneEventsUtil(
                         context: context,
-                        savedSchedule: widget.savedSchedule,
+                        fontSize: widget.savedSchedule.fontSize,
                         savedSubjectList:
                             Provider.of<SavedSubjectsProvider>(context)
                                 .savedSubjects)

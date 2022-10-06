@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +15,10 @@ import '../../../hive_model/saved_schedule.dart';
 import '../../../hive_model/saved_subject.dart';
 import '../../../providers/schedule_layout_setting_provider.dart';
 import '../../../util/extensions.dart';
+import '../../../util/lane_events_util.dart';
 import '../../../util/my_ftoast.dart';
-import '../../../util/screenshot_widget.dart';
 import '../../saved_schedule/saved_schedule_layout.dart';
+import '../../saved_schedule/schedule_export_page.dart';
 import 'rename_dialog.dart';
 import 'setting_bottom_sheet.dart';
 import 'subject_dialog.dart';
@@ -66,23 +66,6 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         .initialConditionSubjectTitle(SubjectTitleSetting.title);
   }
 
-  void takeScreenshot() async {
-    String? path = await ScreenshotWidget.screenshotAndSave(_globalKey, name);
-
-    if (kIsWeb) {
-      Fluttertoast.showToast(
-          msg: "Schedule will be downloaded shortly..",
-          webPosition: "left",
-          timeInSecForIosWeb: 3);
-      return;
-    }
-
-    // show toast for windows and android
-    if (mounted) {
-      MyFtoast.show(context, 'Saved to $path');
-    }
-  }
-
   // Save the generated schedule data to the database (Hive)
   Future<int> save() async {
     int key = await box.add(SavedSchedule(
@@ -109,6 +92,8 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
   Widget build(BuildContext context) {
     List<LaneEvents> laneEventsList = [];
     // var _brightness = SchedulerBinding.instance!.window.platformBrightness;
+    // below is something similar to `LaneEventsUtil.laneEvents()`, we need
+    // to refactor this (combine with above implementation)
     var brightness = Theme.of(context).brightness;
     // Find if there any subject in each day
     for (var i = 1; i <= 7; i++) {
@@ -248,42 +233,63 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                               context: context,
                               builder: (_) => const SettingBottomSheet());
                         },
+                        tooltip: 'Customization',
                         icon: const Icon(Icons.settings_outlined)),
                     PopupMenuButton(
-                        itemBuilder: (context) {
-                          return <PopupMenuEntry>[
-                            const PopupMenuItem(
-                              value: 'save',
-                              child: ListTile(
-                                  trailing: Icon(Icons.save_outlined),
-                                  title: Text('Save')),
-                            ),
-                            const PopupMenuItem(
-                              value: 'screenshot',
-                              child: ListTile(
-                                  trailing: Icon(Icons.file_download_outlined),
-                                  title: Text('Screenshot')),
-                            ),
-                            const PopupMenuItem(
-                              // TODO: Implement share
-                              value: 'share',
-                              child: ListTile(
-                                  trailing: Icon(Icons.send_outlined),
-                                  title: Text('Share')),
-                            ),
-                            const PopupMenuDivider(),
-                            const PopupMenuItem(
-                              // Implement delete
-                              value: 'discard',
-                              child: ListTile(
-                                  trailing: Icon(
-                                    Icons.delete_outline,
+                      itemBuilder: (context) {
+                        return <PopupMenuEntry>[
+                          PopupMenuItem(
+                            child: const Text('Save to app'),
+                            onTap: () async {
+                              var key = await save();
+                              if (!mounted) return;
+                              MyFtoast.show(
+                                context,
+                                'Saved. The schedule can the found from the main menu.',
+                              );
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SavedScheduleLayout(
+                                    savedSchedule: box.get(key)!,
                                   ),
-                                  title: Text('Discard')),
-                            ),
-                          ];
-                        },
-                        onSelected: popupMenuHandler),
+                                ),
+                                (route) => route.isFirst,
+                              );
+                            },
+                          ),
+                          PopupMenuItem(
+                            child: Text(kIsWeb
+                                ? 'Export'
+                                : Platform.isAndroid
+                                    ? 'Export & share'
+                                    : 'Export'),
+                            onTap: () async {
+                              final navigator = Navigator.of(context);
+                              // needed as described in https://stackoverflow.com/a/69589313/13617136
+                              await Future.delayed(Duration.zero);
+                              navigator.push(
+                                MaterialPageRoute(
+                                  builder: (_) => ScheduleExportPage(
+                                      laneEventsResponse: LaneEventsResponse(
+                                          laneEventsList: laneEventsList,
+                                          startHour: _startHour,
+                                          endHour: _endHour),
+                                      scheduleTitle: name,
+                                      itemHeight: _itemHeight),
+                                ),
+                              );
+                            },
+                          ),
+                          // const PopupMenuDivider(),
+                          // const PopupMenuItem(
+                          //   // TODO: Implement delete
+                          //   value: 'discard',
+                          //   child: Text('Discard'),
+                          // ),
+                        ];
+                      },
+                    ),
                   ],
                 ),
           body: SafeArea(
@@ -338,39 +344,6 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         ),
       ),
     );
-  }
-
-  void popupMenuHandler(value) async {
-    switch (value) {
-      case 'save':
-        var key = await save();
-        if (!mounted) return;
-        MyFtoast.show(
-          context,
-          'Saved. The schedule can the found from the main menu.',
-        );
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SavedScheduleLayout(
-              savedSchedule: box.get(key)!,
-            ),
-          ),
-          (route) => route.isFirst,
-        );
-        break;
-      case 'screenshot':
-        takeScreenshot();
-        break;
-      case 'share':
-        // TODO: Implement share
-        Fluttertoast.showToast(msg: "Not implemented yet");
-        break;
-      case 'discard':
-        // TODO: Implement delete
-        Fluttertoast.showToast(msg: "Not implemented yet");
-        break;
-    }
   }
 
   void fullscreenFabHandler() {
