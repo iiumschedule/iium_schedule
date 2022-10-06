@@ -9,7 +9,8 @@ class SaveFile {
 
   SaveFile() : _saveImpl = SaveImpl();
 
-  Future<String?> save(Uint8List pngBytes, String filename) async {
-    return _saveImpl.save(pngBytes, filename);
+  Future<String?> save(
+      Uint8List pngBytes, String filename, bool tempPath) async {
+    return _saveImpl.save(pngBytes, filename, tempPath);
   }
 }

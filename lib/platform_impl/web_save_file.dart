@@ -7,7 +7,8 @@ import 'base_save_file.dart';
 
 class SaveImpl extends BaseSaveFile {
   @override
-  Future<String?> save(Uint8List pngBytes, String filename) {
+  Future<String?> save(
+      Uint8List pngBytes, String filename, bool tempPath) async {
     // https://stackoverflow.com/a/69668841/13617136
     final base64 = base64Encode(pngBytes);
     final anchor =

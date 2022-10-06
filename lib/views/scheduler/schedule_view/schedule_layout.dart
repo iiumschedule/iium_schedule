@@ -67,7 +67,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
   }
 
   void takeScreenshot() async {
-    String? path = await ScreenshotWidget.screenshot(_globalKey, name);
+    String? path = await ScreenshotWidget.screenshotAndSave(_globalKey, name);
 
     if (kIsWeb) {
       Fluttertoast.showToast(

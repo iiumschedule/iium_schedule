@@ -10,27 +10,33 @@ import 'base_save_file.dart';
 
 class SaveImpl extends BaseSaveFile {
   @override
-  Future<String?> save(Uint8List pngBytes, String filename) async {
+  Future<String?> save(
+      Uint8List pngBytes, String filename, bool tempPath) async {
     String? saveDirectory;
-    if (Platform.isAndroid) {
-      var status = await Permission.storage.request();
-      if (status.isDenied) throw Exception('Permission denied');
+    if (tempPath) {
+      saveDirectory = await getTemporaryDirectory().then((value) => value.path);
+    } else {
+      if (Platform.isAndroid) {
+        var status = await Permission.storage.request();
+        if (status.isDenied) throw Exception('Permission denied');
 
-      // create/use Picture folder
+        // create/use Picture folder
 
-      final folderDirectory =
-          await Directory('/storage/emulated/0/Pictures/IIUM Schedule')
-              .create();
-      saveDirectory = folderDirectory.path;
-    }
+        final folderDirectory =
+            await Directory('/storage/emulated/0/Pictures/IIUM Schedule')
+                .create();
+        saveDirectory = folderDirectory.path;
+      }
 
-    if (Platform.isWindows) {
-      final downloadDirectory = await getDownloadsDirectory();
-      // use download folder
-      final folderDirectory =
-          await Directory('${downloadDirectory!.path}/IIUM Schedule').create();
+      if (Platform.isWindows) {
+        final downloadDirectory = await getDownloadsDirectory();
+        // use download folder
+        final folderDirectory =
+            await Directory('${downloadDirectory!.path}/IIUM Schedule')
+                .create();
 
-      saveDirectory = folderDirectory.path;
+        saveDirectory = folderDirectory.path;
+      }
     }
 
     File imgFile = File('$saveDirectory/$filename.png');

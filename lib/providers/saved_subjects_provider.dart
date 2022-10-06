@@ -4,11 +4,11 @@ import '../hive_model/saved_subject.dart';
 
 /// Careful. Takut2 dia ubah subject dalam jadual lain
 class SavedSubjectsProvider extends ChangeNotifier {
-  List<SavedSubject>? savedSubjects; //
+  late List<SavedSubject> savedSubjects; //
 
   /// Change background colour of the given course code
   void modifyColour({required String courseCode, required Color newColor}) {
-    savedSubjects!
+    savedSubjects
         .where((element) => element.code == courseCode)
         .forEach((element) {
       element.hexColor = newColor.value;
@@ -19,7 +19,7 @@ class SavedSubjectsProvider extends ChangeNotifier {
   }
 
   Color subjectColour(String courseCode) {
-    return Color(savedSubjects!
+    return Color(savedSubjects
         .where((element) => element.code == courseCode)
         .first
         .hexColor!);

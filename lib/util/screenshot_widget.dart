@@ -9,8 +9,9 @@ import 'save_file.dart';
 class ScreenshotWidget {
   /// Capture the screenshot of the given widget wrapped in RepaintBoundary
   /// and return the path to the saved image
-  static Future<String?> screenshot(
-      GlobalKey<State<StatefulWidget>> globalKey, String name) async {
+  static Future<String?> screenshotAndSave(
+      GlobalKey<State<StatefulWidget>> globalKey, String name,
+      {bool tempPath = false}) async {
     SaveFile sf = SaveFile();
     RenderRepaintBoundary boundary =
         globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary;
@@ -20,7 +21,7 @@ class ScreenshotWidget {
       print("Waiting for boundary to be painted.");
       await Future.delayed(const Duration(milliseconds: 20));
     }
-    ui.Image image = await boundary.toImage(pixelRatio: 2);
+    ui.Image image = await boundary.toImage(pixelRatio: 2.5);
     // TODO: Saves to gallery
 
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -30,6 +31,6 @@ class ScreenshotWidget {
         name.replaceAll(RegExp(r'[^\w\s]+'), '').replaceAll(' ', '-');
 
     // return saved path of the image, if web it will return null
-    return await sf.save(pngBytes, filename);
+    return await sf.save(pngBytes, filename, tempPath);
   }
 }
