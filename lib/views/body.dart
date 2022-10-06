@@ -105,6 +105,10 @@ class MyBody extends StatelessWidget {
                 case "website":
                   LauncherUrl.open("https://iiumschedule.iqfareez.com/");
                   break;
+                case "feedback":
+                  LauncherUrl.open(
+                      "https://iiumschedule.iqfareez.com/feedback");
+                  break;
                 default:
               }
             },
@@ -116,6 +120,10 @@ class MyBody extends StatelessWidget {
               PopupMenuItem(
                 value: "website",
                 child: Text("Website"),
+              ),
+              PopupMenuItem(
+                value: "feedback",
+                child: Text("Send feedback"),
               ),
             ],
           ),
