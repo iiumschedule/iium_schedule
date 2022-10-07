@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:quick_actions/quick_actions.dart';
 import '../constants.dart';
 import '../hive_model/saved_schedule.dart';
 import '../util/launcher_url.dart';
+import '../util/my_ftoast.dart';
 import 'check_update_page.dart';
 import 'course browser/browser.dart';
 import 'saved_schedule_selector.dart';
@@ -241,6 +243,44 @@ class _SimpleAboutDialog extends StatelessWidget {
                 );
               },
             ),
+          SimpleDialogOption(
+            onPressed: () async {
+              final BuildContext _context = context;
+              var deviceInfo = await DeviceInfoPlugin().deviceInfo;
+              var packageInfo = await PackageInfo.fromPlatform();
+
+              String deviceInfoData;
+
+              // check device info is android, windows or web
+              if (deviceInfo is AndroidDeviceInfo) {
+                var androidVersion = deviceInfo.version;
+                // eg: Android 11 (30)
+                deviceInfoData =
+                    'Android ${androidVersion.release} (${androidVersion.sdkInt})';
+              } else if (deviceInfo is WindowsDeviceInfo) {
+                var windowsVersion = deviceInfo.displayVersion;
+                // eg: Windows 22H2
+                deviceInfoData = 'Windows $windowsVersion';
+              } else {
+                // on web
+                print(deviceInfo.toMap());
+                var browserName = (deviceInfo as WebBrowserInfo).browserName;
+                var platform = deviceInfo.platform;
+                // eg: Web chrome Win32
+                deviceInfoData = 'Web ${browserName.name} $platform';
+              }
+
+              final data = {
+                'device': deviceInfoData,
+                'version': packageInfo.version,
+              };
+
+              await Clipboard.setData(
+                  ClipboardData(text: data.values.join('; ')));
+              MyFtoast.show(_context, 'Copied to clipboard');
+            },
+            child: const Text('Copy debug info'),
+          ),
           SimpleDialogOption(
             child: const Text('View licenses'),
             onPressed: () => showLicensePage(
