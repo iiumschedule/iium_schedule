@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/link.dart';
 import 'package:version/version.dart';
 
 import '../constants.dart';
@@ -93,12 +94,27 @@ class _CheckUpdatePageState extends State<CheckUpdatePage> {
               builder: (context, AsyncSnapshot<Version> snapshot) {
                 if (snapshot.hasData) {
                   if (currentVersion.compareTo(snapshot.data) < 0) {
-                    return Text(
-                      'New version available! (${snapshot.data})',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
+                    var version = snapshot.data!.toString().split('+').first;
+                    return Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'New version available! ($version)',
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          Link(
+                              uri: Uri.parse(
+                                  'https://iiumschedule.iqfareez.com/downloads#upgrading'),
+                              builder: ((context, followLink) => TextButton(
+                                  onPressed: followLink,
+                                  child: Text('Learn how to update the app'))))
+                        ],
                       ),
                     );
                   } else {
