@@ -29,9 +29,6 @@ class _CheckUpdatePageState extends State<CheckUpdatePage> {
   final key = 0; // key must be constant, only one entry will be stored in hive
   final box = Hive.box<GhResponses>(kHiveGhResponse);
 
-  //TODO: Add latest to the url
-  //TODO: Remove `first` in body
-
   /// Since this method is importing dart:io, it cannot be used on the web
   /// Also, the web seems like unsuitable to have a check for updates feature
   /// Despite that there have bene multiple issuew with web pwa caching
@@ -40,7 +37,7 @@ class _CheckUpdatePageState extends State<CheckUpdatePage> {
 
     // API endpoint pointed to latest stable release
     const latestRelease =
-        'https://api.github.com/repos/iqfareez/iium_schedule/releases';
+        'https://api.github.com/repos/iqfareez/iium_schedule/releases/latest';
     final response = await http.get(Uri.parse(latestRelease),
         headers: box.get(0) != null
             ? {
@@ -51,7 +48,7 @@ class _CheckUpdatePageState extends State<CheckUpdatePage> {
     // https://docs.github.com/en/rest/overview/resources-in-the-rest-api#conditional-requests
 
     if (response.statusCode == HttpStatus.ok) {
-      final body = json.decode(response.body).first;
+      final body = json.decode(response.body);
       final ghReleasesLatest = GhReleasesLatest.fromJson(body);
       // store the etag and the body of the response
       box.put(key, GhResponses(etag: response.headers['etag']!, body: body));

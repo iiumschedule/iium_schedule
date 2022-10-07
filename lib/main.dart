@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SavedSubjectsProvider()),
       ],
       child: MaterialApp(
-        title: 'IIUM Schedule (Preview)',
+        title: 'IIUM Schedule',
         theme: ThemeData(primarySwatch: Colors.purple),
         darkTheme: ThemeData.dark().copyWith(
           cupertinoOverrideTheme:
