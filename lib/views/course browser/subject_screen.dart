@@ -79,8 +79,7 @@ class SubjectScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Wrap(
                 children: [
                   TextBubble(
                     text: subject.code,
