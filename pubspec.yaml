@@ -45,6 +45,7 @@ dependencies:
     git: https://github.com/SayuruSandaru/flutter_colorpicker.git
   cross_file: ^0.3.3+2
   device_info_plus: ^5.0.1
+  admonitions: ^1.0.0
 
 dev_dependencies:
   flutter_test:

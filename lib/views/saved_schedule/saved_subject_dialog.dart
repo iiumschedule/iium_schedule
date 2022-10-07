@@ -100,8 +100,10 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) =>
-                              SubjectScreen(widget._subject.toSubject())));
+                          builder: (_) => SubjectScreen(
+                                widget._subject.toSubject(),
+                                isCached: true,
+                              )));
                 },
                 child: Text(
                   'View details',

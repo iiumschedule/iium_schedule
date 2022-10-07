@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:admonitions/admonitions.dart';
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +12,19 @@ import 'package:share_plus/share_plus.dart';
 import '../../util/extensions.dart';
 import '../../util/my_ftoast.dart';
 
+/// Subject detail viewer
 class SubjectScreen extends StatelessWidget {
-  const SubjectScreen(this.subject, {Key? key}) : super(key: key);
+  const SubjectScreen(this.subject, {Key? key, this.isCached = false})
+      : super(key: key);
 
+  /// Subject information from albiruni
   final Subject subject;
+
+  /// Marked the subject is fresh or cached
+  ///
+  /// eg: it is live when loaded from course browser page
+  /// and it is cached when loaded from saved schedule page
+  final bool isCached;
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +59,17 @@ class SubjectScreen extends StatelessWidget {
       // TODO: Maybe boleh letak SelectionArea widget to the whole child
       body: Center(
         child: Container(
+          width: double.infinity,
           constraints: const BoxConstraints(maxWidth: 500),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              if (isCached)
+                const PastelAdmonition.info(
+                  text:
+                      'This is cached version as of the creation of the schedule',
+                ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: SelectableText(
