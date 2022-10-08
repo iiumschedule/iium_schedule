@@ -150,7 +150,7 @@ class _InputCourseState extends State<InputCourse>
                               flex: 2,
                               child: TextField(
                                 controller: _courseCodeInputController,
-                                maxLength: 8,
+                                maxLength: 10,
                                 decoration: InputDecoration(
                                   labelText: 'Course Code',
                                   counterText: '', // disable counter text
