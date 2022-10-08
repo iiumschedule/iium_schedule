@@ -131,10 +131,25 @@ class _SubjectCardState extends State<SubjectCard> {
 
   Future<Subject> fetchSubjectData() async {
     Albiruni albiruni = ScheduleMakerData.albiruni!;
-    var fetchedSubjects = await albiruni.fetch(_selectedKulliyah.code,
-        course: widget.subject.courseCode!, useProxy: kIsWeb);
-    return fetchedSubjects
-        .firstWhere((element) => element.sect == widget.subject.section);
+    // loop for every pages to find the subject, most of the time it
+    // is in the first page, but for subject it isn't
+    for (int i = 1;; i++) {
+      var fetchedSubjects = await albiruni.fetch(_selectedKulliyah.code,
+          page: i, course: widget.subject.courseCode!, useProxy: kIsWeb);
+      if (fetchedSubjects.isEmpty) break;
+      try {
+        // try finding the section
+        return fetchedSubjects
+            .firstWhere((element) => element.sect == widget.subject.section);
+      } catch (e) {
+        // catch and ignore the `Bad state: No element` error
+        // and continue the loop
+        print(e);
+      }
+    }
+
+    // this function is terminated when error thrown by albiruni
+    throw Exception("Subject not found");
   }
 
   @override
