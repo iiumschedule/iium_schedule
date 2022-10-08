@@ -42,7 +42,7 @@ jobs:
       - name: Adding markdown
         if: "!github.event.release.prerelease"
         run: |
-          cho :white_check_mark: Build appbundle **todo: Publish to Google Play** >> $GITHUB_STEP_SUMMARY
+          echo :white_check_mark: Build appbundle **todo: Publish to Google Play** >> $GITHUB_STEP_SUMMARY
 
       - name: Build release APK(s)
         run: |
@@ -51,7 +51,7 @@ jobs:
 
       - name: Adding markdown
         run: |
-          echo :white_check_mark: Build split apk >> $GITHUB_STEP_SUMMARY
+          echo ":white_check_mark: Build split apk" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload file to the assets release
         uses: softprops/action-gh-release@v1
