@@ -150,6 +150,8 @@ class _InputCourseState extends State<InputCourse>
                               flex: 2,
                               child: TextField(
                                 controller: _courseCodeInputController,
+                                // Initially 8, increased to give some space for whitespace
+                                // character etc, so that text will not be truncated
                                 maxLength: 10,
                                 decoration: InputDecoration(
                                   labelText: 'Course Code',
