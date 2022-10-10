@@ -18,4 +18,21 @@ class SavedDaytime extends HiveObject {
 
   SavedDaytime(
       {required this.day, required this.startTime, required this.endTime});
+
+  @override
+  String toString() {
+    return '{day: $day, startTime: $startTime, endTime: $endTime}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SavedDaytime &&
+          runtimeType == other.runtimeType &&
+          day == other.day &&
+          startTime == other.startTime &&
+          endTime == other.endTime;
+
+  @override
+  int get hashCode => day.hashCode ^ startTime.hashCode ^ endTime.hashCode;
 }

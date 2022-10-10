@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,9 +22,12 @@ class SavedSubjectDialog extends StatefulWidget {
 }
 
 class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
+  late TextEditingController venueController;
   late TimeOfDay startTime;
   late TimeOfDay endTime;
-  late Color subjectColour;
+
+  bool isEdtingEnabled = false;
+  bool isEditingVenue = false;
 
   @override
   void initState() {
@@ -39,7 +43,7 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
         minute:
             int.parse(widget._subject.dayTime.first!.endTime.split(":").last));
 
-    subjectColour = Color(widget._subject.hexColor!);
+    venueController = TextEditingController(text: widget._subject.venue);
   }
 
   @override
@@ -51,36 +55,115 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
       builder: (context, value, _) {
         return AlertDialog(
           title: Text(widget._subject.title),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(Icons.pin_drop_outlined),
-                  title: Text(widget._subject.venue ?? "No venue")),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(
-                  Icons.schedule_outlined,
-                ),
-                title: Text(
-                    "Starts ${startTime.toRealString()}, ends ${endTime.toRealString()}"),
-                subtitle: Text(duration.minute == 0
-                    ? 'Duration ${duration.hour}h'
-                    : 'Duration ${duration.hour}h ${duration.minute}m'),
+          content: Column(mainAxisSize: MainAxisSize.min, children: [
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.pin_drop_outlined),
+              onTap: !isEdtingEnabled
+                  ? null
+                  : () {
+                      setState(() {
+                        isEditingVenue = true;
+                      });
+                    },
+              title: !isEditingVenue
+                  ? Text(
+                      value.getVenue(widget._subject.code) ?? "No venue",
+                      style: !isEdtingEnabled
+                          ? null
+                          : const TextStyle(
+                              decoration: TextDecoration.underline,
+                              decorationStyle: TextDecorationStyle.dotted),
+                    )
+                  : TextField(
+                      controller: venueController,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.check),
+                          onPressed: () {
+                            value.setVenue(
+                                courseCode: widget._subject,
+                                newVenue: venueController.text);
+                            setState(() {
+                              isEditingVenue = false;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(
+                Icons.schedule_outlined,
               ),
-              const Divider(),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Icon(Icons.circle,
-                    color: value.subjectColour(widget._subject.code)),
-                title: const Text("Change colour"),
-                onTap: () async {
+              title: Text.rich(
+                TextSpan(children: [
+                  const TextSpan(text: "Starts "),
+                  TextSpan(
+                    text: startTime.toRealString(),
+                    style: TextStyle(
+                      decoration:
+                          !isEdtingEnabled ? null : TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.dotted,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = !isEdtingEnabled
+                          ? null
+                          : () {
+                              showTimePicker(
+                                context: context,
+                                initialTime: startTime,
+                              ).then((value) {
+                                if (value != null) {
+                                  setState(() {
+                                    startTime = value;
+                                  });
+                                }
+                              });
+                            },
+                  ),
+                  const TextSpan(text: " , ends "),
+                  TextSpan(
+                    text: endTime.toRealString(),
+                    style: TextStyle(
+                      decoration:
+                          !isEdtingEnabled ? null : TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.dotted,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = !isEdtingEnabled
+                          ? null
+                          : () {
+                              showTimePicker(
+                                context: context,
+                                initialTime: endTime,
+                              ).then((value) {
+                                if (value != null) {
+                                  setState(() {
+                                    endTime = value;
+                                  });
+                                }
+                              });
+                            },
+                  ),
+                ]),
+              ),
+              // "Starts ${startTime.toRealString()}, ends ${endTime.toRealString()}"),
+              subtitle: Text(duration.minute == 0
+                  ? 'Duration ${duration.hour}h'
+                  : 'Duration ${duration.hour}h ${duration.minute}m'),
+            ),
+            const Divider(),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+              IconButton(
+                tooltip: "Change colour",
+                onPressed: () async {
                   var selectedColour = await Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => SubjectColourDialog(
                         subjectName: widget._subject.code,
-                        color: subjectColour,
+                        color: value.subjectColour(widget._subject.code),
                       ),
                     ),
                   );
@@ -91,9 +174,34 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
                       courseCode: widget._subject.code,
                       newColor: selectedColour);
                 },
+                icon: Icon(Icons.circle,
+                    color: value.subjectColour(widget._subject.code)),
               ),
-            ],
-          ),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: OutlinedButton.icon(
+                    label: Text(isEdtingEnabled ? "Done" : "Edit"),
+                    onPressed: () {
+                      setState(() {
+                        isEdtingEnabled = !isEdtingEnabled;
+                        isEditingVenue = false;
+                      });
+                    },
+                    icon: Icon(!isEdtingEnabled ? Icons.edit : Icons.edit_off)),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: OutlinedButton.icon(
+                  label: const Text("Delete"),
+                  onPressed: () {
+                    value.deleteSingle(widget._subject);
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.delete_forever_outlined),
+                ),
+              ),
+            ]),
+          ]),
           actions: [
             TextButton(
                 onPressed: () {

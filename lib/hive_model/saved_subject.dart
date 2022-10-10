@@ -1,5 +1,6 @@
 import 'package:albiruni/albiruni.dart';
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
 import 'saved_daytime.dart';
 
@@ -43,7 +44,12 @@ class SavedSubject extends HiveObject {
   @HiveField(8)
   int? hexColor;
 
+  /// Unique id
+  @HiveField(9, defaultValue: "abc") // for future implementation
+  String uuid;
+
   SavedSubject({
+    required this.uuid,
     required this.code,
     required this.sect,
     required this.title,
@@ -57,12 +63,13 @@ class SavedSubject extends HiveObject {
 
   @override
   String toString() =>
-      "{title: $title, subjectName: $subjectName ,venue : $venue, colour : $hexColor}";
+      "{title: $title, subjectName: $subjectName ,venue : $venue, colour : $hexColor, lecturers: $lect, dayTime: $dayTime}";
 
   /// Input [Subject] and return [SavedSubject]
   SavedSubject.fromSubject(
       {required Subject subject, String? subjectName, int? hexColor})
       : this(
+          uuid: const Uuid().v1(),
           code: subject.code,
           sect: subject.sect,
           title: subject.title,
@@ -92,4 +99,18 @@ class SavedSubject extends HiveObject {
       chr: chr,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SavedSubject &&
+          runtimeType == other.runtimeType &&
+          title == other.title &&
+          sect == other.sect &&
+          code == other.code &&
+          dayTime == other.dayTime;
+
+  @override
+  int get hashCode =>
+      title.hashCode ^ sect.hashCode ^ code.hashCode ^ dayTime.hashCode;
 }

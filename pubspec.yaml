@@ -46,6 +46,7 @@ dependencies:
   cross_file: ^0.3.3+2
   device_info_plus: ^5.0.1
   admonitions: ^1.0.0
+  uuid: ^3.0.6
 
 dev_dependencies:
   flutter_test:

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../enums/subject_title_setting_enum.dart';
 import '../hive_model/saved_subject.dart';
+import '../providers/saved_subjects_provider.dart';
 import '../providers/schedule_layout_setting_provider.dart';
 import '../views/saved_schedule/saved_subject_dialog.dart';
 import 'extensions.dart';
@@ -36,6 +38,7 @@ class LaneEventsUtil {
         var dayTimes = subject.dayTime.where((element) => element?.day == i);
         extractedSubjects.addAll(
           dayTimes.map((e) => SavedSubject(
+                uuid: const Uuid().v1(),
                 subjectName: subject.subjectName,
                 code: subject.code,
                 sect: subject.sect,
@@ -82,6 +85,10 @@ class LaneEventsUtil {
                 context: context,
                 builder: (_) => SavedSubjectDialog(subject: e),
               );
+              await Future.delayed(const Duration(milliseconds: 300));
+              // clean up residue if any
+              Provider.of<SavedSubjectsProvider>(context, listen: false)
+                  .cleanUpResidue();
             },
           );
         },
