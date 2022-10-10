@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +27,8 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
 
   bool isEdtingEnabled = false;
   bool isEditingVenue = false;
+
+  bool isDeleting = false;
 
   @override
   void initState() {
@@ -73,6 +74,7 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
                           ? null
                           : const TextStyle(
                               decoration: TextDecoration.underline,
+                              color: Colors.blue,
                               decorationStyle: TextDecorationStyle.dotted),
                     )
                   : TextField(
@@ -102,50 +104,12 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
                   const TextSpan(text: "Starts "),
                   TextSpan(
                     text: startTime.toRealString(),
-                    style: TextStyle(
-                      decoration:
-                          !isEdtingEnabled ? null : TextDecoration.underline,
-                      decorationStyle: TextDecorationStyle.dotted,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = !isEdtingEnabled
-                          ? null
-                          : () {
-                              showTimePicker(
-                                context: context,
-                                initialTime: startTime,
-                              ).then((value) {
-                                if (value != null) {
-                                  setState(() {
-                                    startTime = value;
-                                  });
-                                }
-                              });
-                            },
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
-                  const TextSpan(text: " , ends "),
+                  const TextSpan(text: ", ends "),
                   TextSpan(
                     text: endTime.toRealString(),
-                    style: TextStyle(
-                      decoration:
-                          !isEdtingEnabled ? null : TextDecoration.underline,
-                      decorationStyle: TextDecorationStyle.dotted,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = !isEdtingEnabled
-                          ? null
-                          : () {
-                              showTimePicker(
-                                context: context,
-                                initialTime: endTime,
-                              ).then((value) {
-                                if (value != null) {
-                                  setState(() {
-                                    endTime = value;
-                                  });
-                                }
-                              });
-                            },
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
                 ]),
               ),
@@ -191,16 +155,36 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
               ),
               Padding(
                 padding: const EdgeInsets.all(2.0),
-                child: OutlinedButton.icon(
-                  label: const Text("Delete"),
-                  onPressed: () {
-                    value.deleteSingle(widget._subject);
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.delete_forever_outlined),
+                child: Tooltip(
+                  message: "Remove this item",
+                  child: OutlinedButton(
+                    onPressed: () {
+                      setState(() => isDeleting = true);
+                    },
+                    child: const Icon(Icons.delete_forever_outlined),
+                  ),
                 ),
               ),
             ]),
+            // Delete confirmation
+            if (isDeleting)
+              Row(
+                children: [
+                  const Text("Confirm delete?"),
+                  const Spacer(),
+                  TextButton(
+                      onPressed: () {
+                        value.deleteSingle(widget._subject);
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Yes')),
+                  TextButton(
+                      onPressed: () {
+                        setState(() => isDeleting = false);
+                      },
+                      child: const Text('Cancel'))
+                ],
+              )
           ]),
           actions: [
             TextButton(
