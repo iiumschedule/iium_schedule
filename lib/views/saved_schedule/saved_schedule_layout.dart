@@ -13,6 +13,7 @@ import '../../util/lane_events_util.dart';
 import '../scheduler/schedule_view/rename_dialog.dart';
 import '../scheduler/schedule_view/setting_bottom_sheet.dart';
 import '../scheduler/schedule_view/timetable_view_widget.dart';
+import 'add_subject_page.dart';
 import 'metadata_dialog.dart';
 import 'schedule_export_page.dart';
 
@@ -80,6 +81,25 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                           overflow: TextOverflow.fade,
                         )),
                     actions: [
+                      IconButton(
+                        tooltip: "Add subject",
+                        icon: const Icon(Icons.add),
+                        onPressed: () async {
+                          var res = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              fullscreenDialog: true,
+                              builder: (context) => AddSubjectPage(
+                                session: widget.savedSchedule.session,
+                                semester: widget.savedSchedule.semester,
+                              ),
+                            ),
+                          );
+
+                          if (res == null) return;
+
+                          value.addSubject(res);
+                        },
+                      ),
                       if (kIsWeb || !Platform.isAndroid) ...[
                         IconButton(
                           tooltip: 'Increase text sizes',

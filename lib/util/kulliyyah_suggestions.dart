@@ -4,21 +4,22 @@
 /// Eg: CCUB course will return SC4SH
 ///
 /// Uses in course course validator
-class KulliyyahSugesstions {
+class KulliyyahSugestions {
   static String? suggest(String courseCode) {
     if (courseCode.contains(RegExp(r'CCUB [2-3]1'))) return 'SC4SH';
     if (courseCode.contains(RegExp(r'SCSH \d{4}$'))) return 'SC4SH';
     if (courseCode.contains(RegExp(r'CCUB 106[1-2]'))) return 'CCAC';
     if (courseCode.startsWith('CC')) return 'CCAC';
-    if (courseCode.contains(RegExp(r'LC \d{4}$'))) return 'CFL';
-    if (courseCode.contains(RegExp(r'LE \d{4}$'))) return 'CFL';
-    if (courseCode.contains(RegExp(r'LEED \d{4}$'))) return 'CFL';
-    if (courseCode.contains(RegExp(r'LQAD \d{4}$'))) return 'CFL';
-    if (courseCode.contains(RegExp(r'LM \d{4}$'))) return 'CFL';
-    if (courseCode.contains(RegExp(r'TQ \d{4}$'))) return 'CFL';
-    if (courseCode.contains(RegExp(r'TQTD \d{4}$'))) return 'CFL';
-    if (courseCode.contains(RegExp(r'UNGS \d{4}$'))) return 'IRKHS';
-    if (courseCode.contains(RegExp(r'MPU \d{4}$'))) return 'IRKHS';
+    if (courseCode.startsWith('LC')) return 'CFL';
+    if (courseCode.startsWith('LE')) return 'CFL';
+    if (courseCode.startsWith('LEED')) return 'CFL';
+    if (courseCode.startsWith('LQAD')) return 'CFL';
+    if (courseCode.startsWith('LM')) return 'CFL';
+    if (courseCode.startsWith('TQ')) return 'CFL';
+    if (courseCode.startsWith('TQTD')) return 'CFL';
+    if (courseCode.startsWith('UNGS')) return 'IRKHS';
+    if (courseCode.startsWith('MPU')) return 'IRKHS';
+
     return null;
   }
 }

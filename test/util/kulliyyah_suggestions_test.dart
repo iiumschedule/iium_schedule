@@ -6,12 +6,12 @@ void main() {
     // tests correct codes
     var codes = ["CCUB 1062", "CCUB 1061"];
     for (var code in codes) {
-      expect(KulliyyahSugesstions.suggest(code), "CCAC");
+      expect(KulliyyahSugestions.suggest(code), "CCAC");
     }
 
     codes = ["CCUB 2163", "CCUB 3164", "SCSH 2163"];
     for (var code in codes) {
-      expect(KulliyyahSugesstions.suggest(code), "SC4SH");
+      expect(KulliyyahSugestions.suggest(code), "SC4SH");
     }
 
     codes = [
@@ -24,15 +24,12 @@ void main() {
       "TQTD 0004"
     ];
     for (var code in codes) {
-      expect(KulliyyahSugesstions.suggest(code), "CFL");
+      expect(KulliyyahSugestions.suggest(code), "CFL");
     }
 
     codes = ["UNGS 1234", "MPU 3122"];
     for (var code in codes) {
-      expect(KulliyyahSugesstions.suggest(code), "IRKHS");
+      expect(KulliyyahSugestions.suggest(code), "IRKHS");
     }
-
-    // test wrong code
-    expect(KulliyyahSugesstions.suggest("CCUB 3263"), null);
   });
 }

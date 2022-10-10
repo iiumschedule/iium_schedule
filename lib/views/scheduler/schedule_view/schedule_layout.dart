@@ -19,6 +19,7 @@ import '../../../util/lane_events_util.dart';
 import '../../../util/my_ftoast.dart';
 import '../../saved_schedule/saved_schedule_layout.dart';
 import '../../saved_schedule/schedule_export_page.dart';
+import '../schedule_maker_data.dart';
 import 'rename_dialog.dart';
 import 'setting_bottom_sheet.dart';
 import 'subject_dialog.dart';
@@ -69,6 +70,8 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
   // Save the generated schedule data to the database (Hive)
   Future<int> save() async {
     int key = await box.add(SavedSchedule(
+      session: ScheduleMakerData.albiruni!.session,
+      semester: ScheduleMakerData.albiruni!.semester,
       title: name,
       lastModified: DateTime.now().toString(),
       dateCreated: DateTime.now().toString(),
@@ -214,6 +217,15 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                         overflow: TextOverflow.fade,
                       )),
                   actions: [
+                    IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () => showDialog(
+                          context: context,
+                          builder: (_) => const AlertDialog(
+                                content: Text(
+                                    'To add more subjects, save the schedule first.\nTap on menu \u22EE then choose "Save to app"'),
+                              )),
+                    ),
                     if (kIsWeb || !Platform.isAndroid) ...[
                       IconButton(
                         tooltip: 'Increase text sizes',

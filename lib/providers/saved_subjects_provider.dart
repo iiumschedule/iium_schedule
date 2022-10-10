@@ -1,10 +1,24 @@
+import 'dart:math';
+
+import 'package:albiruni/albiruni.dart';
 import 'package:flutter/material.dart';
 
 import '../hive_model/saved_subject.dart';
 
 /// Careful. Takut2 dia ubah subject dalam jadual lain
 class SavedSubjectsProvider extends ChangeNotifier {
-  late List<SavedSubject> savedSubjects; //
+  late List<SavedSubject> savedSubjects;
+
+  void addSubject(Subject subject) {
+    // generate random color
+    int colour = 0xFF000000 | (Random().nextInt(0xFFFFFF));
+
+    SavedSubject savedSubject = SavedSubject.fromSubject(
+        subject: subject, subjectName: subject.title, hexColor: colour);
+
+    savedSubjects.add(savedSubject);
+    notifyListeners();
+  }
 
   /// Change background colour of the given course code
   void modifyColour({required String courseCode, required Color newColor}) {

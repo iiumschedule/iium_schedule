@@ -1,6 +1,5 @@
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:recase/recase.dart';
@@ -9,6 +8,7 @@ import '../../model/basic_subject_model.dart';
 import '../../util/course_validator_pass.dart';
 import '../../util/kulliyyah_suggestions.dart';
 import '../../util/kulliyyahs.dart';
+import '../../util/subject_fetcher.dart';
 import '../course%20browser/subject_screen.dart';
 import 'schedule_view/schedule_layout.dart';
 import 'schedule_maker_data.dart';
@@ -130,29 +130,6 @@ class _SubjectCardState extends State<SubjectCard> {
     _selectedKulliyah = Kuliyyahs.kuliyyahFromCode(widget.kulliyah);
   }
 
-  Future<Subject> fetchSubjectData({required String kulliyyah}) async {
-    Albiruni albiruni = ScheduleMakerData.albiruni!;
-    // loop for every pages to find the subject, most of the time it
-    // is in the first page, but for subject it isn't
-    for (int i = 1;; i++) {
-      var fetchedSubjects = await albiruni.fetch(kulliyyah,
-          page: i, course: widget.subject.courseCode!, useProxy: kIsWeb);
-      if (fetchedSubjects.isEmpty) break;
-      try {
-        // try finding the section
-        return fetchedSubjects
-            .firstWhere((element) => element.sect == widget.subject.section);
-      } catch (e) {
-        // catch and ignore the `Bad state: No element` error
-        // and continue the loop
-        print(e);
-      }
-    }
-
-    // this function is terminated when error thrown by albiruni
-    throw Exception("Subject not found");
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -160,10 +137,13 @@ class _SubjectCardState extends State<SubjectCard> {
       child: FutureBuilder(
         // try to find the kulliyyah for the course code
         // if cannot find, use the main kulliyyah
-        future: fetchSubjectData(
+        future: SubjectFetcher.fetchSubjectData(
+            albiruni: ScheduleMakerData.albiruni!,
             kulliyyah:
-                KulliyyahSugesstions.suggest(widget.subject.courseCode!) ??
-                    _selectedKulliyah.code),
+                KulliyyahSugestions.suggest(widget.subject.courseCode!) ??
+                    _selectedKulliyah.code,
+            courseCode: widget.subject.courseCode!,
+            section: widget.subject.section!),
         builder: (context, AsyncSnapshot<Subject> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return ListTile(

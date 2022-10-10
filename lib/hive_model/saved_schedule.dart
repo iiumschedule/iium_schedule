@@ -29,7 +29,15 @@ class SavedSchedule extends HiveObject {
   @HiveField(6, defaultValue: SubjectTitleSetting.title)
   SubjectTitleSetting subjectTitleSetting;
 
+  @HiveField(7, defaultValue: "2022/2023")
+  String session;
+
+  @HiveField(8, defaultValue: 1)
+  int semester;
+
   SavedSchedule({
+    required this.session,
+    required this.semester,
     required this.title,
     required this.subjects,
     required this.lastModified,
