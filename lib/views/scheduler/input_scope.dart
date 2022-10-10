@@ -51,7 +51,7 @@ class _InputScopeState extends State<InputScope>
                         selectedItemBuilder: (_) => Kuliyyahs.all
                             .map((e) => Text(e.shortName))
                             .toList(),
-                        hint: const Text('Select kulliyyah'),
+                        hint: const Text('Select main kulliyyah'),
                         onChanged: (String? value) {
                           setState(() => _selectedKulliyah = value);
                         },
