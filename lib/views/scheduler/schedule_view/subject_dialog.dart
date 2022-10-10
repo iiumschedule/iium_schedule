@@ -46,6 +46,10 @@ class SubjectDialog extends StatelessWidget {
                 : 'Duration ${duration.hour}h ${duration.minute}m'),
           ),
           const Divider(),
+          Text(
+            'To enable customization & editing, save this schedule first. Tap on menu \u22EE then choose "Save to app"',
+            style: Theme.of(context).textTheme.caption!,
+          ),
         ],
       ),
       actions: [
