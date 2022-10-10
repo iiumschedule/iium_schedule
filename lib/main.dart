@@ -47,6 +47,14 @@ class MyApp extends StatelessWidget {
         darkTheme: ThemeData.dark().copyWith(
           cupertinoOverrideTheme:
               const CupertinoThemeData(primaryColor: Colors.purple),
+          textButtonTheme: TextButtonThemeData(
+            style:
+                TextButton.styleFrom(foregroundColor: Colors.purple.shade200),
+          ),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+            style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.purple.shade200),
+          ),
         ),
         themeMode: ThemeMode.system,
         home: const MyBody(),
