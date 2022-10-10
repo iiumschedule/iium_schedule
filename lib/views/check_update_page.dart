@@ -110,7 +110,8 @@ class _CheckUpdatePageState extends State<CheckUpdatePage> {
                                   'https://iiumschedule.iqfareez.com/downloads#upgrading'),
                               builder: ((context, followLink) => TextButton(
                                   onPressed: followLink,
-                                  child: Text('Learn how to update the app'))))
+                                  child: const Text(
+                                      'Learn how to update the app'))))
                         ],
                       ),
                     );
