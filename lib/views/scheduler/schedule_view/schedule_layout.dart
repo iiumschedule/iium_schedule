@@ -223,7 +223,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                           context: context,
                           builder: (_) => const AlertDialog(
                                 content: Text(
-                                    'To add more subjects, save the schedule first.\nTap on menu \u22EE then choose "Save to app"'),
+                                    'To add more subjects, save the schedule first.\n\nTap on menu \u22EE then choose "Save to app"'),
                               )),
                     ),
                     if (kIsWeb || !Platform.isAndroid) ...[
