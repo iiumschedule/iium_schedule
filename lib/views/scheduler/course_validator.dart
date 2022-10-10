@@ -7,6 +7,7 @@ import 'package:recase/recase.dart';
 
 import '../../model/basic_subject_model.dart';
 import '../../util/course_validator_pass.dart';
+import '../../util/kulliyyah_suggestions.dart';
 import '../../util/kulliyyahs.dart';
 import '../course%20browser/subject_screen.dart';
 import 'schedule_view/schedule_layout.dart';
@@ -129,12 +130,12 @@ class _SubjectCardState extends State<SubjectCard> {
     _selectedKulliyah = Kuliyyahs.kuliyyahFromCode(widget.kulliyah);
   }
 
-  Future<Subject> fetchSubjectData() async {
+  Future<Subject> fetchSubjectData({required String kulliyyah}) async {
     Albiruni albiruni = ScheduleMakerData.albiruni!;
     // loop for every pages to find the subject, most of the time it
     // is in the first page, but for subject it isn't
     for (int i = 1;; i++) {
-      var fetchedSubjects = await albiruni.fetch(_selectedKulliyah.code,
+      var fetchedSubjects = await albiruni.fetch(kulliyyah,
           page: i, course: widget.subject.courseCode!, useProxy: kIsWeb);
       if (fetchedSubjects.isEmpty) break;
       try {
@@ -157,7 +158,12 @@ class _SubjectCardState extends State<SubjectCard> {
     return Card(
         child: Center(
       child: FutureBuilder(
-        future: fetchSubjectData(),
+        // try to find the kulliyyah for the course code
+        // if cannot find, use the main kulliyyah
+        future: fetchSubjectData(
+            kulliyyah:
+                KulliyyahSugesstions.suggest(widget.subject.courseCode!) ??
+                    _selectedKulliyah.code),
         builder: (context, AsyncSnapshot<Subject> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return ListTile(
