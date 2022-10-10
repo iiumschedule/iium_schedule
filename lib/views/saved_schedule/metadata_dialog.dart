@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../hive_model/saved_schedule.dart';
 import '../../widgets/my_bottom_sheet.dart';
 
+/// Show info about the save schedule
 class MetadataSheet extends StatelessWidget {
   const MetadataSheet({Key? key, required this.savedSchedule})
       : super(key: key);
@@ -17,6 +18,14 @@ class MetadataSheet extends StatelessWidget {
     return MyBottomSheet(
       title: 'Metadata',
       content: [
+        ListTile(
+          leading: const _LeadingTextWidget('Acedemic Year:'),
+          title: Text(savedSchedule.session),
+        ),
+        ListTile(
+          leading: const _LeadingTextWidget('Semester:'),
+          title: Text('Sem ${savedSchedule.semester}'),
+        ),
         ListTile(
           leading: const _LeadingTextWidget('Subject count:'),
           title: Text(savedSchedule.subjects!.length.toString()),
