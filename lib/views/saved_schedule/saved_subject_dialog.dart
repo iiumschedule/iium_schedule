@@ -96,6 +96,13 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.class_outlined),
+              title: Text(
+                'Section ${widget._subject.sect}',
+              ),
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
               leading: const Icon(
                 Icons.schedule_outlined,
               ),

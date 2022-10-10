@@ -36,9 +36,12 @@ class SubjectDialog extends StatelessWidget {
               title: Text(_subject.venue ?? "No venue")),
           ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: const Icon(
-              Icons.schedule_outlined,
-            ),
+            leading: const Icon(Icons.class_outlined),
+            title: Text('Section ${_subject.sect}'),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.schedule_outlined),
             title: Text(
                 "Starts ${_start.toRealString()}, ends ${_end.toRealString()}"),
             subtitle: Text(duration.minute == 0
