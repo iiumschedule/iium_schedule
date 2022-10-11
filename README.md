@@ -3,6 +3,7 @@
 [![Web](<https://img.shields.io/badge/WEB%20(PWA)-5a0fc8?style=for-the-badge&logo=GoogleChrome&logoColor=white>)](https://iiumschedule.web.app/#/)
 [![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://iiumschedule.iqfareez.com/downloads/stable#windows)
 ![License](https://img.shields.io/github/license/iqfareez/iium_schedule?style=for-the-badge)
+[![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/iqfareez)
 [![PRs Welcome](https://img.shields.io/badge/PR-welcome-brightgreen.svg?style=for-the-badge)](https://makeapullrequest.com)
 
 # IIUM Schedule App
