@@ -20,6 +20,7 @@ class _BrowserState extends State<Browser> {
   String _session = constants.kDefaultSession;
   int _semester = constants.kDefaultSemester;
   String? _selectedKulliyah;
+  StudyGrad _selectedStudyGrad = StudyGrad.ug;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +88,39 @@ class _BrowserState extends State<Browser> {
                           setState(() => _semester = value + 1);
                         }),
                   ),
-                  const SizedBox(height: 15),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile<StudyGrad>(
+                            value: StudyGrad.ug,
+                            groupValue: _selectedStudyGrad,
+                            onChanged: ((value) => setState(
+                                  () {
+                                    _selectedStudyGrad = value!;
+                                  },
+                                )),
+                            title: Text('Undergraduate'),
+                          ),
+                        ),
+                        Expanded(
+                          child: RadioListTile<StudyGrad>(
+                            value: StudyGrad.pg,
+                            groupValue: _selectedStudyGrad,
+                            onChanged: ((value) => setState(
+                                  () {
+                                    _selectedStudyGrad = value!;
+                                  },
+                                )),
+                            title: Text('Postgraduate'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 14),
                     // Removed [CupertinoTextField] to prevent the usage of
@@ -141,7 +174,9 @@ class _BrowserState extends State<Browser> {
                                 }
 
                                 Albiruni albiruni = Albiruni(
-                                    semester: _semester, session: _session);
+                                    semester: _semester,
+                                    session: _session,
+                                    studyGrade: _selectedStudyGrad);
                                 Navigator.push(
                                   context,
                                   CupertinoPageRoute(
