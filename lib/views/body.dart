@@ -263,7 +263,6 @@ class _SimpleAboutDialog extends StatelessWidget {
                 deviceInfoData = 'Windows $windowsVersion';
               } else {
                 // on web
-                print(deviceInfo.toMap());
                 var browserName = (deviceInfo as WebBrowserInfo).browserName;
                 var platform = deviceInfo.platform;
                 // eg: Web chrome Win32

@@ -25,7 +25,7 @@ dependencies:
   and:
     git: https://github.com/iqfareez/and.git # null-safe
   url_launcher: ^6.0.17
-  package_info_plus: ^2.0.0
+  package_info_plus: ^3.0.1
   flutter_timetable_view:
     git: https://github.com/iqfareez/flutter_timetable_view.git
   page_view_indicators: ^2.0.0
@@ -36,7 +36,7 @@ dependencies:
   path_provider: ^2.0.11
   permission_handler: ^10.0.0
   quick_actions: ^1.0.0
-  share_plus: ^4.0.10
+  share_plus: ^6.0.1
   intl: ^0.17.0
   http: ^0.13.5
   version: ^3.0.2
@@ -44,7 +44,7 @@ dependencies:
     # https://github.com/mchome/flutter_colorpicker/pull/85
     git: https://github.com/SayuruSandaru/flutter_colorpicker.git
   cross_file: ^0.3.3+2
-  device_info_plus: ^6.0.0
+  device_info_plus: ^7.0.1
   admonitions: ^1.0.0
   uuid: ^3.0.6
 
