@@ -18,9 +18,9 @@ packages:
   albiruni:
     dependency: "direct main"
     description:
-      path: "../../Dart App/albiruni"
-      relative: true
-    source: path
+      name: albiruni
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "1.2.0"
   analyzer:
     dependency: transitive
@@ -277,9 +277,11 @@ packages:
   flutter_timetable_view:
     dependency: "direct main"
     description:
-      path: "../Experiments/flutter_timetable_view"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "30d4c4c33acb12886de3b72016088bebcfe0acc8"
+      url: "https://github.com/iqfareez/flutter_timetable_view.git"
+    source: git
     version: "0.2.0"
   flutter_web_plugins:
     dependency: transitive
@@ -439,7 +441,7 @@ packages:
       name: material_color_utilities
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.5"
+    version: "0.2.0"
   meta:
     dependency: transitive
     description:
@@ -643,6 +645,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
+  pull_to_refresh:
+    dependency: "direct main"
+    description:
+      name: pull_to_refresh
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   quick_actions:
     dependency: "direct main"
     description:
@@ -674,9 +683,11 @@ packages:
   recase:
     dependency: "direct main"
     description:
-      path: "../../Dart App/recase"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "19e10e4505eee1e7b518e4dbc06f68af2f41b31f"
+      url: "https://github.com/iqfareez/recase.git"
+    source: git
     version: "4.0.4"
   share_plus:
     dependency: "direct main"
@@ -731,7 +742,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.9.0"
+    version: "1.9.1"
   stack_trace:
     dependency: transitive
     description:
@@ -745,7 +756,7 @@ packages:
       name: stream_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   stream_transform:
     dependency: transitive
     description:
@@ -773,7 +784,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.12"
+    version: "0.4.14"
   timing:
     dependency: transitive
     description:
@@ -857,7 +868,7 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.4"
   version:
     dependency: "direct main"
     description:
