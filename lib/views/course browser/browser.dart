@@ -88,36 +88,18 @@ class _BrowserState extends State<Browser> {
                           setState(() => _semester = value + 1);
                         }),
                   ),
+                  const SizedBox(height: 10),
                   Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: RadioListTile<StudyGrad>(
-                            value: StudyGrad.ug,
-                            groupValue: _selectedStudyGrad,
-                            onChanged: ((value) => setState(
-                                  () {
-                                    _selectedStudyGrad = value!;
-                                  },
-                                )),
-                            title: Text('Undergraduate'),
-                          ),
-                        ),
-                        Expanded(
-                          child: RadioListTile<StudyGrad>(
-                            value: StudyGrad.pg,
-                            groupValue: _selectedStudyGrad,
-                            onChanged: ((value) => setState(
-                                  () {
-                                    _selectedStudyGrad = value!;
-                                  },
-                                )),
-                            title: Text('Postgraduate'),
-                          ),
-                        ),
-                      ],
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: CupertinoSlidingSegmentedControl<StudyGrad>(
+                      groupValue: _selectedStudyGrad,
+                      children: const {
+                        StudyGrad.ug: Text('Undergraduate'),
+                        StudyGrad.pg: Text('Postgraduate'),
+                      },
+                      onValueChanged: (value) {
+                        setState(() => _selectedStudyGrad = value!);
+                      },
                     ),
                   ),
                   const SizedBox(height: 10),

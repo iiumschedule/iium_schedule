@@ -20,6 +20,8 @@ class _InputScopeState extends State<InputScope>
   String _session = constants.kDefaultSession;
   int _semester = constants.kDefaultSemester;
   String? _selectedKulliyah;
+  StudyGrad _selectedStudyGrad = StudyGrad.ug;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -84,6 +86,19 @@ class _InputScopeState extends State<InputScope>
                   ),
                   const SizedBox(height: 10),
                   Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: CupertinoSlidingSegmentedControl<StudyGrad>(
+                      groupValue: _selectedStudyGrad,
+                      children: const {
+                        StudyGrad.ug: Text('Undergraduate'),
+                        StudyGrad.pg: Text('Postgraduate'),
+                      },
+                      onValueChanged: (value) {
+                        setState(() => _selectedStudyGrad = value!);
+                      },
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 10),
                     child: MouseRegion(
@@ -105,7 +120,9 @@ class _InputScopeState extends State<InputScope>
                                         curve: Curves.bounceInOut);
 
                                 Albiruni albiruni = Albiruni(
-                                    semester: _semester, session: _session);
+                                    semester: _semester,
+                                    session: _session,
+                                    studyGrade: _selectedStudyGrad);
 
                                 ScheduleMakerData.albiruni = albiruni;
                                 ScheduleMakerData.kulliyah = _selectedKulliyah!;
