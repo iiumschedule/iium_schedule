@@ -14,7 +14,14 @@ class SaveImpl extends BaseSaveFile {
       Uint8List pngBytes, String filename, bool tempPath) async {
     String? saveDirectory;
     if (tempPath) {
-      saveDirectory = await getTemporaryDirectory().then((value) => value.path);
+      if (Platform.isWindows) {
+        saveDirectory = await getApplicationDocumentsDirectory()
+            .then((value) => value.path);
+      } else {
+        // Android
+        saveDirectory =
+            await getTemporaryDirectory().then((value) => value.path);
+      }
     } else {
       if (Platform.isAndroid) {
         var status = await Permission.storage.request();

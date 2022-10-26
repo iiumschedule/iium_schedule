@@ -5,14 +5,19 @@ import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
 
 class ScheduleShare {
-  static void android(String savedPath, String scheduleTitle) async {
+  /// Share schedule image to external apps. Currently support for Android only
+  ///
+  /// Even the plugin already support sharing files on Windows, I've tested but there is not
+  /// image shown. My share target is Mail app. Anyway, looks like the target app in sharesheet
+  /// is limited.
+  static void share(String savedPath, String scheduleTitle) async {
     XFile xFilePath = XFile(savedPath);
 
     Share.shareXFiles([xFilePath], text: scheduleTitle);
   }
 
   /// TODO: Test with Firebase functions and use it
-  static void windows(String savedPath, String scheduleTitle) async {
+  static void email(String savedPath, String scheduleTitle) async {
     Map<String, String> data = {"schedule_title": scheduleTitle};
     var request =
         http.MultipartRequest('POST', Uri.parse('https://file.io/?expires=1d'));

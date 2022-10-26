@@ -110,13 +110,11 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                           : 'Save to device (.png)')),
                   if (!kIsWeb && Platform.isAndroid)
                     TextButton.icon(
-                      // This button is only shown on Android
-                      // because shareFiles() is not implemented yet on Windows
                       onPressed: () async {
                         String? path = await ScreenshotWidget.screenshotAndSave(
                             _globalKey, widget.scheduleTitle,
                             tempPath: true);
-                        ScheduleShare.android(path!, widget.scheduleTitle);
+                        ScheduleShare.share(path!, widget.scheduleTitle);
                       },
                       icon: const Icon(Icons.share),
                       label: const Text('Share'),
