@@ -71,6 +71,7 @@ class MyBody extends StatelessWidget {
         shadowColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.transparent,
+        titleSpacing: 0,
         centerTitle:
             false, // prevent the version render at the center of the screen for iphone/ipad
         titleTextStyle: TextStyle(
