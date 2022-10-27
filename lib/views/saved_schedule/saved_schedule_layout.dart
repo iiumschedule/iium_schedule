@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/foundation.dart';
@@ -80,11 +81,13 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
     // Keep track of the current subject index
     var currentIndex = 0;
 
+    print(widget.savedSchedule.subjects);
+
     // Here, we loop through each of student's saved subject and get the latest data from IIUM's database
     await Future.forEach<SavedSubject>(widget.savedSchedule.subjects!.toList(), (subject) async {
 
       // Update state of the pull-to-refresh loading text
-      setState(() => currentRefreshCourse = 'Getting latest data for ${subject.subjectName}');
+      setState(() => currentRefreshCourse = 'Getting latest data for ${subject.subjectName ?? "course"}');
 
       final response = await SubjectFetcher.fetchSubjectData(
         albiruni: Albiruni(
@@ -105,10 +108,32 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
       return;
     }
 
-    // Update student's hiveDB SavedSchedule with the latest subject
-    SavedSchedule currentSchedule = widget._box.get(0)!;
-    currentSchedule.subjects = _courseValidator.fetchedSubjects().map((subject) => SavedSubject.fromSubject(subject: subject)).toList();
-    widget._box.put(0, currentSchedule);
+    /**
+     * Update student's hiveDB SavedSchedule with the latest subject
+     * 
+     * TODO: Refactorize code as a separate method
+     */
+
+    // Get the current schedule key
+    final scheduleIdx = widget.savedSchedule.key;
+    SavedSchedule currentSchedule = widget._box.get(scheduleIdx)!;
+    // Override current class with the new updated data
+    currentSchedule.subjects = _courseValidator.fetchedSubjects().map((subject) {
+      // Generate random colours for each subject
+      /**
+       * Note: The colour generated from this line of code is sometimes too contrast.
+       * 
+       * TODO: Implement colour generator class (maybe use Material 3? Refer #30)
+       */
+      int colour = 0xFF000000 | (Random().nextInt(0xFFFFFF));
+      return SavedSubject.fromSubject(
+        subject: subject,
+        subjectName: subject.title,
+        hexColor: colour
+      );
+    }).toList();
+    currentSchedule.lastModified = DateTime.now().toString();
+    widget._box.put(scheduleIdx, currentSchedule);
 
     // Finish the refreshing state
     _refreshController.refreshCompleted();
