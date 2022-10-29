@@ -13,6 +13,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../constants.dart';
 
+import '../../hive_model/saved_daytime.dart';
 import '../../hive_model/saved_schedule.dart';
 import '../../hive_model/saved_subject.dart';
 import '../../providers/saved_subjects_provider.dart';
@@ -87,7 +88,8 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
     await Future.forEach<SavedSubject>(widget.savedSchedule.subjects!.toList(), (subject) async {
 
       // Update state of the pull-to-refresh loading text
-      setState(() => currentRefreshCourse = 'Getting latest data for ${subject.subjectName ?? "course"}');
+      // (We use course code instead of course name to prevent text overflowing)
+      setState(() => currentRefreshCourse = 'Getting latest data for ${subject.code}');
 
       final response = await SubjectFetcher.fetchSubjectData(
         albiruni: Albiruni(
@@ -114,26 +116,37 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
      * TODO: Refactorize code as a separate method
      */
 
-    // Get the current schedule key
-    final scheduleIdx = widget.savedSchedule.key;
-    SavedSchedule currentSchedule = widget._box.get(scheduleIdx)!;
-    // Override current class with the new updated data
-    currentSchedule.subjects = _courseValidator.fetchedSubjects().map((subject) {
-      // Generate random colours for each subject
+    SavedSchedule currentSchedule = widget.savedSchedule;
+    List<Subject> updatedSubjectsList = _courseValidator.fetchedSubjects();
+    
+    currentSchedule.subjects = currentSchedule.subjects!.map((prevSubject) {
+      final updatedSubject = updatedSubjectsList.singleWhere((subject) => (subject.code == prevSubject.code));
+      
       /**
-       * Note: The colour generated from this line of code is sometimes too contrast.
+       * In some cases, a course venue can be empty in i-Maluum and lecturers will update through
+       * other platforms (i.e: Whatsapp / Microsoft Teams). Since users will override the
+       * venue all by themselves, it is necessary to skip empty venue from i-Maluum
+       * as it will override the current venue.
        * 
-       * TODO: Implement colour generator class (maybe use Material 3? Refer #30)
+       * Refer https://github.com/iqfareez/iium_schedule/pull/51#pullrequestreview-1158961053
        */
-      int colour = 0xFF000000 | (Random().nextInt(0xFFFFFF));
-      return SavedSubject.fromSubject(
-        subject: subject,
-        subjectName: subject.title,
-        hexColor: colour
-      );
+      if (updatedSubject.venue == '') return prevSubject;
+
+      // Update venue for this subject
+      prevSubject.venue = updatedSubject.venue;
+
+      // Update lecturer's name
+      prevSubject.lect = updatedSubject.lect;
+      
+      return prevSubject;
     }).toList();
+
+    // Update the current schedule last modified data
     currentSchedule.lastModified = DateTime.now().toString();
-    widget._box.put(scheduleIdx, currentSchedule);
+
+    // Save changes to HiveDB
+    // https://github.com/iqfareez/iium_schedule/pull/51#discussion_r1007335660
+    currentSchedule.save();
 
     // Finish the refreshing state
     _refreshController.refreshCompleted();
