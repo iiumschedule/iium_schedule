@@ -82,7 +82,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
     // Keep track of the current subject index
     var currentIndex = 0;
 
-    print(widget.savedSchedule.subjects);
+    // print(widget.savedSchedule.subjects);
 
     // Here, we loop through each of student's saved subject and get the latest data from IIUM's database
     await Future.forEach<SavedSubject>(widget.savedSchedule.subjects!.toList(), (subject) async {
@@ -130,7 +130,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
        * 
        * Refer https://github.com/iqfareez/iium_schedule/pull/51#pullrequestreview-1158961053
        */
-      if (updatedSubject.venue == '') return prevSubject;
+      if (updatedSubject.venue == null) return prevSubject;
 
       // Update venue for this subject
       prevSubject.venue = updatedSubject.venue;
