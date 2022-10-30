@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/foundation.dart';
@@ -13,12 +12,12 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../constants.dart';
 
-import '../../hive_model/saved_daytime.dart';
 import '../../hive_model/saved_schedule.dart';
 import '../../hive_model/saved_subject.dart';
 import '../../providers/saved_subjects_provider.dart';
 import '../../providers/schedule_layout_setting_provider.dart';
 import '../../util/course_validator_pass.dart';
+import '../../util/kulliyyah_suggestions.dart';
 import '../../util/lane_events_util.dart';
 import '../../util/subject_fetcher.dart';
 import '../scheduler/schedule_view/rename_dialog.dart';
@@ -68,16 +67,9 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
   }
 
   void _onRefresh() async {
-    
-    /*
-      NOTE:
-      For now, we only use data from the title field of the SavedSchedule object.
-
-      TODO: Save student's kuliyyah into HiveDB
-    */
-
-    // Get kuliyyah code (e.g: KICT) from tokenized title
-    final kuliyyah = name.split(' ').elementAt(0);
+  
+    // Get kuliyyah code (e.g: KICT) from HiveDB
+    final kuliyyah = widget.savedSchedule.kuliyyah;
 
     // Keep track of the current subject index
     var currentIndex = 0;
@@ -96,7 +88,8 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
           semester: widget.savedSchedule.semester,
           session: widget.savedSchedule.session
         ),
-        kulliyyah: kuliyyah,
+        // Suggest kuliyyah based on course code (e.g: UNGS 2290 will return KIRKHS)
+        kulliyyah: KulliyyahSugestions.suggest(subject.code) ?? kuliyyah,
         courseCode: subject.code,
         section: subject.sect
       );
