@@ -5,8 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:iium_schedule/views/saved_schedule/saved_schedule_layout.dart';
+import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quick_actions/quick_actions.dart';
 
@@ -19,47 +20,25 @@ import 'course browser/browser.dart';
 import 'saved_schedule_selector.dart';
 import 'scheduler/schedule_maker_entry.dart';
 
-class MyBody extends StatelessWidget {
-  const MyBody({
-    Key? key,
-  }) : super(key: key);
+class MyBody extends StatefulWidget {
+
+  const MyBody({ super.key });
+
+  @override
+  State<StatefulWidget> createState() => _MyBody();
+}
+
+class _MyBody extends State<MyBody> {
+
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     configureQuickAction(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Show material banner if app is launched from schedule.iium.online
-      // TODO: Remember to remove this implementation later
-      // after the domain expires
-      if (Uri.base.host == 'schedule.iium.online') {
-        ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
-          content: const Text(
-              "The domain 'schedule.iium.online' will expire soon in September. Please use 'iiumschedule.iqfareez.com/web' instead."),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Clipboard.setData(const ClipboardData(
-                          text: 'iiumschedule.iqfareez.com/web'))
-                      .then((value) => Fluttertoast.showToast(msg: 'Copied'));
-                },
-                child: const Text('Copy new URL')),
-            TextButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-                },
-                child: const Text('OK')),
-          ],
-        ));
-      }
-    });
-    var textStyle = TextStyle(
-      color: Theme.of(context).brightness == Brightness.light
-          ? Theme.of(context).primaryColor
-          : Colors.white,
-    );
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      // extendBodyBehindAppBar: true,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         systemOverlayStyle: Theme.of(context).brightness == Brightness.light
             ? SystemUiOverlayStyle.dark
@@ -68,9 +47,9 @@ class MyBody extends StatelessWidget {
                 .copyWith(statusBarColor: Colors.grey.withAlpha(90)),
         // systemOverlayStyle: SystemUiOverlayStyle.light
         //     .copyWith(statusBarColor: Colors.transparent),
-        shadowColor: Colors.transparent,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.transparent,
+        // shadowColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
+        // foregroundColor: Colors.transparent,
         titleSpacing: 0,
         centerTitle:
             false, // prevent the version render at the center of the screen for iphone/ipad
@@ -86,9 +65,8 @@ class MyBody extends StatelessWidget {
               return TextButton(
                 // don't want to be as attractive like a button
                 style: TextButton.styleFrom(
-                    textStyle: Theme.of(context).textTheme.caption,
-                    foregroundColor:
-                        Theme.of(context).textTheme.caption!.color),
+                    textStyle: Theme.of(context).textTheme.bodySmall,
+                    foregroundColor: Theme.of(context).colorScheme.onBackground),
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -102,6 +80,9 @@ class MyBody extends StatelessWidget {
             }),
         actions: [
           PopupMenuButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
             tooltip: "Menu",
             onSelected: (value) async {
               switch (value) {
@@ -115,9 +96,8 @@ class MyBody extends StatelessWidget {
                 default:
               }
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.more_vert_outlined,
-              color: Theme.of(context).iconTheme.color!,
             ),
             itemBuilder: (context) => const [
               PopupMenuItem(
@@ -132,78 +112,190 @@ class MyBody extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          MouseRegion(
-            cursor:
-                kIsWeb ? SystemMouseCursors.click : SystemMouseCursors.basic,
-            child: CupertinoButton(
-              child: Text(
-                'Schedule Maker',
-                style: textStyle,
-              ),
-              onPressed: () async {
-                // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-                await Navigator.of(context).push(
-                    CupertinoPageRoute(builder: (_) => ScheduleMakerEntry()));
-
-                // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-              },
-            ),
-          ),
-          const SizedBox(height: 5),
-          MouseRegion(
-            cursor:
-                kIsWeb ? SystemMouseCursors.click : SystemMouseCursors.basic,
-            child: CupertinoButton(
-              child: Text(
-                'Course Browser',
-                style: textStyle,
-              ),
-              onPressed: () {
-                Navigator.of(context)
-                    .push(CupertinoPageRoute(builder: (_) => const Browser()));
-              },
-            ),
-          ),
-          const Divider(),
-          ValueListenableBuilder(
-              valueListenable:
-                  Hive.box<SavedSchedule>(kHiveSavedSchedule).listenable(),
-              builder: (context, Box<SavedSchedule> box, _) {
-                if (box.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 4),
-                    child: Text(
-                      "Your saved schedule will appear here",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.w300),
-                    ),
-                  );
-                }
-                return Column(
-                  children: [
-                    MouseRegion(
-                      cursor: kIsWeb
-                          ? SystemMouseCursors.click
-                          : SystemMouseCursors.basic,
-                      child: CupertinoButton(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: <Widget>[
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(decelerationRate: ScrollDecelerationRate.normal),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'IIUM Schedule', 
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground, 
+                    fontSize: 36.0, 
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20.0,),
+                ValueListenableBuilder(
+                  valueListenable: 
+                    Hive.box<SavedSchedule>(kHiveSavedSchedule).listenable(), 
+                  builder: (context, Box<SavedSchedule> box, _) {
+                    if (box.isEmpty) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 4),
                         child: Text(
-                          'Saved Schedule',
-                          style: textStyle,
+                          "Your saved schedule will appear here",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black
+                          ),
                         ),
-                        onPressed: () {
-                          Navigator.of(context).push(CupertinoPageRoute(
-                              builder: (_) => const SavedScheduleSelector()));
-                        },
-                      ),
-                    ),
-                  ],
-                );
-              }),
+                      );
+                    }
+                    // return const Text('Hey');
+                    return AnimatedList(
+                      initialItemCount: box.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index, animation) {
+                        var item = box.getAt(index);
+                        return _CardItem(
+                          item: item!,
+                          animation: animation,
+                          onTap: () async {
+                            await Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (_) => SavedScheduleLayout(
+                                  savedSchedule: item,
+                                ),
+                              ),
+                            );
+
+                            SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+                          },
+                          onDeleteAction: () async {
+                            var res = await showDialog(
+                              context: context,
+                              builder: (_) => const _DeleteDialog(),
+                            );
+
+                            if (res ?? false) {
+                              // ignore: use_build_context_synchronously
+                              AnimatedList.of(context).removeItem(
+                                  index,
+                                  (context, animation) => _CardItem(
+                                        item: item,
+                                        animation: animation,
+                                      ));
+                              await box.deleteAt(index);
+                            }
+                          },
+                        );
+                      },
+                    );
+                  }
+                ),
+              ],
+            ),
+          ),
+          const Browser()
+        ][selectedIndex],
+      ),
+      floatingActionButton: selectedIndex == 0 ? FloatingActionButton.extended(
+        onPressed: () async {
+          await Navigator.of(context).push(CupertinoPageRoute(builder: (_) => ScheduleMakerEntry()));
+        },
+        icon: const Icon(Icons.add),
+        label: const Text('Create'),
+      ) : null,
+      bottomNavigationBar:  NavigationBar(
+        onDestinationSelected: (index) {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+        selectedIndex: selectedIndex,
+        destinations: const <Widget>[
+          NavigationDestination(
+            icon: Icon(Icons.home),
+            label: 'Schedule',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.book),
+            label: 'Course Browser',
+          )
         ],
+      )
+    );
+  }
+}
+
+class _CardItem extends StatelessWidget {
+  const _CardItem({
+    Key? key,
+    required this.item,
+    required this.animation,
+    this.onTap,
+    this.onDeleteAction
+  }) : super(key: key);
+
+  final SavedSchedule item;
+  final Animation<double> animation;
+  final VoidCallback? onTap;
+  final VoidCallback? onDeleteAction;
+
+  @override
+  Widget build(BuildContext context) {
+    String formattedDate =
+        DateFormat('dd MMM yyyy').format(DateTime.parse(item.lastModified));
+    return ScaleTransition(
+      scale: animation,
+      child: Card(
+        elevation: 0,
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        clipBehavior: Clip.hardEdge,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(20.0)
+          )
+        ),
+        child: InkWell(
+          onTap: onTap,
+          child: SizedBox(
+            height: 100,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            item.title!, 
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSecondaryContainer, 
+                              fontSize: 20.0, 
+                              fontWeight: FontWeight.bold
+                            ),
+                          )
+                        ),
+                        Text(
+                          'Modified on $formattedDate',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSecondaryContainer,
+                            fontSize: 10.0
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: onDeleteAction,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    icon: const Icon(Icons.delete)
+                  )
+                ],
+              )
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -215,7 +307,7 @@ class _SimpleAboutDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-        title: const SimpleDialogOption(child: Text('About')),
+        title: const Text('About', style: TextStyle(fontWeight: FontWeight.bold),),
         children: [
           const SimpleDialogOption(
             child: Text(
@@ -332,4 +424,32 @@ void configureQuickAction(BuildContext context) {
           icon: 'ic_shortcut_layout_outline')
     ],
   );
+}
+
+class _DeleteDialog extends StatelessWidget {
+  const _DeleteDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text("Are you sure?", style: TextStyle(fontWeight: FontWeight.bold),),
+      content: const Text('Deleted schedule will be gone forever!'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text("Cancel"),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.errorContainer,
+            elevation: 0
+          ),
+          onPressed: () async {
+            Navigator.pop(context, true);
+          },
+          child: Text("Delete", style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),),
+        ),
+      ],
+    );
+  }
 }

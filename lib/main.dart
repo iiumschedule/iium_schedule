@@ -13,6 +13,7 @@ import 'hive_model/saved_schedule.dart';
 import 'hive_model/saved_subject.dart';
 import 'providers/saved_subjects_provider.dart';
 import 'providers/schedule_layout_setting_provider.dart';
+import 'util/color_schemes.g.dart';
 import 'views/body.dart';
 
 void main() async {
@@ -32,7 +33,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({ super.key });
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +44,30 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'IIUM Schedule',
-        theme: ThemeData(primarySwatch: Colors.purple),
+        theme: ThemeData(
+          colorScheme: lightColorScheme,
+          useMaterial3: true,
+          fontFamily: 'Inter'
+        ),
         darkTheme: ThemeData.dark().copyWith(
-          cupertinoOverrideTheme:
-              const CupertinoThemeData(primaryColor: Colors.purple),
-          textButtonTheme: TextButtonThemeData(
-            style:
-                TextButton.styleFrom(foregroundColor: Colors.purple.shade200),
+          // cupertinoOverrideTheme:
+          //     const CupertinoThemeData(primaryColor: Color(0xFF23682B)),
+          // textButtonTheme: TextButtonThemeData(
+          //   style:
+          //       TextButton.styleFrom(foregroundColor: Colors.purple.shade200),
+          // ),
+          // outlinedButtonTheme: OutlinedButtonThemeData(
+          //   style: OutlinedButton.styleFrom(
+          //       foregroundColor: Colors.purple.shade200),
+          // ),
+          useMaterial3: true,
+          textTheme: ThemeData.dark().textTheme.apply(
+            fontFamily: 'Inter'
           ),
-          outlinedButtonTheme: OutlinedButtonThemeData(
-            style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.purple.shade200),
+          primaryTextTheme: ThemeData.dark().textTheme.apply(
+            fontFamily: 'Inter'
           ),
+          colorScheme: darkColorScheme
         ),
         themeMode: ThemeMode.system,
         home: const MyBody(),

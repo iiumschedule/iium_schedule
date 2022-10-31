@@ -164,6 +164,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
               refreshingText: currentRefreshCourse,
             ),
             child: Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.background,
               appBar: _isFullScreen
                   ? null
                   : AppBar(

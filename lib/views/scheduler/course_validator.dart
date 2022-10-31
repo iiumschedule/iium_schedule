@@ -29,6 +29,7 @@ class _CourseValidatorState extends State<CourseValidator>
     super.build(context);
     _validatorPass = CourseValidatorPass(ScheduleMakerData.subjects!.length);
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),
         child: ListView(
@@ -42,12 +43,12 @@ class _CourseValidatorState extends State<CourseValidator>
                   IconButton(
                     onPressed: () => setState(() {}),
                     tooltip: "Refresh All",
-                    icon: const Icon(Icons.restart_alt),
+                    icon: Icon(Icons.restart_alt, color: Theme.of(context).colorScheme.onBackground,),
                   ),
                   const SizedBox(width: 10),
                   ElevatedButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).colorScheme.primaryContainer
                     ),
                     onPressed: () async {
                       if (!_validatorPass!.isClearToProceed()) {
@@ -133,6 +134,9 @@ class _SubjectCardState extends State<SubjectCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 0,
+      color: const Color(0xFF303030),
+      clipBehavior: Clip.hardEdge,
         child: Center(
       child: FutureBuilder(
         // try to find the kulliyyah for the course code

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,7 @@ class _InputScopeState extends State<InputScope>
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 500),
@@ -40,6 +43,7 @@ class _InputScopeState extends State<InputScope>
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: DropdownButtonFormField(
+                        borderRadius: BorderRadius.circular(15.0),
                         items: Kuliyyahs.all
                             .map((e) => DropdownMenuItem(
                                   value: e.code,
@@ -48,7 +52,7 @@ class _InputScopeState extends State<InputScope>
                             .toList(),
                         key: dropdownKey,
                         decoration:
-                            const InputDecoration(border: OutlineInputBorder()),
+                            const InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15.0)))),
                         value: _selectedKulliyah,
                         selectedItemBuilder: (_) => Kuliyyahs.all
                             .map((e) => Text(e.shortName))
@@ -62,6 +66,8 @@ class _InputScopeState extends State<InputScope>
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: CupertinoSegmentedControl(
+                        unselectedColor: Theme.of(context).colorScheme.background,
+                        borderColor: Theme.of(context).colorScheme.secondaryContainer,
                         groupValue: _session,
                         children: {
                           for (var session in constants.kSessions)
@@ -75,6 +81,8 @@ class _InputScopeState extends State<InputScope>
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: CupertinoSegmentedControl(
+                        unselectedColor: Theme.of(context).colorScheme.background,
+                        borderColor: Theme.of(context).colorScheme.secondaryContainer,
                         groupValue: _semester - 1,
                         children: List.generate(
                           3,
@@ -85,18 +93,32 @@ class _InputScopeState extends State<InputScope>
                         }),
                   ),
                   const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: CupertinoSlidingSegmentedControl<StudyGrad>(
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: CupertinoSegmentedControl(
+                      unselectedColor: Theme.of(context).colorScheme.background,
+                      borderColor: Theme.of(context).colorScheme.secondaryContainer,
                       groupValue: _selectedStudyGrad,
                       children: const {
                         StudyGrad.ug: Text('Undergraduate'),
                         StudyGrad.pg: Text('Postgraduate'),
                       },
-                      onValueChanged: (value) {
-                        setState(() => _selectedStudyGrad = value!);
+                      onValueChanged: (StudyGrad value) {
+                        setState(() => _selectedStudyGrad = value);
                       },
                     ),
+                    // child: CupertinoSlidingSegmentedControl<StudyGrad>(
+                    //   backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                    //   thumbColor: Theme.of(context).colorScheme.primary,
+                    //   groupValue: _selectedStudyGrad,
+                    //   children: {
+                    //     StudyGrad.ug: Text('Undergraduate', style: TextStyle(color: Theme.of(context).colorScheme.onSecondaryContainer),),
+                    //     StudyGrad.pg: Text('Postgraduate', style: TextStyle(color: Theme.of(context).colorScheme.onSecondaryContainer),),
+                    //   },
+                    //   onValueChanged: (value) {
+                    //     setState(() => _selectedStudyGrad = value!);
+                    //   },
+                    // ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -105,30 +127,58 @@ class _InputScopeState extends State<InputScope>
                       cursor: _selectedKulliyah == null
                           ? SystemMouseCursors.forbidden
                           : SystemMouseCursors.click,
-                      child: CupertinoButton.filled(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: Theme.of(context).colorScheme.primaryContainer
+                        ),
                         onPressed: _selectedKulliyah == null
-                            ? null
-                            : () {
-                                // Redo the same thing as in onEditingComplete above. Just in case.
-                                FocusScope.of(context).unfocus();
+                          ? null
+                          : () {
+                              // Redo the same thing as in onEditingComplete above. Just in case.
+                              FocusScope.of(context).unfocus();
 
-                                ScheduleSteps.of(context)
-                                    .pageController
-                                    .nextPage(
-                                        duration:
-                                            const Duration(milliseconds: 200),
-                                        curve: Curves.bounceInOut);
+                              ScheduleSteps.of(context)
+                                  .pageController
+                                  .nextPage(
+                                      duration:
+                                          const Duration(milliseconds: 200),
+                                      curve: Curves.bounceInOut);
 
-                                Albiruni albiruni = Albiruni(
-                                    semester: _semester,
-                                    session: _session,
-                                    studyGrade: _selectedStudyGrad);
+                              Albiruni albiruni = Albiruni(
+                                  semester: _semester,
+                                  session: _session,
+                                  studyGrade: _selectedStudyGrad);
 
-                                ScheduleMakerData.albiruni = albiruni;
-                                ScheduleMakerData.kulliyah = _selectedKulliyah!;
-                              },
+                              ScheduleMakerData.albiruni = albiruni;
+                              ScheduleMakerData.kulliyah = _selectedKulliyah!;
+                            },
                         child: const Text('Next'),
                       ),
+                      // child: CupertinoButton.filled(
+                      //   onPressed: _selectedKulliyah == null
+                      //       ? null
+                      //       : () {
+                      //           // Redo the same thing as in onEditingComplete above. Just in case.
+                      //           FocusScope.of(context).unfocus();
+
+                      //           ScheduleSteps.of(context)
+                      //               .pageController
+                      //               .nextPage(
+                      //                   duration:
+                      //                       const Duration(milliseconds: 200),
+                      //                   curve: Curves.bounceInOut);
+
+                      //           Albiruni albiruni = Albiruni(
+                      //               semester: _semester,
+                      //               session: _session,
+                      //               studyGrade: _selectedStudyGrad);
+
+                      //           ScheduleMakerData.albiruni = albiruni;
+                      //           ScheduleMakerData.kulliyah = _selectedKulliyah!;
+                      //         },
+                      //   child: const Text('Next'),
+                      // ),
                     ),
                   )
                 ],
