@@ -81,7 +81,7 @@ _Open PR to add your project here_
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="https://github.com/fareez2"><img src="https://avatars.githubusercontent.com/u/110817071?v=4?s=100" width="100px;" alt="fareez2"/><br /><sub><b>fareez2</b></sub></a><br /><a href="https://github.com/iqfareez/iium_schedule/commits?author=fareez2" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/fareez2"><img src="https://avatars.githubusercontent.com/u/110817071?v=4?s=100" width="100px;" alt="fareez2"/><br /><sub><b>fareez2</b></sub></a><br /><a href="https://github.com/iqfareez/iium_schedule/commits?author=fareez2" title="Code">💻</a> <a href="#audio-fareez2" title="Audio">🔊</a></td>
     </tr>
   </tbody>
 </table>
