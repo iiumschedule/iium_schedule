@@ -2,7 +2,7 @@
   "files": [
     "README.md"
   ],
-  "imageSize": 100,
+  "imageSize": 80,
   "commit": false,
   "commitConvention": "angular",
   "contributors": [
@@ -20,6 +20,7 @@
   "skipCi": true,
   "repoType": "github",
   "repoHost": "https://github.com",
+  "commitConvention" : "gitmoji",
   "projectName": "iium_schedule",
   "projectOwner": "iqfareez"
 }
