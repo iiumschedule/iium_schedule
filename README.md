@@ -75,6 +75,13 @@ _Open PR to add your project here_
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/PlashSpeed-Aiman"><img src="https://avatars.githubusercontent.com/u/62431177?v=4?s=80" width="80px;" alt="PlashSpeed-Aiman"/><br /><sub><b>PlashSpeed-Aiman</b></sub></a><br /><a href="https://github.com/iqfareez/iium_schedule/commits?author=PlashSpeed-Aiman" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
