@@ -1,4 +1,7 @@
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev/)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://play.google.com/store/apps/details?id=com.iqfareez.iiumschedule)
 [![Web](<https://img.shields.io/badge/WEB%20(PWA)-5a0fc8?style=for-the-badge&logo=GoogleChrome&logoColor=white>)](https://iiumschedule.web.app/#/)
 [![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://iiumschedule.iqfareez.com/downloads/stable#windows)
@@ -73,6 +76,20 @@ _Open PR to add your project here_
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://github.com/PlashSpeed-Aiman"><img src="https://avatars.githubusercontent.com/u/62431177?v=4?s=100" width="100px;" alt="PlashSpeed-Aiman"/><br /><sub><b>PlashSpeed-Aiman</b></sub></a><br /><a href="https://github.com/iqfareez/iium_schedule/commits?author=PlashSpeed-Aiman" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
