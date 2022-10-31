@@ -70,6 +70,17 @@ https://iiumschedule.iqfareez.com
 
 _Open PR to add your project here_
 
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
 ## Acknowledgment
 
 - Conditional importing that allows compilation to all platforms - https://gpalma.pt/blog/conditional-importing/
