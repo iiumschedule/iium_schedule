@@ -81,21 +81,7 @@ _Open PR to add your project here_
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="https://github.com/PlashSpeed-Aiman"><img src="https://avatars.githubusercontent.com/u/62431177?v=4?s=100" width="100px;" alt="PlashSpeed-Aiman"/><br /><sub><b>PlashSpeed-Aiman</b></sub></a><br /><a href="https://github.com/iqfareez/iium_schedule/commits?author=PlashSpeed-Aiman" title="Code">💻</a></td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/PlashSpeed-Aiman"><img src="https://avatars.githubusercontent.com/u/62431177?v=4?s=80" width="80px;" alt="PlashSpeed-Aiman"/><br /><sub><b>PlashSpeed-Aiman</b></sub></a><br /><a href="https://github.com/iqfareez/iium_schedule/commits?author=PlashSpeed-Aiman" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/PlashSpeed-Aiman"><img src="https://avatars.githubusercontent.com/u/62431177?v=4?s=100" width="80px;" alt="PlashSpeed-Aiman"/><br /><sub><b>PlashSpeed-Aiman</b></sub></a><br /><a href="https://github.com/iqfareez/iium_schedule/commits?author=PlashSpeed-Aiman" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
