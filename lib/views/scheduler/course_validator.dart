@@ -135,7 +135,7 @@ class _SubjectCardState extends State<SubjectCard> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      color: const Color(0xFF303030),
+      color: Theme.of(context).colorScheme.secondaryContainer,
       clipBehavior: Clip.hardEdge,
         child: Center(
       child: FutureBuilder(
@@ -217,6 +217,7 @@ class _SubjectCardState extends State<SubjectCard> {
           _validatorPass!.subjectSuccess(widget.index, snapshot.data!);
 
           return ListTile(
+            tileColor: Theme.of(context).colorScheme.secondaryContainer,
             leading: MiniSubjectInfo(widget.subject),
             title: Text(snapshot.data!.title,
                 style: const TextStyle(
@@ -256,14 +257,12 @@ class MiniSubjectInfo extends StatelessWidget {
 
   final BasicSubjectModel subject;
 
-  final widgetTextStyle = const TextStyle(fontSize: 12);
-
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Colors.purple.withOpacity(.1),
+        color: Theme.of(context).colorScheme.tertiaryContainer,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -271,17 +270,17 @@ class MiniSubjectInfo extends StatelessWidget {
         children: [
           Text(
             subject.courseCode!,
-            style: widgetTextStyle,
+            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onTertiaryContainer),
           ),
           if (subject.section != null)
             Text(
               "Section ${subject.section}",
-              style: widgetTextStyle,
+              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onTertiaryContainer),
             )
           else
             Text(
               "No section",
-              style: widgetTextStyle,
+              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onTertiaryContainer),
             )
         ],
       ),
