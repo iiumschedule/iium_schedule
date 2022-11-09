@@ -18,9 +18,9 @@ packages:
   albiruni:
     dependency: "direct main"
     description:
-      name: albiruni
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../../Dart App/albiruni"
+      relative: true
+    source: path
     version: "1.2.0"
   analyzer:
     dependency: transitive
@@ -93,7 +93,7 @@ packages:
       name: build_resolvers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.10"
+    version: "2.1.0"
   build_runner:
     dependency: "direct dev"
     description:
@@ -121,7 +121,7 @@ packages:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.4.1"
+    version: "8.4.2"
   characters:
     dependency: transitive
     description:
@@ -212,14 +212,14 @@ packages:
       name: device_info_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.0.1"
+    version: "8.0.0"
   device_info_plus_platform_interface:
     dependency: transitive
     description:
       name: device_info_plus_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.1"
+    version: "7.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -277,11 +277,9 @@ packages:
   flutter_timetable_view:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "30d4c4c33acb12886de3b72016088bebcfe0acc8"
-      url: "https://github.com/iqfareez/flutter_timetable_view.git"
-    source: git
+      path: "../Experiments/flutter_timetable_view"
+      relative: true
+    source: path
     version: "0.2.0"
   flutter_web_plugins:
     dependency: transitive
@@ -441,7 +439,7 @@ packages:
       name: material_color_utilities
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "0.1.5"
   meta:
     dependency: transitive
     description:
@@ -462,7 +460,7 @@ packages:
       name: msix
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.6.6"
+    version: "3.7.0"
   nested:
     dependency: transitive
     description:
@@ -518,7 +516,7 @@ packages:
       name: path_provider_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.20"
+    version: "2.0.21"
   path_provider_ios:
     dependency: transitive
     description:
@@ -683,11 +681,9 @@ packages:
   recase:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "19e10e4505eee1e7b518e4dbc06f68af2f41b31f"
-      url: "https://github.com/iqfareez/recase.git"
-    source: git
+      path: "../../Dart App/recase"
+      relative: true
+    source: path
     version: "4.0.4"
   share_plus:
     dependency: "direct main"
@@ -695,14 +691,14 @@ packages:
       name: share_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.1"
+    version: "6.2.0"
   share_plus_platform_interface:
     dependency: transitive
     description:
       name: share_plus_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.2"
+    version: "3.2.0"
   shelf:
     dependency: transitive
     description:
@@ -716,7 +712,7 @@ packages:
       name: shelf_web_socket
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -742,7 +738,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.9.1"
+    version: "1.9.0"
   stack_trace:
     dependency: transitive
     description:
@@ -756,14 +752,14 @@ packages:
       name: stream_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.0"
   stream_transform:
     dependency: transitive
     description:
       name: stream_transform
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.1.0"
   string_scanner:
     dependency: transitive
     description:
@@ -784,7 +780,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.14"
+    version: "0.4.12"
   timing:
     dependency: transitive
     description:
@@ -812,7 +808,7 @@ packages:
       name: url_launcher_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.20"
+    version: "6.0.21"
   url_launcher_ios:
     dependency: transitive
     description:
@@ -868,7 +864,7 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.2"
   version:
     dependency: "direct main"
     description:
@@ -896,7 +892,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1"
+    version: "3.1.1"
   xdg_directories:
     dependency: transitive
     description:
