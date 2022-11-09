@@ -20,7 +20,6 @@
   "skipCi": true,
   "repoType": "github",
   "repoHost": "https://github.com",
-  "commitConvention" : "gitmoji",
   "projectName": "iium_schedule",
   "projectOwner": "iqfareez"
 }
