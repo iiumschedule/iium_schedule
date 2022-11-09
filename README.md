@@ -1,7 +1,4 @@
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev/)
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://play.google.com/store/apps/details?id=com.iqfareez.iiumschedule)
 [![Web](<https://img.shields.io/badge/WEB%20(PWA)-5a0fc8?style=for-the-badge&logo=GoogleChrome&logoColor=white>)](https://iiumschedule.web.app/#/)
 [![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://iiumschedule.iqfareez.com/downloads/stable#windows)
@@ -21,7 +18,7 @@ Just provide the app with your kulliyyah, course codes and section. It'll handle
 
 Feel free to open up [issues](https://github.com/iqfareez/iium_schedule/issues) and/or submit [pull requests](https://github.com/iqfareez/iium_schedule/pulls).
 
-For other type of contributions, kindly refer [wiki](https://github.com/iqfareez/iium_schedule/wiki). More proper guides will be written soon.
+For other types of contributions, kindly refer [wiki](https://github.com/iqfareez/iium_schedule/wiki). More proper guides will be written soon.
 
 ## Getting started
 
@@ -36,8 +33,8 @@ See [here](https://github.com/iqfareez/iium_schedule/wiki/Build-steps)
 ## Features
 
 - Generate schedule (ClassUp style)
-- Save schedule in app.
-- Export as image (so you can set it as lockscreen)
+- Save schedule in-app.
+- Export as an image (so you can set it as lockscreen)
 - Customize schedule (ie: Change colours etc.)
 - Browse for subjects.
 - See more features in planned in [issues](https://github.com/iqfareez/iium_schedule/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement)
