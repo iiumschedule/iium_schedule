@@ -47,6 +47,7 @@ dependencies:
   device_info_plus: ^7.0.1
   admonitions: ^1.0.0
   uuid: ^3.0.6
+  pull_to_refresh: ^2.0.0
 
 dev_dependencies:
   flutter_test:

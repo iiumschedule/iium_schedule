@@ -35,6 +35,9 @@ class SavedSchedule extends HiveObject {
   @HiveField(8, defaultValue: 1)
   int semester;
 
+  @HiveField(9)
+  String kuliyyah;
+
   SavedSchedule({
     required this.session,
     required this.semester,
@@ -45,11 +48,12 @@ class SavedSchedule extends HiveObject {
     required this.fontSize,
     required this.heightFactor,
     required this.subjectTitleSetting,
+    required this.kuliyyah
   });
 
   @override
   String toString() {
-    return '{title: $title, subjects count: ${subjects?.length}, lastModified: $lastModified, dateCreated: $dateCreated, fontSize: $fontSize, heightFactor: $heightFactor}';
+    return '{title: $title, subjects count: ${subjects?.length}, lastModified: $lastModified, dateCreated: $dateCreated, fontSize: $fontSize, heightFactor: $heightFactor, kuliyyah: $kuliyyah}';
   }
 
   @override

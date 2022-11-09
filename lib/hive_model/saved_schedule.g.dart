@@ -28,13 +28,14 @@ class SavedScheduleAdapter extends TypeAdapter<SavedSchedule> {
       subjectTitleSetting: fields[6] == null
           ? SubjectTitleSetting.title
           : fields[6] as SubjectTitleSetting,
+      kuliyyah: fields[9] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, SavedSchedule obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.title)
       ..writeByte(1)
@@ -52,7 +53,9 @@ class SavedScheduleAdapter extends TypeAdapter<SavedSchedule> {
       ..writeByte(7)
       ..write(obj.session)
       ..writeByte(8)
-      ..write(obj.semester);
+      ..write(obj.semester)
+      ..writeByte(9)
+      ..write(obj.kuliyyah);
   }
 
   @override

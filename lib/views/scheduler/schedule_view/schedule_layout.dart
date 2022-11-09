@@ -86,6 +86,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
       subjectTitleSetting:
           Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)
               .subjectTitleSetting!,
+      kuliyyah: ScheduleMakerData.kulliyah!
     ));
     print('Saved to key $key');
     return key;
