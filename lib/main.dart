@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 
 import 'constants.dart';
 import 'enums/subject_title_setting_enum.dart';
@@ -13,7 +14,6 @@ import 'hive_model/saved_schedule.dart';
 import 'hive_model/saved_subject.dart';
 import 'providers/saved_subjects_provider.dart';
 import 'providers/schedule_layout_setting_provider.dart';
-import 'util/color_schemes.g.dart';
 import 'views/body.dart';
 
 void main() async {
@@ -42,35 +42,39 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ScheduleLayoutSettingProvider()),
         ChangeNotifierProvider(create: (_) => SavedSubjectsProvider()),
       ],
-      child: MaterialApp(
-        title: 'IIUM Schedule',
-        theme: ThemeData(
-          colorScheme: lightColorScheme,
-          useMaterial3: true,
-          fontFamily: 'Inter'
-        ),
-        darkTheme: ThemeData.dark().copyWith(
-          // cupertinoOverrideTheme:
-          //     const CupertinoThemeData(primaryColor: Color(0xFF23682B)),
-          // textButtonTheme: TextButtonThemeData(
-          //   style:
-          //       TextButton.styleFrom(foregroundColor: Colors.purple.shade200),
-          // ),
-          // outlinedButtonTheme: OutlinedButtonThemeData(
-          //   style: OutlinedButton.styleFrom(
-          //       foregroundColor: Colors.purple.shade200),
-          // ),
-          useMaterial3: true,
-          textTheme: ThemeData.dark().textTheme.apply(
-            fontFamily: 'Inter'
-          ),
-          primaryTextTheme: ThemeData.dark().textTheme.apply(
-            fontFamily: 'Inter'
-          ),
-          colorScheme: darkColorScheme
-        ),
-        themeMode: ThemeMode.system,
-        home: const MyBody(),
+      child: DynamicColorBuilder(
+        builder: (ColorScheme? lightColorScheme, ColorScheme? darkColorScheme) {
+          return MaterialApp(
+            title: 'IIUM Schedule',
+            theme: ThemeData(
+              colorScheme: lightColorScheme,
+              useMaterial3: true,
+              fontFamily: 'Inter'
+            ),
+            darkTheme: ThemeData.dark().copyWith(
+              // cupertinoOverrideTheme:
+              //     const CupertinoThemeData(primaryColor: Color(0xFF23682B)),
+              // textButtonTheme: TextButtonThemeData(
+              //   style:
+              //       TextButton.styleFrom(foregroundColor: Colors.purple.shade200),
+              // ),
+              // outlinedButtonTheme: OutlinedButtonThemeData(
+              //   style: OutlinedButton.styleFrom(
+              //       foregroundColor: Colors.purple.shade200),
+              // ),
+              useMaterial3: true,
+              textTheme: ThemeData.dark().textTheme.apply(
+                fontFamily: 'Inter'
+              ),
+              primaryTextTheme: ThemeData.dark().textTheme.apply(
+                fontFamily: 'Inter'
+              ),
+              colorScheme: darkColorScheme
+            ),
+            themeMode: ThemeMode.system,
+            home: const MyBody(),
+          );
+        }
       ),
     );
   }

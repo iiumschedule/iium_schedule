@@ -51,7 +51,9 @@ class _BrowserState extends State<Browser> {
                             .toList(),
                         key: dropdownKey,
                         decoration:
-                            const InputDecoration(border: OutlineInputBorder()),
+                            const InputDecoration(border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(15.0))
+                            )),
                         value: _selectedKulliyah,
                         hint: const Text('Select kulliyyah'),
                         selectedItemBuilder: (_) => Kuliyyahs.all
@@ -111,7 +113,9 @@ class _BrowserState extends State<Browser> {
                       maxLength: 9,
                       controller: _searchController,
                       decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15.0))
+                        ),
                         // TODO: Buat dia tukar2 course code tu
                         labelText: 'Search',
                         hintText: 'Eg: MCTE 3100',

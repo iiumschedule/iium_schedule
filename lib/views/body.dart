@@ -80,6 +80,8 @@ class _MyBody extends State<MyBody> {
             }),
         actions: [
           PopupMenuButton(
+            elevation: 1.0,
+            color: Theme.of(context).colorScheme.secondaryContainer,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
             ),
