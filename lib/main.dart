@@ -16,6 +16,8 @@ import 'providers/saved_subjects_provider.dart';
 import 'providers/schedule_layout_setting_provider.dart';
 import 'views/body.dart';
 
+import 'package:flutter_displaymode/flutter_displaymode.dart';
+
 void main() async {
   await Hive.initFlutter('IIUM Schedule Data');
   Hive
@@ -28,6 +30,12 @@ void main() async {
   await Hive.openBox<GhResponses>(kHiveGhResponse);
 
   HttpOverrides.global = MyHttpOverrides();
+
+  /**
+   * For certain type of phones, the refresh rate is limited at 60fps. (i.e.: OnePlus phones)
+   * This line of code instructs the OS to use the highest refresh rate available for this app.
+   **/
+  await FlutterDisplayMode.setHighRefreshRate();
 
   runApp(const MyApp());
 }
