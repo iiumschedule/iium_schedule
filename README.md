@@ -18,7 +18,7 @@ Just provide the app with your kulliyyah, course codes and section. It'll handle
 
 Feel free to open up [issues](https://github.com/iqfareez/iium_schedule/issues) and/or submit [pull requests](https://github.com/iqfareez/iium_schedule/pulls).
 
-For other type of contributions, kindly refer [wiki](https://github.com/iqfareez/iium_schedule/wiki). More proper guides will be written soon.
+For other types of contributions, kindly refer [wiki](https://github.com/iqfareez/iium_schedule/wiki). More proper guides will be written soon.
 
 ## Getting started
 
@@ -33,8 +33,8 @@ See [here](https://github.com/iqfareez/iium_schedule/wiki/Build-steps)
 ## Features
 
 - Generate schedule (ClassUp style)
-- Save schedule in app.
-- Export as image (so you can set it as lockscreen)
+- Save schedule in-app.
+- Export as an image (so you can set it as lockscreen)
 - Customize schedule (ie: Change colours etc.)
 - Browse for subjects.
 - See more features in planned in [issues](https://github.com/iqfareez/iium_schedule/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement)
@@ -69,6 +69,24 @@ https://iiumschedule.iqfareez.com
 - https://github.com/PlashSpeed-Aiman/IIUMCourseScheduleApp
 
 _Open PR to add your project here_
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://github.com/PlashSpeed-Aiman"><img src="https://avatars.githubusercontent.com/u/62431177?v=4?s=100" width="80px;" alt="PlashSpeed-Aiman"/><br /><sub><b>PlashSpeed-Aiman</b></sub></a><br /><a href="https://github.com/iqfareez/iium_schedule/commits?author=PlashSpeed-Aiman" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## Acknowledgment
 
