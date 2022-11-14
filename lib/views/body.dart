@@ -137,14 +137,14 @@ class _MyBody extends State<MyBody> {
                     Hive.box<SavedSchedule>(kHiveSavedSchedule).listenable(), 
                   builder: (context, Box<SavedSchedule> box, _) {
                     if (box.isEmpty) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 4),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Text(
                           "Your saved schedule will appear here",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w300,
-                            color: Colors.black
+                            color: Theme.of(context).colorScheme.onBackground
                           ),
                         ),
                       );
