@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
