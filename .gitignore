@@ -51,3 +51,5 @@ app.*.map.json
 cmd.txt
 cubacuba.dart
 Inno/*.exe
+
+.fvm/flutter_sdk
