@@ -46,7 +46,6 @@ dependencies:
   cross_file: ^0.3.3+2
   device_info_plus: ^8.0.0
   admonitions: ^1.0.0
-  uuid: ^3.0.6
   pull_to_refresh: ^2.0.0
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.5
