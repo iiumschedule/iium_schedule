@@ -17,7 +17,6 @@ class SavedSubjectAdapter extends TypeAdapter<SavedSubject> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return SavedSubject(
-      uuid: fields[9] == null ? 'abc' : fields[9] as String,
       code: fields[0] as String,
       sect: fields[3] as int,
       title: fields[1] as String,
@@ -33,7 +32,7 @@ class SavedSubjectAdapter extends TypeAdapter<SavedSubject> {
   @override
   void write(BinaryWriter writer, SavedSubject obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.code)
       ..writeByte(1)
@@ -51,9 +50,7 @@ class SavedSubjectAdapter extends TypeAdapter<SavedSubject> {
       ..writeByte(7)
       ..write(obj.subjectName)
       ..writeByte(8)
-      ..write(obj.hexColor)
-      ..writeByte(9)
-      ..write(obj.uuid);
+      ..write(obj.hexColor);
   }
 
   @override

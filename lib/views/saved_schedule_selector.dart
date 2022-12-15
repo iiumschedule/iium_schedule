@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:isar/isar.dart';
 
-import '../constants.dart';
-import '../hive_model/saved_schedule.dart';
+import '../isar_models/saved_schedule.dart';
 import 'saved_schedule/saved_schedule_layout.dart';
 
 class SavedScheduleSelector extends StatefulWidget {
@@ -16,7 +15,12 @@ class SavedScheduleSelector extends StatefulWidget {
 }
 
 class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
-  final _box = Hive.box<SavedSchedule>(kHiveSavedSchedule);
+  late Isar? isar;
+  @override
+  void initState() {
+    super.initState();
+    isar = Isar.getInstance();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +30,14 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
         systemOverlayStyle: SystemUiOverlayStyle.light
             .copyWith(statusBarColor: Colors.transparent),
       ),
-      body: ValueListenableBuilder(
-        valueListenable: _box.listenable(),
-        builder: (_, Box<SavedSchedule> value, __) {
+      body: Builder(
+        builder: (_) {
+          var data = isar!.collection<SavedSchedule>();
           return AnimatedList(
             padding: const EdgeInsets.all(8),
-            initialItemCount: value.length,
+            initialItemCount: data.countSync(),
             itemBuilder: (context, index, animation) {
-              var item = value.getAt(index);
+              var item = data.getSync(index + 1);
               return _CardItem(
                 item: item!,
                 animation: animation,
@@ -51,10 +55,12 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
                               item: item,
                               animation: animation,
                             ));
-                    await value.deleteAt(index);
+                    await data.delete(index);
                   }
                 },
               );
+              // print(item);
+              // return Text(item.toString());
             },
           );
         },
@@ -97,6 +103,7 @@ class _CardItem extends StatelessWidget {
               context,
               CupertinoPageRoute(
                 builder: (_) => SavedScheduleLayout(
+                  id: item.id!,
                   savedSchedule: item,
                 ),
               ),

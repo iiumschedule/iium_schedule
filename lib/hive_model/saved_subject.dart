@@ -1,6 +1,5 @@
 import 'package:albiruni/albiruni.dart';
 import 'package:hive/hive.dart';
-import 'package:uuid/uuid.dart';
 
 import 'saved_daytime.dart';
 
@@ -44,12 +43,7 @@ class SavedSubject extends HiveObject {
   @HiveField(8)
   int? hexColor;
 
-  /// Unique id
-  @HiveField(9, defaultValue: "abc") // for future implementation
-  String uuid;
-
   SavedSubject({
-    required this.uuid,
     required this.code,
     required this.sect,
     required this.title,
@@ -69,7 +63,6 @@ class SavedSubject extends HiveObject {
   SavedSubject.fromSubject(
       {required Subject subject, String? subjectName, int? hexColor})
       : this(
-          uuid: const Uuid().v1(),
           code: subject.code,
           sect: subject.sect,
           title: subject.title,

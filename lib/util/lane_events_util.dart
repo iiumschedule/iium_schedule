@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 import '../enums/subject_title_setting_enum.dart';
-import '../hive_model/saved_subject.dart';
-import '../providers/saved_subjects_provider.dart';
+import '../isar_models/saved_subject.dart';
+import '../isar_models/saved_daytime.dart';
 import '../providers/schedule_layout_setting_provider.dart';
 import '../views/saved_schedule/saved_subject_dialog.dart';
 import 'extensions.dart';
@@ -31,44 +30,41 @@ class LaneEventsUtil {
     var brightness = Theme.of(context).brightness;
     // Find if there any subject in each day
     for (var i = 1; i <= 7; i++) {
-      List<SavedSubject?> extractedSubjects = [];
+      List<SubjectEvents?> subjectEvents = [];
 
       // Seperate subject into their day and rebuild the list
       for (var subject in savedSubjectList) {
-        var dayTimes = subject.dayTime.where((element) => element?.day == i);
-        extractedSubjects.addAll(
-          dayTimes.map((e) => SavedSubject(
-                uuid: const Uuid().v1(),
-                subjectName: subject.subjectName,
-                code: subject.code,
-                sect: subject.sect,
-                title: subject.title,
-                chr: subject.chr,
-                venue: subject.venue,
-                lect: subject.lect,
-                dayTime: [e],
-                hexColor: subject.hexColor,
-              )),
+        var dayTimes = subject.dayTimes.where((element) => element.day == i);
+
+        subjectEvents.addAll(
+          dayTimes.map((e) {
+            return SubjectEvents(
+              subjectId: subject.id!,
+              dayTimes: [e],
+              title: subject.title,
+              code: subject.code,
+              color: Color(subject.hexColor!),
+            );
+          }),
         );
       }
 
-      var tableEvents = extractedSubjects.map(
+      var tableEvents = subjectEvents.map(
         (e) {
           var start = TimeOfDay(
-              hour: int.parse(e!.dayTime.first!.startTime.split(":").first),
-              minute: int.parse(e.dayTime.first!.startTime.split(":").last));
+              hour: int.parse(e!.dayTimes.first.startTime.split(":").first),
+              minute: int.parse(e.dayTimes.first.startTime.split(":").last));
           var end = TimeOfDay(
-              hour: int.parse(e.dayTime.first!.endTime.split(":").first),
-              minute: int.parse(e.dayTime.first!.endTime.split(":").last));
+              hour: int.parse(e.dayTimes.first.endTime.split(":").first),
+              minute: int.parse(e.dayTimes.first.endTime.split(":").last));
 
           if (start.hour < _startHour) _startHour = start.hour;
 
           if (end.hour > _endHour) _endHour = end.hour;
 
           // saved colour  - compute luminance & bg colour
-          Color textColor = Color(e.hexColor!).computeLuminance() > 0.5
-              ? Colors.black
-              : Colors.white;
+          Color textColor =
+              e.color.computeLuminance() > 0.5 ? Colors.black : Colors.white;
 
           return TableEvent(
             textStyle: TextStyle(fontSize: fontSize, color: textColor),
@@ -77,18 +73,21 @@ class LaneEventsUtil {
                     SubjectTitleSetting.title
                 ? e.title
                 : e.code,
-            backgroundColor: Color(e.hexColor!),
+            backgroundColor: e.color,
             start: TableEventTime(hour: start.hour, minute: start.minute),
             end: TableEventTime(hour: end.hour, minute: end.minute),
             onTap: () async {
               await showDialog(
                 context: context,
-                builder: (_) => SavedSubjectDialog(subject: e),
+                builder: (_) => SavedSubjectDialog(
+                  subjectId: e.subjectId,
+                  dayTimesId: e.dayTimes.first.id!,
+                ),
               );
-              await Future.delayed(const Duration(milliseconds: 300));
+
               // clean up residue if any
-              Provider.of<SavedSubjectsProvider>(context, listen: false)
-                  .cleanUpResidue();
+              // Provider.of<SavedSubjectsProvider>(context, listen: false)
+              //     .cleanUpResidue();
             },
           );
         },
@@ -136,5 +135,21 @@ class LaneEventsResponse {
     required this.laneEventsList,
     required this.startHour,
     required this.endHour,
+  });
+}
+
+class SubjectEvents {
+  final String title;
+  final String code;
+  final Color color;
+  final int subjectId;
+  final List<SavedDaytime> dayTimes;
+
+  SubjectEvents({
+    required this.subjectId,
+    required this.dayTimes,
+    required this.title,
+    required this.code,
+    required this.color,
   });
 }

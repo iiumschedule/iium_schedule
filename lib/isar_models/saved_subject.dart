@@ -1,6 +1,5 @@
 import 'package:albiruni/albiruni.dart';
 import 'package:isar/isar.dart';
-import 'package:uuid/uuid.dart';
 
 import 'saved_daytime.dart';
 

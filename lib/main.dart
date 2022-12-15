@@ -12,6 +12,7 @@ import 'hive_model/saved_daytime.dart';
 import 'hive_model/saved_schedule.dart';
 import 'hive_model/saved_subject.dart';
 import 'providers/schedule_layout_setting_provider.dart';
+import 'providers/schedule_notifier_provider.dart';
 import 'util/migrate_hive_to_isar.dart';
 import 'views/body.dart';
 
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ScheduleLayoutSettingProvider()),
+        ChangeNotifierProvider(create: (_) => ScheduleNotifierProvider()),
       ],
       child: MaterialApp(
         title: 'IIUM Schedule',
