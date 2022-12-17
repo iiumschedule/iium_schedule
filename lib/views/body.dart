@@ -6,11 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:isar/isar.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quick_actions/quick_actions.dart';
 
-import '../isar_models/saved_schedule.dart';
 import '../services/isar_service.dart';
 import '../util/launcher_url.dart';
 import '../util/my_ftoast.dart';
@@ -172,9 +170,7 @@ class MyBody extends StatelessWidget {
           ),
           const Divider(),
           StreamBuilder(
-              stream: Isar.getInstance()!
-                  .collection<SavedSchedule>()
-                  .watchLazy(fireImmediately: true),
+              stream: _isarService.listenToAllSchedulesChanges(),
               builder: (context, snapshot) {
                 var schedulesList = _isarService.getAllSchedule();
                 if (schedulesList.isEmpty) {

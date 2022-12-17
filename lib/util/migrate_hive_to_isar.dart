@@ -82,5 +82,7 @@ class MigrateHiveToIsar {
       // Delete Hive box
       // hiveBox.deleteFromDisk();
     }
+
+    print('Done "migrate"');
   }
 }

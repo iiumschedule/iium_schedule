@@ -30,7 +30,6 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
 
   await MigrateHiveToIsar.migrate();
-  print('Done "migrate"');
 
   runApp(const MyApp());
 }

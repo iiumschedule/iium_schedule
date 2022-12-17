@@ -26,8 +26,9 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
         systemOverlayStyle: SystemUiOverlayStyle.light
             .copyWith(statusBarColor: Colors.transparent),
       ),
-      body: Builder(
-        builder: (_) {
+      body: StreamBuilder(
+        stream: isar.listenToAllSchedulesChanges(),
+        builder: (_, __) {
           var data = isar.getAllSchedule();
           return AnimatedList(
             padding: const EdgeInsets.all(8),
@@ -43,7 +44,6 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
                     builder: (_) => const _DeleteDialog(),
                   );
 
-                  print('id: ${item.id}');
                   if (res ?? false) {
                     // ignore: use_build_context_synchronously
                     AnimatedList.of(context).removeItem(
@@ -55,6 +55,8 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
 
                     // Note that index and id in this case
                     // are two different things
+                    // index: to AnimatedList know where to move
+                    // id: the isar id
                     await isar.deleteSchedule(item.id!);
                     setState(() {}); // refresh list
                   }

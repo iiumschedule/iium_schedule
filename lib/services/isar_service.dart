@@ -41,6 +41,12 @@ class IsarService {
     });
   }
 
+  Stream<void> listenToAllSchedulesChanges() async* {
+    final isar = await db;
+
+    yield* isar.savedSchedules.watchLazy();
+  }
+
   Stream<SavedSchedule?> listenToSavedSchedule({required int id}) async* {
     final isar = await db;
 
