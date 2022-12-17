@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:isar/isar.dart';
 
 import '../isar_models/saved_schedule.dart';
+import '../services/isar_service.dart';
 import 'saved_schedule/saved_schedule_layout.dart';
 
 class SavedScheduleSelector extends StatefulWidget {
@@ -15,12 +16,7 @@ class SavedScheduleSelector extends StatefulWidget {
 }
 
 class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
-  late Isar? isar;
-  @override
-  void initState() {
-    super.initState();
-    isar = Isar.getInstance();
-  }
+  final IsarService isar = IsarService();
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +28,14 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
       ),
       body: Builder(
         builder: (_) {
-          var data = isar!.collection<SavedSchedule>();
+          var data = isar.getAllSchedule();
           return AnimatedList(
             padding: const EdgeInsets.all(8),
-            initialItemCount: data.countSync(),
+            initialItemCount: data.length,
             itemBuilder: (context, index, animation) {
-              var item = data.getSync(index + 1);
+              var item = data[index];
               return _CardItem(
-                item: item!,
+                item: item,
                 animation: animation,
                 onTap: () async {
                   var res = await showDialog(
@@ -47,6 +43,7 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
                     builder: (_) => const _DeleteDialog(),
                   );
 
+                  print('id: ${item.id}');
                   if (res ?? false) {
                     // ignore: use_build_context_synchronously
                     AnimatedList.of(context).removeItem(
@@ -55,7 +52,11 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
                               item: item,
                               animation: animation,
                             ));
-                    await data.delete(index);
+
+                    // Note that index and id in this case
+                    // are two different things
+                    await isar.deleteSchedule(item.id!);
+                    setState(() {}); // refresh list
                   }
                 },
               );
@@ -91,6 +92,7 @@ class _CardItem extends StatelessWidget {
         child: ListTile(
           title: Text(item.title!),
           subtitle: Text('Last modified: $formattedDate'),
+          leading: kDebugMode ? Text(item.id.toString()) : null,
           trailing: IconButton(
             icon: const Icon(
               Icons.delete_outline,
@@ -104,7 +106,6 @@ class _CardItem extends StatelessWidget {
               CupertinoPageRoute(
                 builder: (_) => SavedScheduleLayout(
                   id: item.id!,
-                  savedSchedule: item,
                 ),
               ),
             );

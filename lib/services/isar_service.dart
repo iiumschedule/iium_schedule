@@ -11,10 +11,35 @@ class IsarService {
     db = openDB();
   }
 
-  // Future<void> saveCat(Cat newCat) async {
-  //   final isar = await db;
-  //   isar.writeTxnSync<int>(() => isar.cats.putSync(newCat));
-  // }
+  // for save new schedule, view [ScheduleLayout]'s save() function
+
+  // for save new subject, view [SavedScheduleLayout] in manual add subject
+
+  List<SavedSchedule> getAllSchedule() {
+    final isar = Isar.getInstance()!;
+    return isar.collection<SavedSchedule>().where().findAllSync();
+  }
+
+  Future<void> addNewSubject(
+      {required int scheduleId,
+      required SavedSubject newSubject,
+      required SavedDaytime newDayTime}) async {
+    final isar = await db;
+    isar.writeTxnSync(() {
+      isar.savedSubjects.putSync(newSubject);
+      isar.savedDaytimes.putSync(newDayTime);
+    });
+
+    var currentSchedule = isar.savedSchedules.getSync(scheduleId);
+
+    // add links
+    isar.writeTxnSync(() {
+      currentSchedule!.subjects.add(newSubject);
+      newSubject.dayTimes.add(newDayTime);
+      currentSchedule.subjects.save();
+      newSubject.dayTimes.save();
+    });
+  }
 
   // Future<List<Cat>> getAllCat() async {
   //   final isar = await db;
@@ -60,6 +85,21 @@ class IsarService {
     final isar = await db;
     isar.writeTxnSync(() {
       isar.savedSubjects.putSync(subject);
+    });
+  }
+
+  Future<void> deleteSchedule(int id) async {
+    final isar = await db;
+    isar.writeTxnSync(() {
+      // delete all linked references
+      for (var subject in isar.savedSchedules.getSync(id)!.subjects) {
+        for (var dayTime in subject.dayTimes) {
+          isar.savedDaytimes.deleteSync(dayTime.id!);
+        }
+        isar.savedSubjects.deleteSync(subject.id!);
+      }
+      // finally, delete the schedule reference
+      isar.savedSchedules.deleteSync(id);
     });
   }
 

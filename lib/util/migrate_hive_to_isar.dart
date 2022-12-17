@@ -1,13 +1,13 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:isar/isar.dart';
+
 import '../constants.dart';
+import '../hive_model/saved_schedule.dart' as hive_saved_schedule;
+import '../isar_models/saved_daytime.dart' as isar_saved_daytime;
 import '../isar_models/saved_schedule.dart' as isar_saved_schedule;
 import '../isar_models/saved_subject.dart' as isar_saved_subject;
-import '../isar_models/saved_daytime.dart' as isar_saved_daytime;
-import '../hive_model/saved_schedule.dart' as hive_saved_schedule;
 
-/// Handles migration from Hive to Isar
-/// from previous app version
+/// Handles migration from Hive to Isar from previous app version
 class MigrateHiveToIsar {
   static Future<void> migrate() async {
     final isar = await Isar.open([
@@ -50,8 +50,6 @@ class MigrateHiveToIsar {
           // kuliyyah: 'meow',
         );
 
-        var isarDayTimes = <isar_saved_daytime.SavedDaytime>[];
-
         await isar.writeTxn(() async {
           await isar.savedSubjects.put(isarSubject);
         });
@@ -60,6 +58,8 @@ class MigrateHiveToIsar {
         await isar.writeTxn(() async {
           isarSchedule.subjects.save();
         });
+
+        var isarDayTimes = <isar_saved_daytime.SavedDaytime>[];
 
         for (final dayTime in subject.dayTime) {
           isarDayTimes.add(isar_saved_daytime.SavedDaytime(

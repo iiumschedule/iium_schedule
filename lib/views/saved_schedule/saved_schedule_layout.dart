@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/foundation.dart';
@@ -31,10 +32,9 @@ import 'metadata_dialog.dart';
 import 'schedule_export_page.dart';
 
 class SavedScheduleLayout extends StatefulWidget {
-  SavedScheduleLayout({Key? key, required this.savedSchedule, required this.id})
-      : super(key: key);
+  const SavedScheduleLayout({Key? key, required this.id}) : super(key: key);
 
-  final SavedSchedule savedSchedule;
+  // final SavedSchedule savedSchedule;
   final int id;
   // final _box = Hive.box<SavedSchedule>(kHiveSavedSchedule);
 
@@ -44,8 +44,6 @@ class SavedScheduleLayout extends StatefulWidget {
 
 class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
   final IsarService isarService = IsarService();
-
-  late String name;
 
   bool _isFullScreen = false;
   bool _hideFab = false;
@@ -62,10 +60,9 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
   @override
   void initState() {
     super.initState();
-    name = widget.savedSchedule.title ?? "";
 
-    _courseValidator =
-        CourseValidatorPass(widget.savedSchedule.subjects.length);
+    // _courseValidator =
+    //     CourseValidatorPass(widget.savedSchedule.subjects.length);
   }
 
   // void _onRefresh() async {
@@ -149,8 +146,8 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ScheduleNotifierProvider>(
-      builder: (_, __, ___) => StreamBuilder(
+    return Consumer2<ScheduleNotifierProvider, ScheduleLayoutSettingProvider>(
+      builder: (_, __, scheduleSetting, ___) => StreamBuilder(
         stream: isarService.listenToSavedSchedule(id: widget.id),
         builder: (context, AsyncSnapshot<SavedSchedule?> snapshot) {
           if (snapshot.hasError) {
@@ -171,9 +168,13 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
             return const Center(child: Text('Links loading'));
           }
 
+          var name = snapshot.data!.title ?? "";
+          scheduleSetting
+              .initialConditionSubjectTitle(snapshot.data!.subjectTitleSetting);
+
           LaneEventsResponse laneEventsList = LaneEventsUtil(
                   context: context,
-                  fontSize: widget.savedSchedule.fontSize,
+                  fontSize: snapshot.data!.fontSize,
                   savedSubjectList: snapshot.data!.subjects.toList())
               .laneEvents();
           return GestureDetector(
@@ -204,7 +205,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                               setState(() => name = newName);
 
                               // save the new name and record the last modified
-                              widget.savedSchedule.title = newName;
+                              snapshot.data!.title = newName;
                               // isar.writeTxnSync(() =>
                               //     isar.savedSchedules.put(widget.savedSchedule));
                             },
@@ -221,32 +222,74 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                                 MaterialPageRoute(
                                   fullscreenDialog: true,
                                   builder: (context) => AddSubjectPage(
-                                    session: widget.savedSchedule.session,
-                                    semester: widget.savedSchedule.semester,
+                                    session: snapshot.data!.session,
+                                    semester: snapshot.data!.semester,
                                   ),
                                 ),
                               );
 
                               if (res == null) return;
 
-                              // await isar
-                              //     .writeTxn(() => isar.savedSchedules.put(res));
+                              // cast res as Subject
+                              var subject = res as Subject;
+
+                              var isar = Isar.getInstance()!;
+                              var isarSchedule =
+                                  isar.savedSchedules.getSync(widget.id);
+
+                              await isar.writeTxn(() async {
+                                var isarSubject = SavedSubject(
+                                  code: subject.code,
+                                  sect: subject.sect,
+                                  title: subject.title,
+                                  chr: subject.chr,
+                                  venue: subject.venue,
+                                  lect: subject.lect,
+                                  subjectName: subject.title,
+                                  hexColor:
+                                      0xFF000000 | (Random().nextInt(0xFFFFFF)),
+                                );
+
+                                await isar.savedSubjects.put(isarSubject);
+                                isarSchedule!.subjects.add(isarSubject);
+
+                                isarSchedule.subjects.save();
+
+                                var isarDayTimes = <SavedDaytime>[];
+
+                                for (final dayTime in subject.dayTime) {
+                                  isarDayTimes.add(SavedDaytime(
+                                    day: dayTime!.day,
+                                    startTime: dayTime.startTime,
+                                    endTime: dayTime.endTime,
+                                  ));
+                                }
+
+                                await isar.savedDaytimes.putAll(isarDayTimes);
+                                isarSubject.dayTimes.addAll(isarDayTimes);
+                                await isarSubject.dayTimes.save();
+                                setState(() {});
+                              });
                             },
                           ),
                           if (kIsWeb || !Platform.isAndroid) ...[
                             IconButton(
                               tooltip: 'Increase text sizes',
                               onPressed: () {
-                                setState(() => widget.savedSchedule.fontSize--);
-                                // widget.savedSchedule.save();
+                                setState(() {
+                                  snapshot.data!.fontSize--;
+                                  isarService.updateSchedule(snapshot.data!);
+                                });
                               },
                               icon: const Icon(Icons.text_decrease_rounded),
                             ),
                             IconButton(
                               tooltip: 'Reduce text sizes',
                               onPressed: () {
-                                setState(() => widget.savedSchedule.fontSize++);
-                                // widget.savedSchedule.save();
+                                setState(() {
+                                  snapshot.data!.fontSize++;
+                                  isarService.updateSchedule(snapshot.data!);
+                                });
                               },
                               icon: const Icon(Icons.text_increase_rounded),
                             ),
@@ -300,7 +343,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                             startHour: laneEventsList.startHour,
                             endHour: laneEventsList.endHour,
                             laneEventsList: laneEventsList.laneEventsList,
-                            itemHeight: widget.savedSchedule.heightFactor,
+                            itemHeight: snapshot.data!.heightFactor,
                           ))),
                 ),
                 floatingActionButton: _hideFab
@@ -308,31 +351,29 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                     : Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (widget.savedSchedule.heightFactor <= 90)
+                          if (snapshot.data!.heightFactor <= 90)
                             FloatingActionButton(
                                 heroTag: "btnZoom+",
                                 tooltip: "Zoom in (increase height)",
                                 mini: true,
                                 child: const Icon(Icons.zoom_in),
                                 onPressed: () {
-                                  setState(() =>
-                                      widget.savedSchedule.heightFactor += 2);
-                                  isarService
-                                      .updateSchedule(widget.savedSchedule);
+                                  setState(
+                                      () => snapshot.data!.heightFactor += 2);
+                                  isarService.updateSchedule(snapshot.data!);
                                 }),
                           if (kIsWeb || !Platform.isAndroid)
                             const SizedBox(height: 5),
-                          if (widget.savedSchedule.heightFactor >= 44)
+                          if (snapshot.data!.heightFactor >= 44)
                             FloatingActionButton(
                                 heroTag: "btnZoom-",
                                 tooltip: "Zoom out (decrease height)",
                                 mini: true,
                                 child: const Icon(Icons.zoom_out),
                                 onPressed: () {
-                                  setState(() =>
-                                      widget.savedSchedule.heightFactor -= 2);
-                                  isarService
-                                      .updateSchedule(widget.savedSchedule);
+                                  setState(
+                                      () => snapshot.data!.heightFactor -= 2);
+                                  isarService.updateSchedule(snapshot.data!);
                                 }),
                           if (kIsWeb || !Platform.isAndroid)
                             const SizedBox(height: 5),
@@ -365,13 +406,13 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
           context,
           MaterialPageRoute(
             builder: (_) => ScheduleExportPage(
-                scheduleTitle: name,
+                scheduleTitle: schedule!.title!,
                 laneEventsResponse: LaneEventsUtil(
                         context: context,
-                        fontSize: widget.savedSchedule.fontSize,
-                        savedSubjectList: schedule!.subjects.toList())
+                        fontSize: schedule.fontSize,
+                        savedSubjectList: schedule.subjects.toList())
                     .laneEvents(),
-                itemHeight: widget.savedSchedule.heightFactor),
+                itemHeight: schedule.heightFactor),
           ),
         );
         break;
@@ -379,7 +420,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
         showModalBottomSheet(
             context: context,
             builder: (_) => MetadataSheet(
-                  savedSchedule: widget.savedSchedule,
+                  savedSchedule: schedule!,
                 ));
         break;
       case 'delete':

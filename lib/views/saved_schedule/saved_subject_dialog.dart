@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
 import 'package:provider/provider.dart';
 
 import '../../isar_models/saved_subject.dart';
@@ -58,11 +57,6 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
             minute: int.parse(
                 snapshot.data!.dayTimes.first.endTime.split(":").last));
         var duration = endTime.difference(startTime);
-
-        print('subjectId');
-        print(widget.subjectId);
-        print('dayTimesId');
-        print(snapshot.data!.dayTimes.first.id!);
 
         return AlertDialog(
           title: Text(snapshot.data!.title),
@@ -154,6 +148,8 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
                   snapshot.data!.hexColor = selectedColour.value;
 
                   isarService.updateSubject(snapshot.data!);
+                  // notify the schedule behind the dialog to reflect the
+                  // new information
                   Provider.of<ScheduleNotifierProvider>(context, listen: false)
                       .notify();
 

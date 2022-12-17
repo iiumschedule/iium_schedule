@@ -7,6 +7,7 @@ class ScheduleLayoutSettingProvider extends ChangeNotifier {
 
   SubjectTitleSetting? get subjectTitleSetting => _subjectTitleSetting;
 
+  /// Set the value without call setState() or markNeedsBuild() called during build.
   void initialConditionSubjectTitle(SubjectTitleSetting setting) {
     _subjectTitleSetting = setting;
   }

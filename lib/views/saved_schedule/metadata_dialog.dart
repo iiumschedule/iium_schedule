@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../hive_model/saved_schedule.dart';
+import '../../isar_models/saved_schedule.dart';
 import '../../widgets/my_bottom_sheet.dart';
 
 /// Show info about the save schedule
@@ -28,7 +28,7 @@ class MetadataSheet extends StatelessWidget {
         ),
         ListTile(
           leading: const _LeadingTextWidget('Subject count:'),
-          title: Text(savedSchedule.subjects!.length.toString()),
+          title: Text(savedSchedule.subjects.length.toString()),
         ),
         ListTile(
           leading: const _LeadingTextWidget('Last modified:'),
