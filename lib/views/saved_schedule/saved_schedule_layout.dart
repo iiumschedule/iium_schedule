@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 
 // pull-to-refresh implementation
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../../constants.dart';
 
 import '../../isar_models/saved_daytime.dart';
 import '../../isar_models/saved_schedule.dart';
@@ -54,95 +53,108 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
   // Let users keep track of what is currently fetching from the IIUM's database
   String currentRefreshCourse = '';
 
-  // Initialize course validator
-  late CourseValidatorPass _courseValidator;
-
   @override
   void initState() {
     super.initState();
-
-    // _courseValidator =
-    //     CourseValidatorPass(widget.savedSchedule.subjects.length);
   }
 
-  // void _onRefresh() async {
-  //   // Get kuliyyah code (e.g: KICT) from HiveDB
-  //   final kuliyyah = widget.savedSchedule.kuliyyah;
+  void _onRefresh() async {
+    // Get current schedule
+    final savedSchedule = await isarService.getSavedSchedule(id: widget.id);
+    // initialize course validator
+    var courseValidator = CourseValidatorPass(savedSchedule!.subjects.length);
+    // Get kuliyyah code (e.g: KICT) from HiveDB
+    final kuliyyah = savedSchedule.kuliyyah;
 
-  //   // Keep track of the current subject index
-  //   var currentIndex = 0;
+    if (kuliyyah == null) {
+      Fluttertoast.showToast(
+          msg: 'Please set your kuliyyah in the settings',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      _refreshController.refreshCompleted();
+      return;
+    }
 
-  //   // print(widget.savedSchedule.subjects);
+    // Keep track of the current subject index
+    var currentIndex = 0;
 
-  //   // Here, we loop through each of student's saved subject and get the latest data from IIUM's database
-  //   await Future.forEach<SavedSubject>(widget.savedSchedule.subjects!.toList(),
-  //       (subject) async {
-  //     // Update state of the pull-to-refresh loading text
-  //     // (We use course code instead of course name to prevent text overflowing)
-  //     setState(() =>
-  //         currentRefreshCourse = 'Getting latest data for ${subject.code}');
+    // print(widget.savedSchedule.subjects);
 
-  //     final response = await SubjectFetcher.fetchSubjectData(
-  //         albiruni: Albiruni(
-  //             semester: widget.savedSchedule.semester,
-  //             session: widget.savedSchedule.session),
-  //         // Suggest kuliyyah based on course code (e.g: UNGS 2290 will return KIRKHS)
-  //         kulliyyah: KulliyyahSugestions.suggest(subject.code) ?? kuliyyah,
-  //         courseCode: subject.code,
-  //         section: subject.sect);
+    // Here, we loop through each of student's saved subject and get the latest data from IIUM's database
+    await Future.forEach<SavedSubject>(savedSchedule.subjects.toList(),
+        (subject) async {
+      // Update state of the pull-to-refresh loading text
+      // (We use course code instead of course name to prevent text overflowing)
+      setState(() =>
+          currentRefreshCourse = 'Getting latest data for ${subject.code}');
 
-  //     _courseValidator.subjectSuccess(currentIndex++, response);
-  //   });
+      final response = await SubjectFetcher.fetchSubjectData(
+          albiruni: Albiruni(
+              semester: savedSchedule.semester, session: savedSchedule.session),
+          // Suggest kuliyyah based on course code (e.g: UNGS 2290 will return KIRKHS)
+          kulliyyah: KulliyyahSugestions.suggest(subject.code) ?? kuliyyah,
+          courseCode: subject.code,
+          section: subject.sect);
 
-  //   if (!_courseValidator.isClearToProceed()) {
-  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //         content: Text(
-  //             'We\'re facing some issues while fetching latest data. Try again later.')));
-  //     return;
-  //   }
+      courseValidator.subjectSuccess(currentIndex++, response);
+    });
 
-  //   /**
-  //    * Update student's hiveDB SavedSchedule with the latest subject
-  //    *
-  //    * TODO: Refactorize code as a separate method
-  //    */
+    if (!courseValidator.isClearToProceed()) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'We\'re facing some issues while fetching latest data. Try again later.')));
+      return;
+    }
 
-  //   SavedSchedule currentSchedule = widget.savedSchedule;
-  //   List<Subject> updatedSubjectsList = _courseValidator.fetchedSubjects();
+    /**
+     * Update student's hiveDB SavedSchedule with the latest subject
+     *
+     * TODO: Refactorize code as a separate method
+     */
 
-  //   currentSchedule.subjects = currentSchedule.subjects!.map((prevSubject) {
-  //     final updatedSubject = updatedSubjectsList
-  //         .singleWhere((subject) => (subject.code == prevSubject.code));
+    SavedSchedule currentSchedule = savedSchedule;
+    List<Subject> updatedSubjectsList = courseValidator.fetchedSubjects();
 
-  //     /**
-  //      * In some cases, a course venue can be empty in i-Maluum and lecturers will update through
-  //      * other platforms (i.e: Whatsapp / Microsoft Teams). Since users will override the
-  //      * venue all by themselves, it is necessary to skip empty venue from i-Maluum
-  //      * as it will override the current venue.
-  //      *
-  //      * Refer https://github.com/iqfareez/iium_schedule/pull/51#pullrequestreview-1158961053
-  //      */
-  //     if (updatedSubject.venue == null) return prevSubject;
+    for (var prevSubject in currentSchedule.subjects) {
+      final updatedSubject = updatedSubjectsList
+          .singleWhere((subject) => (subject.code == prevSubject.code));
 
-  //     // Update venue for this subject
-  //     prevSubject.venue = updatedSubject.venue;
+      /**
+       * In some cases, a course venue can be empty in i-Maluum and lecturers will update through
+       * other platforms (i.e: Whatsapp / Microsoft Teams). Since users will override the
+       * venue all by themselves, it is necessary to skip empty venue from i-Maluum
+       * as it will override the current venue.
+       *
+       * Refer https://github.com/iqfareez/iium_schedule/pull/51#pullrequestreview-1158961053
+       */
 
-  //     // Update lecturer's name
-  //     prevSubject.lect = updatedSubject.lect;
+      if (updatedSubject.venue == null) continue;
 
-  //     return prevSubject;
-  //   }).toList();
+      // Update venue for this subject
+      prevSubject.venue = updatedSubject.venue;
 
-  //   // Update the current schedule last modified data
-  //   currentSchedule.lastModified = DateTime.now().toString();
+      // Update lecturer's name
+      prevSubject.lect = updatedSubject.lect;
 
-  //   // Save changes to HiveDB
-  //   // https://github.com/iqfareez/iium_schedule/pull/51#discussion_r1007335660
-  //   currentSchedule.save();
+      // Save to isar db
+      isarService.updateSubject(prevSubject);
+    }
 
-  //   // Finish the refreshing state
-  //   _refreshController.refreshCompleted();
-  // }
+    // Update the current schedule last modified data
+    currentSchedule.lastModified = DateTime.now().toString();
+    isarService.updateSchedule(currentSchedule);
+
+    // Save changes to HiveDB
+    // https://github.com/iqfareez/iium_schedule/pull/51#discussion_r1007335660
+    // currentSchedule.save();
+
+    // Finish the refreshing state
+    _refreshController.refreshCompleted();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -337,7 +349,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                       // pull-to-refresh implementation here
                       child: SmartRefresher(
                           controller: _refreshController,
-                          // onRefresh: _onRefresh,
+                          onRefresh: _onRefresh,
                           child: TimetableViewWidget(
                             startHour: laneEventsList.startHour,
                             endHour: laneEventsList.endHour,

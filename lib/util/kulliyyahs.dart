@@ -102,6 +102,9 @@ class Kuliyyahs {
   /// Return kuliyyah data from code
   static Kuliyyah kuliyyahFromCode(String code) =>
       _kulls.firstWhere((element) => element.code == code);
+
+  /// Return a list of kuliyyah codes
+  static List<String> get allCodes => _kulls.map((e) => e.code).toList();
 }
 
 class Kuliyyah {

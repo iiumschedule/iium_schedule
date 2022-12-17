@@ -83,6 +83,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         subjectTitleSetting:
             Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)
                 .subjectTitleSetting!,
+        kuliyyah: ScheduleMakerData.kulliyah,
       );
 
       savedId = await isar.savedSchedules.put(isarSchedule);

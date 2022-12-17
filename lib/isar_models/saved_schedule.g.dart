@@ -32,29 +32,34 @@ const SavedScheduleSchema = CollectionSchema(
       name: r'heightFactor',
       type: IsarType.double,
     ),
-    r'lastModified': PropertySchema(
+    r'kuliyyah': PropertySchema(
       id: 3,
+      name: r'kuliyyah',
+      type: IsarType.string,
+    ),
+    r'lastModified': PropertySchema(
+      id: 4,
       name: r'lastModified',
       type: IsarType.string,
     ),
     r'semester': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'semester',
       type: IsarType.long,
     ),
     r'session': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'session',
       type: IsarType.string,
     ),
     r'subjectTitleSetting': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'subjectTitleSetting',
       type: IsarType.byte,
       enumMap: _SavedSchedulesubjectTitleSettingEnumValueMap,
     ),
     r'title': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'title',
       type: IsarType.string,
     )
@@ -87,6 +92,12 @@ int _savedScheduleEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.dateCreated.length * 3;
+  {
+    final value = object.kuliyyah;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.lastModified.length * 3;
   bytesCount += 3 + object.session.length * 3;
   {
@@ -107,11 +118,12 @@ void _savedScheduleSerialize(
   writer.writeString(offsets[0], object.dateCreated);
   writer.writeDouble(offsets[1], object.fontSize);
   writer.writeDouble(offsets[2], object.heightFactor);
-  writer.writeString(offsets[3], object.lastModified);
-  writer.writeLong(offsets[4], object.semester);
-  writer.writeString(offsets[5], object.session);
-  writer.writeByte(offsets[6], object.subjectTitleSetting.index);
-  writer.writeString(offsets[7], object.title);
+  writer.writeString(offsets[3], object.kuliyyah);
+  writer.writeString(offsets[4], object.lastModified);
+  writer.writeLong(offsets[5], object.semester);
+  writer.writeString(offsets[6], object.session);
+  writer.writeByte(offsets[7], object.subjectTitleSetting.index);
+  writer.writeString(offsets[8], object.title);
 }
 
 SavedSchedule _savedScheduleDeserialize(
@@ -124,13 +136,14 @@ SavedSchedule _savedScheduleDeserialize(
     dateCreated: reader.readString(offsets[0]),
     fontSize: reader.readDouble(offsets[1]),
     heightFactor: reader.readDouble(offsets[2]),
-    lastModified: reader.readString(offsets[3]),
-    semester: reader.readLong(offsets[4]),
-    session: reader.readString(offsets[5]),
+    kuliyyah: reader.readStringOrNull(offsets[3]),
+    lastModified: reader.readString(offsets[4]),
+    semester: reader.readLong(offsets[5]),
+    session: reader.readString(offsets[6]),
     subjectTitleSetting: _SavedSchedulesubjectTitleSettingValueEnumMap[
-            reader.readByteOrNull(offsets[6])] ??
+            reader.readByteOrNull(offsets[7])] ??
         SubjectTitleSetting.title,
-    title: reader.readStringOrNull(offsets[7]),
+    title: reader.readStringOrNull(offsets[8]),
   );
   object.id = id;
   return object;
@@ -150,16 +163,18 @@ P _savedScheduleDeserializeProp<P>(
     case 2:
       return (reader.readDouble(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
-      return (reader.readLong(offset)) as P;
-    case 5:
       return (reader.readString(offset)) as P;
+    case 5:
+      return (reader.readLong(offset)) as P;
     case 6:
+      return (reader.readString(offset)) as P;
+    case 7:
       return (_SavedSchedulesubjectTitleSettingValueEnumMap[
               reader.readByteOrNull(offset)] ??
           SubjectTitleSetting.title) as P;
-    case 7:
+    case 8:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -608,6 +623,160 @@ extension SavedScheduleQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      kuliyyahIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'kuliyyah',
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      kuliyyahIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'kuliyyah',
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      kuliyyahEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'kuliyyah',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      kuliyyahGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'kuliyyah',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      kuliyyahLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'kuliyyah',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      kuliyyahBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'kuliyyah',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      kuliyyahStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'kuliyyah',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      kuliyyahEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'kuliyyah',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      kuliyyahContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'kuliyyah',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      kuliyyahMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'kuliyyah',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      kuliyyahIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'kuliyyah',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      kuliyyahIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'kuliyyah',
+        value: '',
       ));
     });
   }
@@ -1260,6 +1429,19 @@ extension SavedScheduleQuerySortBy
     });
   }
 
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy> sortByKuliyyah() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'kuliyyah', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy>
+      sortByKuliyyahDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'kuliyyah', Sort.desc);
+    });
+  }
+
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy>
       sortByLastModified() {
     return QueryBuilder.apply(this, (query) {
@@ -1380,6 +1562,19 @@ extension SavedScheduleQuerySortThenBy
     });
   }
 
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy> thenByKuliyyah() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'kuliyyah', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy>
+      thenByKuliyyahDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'kuliyyah', Sort.desc);
+    });
+  }
+
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy>
       thenByLastModified() {
     return QueryBuilder.apply(this, (query) {
@@ -1468,6 +1663,13 @@ extension SavedScheduleQueryWhereDistinct
     });
   }
 
+  QueryBuilder<SavedSchedule, SavedSchedule, QDistinct> distinctByKuliyyah(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'kuliyyah', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<SavedSchedule, SavedSchedule, QDistinct> distinctByLastModified(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1526,6 +1728,12 @@ extension SavedScheduleQueryProperty
   QueryBuilder<SavedSchedule, double, QQueryOperations> heightFactorProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'heightFactor');
+    });
+  }
+
+  QueryBuilder<SavedSchedule, String?, QQueryOperations> kuliyyahProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'kuliyyah');
     });
   }
 

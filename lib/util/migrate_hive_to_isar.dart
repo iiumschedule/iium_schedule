@@ -6,6 +6,7 @@ import '../isar_models/saved_daytime.dart' as isar_saved_daytime;
 import '../isar_models/saved_schedule.dart' as isar_saved_schedule;
 import '../isar_models/saved_subject.dart' as isar_saved_subject;
 import '../services/isar_service.dart';
+import 'kulliyyahs.dart';
 
 /// Handles migration from Hive to Isar from previous app version
 class MigrateHiveToIsar {
@@ -27,6 +28,17 @@ class MigrateHiveToIsar {
 
     // Add all schedules to Isar
     for (final schedule in schedules) {
+      // since kulliyyah param is not implemented in previous version,
+      // we tried to infer it from the schedule title
+      // if the user haven't touch the schedule title, by default it will be
+      // `ENGIN 1 2022/2023`
+      String? inferredKuliyyah = schedule.title!.split(' ').first;
+
+      // check if inferred kuliyyah is valid, if not, return null
+      if (!Kuliyyahs.allCodes.contains(inferredKuliyyah)) {
+        inferredKuliyyah = null;
+      }
+
       final isarSchedule = isar_saved_schedule.SavedSchedule(
         session: schedule.session,
         semester: schedule.semester,
@@ -36,7 +48,7 @@ class MigrateHiveToIsar {
         fontSize: schedule.fontSize,
         heightFactor: schedule.heightFactor,
         subjectTitleSetting: schedule.subjectTitleSetting,
-        // kuliyyah: 'meow',
+        kuliyyah: inferredKuliyyah,
       );
       await isar.writeTxn(() async {
         await isar.savedSchedules.put(isarSchedule);
@@ -83,6 +95,6 @@ class MigrateHiveToIsar {
       // hiveBox.deleteFromDisk();
     }
 
-    print('Done "migrate"');
+    print('Done migrate');
   }
 }

@@ -9,6 +9,7 @@ part 'saved_schedule.g.dart';
 class SavedSchedule {
   Id? id;
 
+  /// Schedule title
   String? title;
 
   final subjects = IsarLinks<SavedSubject>();
@@ -16,6 +17,7 @@ class SavedSchedule {
   /// Datetime saved in to isoString
   String lastModified;
 
+  /// Datetime saved in to isoString
   String dateCreated;
 
   double fontSize;
@@ -29,6 +31,9 @@ class SavedSchedule {
 
   int semester;
 
+  // The main kuliyyah of the schedule
+  String? kuliyyah;
+
   SavedSchedule({
     required this.session,
     required this.semester,
@@ -38,6 +43,7 @@ class SavedSchedule {
     required this.fontSize,
     required this.heightFactor,
     required this.subjectTitleSetting,
+    required this.kuliyyah,
   });
 
   @override
