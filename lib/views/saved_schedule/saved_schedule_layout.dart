@@ -206,8 +206,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
 
                               // save the new name and record the last modified
                               snapshot.data!.title = newName;
-                              // isar.writeTxnSync(() =>
-                              //     isar.savedSchedules.put(widget.savedSchedule));
+                              isarService.updateSchedule(snapshot.data!);
                             },
                             child: Text(
                               name,
