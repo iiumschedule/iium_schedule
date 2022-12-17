@@ -1,26 +1,30 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:isar/isar.dart';
 
 import '../constants.dart';
 import '../hive_model/saved_schedule.dart' as hive_saved_schedule;
 import '../isar_models/saved_daytime.dart' as isar_saved_daytime;
 import '../isar_models/saved_schedule.dart' as isar_saved_schedule;
 import '../isar_models/saved_subject.dart' as isar_saved_subject;
+import '../services/isar_service.dart';
 
 /// Handles migration from Hive to Isar from previous app version
 class MigrateHiveToIsar {
   static Future<void> migrate() async {
-    final isar = await Isar.open([
-      isar_saved_schedule.SavedScheduleSchema,
-      isar_saved_subject.SavedSubjectSchema,
-      isar_saved_daytime.SavedDaytimeSchema
-    ]);
+    final isarService = IsarService();
+    final isar = await isarService.db; // to interract with isar directly
+
     // Get Hive box
     final hiveBox =
         Hive.box<hive_saved_schedule.SavedSchedule>(kHiveSavedSchedule);
     // Get all schedules from Hive
     final schedules = hiveBox.values.toList();
-    print(schedules);
+
+    // ignore is hive if empty
+    if (hiveBox.isEmpty) {
+      print('no migration needed');
+      return;
+    }
+
     // Add all schedules to Isar
     for (final schedule in schedules) {
       final isarSchedule = isar_saved_schedule.SavedSchedule(
@@ -69,15 +73,12 @@ class MigrateHiveToIsar {
           ));
         }
 
-        print(isarDayTimes);
-
         await isar.writeTxn(() async {
           await isar.savedDaytimes.putAll(isarDayTimes);
           isarSubject.dayTimes.addAll(isarDayTimes);
           await isarSubject.dayTimes.save();
         });
       }
-      // isarBox.putAll(schedules as List<isar_saved_schedule.SavedSchedule>);
       // Delete Hive box
       // hiveBox.deleteFromDisk();
     }

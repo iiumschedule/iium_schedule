@@ -41,21 +41,6 @@ class IsarService {
     });
   }
 
-  // Future<List<Cat>> getAllCat() async {
-  //   final isar = await db;
-  //   return await isar.cats.where().findAll();
-  // }
-
-  // Stream<List<Cat>> listenToCat() async* {
-  //   final isar = await db;
-  //   yield* isar.cats.where().watch(fireImmediately: true);
-  // }
-
-  // Stream<Cat?> listenToSingleCat(int id) async* {
-  //   final isar = await db;
-  //   yield* isar.cats.watchObject(id, fireImmediately: true);
-  // }
-
   Stream<SavedSchedule?> listenToSavedSchedule({required int id}) async* {
     final isar = await db;
 
@@ -76,6 +61,7 @@ class IsarService {
 
   Future<void> updateSchedule(SavedSchedule schedule) async {
     final isar = await db;
+    schedule.lastModified = DateTime.now().toString();
     isar.writeTxnSync(() {
       isar.savedSchedules.putSync(schedule);
     });
@@ -113,6 +99,7 @@ class IsarService {
     });
     // check if the subject has no more dayTimes
     final subject = isar.savedSubjects.getSync(subjectId);
+    // if empty, delete the subject object altogether
     if (subject!.dayTimes.isEmpty) {
       isar.writeTxnSync(() {
         isar.savedSubjects.deleteSync(subjectId);
@@ -120,10 +107,10 @@ class IsarService {
     }
   }
 
-  Future<void> cleanDb() async {
-    final isar = await db;
-    await isar.writeTxn(() => isar.clear());
-  }
+  // Future<void> cleanDb() async {
+  //   final isar = await db;
+  //   await isar.writeTxn(() => isar.clear());
+  // }
 
   Future<Isar> openDB() async {
     if (Isar.instanceNames.isEmpty) {

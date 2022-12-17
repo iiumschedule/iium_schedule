@@ -63,13 +63,13 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     name = widget.initialName;
 
     Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)
-        .subjectTitleSetting = SubjectTitleSetting.title;
+        .initialConditionSubjectTitle(SubjectTitleSetting.title);
   }
 
   // Save the generated schedule data to the database (Hive)
   Future<int> save() async {
     Isar isar = Isar.getInstance()!;
-    int savedId = 0;
+    late int savedId;
 
     await isar.writeTxn(() async {
       var isarSchedule = SavedSchedule(
