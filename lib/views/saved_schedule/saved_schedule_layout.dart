@@ -68,7 +68,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
 
     if (kuliyyah == null) {
       Fluttertoast.showToast(
-          msg: 'Please set your kuliyyah in the settings',
+          msg: 'Please set your kuliyyah in the metadata',
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
@@ -430,8 +430,9 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
       case 'metadata':
         showModalBottomSheet(
             context: context,
+            isScrollControlled: true,
             builder: (_) => MetadataSheet(
-                  savedSchedule: schedule!,
+                  savedScheduleId: schedule!.id!,
                 ));
         break;
       case 'delete':
