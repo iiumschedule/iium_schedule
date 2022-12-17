@@ -49,7 +49,6 @@ class IsarService {
 
   Future<SavedSchedule?> getSavedSchedule({required int id}) async {
     final isar = await db;
-
     return isar.savedSchedules.get(id);
   }
 

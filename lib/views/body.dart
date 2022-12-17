@@ -6,18 +6,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:isar/isar.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quick_actions/quick_actions.dart';
 
-import '../constants.dart';
-import '../hive_model/saved_schedule.dart';
+import '../isar_models/saved_schedule.dart';
+import '../services/isar_service.dart';
 import '../util/launcher_url.dart';
 import '../util/my_ftoast.dart';
 import 'check_update_page.dart';
 import 'course browser/browser.dart';
 import 'saved_schedule_selector.dart';
 import 'scheduler/schedule_maker_entry.dart';
+
+final IsarService _isarService = IsarService();
 
 class MyBody extends StatelessWidget {
   const MyBody({
@@ -169,11 +171,13 @@ class MyBody extends StatelessWidget {
             ),
           ),
           const Divider(),
-          ValueListenableBuilder(
-              valueListenable:
-                  Hive.box<SavedSchedule>(kHiveSavedSchedule).listenable(),
-              builder: (context, Box<SavedSchedule> box, _) {
-                if (box.isEmpty) {
+          StreamBuilder(
+              stream: Isar.getInstance()!
+                  .collection<SavedSchedule>()
+                  .watchLazy(fireImmediately: true),
+              builder: (context, snapshot) {
+                var schedulesList = _isarService.getAllSchedule();
+                if (schedulesList.isEmpty) {
                   return const Padding(
                     padding: EdgeInsets.symmetric(vertical: 4),
                     child: Text(
@@ -246,7 +250,6 @@ class _SimpleAboutDialog extends StatelessWidget {
             ),
           SimpleDialogOption(
             onPressed: () async {
-              final BuildContext _context = context;
               var deviceInfo = await DeviceInfoPlugin().deviceInfo;
               var packageInfo = await PackageInfo.fromPlatform();
 
@@ -277,7 +280,7 @@ class _SimpleAboutDialog extends StatelessWidget {
 
               await Clipboard.setData(
                   ClipboardData(text: data.values.join('; ')));
-              MyFtoast.show(_context, 'Copied to clipboard');
+              MyFtoast.show(context, 'Copied to clipboard');
             },
             child: const Text('Copy debug info'),
           ),
