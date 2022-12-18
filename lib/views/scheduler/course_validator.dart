@@ -29,6 +29,7 @@ class _CourseValidatorState extends State<CourseValidator>
     super.build(context);
     _validatorPass = CourseValidatorPass(ScheduleMakerData.subjects!.length);
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),
         child: ListView(
@@ -42,12 +43,12 @@ class _CourseValidatorState extends State<CourseValidator>
                   IconButton(
                     onPressed: () => setState(() {}),
                     tooltip: "Refresh All",
-                    icon: const Icon(Icons.restart_alt),
+                    icon: Icon(Icons.restart_alt, color: Theme.of(context).colorScheme.onBackground,),
                   ),
                   const SizedBox(width: 10),
                   ElevatedButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).colorScheme.primaryContainer
                     ),
                     onPressed: () async {
                       if (!_validatorPass!.isClearToProceed()) {
@@ -133,6 +134,9 @@ class _SubjectCardState extends State<SubjectCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 0,
+      color: Theme.of(context).colorScheme.secondaryContainer,
+      clipBehavior: Clip.hardEdge,
         child: Center(
       child: FutureBuilder(
         // try to find the kulliyyah for the course code
@@ -213,6 +217,7 @@ class _SubjectCardState extends State<SubjectCard> {
           _validatorPass!.subjectSuccess(widget.index, snapshot.data!);
 
           return ListTile(
+            tileColor: Theme.of(context).colorScheme.secondaryContainer,
             leading: MiniSubjectInfo(widget.subject),
             title: Text(snapshot.data!.title,
                 style: const TextStyle(
@@ -252,14 +257,12 @@ class MiniSubjectInfo extends StatelessWidget {
 
   final BasicSubjectModel subject;
 
-  final widgetTextStyle = const TextStyle(fontSize: 12);
-
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Colors.purple.withOpacity(.1),
+        color: Theme.of(context).colorScheme.tertiaryContainer,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -267,17 +270,17 @@ class MiniSubjectInfo extends StatelessWidget {
         children: [
           Text(
             subject.courseCode!,
-            style: widgetTextStyle,
+            style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onTertiaryContainer),
           ),
           if (subject.section != null)
             Text(
               "Section ${subject.section}",
-              style: widgetTextStyle,
+              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onTertiaryContainer),
             )
           else
             Text(
               "No section",
-              style: widgetTextStyle,
+              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onTertiaryContainer),
             )
         ],
       ),

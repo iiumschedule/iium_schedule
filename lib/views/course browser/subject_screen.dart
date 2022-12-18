@@ -29,6 +29,7 @@ class SubjectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: const Text('Subject details'),
         // shadowColor: Colors.transparent,
@@ -66,7 +67,8 @@ class SubjectScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               if (isCached)
-                const PastelAdmonition.info(
+                PastelAdmonition.info(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
                   text:
                       'This is cached version as of the creation of the schedule',
                 ),

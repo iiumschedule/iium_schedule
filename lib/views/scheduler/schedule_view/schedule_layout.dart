@@ -47,7 +47,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
   int _startHour = 10; // pukul 10 am
   int _endHour = 17; // pukul 5 pm
   double _itemHeight = 60.0;
-  double _fontSizeSubject = 10;
+  double _fontSizeSubject = 9;
   bool _isFullScreen = false;
   bool _hideFab = false;
 
@@ -178,13 +178,17 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
           });
 
           return TableEvent(
-            textStyle: TextStyle(fontSize: _fontSizeSubject, color: textColor),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+              color: _colorPallete[subjIndex]
+            ),
+            textStyle: TextStyle(fontSize: _fontSizeSubject, color: textColor, fontFamily: 'Inter'),
             title: Provider.of<ScheduleLayoutSettingProvider>(context)
                         .subjectTitleSetting ==
                     SubjectTitleSetting.title
                 ? e.title
                 : e.code,
-            backgroundColor: _colorPallete[subjIndex],
+            // backgroundColor: _colorPallete[subjIndex],
             start: TableEventTime(hour: start.hour, minute: start.minute),
             end: TableEventTime(hour: end.hour, minute: end.minute),
             onTap: () => showDialog(
@@ -200,13 +204,12 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         },
       );
       Lane lane = Lane(
-        backgroundColor: brightness == Brightness.light
-            ? const Color(0xfffafafa)
-            : const Color(0xff303030),
+        backgroundColor: Theme.of(context).colorScheme.background,
         name: i.englishDay().substring(0, 3).toUpperCase(),
         textStyle: TextStyle(
+          fontFamily: 'Inter',
           color:
-              brightness == Brightness.light ? Colors.black38 : Colors.white38,
+              Theme.of(context).colorScheme.onBackground,
         ),
       );
 
@@ -228,6 +231,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
       child: GestureDetector(
         onTap: _hideFab ? () => setState(() => _hideFab = !_hideFab) : null,
         child: Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.background,
           appBar: _isFullScreen
               ? null
               : AppBar(

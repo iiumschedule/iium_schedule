@@ -67,6 +67,10 @@ class LaneEventsUtil {
               e.color.computeLuminance() > 0.5 ? Colors.black : Colors.white;
 
           return TableEvent(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+              color: Color(e.hexColor!)
+            ),
             textStyle: TextStyle(fontSize: fontSize, color: textColor),
             title: Provider.of<ScheduleLayoutSettingProvider>(context)
                         .subjectTitleSetting ==
@@ -93,13 +97,10 @@ class LaneEventsUtil {
         },
       );
       Lane lane = Lane(
-        backgroundColor: brightness == Brightness.light
-            ? const Color(0xfffafafa)
-            : const Color(0xff303030),
+        backgroundColor: Theme.of(context).colorScheme.background,
         name: i.englishDay().substring(0, 3).toUpperCase(),
         textStyle: TextStyle(
-          color:
-              brightness == Brightness.light ? Colors.black38 : Colors.white38,
+          color: Theme.of(context).colorScheme.onBackground,
         ),
       );
 

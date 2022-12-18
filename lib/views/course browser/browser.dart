@@ -27,17 +27,16 @@ class _BrowserState extends State<Browser> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: AppBar(
-          systemOverlayStyle: SystemUiOverlayStyle.light
-              .copyWith(statusBarColor: Colors.transparent),
-          title: const Text('Course Browser'),
-        ),
+        backgroundColor: Theme.of(context).colorScheme.background,
+        // appBar: AppBar(
+        //   systemOverlayStyle: SystemUiOverlayStyle.light
+        //       .copyWith(statusBarColor: Colors.transparent),
+        //   title: const Text('Course Browser'),
+        // ),
         body: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 500),
-            child: Padding(
-              padding: const EdgeInsets.all(18),
-              child: Column(
+            child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -52,7 +51,9 @@ class _BrowserState extends State<Browser> {
                             .toList(),
                         key: dropdownKey,
                         decoration:
-                            const InputDecoration(border: OutlineInputBorder()),
+                            const InputDecoration(border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(15.0))
+                            )),
                         value: _selectedKulliyah,
                         hint: const Text('Select kulliyyah'),
                         selectedItemBuilder: (_) => Kuliyyahs.all
@@ -112,7 +113,9 @@ class _BrowserState extends State<Browser> {
                       maxLength: 9,
                       controller: _searchController,
                       decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15.0))
+                        ),
                         // TODO: Buat dia tukar2 course code tu
                         labelText: 'Search',
                         hintText: 'Eg: MCTE 3100',
@@ -141,7 +144,10 @@ class _BrowserState extends State<Browser> {
                       cursor: _selectedKulliyah == null
                           ? SystemMouseCursors.forbidden
                           : SystemMouseCursors.click,
-                      child: CupertinoButton.filled(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.primaryContainer
+                        ),
                         onPressed: _selectedKulliyah == null
                             ? null
                             : () {
@@ -178,7 +184,6 @@ class _BrowserState extends State<Browser> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

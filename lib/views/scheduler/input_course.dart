@@ -33,6 +33,7 @@ class _InputCourseState extends State<InputCourse>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SizedBox(
         width: double.infinity,
         child: Column(
@@ -42,6 +43,7 @@ class _InputCourseState extends State<InputCourse>
               child: ListTile(
                 title: const Text("Enter your course code and section number"),
                 trailing: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primaryContainer),
                   // style: TextButton.styleFrom(primary: Colors.white),
                   onPressed: _inputCourses.isEmpty
                       ? null
