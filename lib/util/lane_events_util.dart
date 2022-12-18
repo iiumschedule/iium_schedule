@@ -68,9 +68,8 @@ class LaneEventsUtil {
 
           return TableEvent(
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-              color: Color(e.hexColor!)
-            ),
+                borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+                color: e.color),
             textStyle: TextStyle(fontSize: fontSize, color: textColor),
             title: Provider.of<ScheduleLayoutSettingProvider>(context)
                         .subjectTitleSetting ==
