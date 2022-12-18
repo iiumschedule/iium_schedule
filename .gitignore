@@ -33,7 +33,6 @@
 pubspec_overrides.yaml
 
 # Web related
-lib/generated_plugin_registrant.dart
 .firebase/hosting.YnVpbGRcd2Vi.cache
 
 # Symbolication related
