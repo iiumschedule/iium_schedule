@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +11,9 @@ import 'hive_model/gh_responses.dart';
 import 'hive_model/saved_daytime.dart';
 import 'hive_model/saved_schedule.dart';
 import 'hive_model/saved_subject.dart';
-import 'providers/saved_subjects_provider.dart';
 import 'providers/schedule_layout_setting_provider.dart';
+import 'providers/schedule_notifier_provider.dart';
+import 'util/migrate_hive_to_isar.dart';
 import 'views/body.dart';
 
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -37,29 +37,30 @@ void main() async {
    **/
   await FlutterDisplayMode.setHighRefreshRate();
 
+  await MigrateHiveToIsar.migrate();
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({ super.key });
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ScheduleLayoutSettingProvider()),
-        ChangeNotifierProvider(create: (_) => SavedSubjectsProvider()),
+        ChangeNotifierProvider(create: (_) => ScheduleNotifierProvider()),
       ],
-      child: DynamicColorBuilder(
-        builder: (ColorScheme? lightColorScheme, ColorScheme? darkColorScheme) {
-          return MaterialApp(
-            title: 'IIUM Schedule',
-            theme: ThemeData(
+      child: DynamicColorBuilder(builder:
+          (ColorScheme? lightColorScheme, ColorScheme? darkColorScheme) {
+        return MaterialApp(
+          title: 'IIUM Schedule',
+          theme: ThemeData(
               colorScheme: lightColorScheme,
               useMaterial3: true,
-              fontFamily: 'Inter'
-            ),
-            darkTheme: ThemeData.dark().copyWith(
+              fontFamily: 'Inter'),
+          darkTheme: ThemeData.dark().copyWith(
               // cupertinoOverrideTheme:
               //     const CupertinoThemeData(primaryColor: Color(0xFF23682B)),
               // textButtonTheme: TextButtonThemeData(
@@ -71,19 +72,14 @@ class MyApp extends StatelessWidget {
               //       foregroundColor: Colors.purple.shade200),
               // ),
               useMaterial3: true,
-              textTheme: ThemeData.dark().textTheme.apply(
-                fontFamily: 'Inter'
-              ),
-              primaryTextTheme: ThemeData.dark().textTheme.apply(
-                fontFamily: 'Inter'
-              ),
-              colorScheme: darkColorScheme
-            ),
-            themeMode: ThemeMode.system,
-            home: const MyBody(),
-          );
-        }
-      ),
+              textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
+              primaryTextTheme:
+                  ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
+              colorScheme: darkColorScheme),
+          themeMode: ThemeMode.system,
+          home: const MyBody(),
+        );
+      }),
     );
   }
 }

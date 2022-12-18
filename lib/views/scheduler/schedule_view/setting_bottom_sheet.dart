@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../enums/subject_title_setting_enum.dart';
-import '../../../hive_model/saved_schedule.dart';
+import '../../../isar_models/saved_schedule.dart';
 import '../../../providers/schedule_layout_setting_provider.dart';
+import '../../../services/isar_service.dart';
 
 /// Pass `savedSchedule` for saved schedule layout only
 /// For save to the hive object
@@ -15,6 +16,7 @@ class SettingBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final IsarService isarService = IsarService();
     return Consumer<ScheduleLayoutSettingProvider>(
       builder: (_, value, __) {
         return Padding(
@@ -36,12 +38,13 @@ class SettingBottomSheet extends StatelessWidget {
               CupertinoSegmentedControl<SubjectTitleSetting>(
                 padding: EdgeInsets.zero,
                 groupValue: value.subjectTitleSetting,
-                onValueChanged: (SubjectTitleSetting newValue) {
+                onValueChanged: (SubjectTitleSetting newValue) async {
                   value.subjectTitleSetting = newValue;
 
                   // save to hive for saved schedule layout
                   savedSchedule?.subjectTitleSetting = newValue;
-                  savedSchedule?.save();
+
+                  isarService.updateSchedule(savedSchedule!);
                 },
                 children: const <SubjectTitleSetting, Widget>{
                   SubjectTitleSetting.title: Padding(

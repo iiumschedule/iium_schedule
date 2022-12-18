@@ -28,7 +28,7 @@ class SavedScheduleAdapter extends TypeAdapter<SavedSchedule> {
       subjectTitleSetting: fields[6] == null
           ? SubjectTitleSetting.title
           : fields[6] as SubjectTitleSetting,
-      kuliyyah: fields[9] as String,
+      kuliyyah: fields[9] == null ? 'ENGIN' : fields[9] as String,
     );
   }
 

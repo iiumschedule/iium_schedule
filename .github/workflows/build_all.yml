@@ -5,22 +5,77 @@ on:
     types: [published]
 
 jobs:
+  # Read config file to get the Flutter channel and build targets
+  read_config:
+    runs-on: ubuntu-latest
+    outputs:
+      flutterVer: ${{ steps.flutter-ver.outputs.data }}
+      buildWindows: ${{ steps.read-build-windows.outputs.data }}
+      buildWeb: ${{ steps.read-build-web.outputs.data }}
+      buildAndroid: ${{ steps.read-build-android.outputs.data }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - id: read-flutter-ver
+        name: Determine Flutter version from ci-config.yml
+        uses: jbutcher5/read-yaml@1.6
+        with:
+          file: "./ci-config.yml" # File to read from
+          key-path: '["flutter_channel"]' # Access the runs key then the using key and retuns the value.
+
+      - id: set-flutter-ver
+        name: Set Flutter version to be built against
+        run: echo "data=${{ steps.read-flutter-ver.outputs.data }}" >> $GITHUB_OUTPUT
+
+      - id: read-build-windows
+        name: Determine Flutter version from ci-config.yml
+        uses: jbutcher5/read-yaml@1.6
+        with:
+          file: "./ci-config.yml"
+          key-path: '["build_for", "windows"]'
+
+      - id: set-build-windows
+        run: echo "data=${{ steps.read-build-windows.outputs.data }}" >> $GITHUB_OUTPUT
+
+      - id: read-build-web
+        name: Determine Flutter version from ci-config.yml
+        uses: jbutcher5/read-yaml@1.6
+        with:
+          file: "./ci-config.yml"
+          key-path: '["build_for", "web"]'
+
+      - id: set-build-web
+        run: echo "data=${{ steps.read-build-web.outputs.data }}" >> $GITHUB_OUTPUT
+
+      - id: read-build-android
+        name: Determine Flutter version from ci-config.yml
+        uses: jbutcher5/read-yaml@1.6
+        with:
+          file: "./ci-config.yml"
+          key-path: '["build_for", "android"]'
+
+      - id: set-build-android
+        run: echo "data=${{ steps.read-build-android.outputs.data }}" >> $GITHUB_OUTPUT
+
   build_android:
+    needs: read_config
+    if: ${{ needs.read_config.outputs.buildAndroid == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3.9.0
         with:
           distribution: "zulu"
           java-version: "11"
 
-      - name: Setup Flutter stable
-        uses: subosito/flutter-action@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2.8.0
         with:
-          channel: "stable"
+          channel: "${{ needs.read_config.outputs.flutterVer }}"
 
       # File can be encoded to base64 on https://base64.guru/converter/encode/file
       - name: Decoding android/key.properties
@@ -65,15 +120,17 @@ jobs:
           echo ":blue_heart: Using **`flutter --version`**" >> $GITHUB_STEP_SUMMARY
 
   build_web:
+    needs: read_config
+    if: ${{ needs.read_config.outputs.buildWeb == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Setup Flutter stable
-        uses: subosito/flutter-action@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2.8.0
         with:
-          channel: "stable"
+          channel: "${{ needs.read_config.outputs.flutterVer }}"
 
       - name: Build release web
         run: |
@@ -106,15 +163,17 @@ jobs:
           echo ':rocket: Deployed to Firebase **${{ steps.hostingChannel.outputs.value }} channel**. URL **${{ steps.firebaseDeploy.outputs.details_url }}**' >> $GITHUB_STEP_SUMMARY
 
   build_windows:
+    needs: read_config
+    if: ${{ needs.read_config.outputs.buildWindows == 'true' }}
     runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2.8.0
         with:
-          channel: "stable"
+          channel: "${{ needs.read_config.outputs.flutterVer }}"
 
       - name: Flutter build for Windows
         run: |
@@ -166,6 +225,7 @@ jobs:
           echo :rocket: **Added outputs** to release assets **todo: Publish to winget** >> $GITHUB_STEP_SUMMARY
 
   # After all builds successfully completed, notify me thru Telegram
+  # Note that it will not called if the needs workflow has skipped or failed
   notify:
     needs: [build_android, build_web, build_windows]
     runs-on: ubuntu-latest

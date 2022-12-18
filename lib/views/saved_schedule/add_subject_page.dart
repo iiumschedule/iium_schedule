@@ -7,12 +7,14 @@ import '../../util/kulliyyahs.dart';
 import '../../util/subject_fetcher.dart';
 import '../scheduler/course_validator.dart';
 
+// TODO: add default kulliyyah based on savedschedule killiyyah
+// TODO: Prevent refetching when textfield unfocus
+// TODO: make sure lowercase if also accepted etc
+
 class AddSubjectPage extends StatefulWidget {
   const AddSubjectPage(
       {super.key, required this.session, required this.semester});
 
-  // TODO: add default kulliyyah. Currently not possible because
-  // SavedSchedule object doesn't store main kulliyyah information
   final String session;
   final int semester;
 

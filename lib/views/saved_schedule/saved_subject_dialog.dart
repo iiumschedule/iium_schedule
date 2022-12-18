@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../hive_model/saved_subject.dart';
-import '../../providers/saved_subjects_provider.dart';
+import '../../isar_models/saved_subject.dart';
+import '../../providers/schedule_notifier_provider.dart';
+import '../../services/isar_service.dart';
 import '../../util/extensions.dart';
 import '../course browser/subject_screen.dart';
 import 'subject_colour_dialog.dart';
 
+/// TODO: turn this dialog onto a page
 class SavedSubjectDialog extends StatefulWidget {
   const SavedSubjectDialog({
     Key? key,
-    required SavedSubject subject,
-  })  : _subject = subject,
-        super(key: key);
+    required this.subjectId,
+    required this.dayTimesId,
+  }) : super(key: key);
 
-  final SavedSubject _subject;
+  final int subjectId;
+  final int dayTimesId;
 
   @override
   State<SavedSubjectDialog> createState() => _SavedSubjectDialogState();
 }
 
 class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
-  late TextEditingController venueController;
-  late TimeOfDay startTime;
-  late TimeOfDay endTime;
+  final IsarService isarService = IsarService();
 
   bool isEdtingEnabled = false;
   bool isEditingVenue = false;
@@ -31,31 +32,39 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
   bool isDeleting = false;
 
   @override
-  void initState() {
-    super.initState();
-    startTime = TimeOfDay(
-        hour: int.parse(
-            widget._subject.dayTime.first!.startTime.split(":").first),
-        minute: int.parse(
-            widget._subject.dayTime.first!.startTime.split(":").last));
-    endTime = TimeOfDay(
-        hour:
-            int.parse(widget._subject.dayTime.first!.endTime.split(":").first),
-        minute:
-            int.parse(widget._subject.dayTime.first!.endTime.split(":").last));
-
-    venueController = TextEditingController(text: widget._subject.venue);
-  }
-
-  @override
   Widget build(BuildContext context) {
     var actionButtonColour = Theme.of(context).textTheme.bodyLarge!.color;
 
-    var duration = endTime.difference(startTime);
-    return Consumer<SavedSubjectsProvider>(
-      builder: (context, value, _) {
+    return StreamBuilder<SavedSubject?>(
+      stream: isarService.listenToSavedSubject(id: widget.subjectId),
+      builder: (context, AsyncSnapshot<SavedSubject?> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const AlertDialog(
+              content: Padding(
+            padding: EdgeInsets.all(100.0),
+            child: Text('Loading...'),
+          ));
+        }
+        TextEditingController venueController =
+            TextEditingController(text: snapshot.data?.venue ?? "No venue");
+        var startTime = TimeOfDay(
+            hour: int.parse(
+                snapshot.data!.dayTimes.first.startTime.split(":").first),
+            minute: int.parse(
+                snapshot.data!.dayTimes.first.startTime.split(":").last));
+        var endTime = TimeOfDay(
+            hour: int.parse(
+                snapshot.data!.dayTimes.first.endTime.split(":").first),
+            minute: int.parse(
+                snapshot.data!.dayTimes.first.endTime.split(":").last));
+        var duration = endTime.difference(startTime);
+
         return AlertDialog(
-          title: Text(widget._subject.title),
+          title: Text(snapshot.data!.title),
           content: Column(mainAxisSize: MainAxisSize.min, children: [
             ListTile(
               contentPadding: EdgeInsets.zero,
@@ -69,7 +78,7 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
                     },
               title: !isEditingVenue
                   ? Text(
-                      value.getVenue(widget._subject.code) ?? "No venue",
+                      snapshot.data?.venue ?? "No venue",
                       style: !isEdtingEnabled
                           ? null
                           : const TextStyle(
@@ -83,12 +92,12 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.check),
                           onPressed: () {
-                            value.setVenue(
-                                courseCode: widget._subject,
-                                newVenue: venueController.text);
-                            setState(() {
-                              isEditingVenue = false;
-                            });
+                            snapshot.data!.venue = venueController.text;
+
+                            isarService.updateSubject(snapshot.data!);
+                            Provider.of<ScheduleNotifierProvider>(context,
+                                    listen: false)
+                                .notify();
                           },
                         ),
                       ),
@@ -98,7 +107,7 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.class_outlined),
               title: Text(
-                'Section ${widget._subject.sect}',
+                'Section ${snapshot.data!.sect}',
               ),
             ),
             ListTile(
@@ -133,20 +142,26 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
                   var selectedColour = await Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => SubjectColourDialog(
-                        subjectName: widget._subject.code,
-                        color: value.subjectColour(widget._subject.code),
+                        subjectName: snapshot.data!.code,
+                        color: Color(snapshot.data!.hexColor!),
                       ),
                     ),
                   );
 
                   if (selectedColour == null) return;
 
-                  value.modifyColour(
-                      courseCode: widget._subject.code,
-                      newColor: selectedColour);
+                  snapshot.data!.hexColor = selectedColour.value;
+
+                  isarService.updateSubject(snapshot.data!);
+                  // notify the schedule behind the dialog to reflect the
+                  // new information
+                  Provider.of<ScheduleNotifierProvider>(context, listen: false)
+                      .notify();
+
+                  setState(() => isEditingVenue = false);
                 },
-                icon: Icon(Icons.circle,
-                    color: value.subjectColour(widget._subject.code)),
+                icon:
+                    Icon(Icons.circle, color: Color(snapshot.data!.hexColor!)),
               ),
               Padding(
                 padding: const EdgeInsets.all(2.0),
@@ -180,9 +195,17 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
                   const Text("Confirm delete?"),
                   const Spacer(),
                   TextButton(
-                      onPressed: () {
-                        value.deleteSingle(widget._subject);
+                      onPressed: () async {
+                        // cannot use dayTimes from snapshot.data!.id because
+                        // it contains dayTime for other subject instance as well
+                        await isarService.deleteSingleSubject(
+                            subjectId: widget.subjectId,
+                            dayTimesId: widget.dayTimesId);
+                        if (!mounted) return;
                         Navigator.pop(context);
+                        Provider.of<ScheduleNotifierProvider>(context,
+                                listen: false)
+                            .notify();
                       },
                       child: const Text('Yes')),
                   TextButton(
@@ -200,7 +223,7 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
                       context,
                       MaterialPageRoute(
                           builder: (_) => SubjectScreen(
-                                widget._subject.toSubject(),
+                                snapshot.data!.toSubject(),
                                 isCached: true,
                               )));
                 },

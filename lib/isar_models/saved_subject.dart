@@ -1,46 +1,39 @@
 import 'package:albiruni/albiruni.dart';
-import 'package:hive/hive.dart';
+import 'package:isar/isar.dart';
 
 import 'saved_daytime.dart';
 
 part 'saved_subject.g.dart';
 
-@HiveType(typeId: 1)
-class SavedSubject extends HiveObject {
+@collection
+class SavedSubject {
+  Id? id;
+
   /// Course Code. Example: "MCTE 3373"
-  @HiveField(0)
   late String code;
 
   /// Name of the course. Example: "INDUSTRIAL AUTOMATION"
-  @HiveField(1)
   late String title;
 
   /// Venue. It can be null
-  @HiveField(2)
   String? venue;
 
   /// Section
-  @HiveField(3)
   late int sect;
 
   /// Credit hour
-  @HiveField(4)
   late double chr;
 
   /// List of lecturer(s) teaching the subject
-  @HiveField(5)
   late List<String> lect;
 
   /// Day and Time for the class. It can be null.
-  @HiveField(6)
-  late List<SavedDaytime?> dayTime;
+  final dayTimes = IsarLinks<SavedDaytime>();
 
   /// Custom subject name set by user
-  @HiveField(7)
   String? subjectName;
 
   /// Colour assigned to this subject
-  @HiveField(8)
   int? hexColor;
 
   SavedSubject({
@@ -50,14 +43,13 @@ class SavedSubject extends HiveObject {
     required this.chr,
     required this.venue,
     required this.lect,
-    required this.dayTime,
     required this.subjectName,
     required this.hexColor,
   });
 
   @override
   String toString() =>
-      "{title: $title, subjectName: $subjectName ,venue : $venue, colour : $hexColor, lecturers: $lect, dayTime: $dayTime}";
+      "{title: $title, subjectName: $subjectName ,venue : $venue, colour : $hexColor, lecturers: $lect, dayTime: $dayTimes}";
 
   /// Input [Subject] and return [SavedSubject]
   SavedSubject.fromSubject(
@@ -69,10 +61,6 @@ class SavedSubject extends HiveObject {
           chr: subject.chr,
           venue: subject.venue,
           lect: subject.lect,
-          dayTime: subject.dayTime
-              .map((e) => SavedDaytime(
-                  day: e!.day, startTime: e.startTime, endTime: e.endTime))
-              .toList(),
           subjectName: subjectName,
           hexColor: hexColor,
         );
@@ -84,9 +72,9 @@ class SavedSubject extends HiveObject {
       venue: venue,
       lect: lect,
       sect: sect,
-      dayTime: dayTime
+      dayTime: dayTimes
           .map((e) =>
-              DayTime(day: e!.day, startTime: e.startTime, endTime: e.endTime))
+              DayTime(day: e.day, startTime: e.startTime, endTime: e.endTime))
           .toList(),
       code: code,
       chr: chr,
@@ -101,9 +89,9 @@ class SavedSubject extends HiveObject {
           title == other.title &&
           sect == other.sect &&
           code == other.code &&
-          dayTime == other.dayTime;
+          dayTimes == other.dayTimes;
 
   @override
   int get hashCode =>
-      title.hashCode ^ sect.hashCode ^ code.hashCode ^ dayTime.hashCode;
+      title.hashCode ^ sect.hashCode ^ code.hashCode ^ dayTimes.hashCode;
 }

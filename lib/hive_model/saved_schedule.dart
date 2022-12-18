@@ -35,7 +35,7 @@ class SavedSchedule extends HiveObject {
   @HiveField(8, defaultValue: 1)
   int semester;
 
-  @HiveField(9)
+  @HiveField(9, defaultValue: 'ENGIN')
   String kuliyyah;
 
   SavedSchedule({
@@ -48,7 +48,7 @@ class SavedSchedule extends HiveObject {
     required this.fontSize,
     required this.heightFactor,
     required this.subjectTitleSetting,
-    required this.kuliyyah
+    required this.kuliyyah,
   });
 
   @override
