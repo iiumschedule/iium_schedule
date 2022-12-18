@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +35,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({ super.key });
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +44,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ScheduleLayoutSettingProvider()),
         ChangeNotifierProvider(create: (_) => ScheduleNotifierProvider()),
       ],
-      child: DynamicColorBuilder(
-        builder: (ColorScheme? lightColorScheme, ColorScheme? darkColorScheme) {
-          return MaterialApp(
-            title: 'IIUM Schedule',
-            theme: ThemeData(
+      child: DynamicColorBuilder(builder:
+          (ColorScheme? lightColorScheme, ColorScheme? darkColorScheme) {
+        return MaterialApp(
+          title: 'IIUM Schedule',
+          theme: ThemeData(
               colorScheme: lightColorScheme,
               useMaterial3: true,
-              fontFamily: 'Inter'
-            ),
-            darkTheme: ThemeData.dark().copyWith(
+              fontFamily: 'Inter'),
+          darkTheme: ThemeData.dark().copyWith(
               // cupertinoOverrideTheme:
               //     const CupertinoThemeData(primaryColor: Color(0xFF23682B)),
               // textButtonTheme: TextButtonThemeData(
@@ -66,19 +64,14 @@ class MyApp extends StatelessWidget {
               //       foregroundColor: Colors.purple.shade200),
               // ),
               useMaterial3: true,
-              textTheme: ThemeData.dark().textTheme.apply(
-                fontFamily: 'Inter'
-              ),
-              primaryTextTheme: ThemeData.dark().textTheme.apply(
-                fontFamily: 'Inter'
-              ),
-              colorScheme: darkColorScheme
-            ),
-            themeMode: ThemeMode.system,
-            home: const MyBody(),
-          );
-        }
-      ),
+              textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
+              primaryTextTheme:
+                  ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
+              colorScheme: darkColorScheme),
+          themeMode: ThemeMode.system,
+          home: const MyBody(),
+        );
+      }),
     );
   }
 }

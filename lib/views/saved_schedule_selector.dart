@@ -94,7 +94,7 @@ class _CardItem extends StatelessWidget {
         child: ListTile(
           title: Text(item.title!),
           subtitle: Text('Last modified: $formattedDate'),
-          leading: kDebugMode ? Text(item.id.toString()) : null,
+          leading: kDebugMode ? Text('${item.id}*') : null,
           trailing: IconButton(
             icon: const Icon(
               Icons.delete_outline,
