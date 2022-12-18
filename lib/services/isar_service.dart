@@ -11,8 +11,10 @@ class IsarService {
     db = openDB();
   }
 
+  // TODO: Make function for save new schedule
   // for save new schedule, view [ScheduleLayout]'s save() function
 
+  // TODO: Make function for save & add new subject to a schedule
   // for save new subject, view [SavedScheduleLayout] in manual add subject
 
   List<SavedSchedule> getAllSchedule() {

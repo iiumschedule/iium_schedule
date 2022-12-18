@@ -120,7 +120,6 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         await isarSubject.dayTimes.save();
       }
     });
-    print(savedId);
     return savedId;
   }
 
@@ -179,10 +178,12 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
 
           return TableEvent(
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-              color: _colorPallete[subjIndex]
-            ),
-            textStyle: TextStyle(fontSize: _fontSizeSubject, color: textColor, fontFamily: 'Inter'),
+                borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+                color: _colorPallete[subjIndex]),
+            textStyle: TextStyle(
+                fontSize: _fontSizeSubject,
+                color: textColor,
+                fontFamily: 'Inter'),
             title: Provider.of<ScheduleLayoutSettingProvider>(context)
                         .subjectTitleSetting ==
                     SubjectTitleSetting.title
@@ -208,8 +209,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         name: i.englishDay().substring(0, 3).toUpperCase(),
         textStyle: TextStyle(
           fontFamily: 'Inter',
-          color:
-              Theme.of(context).colorScheme.onBackground,
+          color: Theme.of(context).colorScheme.onBackground,
         ),
       );
 
@@ -294,7 +294,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                               if (!mounted) return;
                               MyFtoast.show(
                                 context,
-                                'Saved. The schedule can the found from the main menu.',
+                                'Saved. The schedule can the found from the main menu. ${kDebugMode ? '$key*' : ''}}',
                               );
                               Navigator.pushAndRemoveUntil(
                                 context,

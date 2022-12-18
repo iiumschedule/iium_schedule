@@ -62,8 +62,6 @@ class _SavedScheduleSelectorState extends State<SavedScheduleSelector> {
                   }
                 },
               );
-              // print(item);
-              // return Text(item.toString());
             },
           );
         },

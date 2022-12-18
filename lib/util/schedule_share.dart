@@ -16,6 +16,7 @@ class ScheduleShare {
   }
 
   /// TODO: Test with Firebase functions and use it
+  /// TODO: Not fully implemented yet
   static void email(String savedPath, String scheduleTitle) async {
     Map<String, String> data = {"schedule_title": scheduleTitle};
     var request =

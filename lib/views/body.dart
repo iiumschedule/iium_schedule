@@ -19,8 +19,6 @@ import 'saved_schedule/saved_schedule_layout.dart';
 import 'saved_schedule_selector.dart';
 import 'scheduler/schedule_maker_entry.dart';
 
-final IsarService _isarService = IsarService();
-
 class MyBody extends StatefulWidget {
   const MyBody({
     Key? key,
@@ -31,6 +29,7 @@ class MyBody extends StatefulWidget {
 }
 
 class _MyBodyState extends State<MyBody> {
+  final IsarService _isarService = IsarService();
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
   int selectedIndex = 0;
 
@@ -150,7 +149,6 @@ class _MyBodyState extends State<MyBody> {
                           _listKey.currentState!.insertItem(data.length - 1);
                         }
 
-                        print(data.length);
                         if (data.isEmpty) {
                           return const Padding(
                             padding: EdgeInsets.symmetric(vertical: 4),
@@ -434,7 +432,6 @@ void configureQuickAction(BuildContext context) {
     }
 
     if (shortcutType == 'action_view_saved') {
-      print("hheehe");
       Navigator.push(context,
           MaterialPageRoute(builder: (_) => const SavedScheduleSelector()));
     }
