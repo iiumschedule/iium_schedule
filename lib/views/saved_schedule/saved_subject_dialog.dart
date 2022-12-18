@@ -8,6 +8,7 @@ import '../../util/extensions.dart';
 import '../course browser/subject_screen.dart';
 import 'subject_colour_dialog.dart';
 
+/// TODO: turn this dialog onto a page
 class SavedSubjectDialog extends StatefulWidget {
   const SavedSubjectDialog({
     Key? key,
@@ -42,7 +43,11 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text('Loading...');
+          return const AlertDialog(
+              content: Padding(
+            padding: EdgeInsets.all(100.0),
+            child: Text('Loading...'),
+          ));
         }
         TextEditingController venueController =
             TextEditingController(text: snapshot.data?.venue ?? "No venue");
