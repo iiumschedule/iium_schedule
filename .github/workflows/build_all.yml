@@ -19,7 +19,7 @@ jobs:
 
       - id: read-flutter-ver
         name: Determine Flutter version from ci-config.yml
-        uses: jbutcher5/read-yaml@@1.6
+        uses: jbutcher5/read-yaml@1.6
         with:
           file: "./ci-config.yml" # File to read from
           key-path: '["flutter_channel"]' # Access the runs key then the using key and retuns the value.
@@ -30,7 +30,7 @@ jobs:
 
       - id: read-build-windows
         name: Determine Flutter version from ci-config.yml
-        uses: jbutcher5/read-yaml@@1.6
+        uses: jbutcher5/read-yaml@1.6
         with:
           file: "./ci-config.yml"
           key-path: '["build_for", "windows"]'
@@ -40,7 +40,7 @@ jobs:
 
       - id: read-build-web
         name: Determine Flutter version from ci-config.yml
-        uses: jbutcher5/read-yaml@@1.6
+        uses: jbutcher5/read-yaml@1.6
         with:
           file: "./ci-config.yml"
           key-path: '["build_for", "web"]'
@@ -50,7 +50,7 @@ jobs:
 
       - id: read-build-android
         name: Determine Flutter version from ci-config.yml
-        uses: jbutcher5/read-yaml@@1.6
+        uses: jbutcher5/read-yaml@1.6
         with:
           file: "./ci-config.yml"
           key-path: '["build_for", "android"]'
