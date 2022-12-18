@@ -1,6 +1,6 @@
 # Build fat apk and splitted apk(s)
 
-name: Build release apk(s)
+name: Build Android (.apk(s))
 
 "on":
   workflow_dispatch:

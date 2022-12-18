@@ -1,4 +1,4 @@
-name: Build for Windows and package as msix
+name: Build Windows (.msix)
 
 on:
   workflow_dispatch:

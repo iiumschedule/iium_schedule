@@ -1,7 +1,17 @@
-name: Build Android aab bundle
+name: Build Android appbundle (.aab)
 
 on:
   workflow_dispatch:
+    inputs:
+      flutterChannel:
+        description: "Flutter channel"
+        default: stable
+        required: true
+        type: choice
+        options:
+          - stable
+          - beta
+          - master
 
 jobs:
   build_android:
@@ -19,7 +29,7 @@ jobs:
       - name: Setup Flutter stable
         uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
+          channel: ${{ inputs.flutterChannel }}
 
       - name: Decoding android/key.properties
         run: echo "${{ secrets.KEY_PROP }}" | base64 --decode > android/key.properties
