@@ -5,14 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:iium_schedule/views/saved_schedule/saved_schedule_layout.dart';
-import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:quick_actions/quick_actions.dart';
 
-import '../constants.dart';
-import '../hive_model/saved_schedule.dart';
+import '../services/isar_service.dart';
 import '../util/launcher_url.dart';
 import '../util/my_ftoast.dart';
 import 'check_update_page.dart';
@@ -20,17 +17,12 @@ import 'course browser/browser.dart';
 import 'saved_schedule_selector.dart';
 import 'scheduler/schedule_maker_entry.dart';
 
-class MyBody extends StatefulWidget {
+final IsarService _isarService = IsarService();
 
-  const MyBody({ super.key });
-
-  @override
-  State<StatefulWidget> createState() => _MyBody();
-}
-
-class _MyBody extends State<MyBody> {
-
-  int selectedIndex = 0;
+class MyBody extends StatelessWidget {
+  const MyBody({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -277,6 +269,31 @@ class _CardItem extends StatelessWidget {
                               fontWeight: FontWeight.bold
                             ),
                           )
+          const Divider(),
+          StreamBuilder(
+              stream: _isarService.listenToAllSchedulesChanges(),
+              builder: (context, snapshot) {
+                var schedulesList = _isarService.getAllSchedule();
+                if (schedulesList.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4),
+                    child: Text(
+                      "Your saved schedule will appear here",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.w300),
+                    ),
+                  );
+                }
+                return Column(
+                  children: [
+                    MouseRegion(
+                      cursor: kIsWeb
+                          ? SystemMouseCursors.click
+                          : SystemMouseCursors.basic,
+                      child: CupertinoButton(
+                        child: Text(
+                          'Saved Schedule',
+                          style: textStyle,
                         ),
                         Text(
                           'Modified on $formattedDate',
@@ -340,7 +357,6 @@ class _SimpleAboutDialog extends StatelessWidget {
             ),
           SimpleDialogOption(
             onPressed: () async {
-              final BuildContext _context = context;
               var deviceInfo = await DeviceInfoPlugin().deviceInfo;
               var packageInfo = await PackageInfo.fromPlatform();
 
@@ -371,7 +387,7 @@ class _SimpleAboutDialog extends StatelessWidget {
 
               await Clipboard.setData(
                   ClipboardData(text: data.values.join('; ')));
-              MyFtoast.show(_context, 'Copied to clipboard');
+              MyFtoast.show(context, 'Copied to clipboard');
             },
             child: const Text('Copy debug info'),
           ),

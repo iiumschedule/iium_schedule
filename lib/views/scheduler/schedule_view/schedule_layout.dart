@@ -5,14 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:isar/isar.dart';
 import 'package:provider/provider.dart';
 
 import '../../../enums/subject_title_setting_enum.dart';
+import '../../../isar_models/saved_daytime.dart';
+import '../../../isar_models/saved_schedule.dart';
+import '../../../isar_models/saved_subject.dart';
 import '../../../util/colour_palletes.dart';
-import '../../../constants.dart';
-import '../../../hive_model/saved_schedule.dart';
-import '../../../hive_model/saved_subject.dart';
 import '../../../providers/schedule_layout_setting_provider.dart';
 import '../../../util/extensions.dart';
 import '../../../util/lane_events_util.dart';
@@ -43,7 +43,6 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     ...ColourPalletes.pallete1
   ]; // colour pallete to be included in initial generation
   final GlobalKey _globalKey = GlobalKey();
-  final box = Hive.box<SavedSchedule>(kHiveSavedSchedule);
 
   int _startHour = 10; // pukul 10 am
   int _endHour = 17; // pukul 5 pm
@@ -69,27 +68,60 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
 
   // Save the generated schedule data to the database (Hive)
   Future<int> save() async {
-    int key = await box.add(SavedSchedule(
-      session: ScheduleMakerData.albiruni!.session,
-      semester: ScheduleMakerData.albiruni!.semester,
-      title: name,
-      lastModified: DateTime.now().toString(),
-      dateCreated: DateTime.now().toString(),
-      subjects: widget.subjects
-          .map((e) => SavedSubject.fromSubject(
-              subject: e,
-              subjectName: e.title,
-              hexColor: tempHexColour[e.code]))
-          .toList(),
-      fontSize: _fontSizeSubject,
-      heightFactor: _itemHeight,
-      subjectTitleSetting:
-          Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)
-              .subjectTitleSetting!,
-      kuliyyah: ScheduleMakerData.kulliyah!
-    ));
-    print('Saved to key $key');
-    return key;
+    Isar isar = Isar.getInstance()!;
+    late int savedId;
+
+    await isar.writeTxn(() async {
+      var isarSchedule = SavedSchedule(
+        session: ScheduleMakerData.albiruni!.session,
+        semester: ScheduleMakerData.albiruni!.semester,
+        title: name,
+        lastModified: DateTime.now().toString(),
+        dateCreated: DateTime.now().toString(),
+        fontSize: _fontSizeSubject,
+        heightFactor: _itemHeight,
+        subjectTitleSetting:
+            Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)
+                .subjectTitleSetting!,
+        kuliyyah: ScheduleMakerData.kulliyah,
+      );
+
+      savedId = await isar.savedSchedules.put(isarSchedule);
+
+      for (final subject in widget.subjects) {
+        var isarSubject = SavedSubject(
+          code: subject.code,
+          sect: subject.sect,
+          title: subject.title,
+          chr: subject.chr,
+          venue: subject.venue,
+          lect: subject.lect,
+          subjectName: subject.title,
+          hexColor: tempHexColour[subject.code],
+        );
+
+        await isar.savedSubjects.put(isarSubject);
+        isarSchedule.subjects.add(isarSubject);
+
+        isarSchedule.subjects.save();
+
+        var isarDayTimes = <SavedDaytime>[];
+
+        for (final dayTime in subject.dayTime) {
+          isarDayTimes.add(SavedDaytime(
+            day: dayTime!.day,
+            startTime: dayTime.startTime,
+            endTime: dayTime.endTime,
+          ));
+        }
+
+        await isar.savedDaytimes.putAll(isarDayTimes);
+        isarSubject.dayTimes.addAll(isarDayTimes);
+        await isarSubject.dayTimes.save();
+      }
+    });
+    print(savedId);
+    return savedId;
   }
 
   @override
@@ -267,9 +299,8 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SavedScheduleLayout(
-                                    savedSchedule: box.get(key)!,
-                                  ),
+                                  builder: (context) =>
+                                      SavedScheduleLayout(id: key),
                                 ),
                                 (route) => route.isFirst,
                               );

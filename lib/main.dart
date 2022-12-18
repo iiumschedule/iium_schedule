@@ -12,8 +12,9 @@ import 'hive_model/gh_responses.dart';
 import 'hive_model/saved_daytime.dart';
 import 'hive_model/saved_schedule.dart';
 import 'hive_model/saved_subject.dart';
-import 'providers/saved_subjects_provider.dart';
 import 'providers/schedule_layout_setting_provider.dart';
+import 'providers/schedule_notifier_provider.dart';
+import 'util/migrate_hive_to_isar.dart';
 import 'views/body.dart';
 
 void main() async {
@@ -29,6 +30,8 @@ void main() async {
 
   HttpOverrides.global = MyHttpOverrides();
 
+  await MigrateHiveToIsar.migrate();
+
   runApp(const MyApp());
 }
 
@@ -40,7 +43,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ScheduleLayoutSettingProvider()),
-        ChangeNotifierProvider(create: (_) => SavedSubjectsProvider()),
+        ChangeNotifierProvider(create: (_) => ScheduleNotifierProvider()),
       ],
       child: DynamicColorBuilder(
         builder: (ColorScheme? lightColorScheme, ColorScheme? darkColorScheme) {
