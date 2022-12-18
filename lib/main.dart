@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -35,12 +36,17 @@ void main() async {
    * For certain type of phones, the refresh rate is limited at 60fps. (i.e.: OnePlus phones)
    * This line of code instructs the OS to use the highest refresh rate available for this app.
    **/
-  await FlutterDisplayMode.setHighRefreshRate();
+  if (!kIsWeb && Platform.isAndroid) {
+    await FlutterDisplayMode.setHighRefreshRate();
+  }
 
   await MigrateHiveToIsar.migrate();
 
   runApp(const MyApp());
 }
+
+/// Note: Some UI elements that are marked in asterisk (*) are only
+/// appear in debug mode
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
