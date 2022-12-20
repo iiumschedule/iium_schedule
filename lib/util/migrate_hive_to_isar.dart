@@ -91,9 +91,10 @@ class MigrateHiveToIsar {
           await isarSubject.dayTimes.save();
         });
       }
-      // Delete Hive box
-      // hiveBox.deleteFromDisk();
     }
+
+    // Delete Hive box
+    Hive.deleteFromDisk();
 
     print('Done migrate');
   }
