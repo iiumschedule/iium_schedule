@@ -1,7 +1,6 @@
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../../constants.dart' as constants;
 import '../../util/kulliyyahs.dart';
@@ -37,153 +36,152 @@ class _BrowserState extends State<Browser> {
           child: Container(
             constraints: const BoxConstraints(maxWidth: 500),
             child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: DropdownButtonFormField(
-                        items: Kuliyyahs.all
-                            .map((e) => DropdownMenuItem(
-                                  value: e.code,
-                                  child: Text(e.fullName),
-                                ))
-                            .toList(),
-                        key: dropdownKey,
-                        decoration:
-                            const InputDecoration(border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(15.0))
-                            )),
-                        value: _selectedKulliyah,
-                        hint: const Text('Select kulliyyah'),
-                        selectedItemBuilder: (_) => Kuliyyahs.all
-                            .map((e) => Text(e.shortName))
-                            .toList(),
-                        onChanged: (String? value) {
-                          setState(() => _selectedKulliyah = value);
-                        },
-                      )),
-                  const SizedBox(height: 10),
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: CupertinoSegmentedControl(
-                        groupValue: _session,
-                        children: {
-                          for (var session in constants.kSessions)
-                            session: Text(session)
-                        },
-                        onValueChanged: (String value) {
-                          setState(() => _session = value);
-                        }),
-                  ),
-                  const SizedBox(height: 10),
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: CupertinoSegmentedControl(
-                        groupValue: _semester - 1,
-                        children: List.generate(
-                          3,
-                          (index) => Text("Sem ${index + 1}"),
-                        ).asMap(),
-                        onValueChanged: (int value) {
-                          setState(() => _semester = value + 1);
-                        }),
-                  ),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: CupertinoSlidingSegmentedControl<StudyGrad>(
-                      groupValue: _selectedStudyGrad,
-                      children: const {
-                        StudyGrad.ug: Text('Undergraduate'),
-                        StudyGrad.pg: Text('Postgraduate'),
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: DropdownButtonFormField(
+                      items: Kuliyyahs.all
+                          .map((e) => DropdownMenuItem(
+                                value: e.code,
+                                child: Text(e.fullName),
+                              ))
+                          .toList(),
+                      key: dropdownKey,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15.0)))),
+                      value: _selectedKulliyah,
+                      hint: const Text('Select kulliyyah'),
+                      selectedItemBuilder: (_) =>
+                          Kuliyyahs.all.map((e) => Text(e.shortName)).toList(),
+                      onChanged: (String? value) {
+                        setState(() => _selectedKulliyah = value);
                       },
-                      onValueChanged: (value) {
-                        setState(() => _selectedStudyGrad = value!);
+                    )),
+                const SizedBox(height: 10),
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: CupertinoSegmentedControl(
+                      groupValue: _session,
+                      children: {
+                        for (var session in constants.kSessions)
+                          session: Text(session)
                       },
-                    ),
+                      onValueChanged: (String value) {
+                        setState(() => _session = value);
+                      }),
+                ),
+                const SizedBox(height: 10),
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: CupertinoSegmentedControl(
+                      groupValue: _semester - 1,
+                      children: List.generate(
+                        3,
+                        (index) => Text("Sem ${index + 1}"),
+                      ).asMap(),
+                      onValueChanged: (int value) {
+                        setState(() => _semester = value + 1);
+                      }),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: CupertinoSlidingSegmentedControl<StudyGrad>(
+                    groupValue: _selectedStudyGrad,
+                    children: const {
+                      StudyGrad.ug: Text('Undergraduate'),
+                      StudyGrad.pg: Text('Postgraduate'),
+                    },
+                    onValueChanged: (value) {
+                      setState(() => _selectedStudyGrad = value!);
+                    },
                   ),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
-                    // Removed [CupertinoTextField] to prevent the usage of
-                    // [CupertinoIcons] as they are not tree shaken when publish
-                    // to the web. https://github.com/flutter/flutter/issues/57181
-                    child: TextField(
-                      maxLength: 9,
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15.0))
-                        ),
-                        // TODO: Buat dia tukar2 course code tu
-                        labelText: 'Search',
-                        hintText: 'Eg: MCTE 3100',
-                        isDense: true,
-                        helperText: 'Leave empty to load all',
-                        counter: const SizedBox.shrink(),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            _searchController.clear();
-                            FocusScope.of(context).unfocus();
-                          },
-                          icon: const Icon(Icons.clear_outlined),
-                        ),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  // Removed [CupertinoTextField] to prevent the usage of
+                  // [CupertinoIcons] as they are not tree shaken when publish
+                  // to the web. https://github.com/flutter/flutter/issues/57181
+                  child: TextField(
+                    maxLength: 9,
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0))),
+                      // TODO: Buat dia tukar2 course code tu
+                      labelText: 'Search',
+                      hintText: 'Eg: MCTE 3100',
+                      isDense: true,
+                      helperText: 'Leave empty to load all',
+                      counter: const SizedBox.shrink(),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          _searchController.clear();
+                          FocusScope.of(context).unfocus();
+                        },
+                        icon: const Icon(Icons.clear_outlined),
                       ),
-                      onEditingComplete: () {
-                        FocusScope.of(context).unfocus();
-                        _searchController.text =
-                            _searchController.text.toAlbiruniFormat();
-                      },
                     ),
+                    onEditingComplete: () {
+                      FocusScope.of(context).unfocus();
+                      _searchController.text =
+                          _searchController.text.toAlbiruniFormat();
+                    },
                   ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
-                    child: MouseRegion(
-                      cursor: _selectedKulliyah == null
-                          ? SystemMouseCursors.forbidden
-                          : SystemMouseCursors.click,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.primaryContainer
-                        ),
-                        onPressed: _selectedKulliyah == null
-                            ? null
-                            : () {
-                                // Redo the same thing as in onEditingComplete above. Just in case.
-                                FocusScope.of(context).unfocus();
-                                String? courseCode;
-                                if (_searchController.text.isNotEmpty) {
-                                  _searchController.text = courseCode =
-                                      _searchController.text.toAlbiruniFormat();
-                                } else {
-                                  courseCode = null;
-                                }
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: MouseRegion(
+                    cursor: _selectedKulliyah == null
+                        ? SystemMouseCursors.forbidden
+                        : SystemMouseCursors.click,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primaryContainer),
+                      onPressed: _selectedKulliyah == null
+                          ? null
+                          : () {
+                              // Redo the same thing as in onEditingComplete above. Just in case.
+                              FocusScope.of(context).unfocus();
+                              String? courseCode;
+                              if (_searchController.text.isNotEmpty) {
+                                _searchController.text = courseCode =
+                                    _searchController.text.toAlbiruniFormat();
+                              } else {
+                                courseCode = null;
+                              }
 
-                                Albiruni albiruni = Albiruni(
-                                    semester: _semester,
-                                    session: _session,
-                                    studyGrade: _selectedStudyGrad);
-                                Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (_) => BrowserView(
-                                        kulliyah: _selectedKulliyah!,
-                                        albiruni: albiruni,
-                                        courseCode: courseCode),
-                                  ),
-                                );
-                              },
-                        child: const Text('Go'),
-                      ),
+                              Albiruni albiruni = Albiruni(
+                                  semester: _semester,
+                                  session: _session,
+                                  studyGrade: _selectedStudyGrad);
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (_) => BrowserView(
+                                      kulliyah: _selectedKulliyah!,
+                                      albiruni: albiruni,
+                                      courseCode: courseCode),
+                                ),
+                              );
+                            },
+                      child: const Text('Go'),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
           ),
         ),
-      );
+      ),
+    );
   }
 }

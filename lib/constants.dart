@@ -12,4 +12,3 @@ const int kDefaultSemester = 1;
 
 // Hive boxes name (do not change)
 const kHiveSavedSchedule = "savedSchedule";
-const kHiveGhResponse = "ghResponse";

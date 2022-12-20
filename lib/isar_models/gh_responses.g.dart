@@ -73,7 +73,6 @@ GhResponses _ghResponsesDeserialize(
     body: reader.readString(offsets[0]),
     etag: reader.readString(offsets[1]),
   );
-  object.id = id;
   return object;
 }
 
@@ -94,7 +93,7 @@ P _ghResponsesDeserializeProp<P>(
 }
 
 Id _ghResponsesGetId(GhResponses object) {
-  return object.id ?? Isar.autoIncrement;
+  return object.id;
 }
 
 List<IsarLinkBase<dynamic>> _ghResponsesGetLinks(GhResponses object) {
@@ -102,9 +101,7 @@ List<IsarLinkBase<dynamic>> _ghResponsesGetLinks(GhResponses object) {
 }
 
 void _ghResponsesAttach(
-    IsarCollection<dynamic> col, Id id, GhResponses object) {
-  object.id = id;
-}
+    IsarCollection<dynamic> col, Id id, GhResponses object) {}
 
 extension GhResponsesQueryWhereSort
     on QueryBuilder<GhResponses, GhResponses, QWhere> {
@@ -448,24 +445,8 @@ extension GhResponsesQueryFilter
     });
   }
 
-  QueryBuilder<GhResponses, GhResponses, QAfterFilterCondition> idIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'id',
-      ));
-    });
-  }
-
-  QueryBuilder<GhResponses, GhResponses, QAfterFilterCondition> idIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'id',
-      ));
-    });
-  }
-
   QueryBuilder<GhResponses, GhResponses, QAfterFilterCondition> idEqualTo(
-      Id? value) {
+      Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -475,7 +456,7 @@ extension GhResponsesQueryFilter
   }
 
   QueryBuilder<GhResponses, GhResponses, QAfterFilterCondition> idGreaterThan(
-    Id? value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -488,7 +469,7 @@ extension GhResponsesQueryFilter
   }
 
   QueryBuilder<GhResponses, GhResponses, QAfterFilterCondition> idLessThan(
-    Id? value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -501,8 +482,8 @@ extension GhResponsesQueryFilter
   }
 
   QueryBuilder<GhResponses, GhResponses, QAfterFilterCondition> idBetween(
-    Id? lower,
-    Id? upper, {
+    Id lower,
+    Id upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {

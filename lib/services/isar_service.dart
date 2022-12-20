@@ -1,5 +1,6 @@
 import 'package:isar/isar.dart';
 
+import '../isar_models/gh_responses.dart';
 import '../isar_models/saved_daytime.dart';
 import '../isar_models/saved_schedule.dart';
 import '../isar_models/saved_subject.dart';
@@ -114,6 +115,22 @@ class IsarService {
     }
   }
 
+  /// Save the [GhResponses] object to the database
+  Future<void> addGhResponse(GhResponses response) async {
+    final isar = await db;
+
+    isar.writeTxn(() {
+      return isar.ghResponses.put(response);
+    });
+  }
+
+  /// Retrieve the [GhResponses] object from the database
+  Future<GhResponses?> getGhResponse() async {
+    final isar = await db;
+
+    return isar.ghResponses.get(0);
+  }
+
   // Future<void> cleanDb() async {
   //   final isar = await db;
   //   await isar.writeTxn(() => isar.clear());
@@ -122,7 +139,12 @@ class IsarService {
   Future<Isar> openDB() async {
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open(
-        [SavedScheduleSchema, SavedSubjectSchema, SavedDaytimeSchema],
+        [
+          SavedScheduleSchema,
+          SavedSubjectSchema,
+          SavedDaytimeSchema,
+          GhResponsesSchema
+        ],
         inspector: true,
       );
     }

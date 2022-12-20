@@ -4,7 +4,7 @@ part 'gh_responses.g.dart';
 
 @collection
 class GhResponses {
-  Id? id;
+  final Id id = 0; // constant, only one entry will be stored
 
   /// etag of the response header.
   late String etag;

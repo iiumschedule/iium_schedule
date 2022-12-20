@@ -2,17 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/link.dart';
 import 'package:version/version.dart';
 
-import '../constants.dart';
-import '../hive_model/gh_responses.dart';
+import '../isar_models/gh_responses.dart';
 import '../model/gh_error.dart';
 import '../model/gh_releases_latest.dart';
+import '../services/isar_service.dart';
 
 /// Check for update for Android & Windows
 /// Currently the is an known issue for Windows
@@ -26,37 +25,38 @@ class CheckUpdatePage extends StatefulWidget {
 
 class _CheckUpdatePageState extends State<CheckUpdatePage> {
   late Version currentVersion;
-  final key = 0; // key must be constant, only one entry will be stored in hive
-  final box = Hive.box<GhResponses>(kHiveGhResponse);
+  final IsarService isarService = IsarService();
 
   /// Since this method is importing dart:io, it cannot be used on the web
   /// Also, the web seems like unsuitable to have a check for updates feature
   /// Despite that there have bene multiple issuew with web pwa caching
   Future<Version> _checkLatestVersion() async {
     GhReleasesLatest latest;
+    GhResponses? cachedResponses = await isarService.getGhResponse();
 
     // API endpoint pointed to latest stable release
     const latestRelease =
         'https://api.github.com/repos/iqfareez/iium_schedule/releases/latest';
     final response = await http.get(Uri.parse(latestRelease),
-        headers: box.get(0) != null
+        headers: cachedResponses != null
             ? {
-                'If-None-Match': box.get(0)!.etag,
+                'If-None-Match': cachedResponses.etag,
               }
             : null);
     // If the response is not modified, return the cached version
     // https://docs.github.com/en/rest/overview/resources-in-the-rest-api#conditional-requests
 
     if (response.statusCode == HttpStatus.ok) {
-      final body = json.decode(response.body);
-      final ghReleasesLatest = GhReleasesLatest.fromJson(body);
+      final ghReleasesLatest =
+          GhReleasesLatest.fromJson(json.decode(response.body));
       // store the etag and the body of the response
-      box.put(key, GhResponses(etag: response.headers['etag']!, body: body));
+      isarService.addGhResponse(
+          GhResponses(etag: response.headers['etag']!, body: response.body));
       latest = ghReleasesLatest;
     } else if (response.statusCode == HttpStatus.notModified) {
       // return the cached version
-      GhResponses cachedResponses = box.get(key)!;
-      latest = GhReleasesLatest.fromJson(cachedResponses.body);
+      var body = jsonDecode(cachedResponses!.body);
+      latest = GhReleasesLatest.fromJson(body);
     } else {
       final data = json.decode(response.body);
       final ghError = GhError.fromJson(data);
