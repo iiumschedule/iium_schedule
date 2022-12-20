@@ -1,5 +1,7 @@
+import 'package:albiruni/albiruni.dart';
 import 'package:isar/isar.dart';
 
+import '../isar_models/favourite_subject.dart';
 import '../isar_models/gh_responses.dart';
 import '../isar_models/saved_daytime.dart';
 import '../isar_models/saved_schedule.dart';
@@ -115,6 +117,59 @@ class IsarService {
     }
   }
 
+  /// Add new Favourites subject
+  Future<void> addFavouritesSubject(
+      Albiruni albiruni, String kuliyyah, Subject subject) async {
+    final isar = await db;
+    var favSubject = FavouriteSubject(
+        kulliyyahCode: kuliyyah,
+        semester: albiruni.semester,
+        session: albiruni.session,
+        courseCode: subject.code,
+        section: subject.sect,
+        favouritedDate: DateTime.now());
+    isar.writeTxnSync(() {
+      isar.favouriteSubjects.putSync(favSubject);
+    });
+  }
+
+  /// Check if the subject given subject and scope is already favourited or not
+  ///
+  /// Return integer is already favourited, null if not
+  Future<int?> checkFavourite(
+      Albiruni albiruni, String kuliyyah, Subject subject) async {
+    final isar = await db;
+
+    var res = await isar.favouriteSubjects
+        .filter()
+        .courseCodeMatches(subject.code)
+        .and()
+        .sectionEqualTo(subject.sect)
+        .and()
+        .kulliyyahCodeMatches(kuliyyah)
+        .and()
+        .semesterEqualTo(albiruni.semester)
+        .and()
+        .sessionMatches(albiruni.session)
+        .findAll();
+
+    return res.isEmpty ? null : res.first.id;
+  }
+
+  /// Get all favourited subjects
+  Future<List<FavouriteSubject>> getAllFavourites() async {
+    final isar = await db;
+    return isar.favouriteSubjects.where().findAll();
+  }
+
+  /// Remove a favourited subject, pass the ID of the [FavouriteSubject] object
+  Future<void> removeFavouritesSubject(int id) async {
+    final isar = await db;
+    isar.writeTxn(() async {
+      await isar.favouriteSubjects.delete(id);
+    });
+  }
+
   /// Save the [GhResponses] object to the database
   Future<void> addGhResponse(GhResponses response) async {
     final isar = await db;
@@ -143,7 +198,8 @@ class IsarService {
           SavedScheduleSchema,
           SavedSubjectSchema,
           SavedDaytimeSchema,
-          GhResponsesSchema
+          GhResponsesSchema,
+          FavouriteSubjectSchema,
         ],
         inspector: true,
       );

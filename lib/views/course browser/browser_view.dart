@@ -199,6 +199,8 @@ class _BrowserViewState extends State<BrowserView> {
                             CupertinoPageRoute(
                               builder: (_) => SubjectScreen(
                                 snapshot.data![index],
+                                albiruni: widget.albiruni,
+                                kulliyyah: widget.kulliyah,
                               ),
                             ),
                           );
