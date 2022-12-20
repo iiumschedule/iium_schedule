@@ -1,9 +1,12 @@
+import 'package:albiruni/albiruni.dart';
 import 'package:flutter/material.dart';
 
 import '../isar_models/favourite_subject.dart';
 import '../services/isar_service.dart';
 import '../util/kulliyyahs.dart';
+import '../util/subject_fetcher.dart';
 import 'course browser/browser.dart';
+import 'course browser/subject_screen.dart';
 
 class FavouritesPage extends StatefulWidget {
   const FavouritesPage({super.key});
@@ -82,41 +85,97 @@ class _FavouriteCard extends StatefulWidget {
 }
 
 class __FavouriteCardState extends State<_FavouriteCard> {
+  late Future<Subject> subject;
+
+  @override
+  void initState() {
+    super.initState();
+    subject = fetchSubject();
+  }
+
+  Future<Subject> fetchSubject() async {
+    return SubjectFetcher.fetchSubjectData(
+        albiruni: Albiruni(
+            semester: widget.favouriteSubject.semester,
+            session: widget.favouriteSubject.session),
+        kulliyyah: widget.favouriteSubject.kulliyyahCode,
+        courseCode: widget.favouriteSubject.courseCode,
+        section: widget.favouriteSubject.section);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.favouriteSubject.courseCode,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold),
+    return FutureBuilder<Subject>(
+        future: subject,
+        builder: (context, snapshot) {
+          return Card(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(8),
+              onTap: snapshot.hasData
+                  ? () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => SubjectScreen(snapshot.data!),
+                        ),
+                      );
+                    }
+                  : null,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            widget.favouriteSubject.courseCode,
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          if (snapshot.hasData)
+                            Text(
+                              snapshot.data!.title,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          Text(
+                              'Section ${widget.favouriteSubject.section.toString()}'),
+                          Text(
+                            Kuliyyahs.kuliyyahFromCode(
+                                    widget.favouriteSubject.kulliyyahCode)
+                                .fullName,
+                            style: const TextStyle(fontWeight: FontWeight.w200),
+                          ),
+
+                          // Text(widget.favouriteSubject.favouritedDate.toString()),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(widget.favouriteSubject.session),
+                        Text('Semester ${widget.favouriteSubject.semester}'),
+                      ],
+                    )
+                  ],
                 ),
-                Text(Kuliyyahs.kuliyyahFromCode(
-                        widget.favouriteSubject.kulliyyahCode)
-                    .fullName),
-                Text('Section ${widget.favouriteSubject.section.toString()}'),
-                // Text(widget.favouriteSubject.favouritedDate.toString()),
-              ],
+              ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(widget.favouriteSubject.session),
-                Text('Semester ${widget.favouriteSubject.semester}'),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 }
