@@ -9,12 +9,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:recase/recase.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../services/isar_service.dart';
 import '../../util/extensions.dart';
 import '../../util/my_ftoast.dart';
 
+IsarService isarService = IsarService();
+
 /// Subject detail viewer
-class SubjectScreen extends StatelessWidget {
-  const SubjectScreen(this.subject, {Key? key, this.isCached = false})
+class SubjectScreen extends StatefulWidget {
+  const SubjectScreen(this.subject,
+      {Key? key, this.isCached = false, this.albiruni, this.kulliyyah})
       : super(key: key);
 
   /// Subject information from albiruni
@@ -26,6 +30,17 @@ class SubjectScreen extends StatelessWidget {
   /// and it is cached when loaded from saved schedule page
   final bool isCached;
 
+  /// Pass this from Course Browser, as a context to save to Favourites
+  final Albiruni? albiruni;
+
+  /// Pass this from Course Browser, as a context to save to Favourites
+  final String? kulliyyah;
+
+  @override
+  State<SubjectScreen> createState() => _SubjectScreenState();
+}
+
+class _SubjectScreenState extends State<SubjectScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,22 +49,54 @@ class SubjectScreen extends StatelessWidget {
         title: const Text('Subject details'),
         // shadowColor: Colors.transparent,
         actions: [
+          // only shows favourite button when the subject is loaded from course browser
+          if (widget.albiruni != null && widget.kulliyyah != null)
+            FutureBuilder<int?>(
+                future: isarService.checkFavourite(
+                    widget.albiruni!, widget.kulliyyah!, widget.subject),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    print(snapshot.error.toString());
+                    return const SizedBox.shrink();
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const SizedBox(
+                      height: 18,
+                      width: 18,
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  if (snapshot.data != null) {
+                    return IconButton(
+                      onPressed: () async {
+                        await isarService
+                            .removeFavouritesSubject(snapshot.data!);
+                        setState(() {});
+                      },
+                      icon: const Icon(Icons.favorite),
+                      tooltip: "Remove this subject from favourite",
+                    );
+                  }
+                  return IconButton(
+                    onPressed: () async {
+                      await isarService.addFavouritesSubject(
+                          widget.albiruni!, widget.kulliyyah!, widget.subject);
+
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.favorite_outline),
+                    tooltip: "Add this subject to favourite",
+                  );
+                }),
           IconButton(
             onPressed: () {
-              Fluttertoast.showToast(msg: "not implemented");
-              throw UnimplementedError();
-            },
-            icon: const Icon(Icons.favorite_outline),
-            tooltip: "Add this subject to favourite",
-          ),
-          IconButton(
-            onPressed: () {
-              String text = '${subject.title} (${subject.code})';
+              String text = '${widget.subject.title} (${widget.subject.code})';
               text += '\n';
-              text += '\nSection: ${subject.sect}';
-              text += '\nCredit hour: ${subject.chr}';
-              text += '\nLecturer(s): ${subject.lect.join(', ')}';
-              text += '\nVenue: ${subject.venue ?? '-'}';
+              text += '\nSection: ${widget.subject.sect}';
+              text += '\nCredit hour: ${widget.subject.chr}';
+              text += '\nLecturer(s): ${widget.subject.lect.join(', ')}';
+              text += '\nVenue: ${widget.subject.venue ?? '-'}';
               Share.share(text);
             },
             icon: const Icon(Icons.share_outlined),
@@ -66,7 +113,7 @@ class SubjectScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (isCached)
+              if (widget.isCached)
                 PastelAdmonition.info(
                   color: Theme.of(context).colorScheme.secondaryContainer,
                   text:
@@ -75,7 +122,7 @@ class SubjectScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: SelectableText(
-                  subject.title,
+                  widget.subject.title,
                   style: const TextStyle(
                       fontSize: 24, fontWeight: FontWeight.w600),
                   textAlign: TextAlign.center,
@@ -84,18 +131,18 @@ class SubjectScreen extends StatelessWidget {
               Wrap(
                 children: [
                   TextBubble(
-                    text: subject.code,
+                    text: widget.subject.code,
                     icon: Icons.label_outline,
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
                   TextBubble(
                     text:
-                        'Chr ${subject.chr.toString().removeTrailingDotZero()}',
+                        'Chr ${widget.subject.chr.toString().removeTrailingDotZero()}',
                     icon: Icons.class_outlined,
                     backgroundColor: Colors.deepPurple,
                   ),
                   TextBubble(
-                    text: 'Section ${subject.sect}',
+                    text: 'Section ${widget.subject.sect}',
                     icon: Icons.group_outlined,
                     backgroundColor: Colors.deepOrange,
                   ),
@@ -105,21 +152,21 @@ class SubjectScreen extends StatelessWidget {
                 '\nSession(s)',
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
-              _DayTimeTable(subject.dayTime),
+              _DayTimeTable(widget.subject.dayTime),
               const Text(
                 '\nLecturer(s)',
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
               ...List.generate(
-                subject.lect.length,
+                widget.subject.lect.length,
                 (index) => SelectableText(
-                    '${index + 1}. ${ReCase(subject.lect[index]).titleCase}'),
+                    '${index + 1}. ${ReCase(widget.subject.lect[index]).titleCase}'),
               ),
               const Text(
                 '\nVenue',
                 style: TextStyle(fontWeight: FontWeight.w600),
               ),
-              Text(subject.venue ?? '-')
+              Text(widget.subject.venue ?? '-')
             ],
           ),
         ),
