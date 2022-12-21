@@ -156,16 +156,22 @@ class IsarService {
     return res.isEmpty ? null : res.first.id;
   }
 
-  /// Get all favourited subjects
-  Future<List<FavouriteSubject>> getAllFavourites() async {
+  /// Listen to Favourite Subject changes
+  Stream<List<FavouriteSubject>> listenToAllFavourites() async* {
     final isar = await db;
-    return isar.favouriteSubjects.where().findAll();
+
+    // https://isar.dev/watchers.html#watching-queries
+    yield* isar.favouriteSubjects
+        .filter()
+        .idIsNotNull()
+        .build()
+        .watch(fireImmediately: true);
   }
 
   /// Remove a favourited subject, pass the ID of the [FavouriteSubject] object
   Future<void> removeFavouritesSubject(int id) async {
     final isar = await db;
-    isar.writeTxn(() async {
+    await isar.writeTxn(() async {
       await isar.favouriteSubjects.delete(id);
     });
   }

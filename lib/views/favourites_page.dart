@@ -25,8 +25,8 @@ class _FavouritesPageState extends State<FavouritesPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: FutureBuilder<List<FavouriteSubject>>(
-          future: isarService.getAllFavourites(),
+        child: StreamBuilder<List<FavouriteSubject>>(
+          stream: isarService.listenToAllFavourites(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(
@@ -44,10 +44,19 @@ class _FavouritesPageState extends State<FavouritesPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('No favourites yet.'),
+                    const Text('No favourites yet'),
                     const SizedBox(height: 30),
-                    const Text(
-                        'Start adding favourites by tapping the ♡ icon on the subject details page.'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        'Start adding favourites by tapping the ♡ icon on the subject details page.',
+                        style: Theme.of(context).textTheme.labelMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    // TODO: reevaluate this because the Browser page doesn't have appbar
+                    // I planned to put the view favourite button on course browser page
+                    // so we can remove this as user can navigate just one step backward
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).push(
@@ -63,9 +72,14 @@ class _FavouritesPageState extends State<FavouritesPage> {
               return GridView(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: constraints.maxWidth > 750 ? 2 : 1,
-                  mainAxisExtent: 130,
+                  mainAxisExtent: 140,
                 ),
-                children: snapshot.data!.map((e) => _FavouriteCard(e)).toList(),
+                // had to pass the because otherwise the state is overlapping
+                // with each other the layout rebuild (sorry for bad explaination)
+                // so it will cause wrong name appear etc.
+                children: snapshot.data!
+                    .map((e) => _FavouriteCard(e, Key(e.id.toString())))
+                    .toList(),
               );
             });
           },
@@ -76,7 +90,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
 }
 
 class _FavouriteCard extends StatefulWidget {
-  const _FavouriteCard(this.favouriteSubject);
+  const _FavouriteCard(this.favouriteSubject, Key? key) : super(key: key);
 
   final FavouriteSubject favouriteSubject;
 
@@ -86,18 +100,20 @@ class _FavouriteCard extends StatefulWidget {
 
 class __FavouriteCardState extends State<_FavouriteCard> {
   late Future<Subject> subject;
+  late Albiruni albiruni;
 
   @override
   void initState() {
     super.initState();
+    albiruni = Albiruni(
+        semester: widget.favouriteSubject.semester,
+        session: widget.favouriteSubject.session);
     subject = fetchSubject();
   }
 
   Future<Subject> fetchSubject() async {
     return SubjectFetcher.fetchSubjectData(
-        albiruni: Albiruni(
-            semester: widget.favouriteSubject.semester,
-            session: widget.favouriteSubject.session),
+        albiruni: albiruni,
         kulliyyah: widget.favouriteSubject.kulliyyahCode,
         courseCode: widget.favouriteSubject.courseCode,
         section: widget.favouriteSubject.section);
@@ -106,76 +122,89 @@ class __FavouriteCardState extends State<_FavouriteCard> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Subject>(
-        future: subject,
-        builder: (context, snapshot) {
-          return Card(
-            child: InkWell(
-              borderRadius: BorderRadius.circular(8),
-              onTap: snapshot.hasData
-                  ? () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => SubjectScreen(snapshot.data!),
+      future: subject,
+      builder: (context, snapshot) {
+        return Card(
+          child: InkWell(
+            borderRadius: BorderRadius.circular(8),
+            onTap: snapshot.hasData
+                ? () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => SubjectScreen(
+                          snapshot.data!,
+                          albiruni: albiruni,
+                          kulliyyah: widget.favouriteSubject.kulliyyahCode,
                         ),
-                      );
-                    }
-                  : null,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      ),
+                    );
+                  }
+                : null,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.favouriteSubject.courseCode,
+                    style: TextStyle(
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  if (snapshot.hasData)
+                    Text(
+                      snapshot.data!.title,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  Text('Section ${widget.favouriteSubject.section.toString()}'),
+
+                  // Text(widget.favouriteSubject.favouritedDate.toString()),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          Kuliyyahs.kuliyyahFromCode(
+                                  widget.favouriteSubject.kulliyyahCode)
+                              .fullName,
+                          maxLines: 2,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w100,
+                            fontSize: 11,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            widget.favouriteSubject.courseCode,
-                            style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold),
+                            widget.favouriteSubject.session,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium!
+                                .copyWith(fontSize: 13),
                           ),
-                          if (snapshot.hasData)
-                            Text(
-                              snapshot.data!.title,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSecondaryContainer,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          Text(
-                              'Section ${widget.favouriteSubject.section.toString()}'),
-                          Text(
-                            Kuliyyahs.kuliyyahFromCode(
-                                    widget.favouriteSubject.kulliyyahCode)
-                                .fullName,
-                            style: const TextStyle(fontWeight: FontWeight.w200),
-                          ),
-
-                          // Text(widget.favouriteSubject.favouritedDate.toString()),
+                          Text('Semester ${widget.favouriteSubject.semester}'),
                         ],
                       ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(widget.favouriteSubject.session),
-                        Text('Semester ${widget.favouriteSubject.semester}'),
-                      ],
-                    )
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }
