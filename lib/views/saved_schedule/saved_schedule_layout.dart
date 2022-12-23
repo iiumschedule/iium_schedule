@@ -212,8 +212,9 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                                       scheduleNameController:
                                           scheduleNameController));
 
-                              if ((newName == null) || (newName.isEmpty))
+                              if ((newName == null) || (newName.isEmpty)) {
                                 return;
+                              }
                               setState(() => name = newName);
 
                               // save the new name and record the last modified

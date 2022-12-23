@@ -51,6 +51,7 @@ dependencies:
   flutter_displaymode: ^0.4.1
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.5
+  flutter_inappwebview: ^5.7.2+3
 
 dev_dependencies:
   flutter_test:
