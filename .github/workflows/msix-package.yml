@@ -36,6 +36,6 @@ jobs:
         run: echo 'Y' | flutter pub run msix:create
 
       - name: Upload msix
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           path: build\windows\runner\Release\iium_schedule.msix
