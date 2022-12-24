@@ -15,7 +15,6 @@ import '../util/launcher_url.dart';
 import '../util/my_ftoast.dart';
 import 'check_update_page.dart';
 import 'course browser/browser.dart';
-import 'favourites_page.dart';
 import 'saved_schedule/saved_schedule_layout.dart';
 import 'saved_schedule_selector.dart';
 import 'scheduler/schedule_maker_entry.dart';
@@ -218,19 +217,6 @@ class _MyBodyState extends State<MyBody> {
                         );
                       },
                       child: const Text('Go to legacy selector*'),
-                    ),
-                  if (kDebugMode)
-                    // Idk where to put button to open the favourites subject yet
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const FavouritesPage(),
-                          ),
-                        );
-                      },
-                      child: const Text('Go to Favourites subject*'),
                     ),
                 ],
               ),

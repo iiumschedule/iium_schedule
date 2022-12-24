@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants.dart' as constants;
 import '../../util/kulliyyahs.dart';
+import '../favourites_page.dart';
 import 'browser_view.dart';
 
 class Browser extends StatefulWidget {
@@ -114,8 +115,8 @@ class _BrowserState extends State<Browser> {
                       border: const OutlineInputBorder(
                           borderRadius:
                               BorderRadius.all(Radius.circular(15.0))),
-                      // TODO: Buat dia tukar2 course code tu
                       labelText: 'Search',
+                      // TODO: Buat dia tukar2 course code suggestion
                       hintText: 'Eg: MCTE 3100',
                       isDense: true,
                       helperText: 'Leave empty to load all',
@@ -130,6 +131,7 @@ class _BrowserState extends State<Browser> {
                     ),
                     onEditingComplete: () {
                       FocusScope.of(context).unfocus();
+                      // format to Albiruni format
                       _searchController.text =
                           _searchController.text.toAlbiruniFormat();
                     },
@@ -176,7 +178,25 @@ class _BrowserState extends State<Browser> {
                       child: const Text('Go'),
                     ),
                   ),
-                )
+                ),
+                // I'm still thinking the best place to place this favourites button
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const FavouritesPage(),
+                          ),
+                        );
+                      },
+                      child: const Text('Open Favourites'),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
