@@ -3,7 +3,7 @@
 # https://github.com/iqfareez/iium_schedule/actions/workflows/build_all.yml
 
 # Flutter channel: `stable` or `beta` or `master`
-flutter_channel: stable
+flutter_channel: beta
 
 # build target. Set `true` or `false`
 build_for:
