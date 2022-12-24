@@ -12,6 +12,7 @@ class JsonImportDialog extends StatefulWidget {
 
 class _JsonImportDialogState extends State<JsonImportDialog> {
   final _jsonInputController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +27,37 @@ class _JsonImportDialogState extends State<JsonImportDialog> {
               style: TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 16),
-            TextField(
-              controller: _jsonInputController,
-              decoration: InputDecoration(
-                labelText: 'JSON',
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
+            Form(
+              key: _formKey,
+              child: TextFormField(
+                controller: _jsonInputController,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Can\'t add. Data is empty';
+                  }
+                  try {
+                    jsonDecode(value);
+                  } on FormatException catch (e) {
+                    return 'Failed to decode JSON (${e.message})';
+                  }
+
+                  // check for other value error
+                  // this usually when users paste the wrong JSON etc.
+                  if (!_validateJson(value)) {
+                    return 'Unexpected format. Make sure you are pasting the correct JSON';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  labelText: 'JSON',
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
+                maxLines: 5,
               ),
-              maxLines: 5,
             ),
             Align(
               alignment: Alignment.centerLeft,
@@ -67,33 +88,11 @@ class _JsonImportDialogState extends State<JsonImportDialog> {
                 TextButton(
                   onPressed: () {
                     FocusScope.of(context).unfocus();
-                    if (_jsonInputController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Can\'t add. Data is empty'),
-                        behavior: SnackBarBehavior.floating,
-                        backgroundColor: Colors.red,
-                      ));
-                      return;
-                    }
-                    List<dynamic> decodedJson;
+                    if (!_formKey.currentState!.validate()) return;
 
-                    try {
-                      decodedJson = jsonDecode(_jsonInputController.text);
-                    } on FormatException catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Failed to decode JSON (${e.message})'),
-                        backgroundColor: Colors.red,
-                        behavior: SnackBarBehavior.floating,
-                      ));
-                      return;
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Failed to decode JSON'),
-                        backgroundColor: Colors.red,
-                        behavior: SnackBarBehavior.floating,
-                      ));
-                      return;
-                    }
+                    List<dynamic> decodedJson =
+                        jsonDecode(_jsonInputController.text);
+
                     Navigator.of(context).pop(decodedJson);
                   },
                   child: const Text('Import'),
@@ -105,4 +104,34 @@ class _JsonImportDialogState extends State<JsonImportDialog> {
       ),
     );
   }
+}
+
+/// Validate JSON so that only format like this
+/// https://iiumschedule.iqfareez.com/docs/extract/imaluum/#4-finish will be accepted
+///
+/// Return [true] if valid, [false] otherwise
+bool _validateJson(String jsonString) {
+  final courses = jsonDecode(jsonString);
+
+  // check if the json is list. Eg: [{...}, {...}]
+  if (courses is! List<dynamic>) {
+    return false;
+  }
+
+  if (courses.isEmpty) return false;
+
+  for (var course in courses) {
+    if (course == null || course is! Map) return false;
+    if (!course.containsKey("courseCode") || !course.containsKey("section")) {
+      return false;
+    }
+    if (course["courseCode"] == null || course["courseCode"] is! String) {
+      return false;
+    }
+    if (course["section"] == null || course["section"] is! int) {
+      return false;
+    }
+  }
+
+  return true;
 }
