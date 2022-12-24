@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:albiruni/albiruni.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -269,11 +272,23 @@ class _InputCourseState extends State<InputCourse>
                     const SizedBox(height: 5),
                     PopupMenuButton<ImportMethod>(
                       initialValue: _importMethod,
-                      // Callback that sets the selected popup menu item.
                       onSelected: (ImportMethod item) async {
-                        print(item);
                         switch (item) {
                           case ImportMethod.imaluum:
+                            // Inappwebview is supported on Android only
+                            // so, show unsupported message on other platforms
+                            if (kIsWeb || !Platform.isAndroid) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Unsupported on this platform. Available on Android only'),
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: Colors.purpleAccent,
+                                ),
+                              );
+                              return;
+                            }
+
                             var res = await Navigator.push<List<dynamic>?>(
                               context,
                               MaterialPageRoute(
@@ -288,7 +303,6 @@ class _InputCourseState extends State<InputCourse>
                                 context: context,
                                 builder: ((_) => const JsonImportDialog()));
                             if (res != null) {
-                              print(res);
                               importSubjects(res);
                             }
                             break;
@@ -371,7 +385,7 @@ class _InputCourseState extends State<InputCourse>
       SnackBar(
         content: Text('Added $itemCountAdded subjects. $itemSkippkedMessage'),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.purple,
       ),
     );
   }
