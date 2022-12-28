@@ -21,7 +21,7 @@ packages:
       path: "../../Dart App/albiruni"
       relative: true
     source: path
-    version: "1.2.0"
+    version: "1.2.1"
   analyzer:
     dependency: transitive
     description:
