@@ -58,6 +58,10 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
                           });
                         }
                       },
+                      onEditingComplete: () {
+                        _courseCodeController.text =
+                            _courseCodeController.text.toAlbiruniFormat();
+                      },
                     ),
                     const SizedBox(height: 15),
                     TextFormField(
@@ -91,9 +95,6 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
                       onChanged: (String? value) {
                         hasManuallySelectedKulliyah = true;
                         setState(() => _selectedKulliyah = value);
-                        // format to albiruni in case havent already
-                        _courseCodeController.text =
-                            _courseCodeController.text.toAlbiruniFormat();
                       },
                     ),
                     const SizedBox(height: 30),
@@ -101,56 +102,15 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
                             _selectedKulliyah!.isNotEmpty) &&
                         _courseCodeController.text.isNotEmpty &&
                         _selectedSection != null)
-                      FutureBuilder(
-                        future: SubjectFetcher.fetchSubjectData(
-                          albiruni: Albiruni(
-                              session: widget.session,
-                              semester: widget.semester),
-                          kulliyyah: _selectedKulliyah!,
-                          section: _selectedSection!,
-                          courseCode: _courseCodeController.text,
-                        ),
-                        builder: (context, AsyncSnapshot<Subject> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const ListTile(
-                              title: Text('Loading'),
-                              trailing: SizedBox(
-                                  height: 15,
-                                  width: 15,
-                                  child: CircularProgressIndicator()),
-                            );
-                          }
-                          if (snapshot.hasError) {
-                            return ListTile(
-                              title: const Text(
-                                  'Error. Subject may not be available'),
-                              trailing: const Icon(Icons.refresh_outlined),
-                              onTap: () {
-                                setState(() {});
-                              },
-                            );
-                          }
-
-                          // TODO: Add option check another section if error returned
-
-                          return ListTile(
-                            leading: MiniSubjectInfo(
-                              BasicSubjectModel(
-                                  courseCode: snapshot.data!.code,
-                                  section:
-                                      int.tryParse(_sectionController.text)),
-                            ),
-                            title: Text(snapshot.data!.title),
-                            trailing: IconButton(
-                              tooltip: "Add this subject",
-                              icon: const Icon(Icons.add),
-                              onPressed: () {
-                                Navigator.of(context).pop(snapshot.data);
-                              },
-                            ),
-                          );
-                        },
+                      _SubjectAddCard(
+                        key: ValueKey(
+                            "${_courseCodeController.text.toAlbiruniFormat()}$_selectedSection"),
+                        albiruni: Albiruni(
+                            semester: widget.semester, session: widget.session),
+                        kulliyyah: _selectedKulliyah!,
+                        section: _selectedSection!,
+                        courseCode:
+                            _courseCodeController.text.toAlbiruniFormat(),
                       ),
                   ],
                 ),
@@ -159,6 +119,75 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SubjectAddCard extends StatefulWidget {
+  const _SubjectAddCard({
+    Key? key,
+    required this.albiruni,
+    required this.kulliyyah,
+    required this.courseCode,
+    required this.section,
+  }) : super(key: key);
+
+  final Albiruni albiruni;
+  final String kulliyyah;
+  final String courseCode;
+  final int section;
+
+  @override
+  State<_SubjectAddCard> createState() => __SubjectAddCardState();
+}
+
+class __SubjectAddCardState extends State<_SubjectAddCard> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: SubjectFetcher.fetchSubjectData(
+        albiruni: widget.albiruni,
+        kulliyyah: widget.kulliyyah,
+        section: widget.section,
+        courseCode: widget.courseCode,
+      ),
+      builder: (context, AsyncSnapshot<Subject> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const ListTile(
+            title: Text('Loading'),
+            trailing: SizedBox(
+                height: 15, width: 15, child: CircularProgressIndicator()),
+          );
+        }
+        if (snapshot.hasError) {
+          return ListTile(
+            title: const Text('Error. Subject may not be available'),
+            trailing: const Icon(Icons.refresh_outlined),
+            onTap: () {
+              setState(() {});
+            },
+          );
+        }
+
+        // TODO: Add option check another section if error returned
+
+        return ListTile(
+          leading: MiniSubjectInfo(
+            BasicSubjectModel(
+              courseCode: snapshot.data!.code,
+              section: widget.section,
+            ),
+          ),
+          title: Text(snapshot.data!.title),
+          trailing: IconButton(
+            tooltip: "Add this subject",
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).pop(snapshot.data);
+            },
+          ),
+        );
+      },
     );
   }
 }
