@@ -84,8 +84,7 @@ class _CardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate =
-        DateFormat('d/M/yy').format(DateTime.parse(item.lastModified));
+    String formattedDate = DateFormat('d/M/yy').format(item.lastModified);
     return ScaleTransition(
       scale: animation,
       child: Card(

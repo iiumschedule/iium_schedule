@@ -8,7 +8,7 @@ class SavedDaytime {
   Id? id;
 
   /// Day in integer. 0 is Sunday, 1 is Monday and so on.
-  late int day;
+  late byte day;
 
   /// Starting time of the class
   late String startTime;

@@ -20,7 +20,7 @@ const SavedSubjectSchema = CollectionSchema(
     r'chr': PropertySchema(
       id: 0,
       name: r'chr',
-      type: IsarType.double,
+      type: IsarType.float,
     ),
     r'code': PropertySchema(
       id: 1,
@@ -45,7 +45,7 @@ const SavedSubjectSchema = CollectionSchema(
     r'sect': PropertySchema(
       id: 5,
       name: r'sect',
-      type: IsarType.long,
+      type: IsarType.int,
     ),
     r'subjectName': PropertySchema(
       id: 6,
@@ -120,12 +120,12 @@ void _savedSubjectSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeDouble(offsets[0], object.chr);
+  writer.writeFloat(offsets[0], object.chr);
   writer.writeString(offsets[1], object.code);
   writer.writeLong(offsets[2], object.hashCode);
   writer.writeLong(offsets[3], object.hexColor);
   writer.writeStringList(offsets[4], object.lect);
-  writer.writeLong(offsets[5], object.sect);
+  writer.writeInt(offsets[5], object.sect);
   writer.writeString(offsets[6], object.subjectName);
   writer.writeString(offsets[7], object.title);
   writer.writeString(offsets[8], object.venue);
@@ -138,11 +138,11 @@ SavedSubject _savedSubjectDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = SavedSubject(
-    chr: reader.readDouble(offsets[0]),
+    chr: reader.readFloat(offsets[0]),
     code: reader.readString(offsets[1]),
     hexColor: reader.readLongOrNull(offsets[3]),
     lect: reader.readStringList(offsets[4]) ?? [],
-    sect: reader.readLong(offsets[5]),
+    sect: reader.readInt(offsets[5]),
     subjectName: reader.readStringOrNull(offsets[6]),
     title: reader.readString(offsets[7]),
     venue: reader.readStringOrNull(offsets[8]),
@@ -159,7 +159,7 @@ P _savedSubjectDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readDouble(offset)) as P;
+      return (reader.readFloat(offset)) as P;
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
@@ -169,7 +169,7 @@ P _savedSubjectDeserializeProp<P>(
     case 4:
       return (reader.readStringList(offset) ?? []) as P;
     case 5:
-      return (reader.readLong(offset)) as P;
+      return (reader.readInt(offset)) as P;
     case 6:
       return (reader.readStringOrNull(offset)) as P;
     case 7:

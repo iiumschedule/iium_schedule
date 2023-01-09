@@ -19,10 +19,10 @@ class SavedSubject {
   String? venue;
 
   /// Section
-  late int sect;
+  late short sect;
 
   /// Credit hour
-  late double chr;
+  late float chr;
 
   /// List of lecturer(s) teaching the subject
   late List<String> lect;

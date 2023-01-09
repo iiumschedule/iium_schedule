@@ -71,7 +71,7 @@ class IsarService {
 
   Future<void> updateSchedule(SavedSchedule schedule) async {
     final isar = await db;
-    schedule.lastModified = DateTime.now().toString();
+    schedule.lastModified = DateTime.now();
     isar.writeTxnSync(() {
       isar.savedSchedules.putSync(schedule);
     });

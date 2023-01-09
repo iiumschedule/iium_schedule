@@ -28,9 +28,8 @@ class MetadataSheet extends StatelessWidget {
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
-              DateTime lastModifiedDate =
-                  DateTime.parse(snapshot.data!.lastModified);
-              DateTime createdDate = DateTime.parse(snapshot.data!.dateCreated);
+              DateTime lastModifiedDate = snapshot.data!.lastModified;
+              DateTime createdDate = snapshot.data!.dateCreated;
               return SingleChildScrollView(
                 controller: scrollController,
                 child: Column(

@@ -20,7 +20,7 @@ const SavedDaytimeSchema = CollectionSchema(
     r'day': PropertySchema(
       id: 0,
       name: r'day',
-      type: IsarType.long,
+      type: IsarType.byte,
     ),
     r'endTime': PropertySchema(
       id: 1,
@@ -69,7 +69,7 @@ void _savedDaytimeSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.day);
+  writer.writeByte(offsets[0], object.day);
   writer.writeString(offsets[1], object.endTime);
   writer.writeLong(offsets[2], object.hashCode);
   writer.writeString(offsets[3], object.startTime);
@@ -82,7 +82,7 @@ SavedDaytime _savedDaytimeDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = SavedDaytime(
-    day: reader.readLong(offsets[0]),
+    day: reader.readByte(offsets[0]),
     endTime: reader.readString(offsets[1]),
     startTime: reader.readString(offsets[3]),
   );
@@ -98,7 +98,7 @@ P _savedDaytimeDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLong(offset)) as P;
+      return (reader.readByte(offset)) as P;
     case 1:
       return (reader.readString(offset)) as P;
     case 2:

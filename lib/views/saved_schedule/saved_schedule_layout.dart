@@ -145,7 +145,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
     }
 
     // Update the current schedule last modified data
-    currentSchedule.lastModified = DateTime.now().toString();
+    currentSchedule.lastModified = DateTime.now();
     isarService.updateSchedule(currentSchedule);
 
     // Save changes to HiveDB

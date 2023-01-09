@@ -76,8 +76,8 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         session: ScheduleMakerData.albiruni!.session,
         semester: ScheduleMakerData.albiruni!.semester,
         title: name,
-        lastModified: DateTime.now().toString(),
-        dateCreated: DateTime.now().toString(),
+        lastModified: DateTime.now(),
+        dateCreated: DateTime.now(),
         fontSize: _fontSizeSubject,
         heightFactor: _itemHeight,
         subjectTitleSetting:

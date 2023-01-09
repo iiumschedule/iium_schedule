@@ -14,11 +14,10 @@ class SavedSchedule {
 
   final subjects = IsarLinks<SavedSubject>();
 
-  /// Datetime saved in to isoString
-  String lastModified;
+  /// when the schedule is last modified
+  DateTime lastModified;
 
-  /// Datetime saved in to isoString
-  String dateCreated;
+  DateTime dateCreated;
 
   double fontSize;
 
@@ -29,7 +28,7 @@ class SavedSchedule {
 
   String session;
 
-  int semester;
+  byte semester;
 
   // The main kuliyyah of the schedule
   String? kuliyyah;
