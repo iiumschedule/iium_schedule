@@ -60,25 +60,27 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'IIUM Schedule',
           theme: ThemeData(
-              colorScheme: lightColorScheme,
-              useMaterial3: true,
-              fontFamily: 'Inter'),
+            colorScheme: lightColorScheme ?? const ColorScheme.light(),
+            useMaterial3: true,
+            fontFamily: 'Inter',
+          ),
           darkTheme: ThemeData.dark().copyWith(
-              // cupertinoOverrideTheme:
-              //     const CupertinoThemeData(primaryColor: Color(0xFF23682B)),
-              // textButtonTheme: TextButtonThemeData(
-              //   style:
-              //       TextButton.styleFrom(foregroundColor: Colors.purple.shade200),
-              // ),
-              // outlinedButtonTheme: OutlinedButtonThemeData(
-              //   style: OutlinedButton.styleFrom(
-              //       foregroundColor: Colors.purple.shade200),
-              // ),
-              useMaterial3: true,
-              textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
-              primaryTextTheme:
-                  ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
-              colorScheme: darkColorScheme),
+            // cupertinoOverrideTheme:
+            //     const CupertinoThemeData(primaryColor: Color(0xFF23682B)),
+            // textButtonTheme: TextButtonThemeData(
+            //   style:
+            //       TextButton.styleFrom(foregroundColor: Colors.purple.shade200),
+            // ),
+            // outlinedButtonTheme: OutlinedButtonThemeData(
+            //   style: OutlinedButton.styleFrom(
+            //       foregroundColor: Colors.purple.shade200),
+            // ),
+            useMaterial3: true,
+            textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
+            primaryTextTheme:
+                ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
+            colorScheme: darkColorScheme ?? const ColorScheme.dark(),
+          ),
           themeMode: ThemeMode.system,
           home: const MyBody(),
         );
