@@ -52,6 +52,7 @@ dependencies:
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.5
   flutter_inappwebview: ^5.7.2+3
+  like_button: ^2.0.5
 
 dev_dependencies:
   flutter_test:

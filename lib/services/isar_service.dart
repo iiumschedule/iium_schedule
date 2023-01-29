@@ -117,10 +117,11 @@ class IsarService {
     }
   }
 
-  /// Add new Favourites subject
-  Future<void> addFavouritesSubject(
+  /// Add new Favourites subject, returns the saved id
+  Future<int> addFavouritesSubject(
       Albiruni albiruni, String kuliyyah, Subject subject) async {
     final isar = await db;
+    late int savedId;
     var favSubject = FavouriteSubject(
         kulliyyahCode: kuliyyah,
         semester: albiruni.semester,
@@ -129,8 +130,10 @@ class IsarService {
         section: subject.sect,
         favouritedDate: DateTime.now());
     isar.writeTxnSync(() {
-      isar.favouriteSubjects.putSync(favSubject);
+      savedId = isar.favouriteSubjects.putSync(favSubject);
     });
+
+    return savedId;
   }
 
   /// Check if the subject given subject and scope is already favourited or not

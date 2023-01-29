@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:like_button/like_button.dart';
 import 'package:recase/recase.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -41,6 +42,19 @@ class SubjectScreen extends StatefulWidget {
 }
 
 class _SubjectScreenState extends State<SubjectScreen> {
+  /// Set when the subject is/already added to favourites
+  int? favouriteId;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // check subject if it is already added to favourites
+    isarService
+        .checkFavourite(widget.albiruni!, widget.kulliyyah!, widget.subject)
+        .then((value) => setState(() => favouriteId = value));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,44 +65,26 @@ class _SubjectScreenState extends State<SubjectScreen> {
         actions: [
           // only shows favourite button when the subject is loaded from course browser
           if (widget.albiruni != null && widget.kulliyyah != null)
-            FutureBuilder<int?>(
-                future: isarService.checkFavourite(
-                    widget.albiruni!, widget.kulliyyah!, widget.subject),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    print(snapshot.error.toString());
-                    return const SizedBox.shrink();
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SizedBox(
-                      height: 18,
-                      width: 18,
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-
-                  if (snapshot.data != null) {
-                    return IconButton(
-                      onPressed: () async {
-                        await isarService
-                            .removeFavouritesSubject(snapshot.data!);
-                        setState(() {});
-                      },
-                      icon: const Icon(Icons.favorite),
-                      tooltip: "Remove this subject from favourite",
-                    );
-                  }
-                  return IconButton(
-                    onPressed: () async {
-                      await isarService.addFavouritesSubject(
-                          widget.albiruni!, widget.kulliyyah!, widget.subject);
-
-                      setState(() {});
-                    },
-                    icon: const Icon(Icons.favorite_outline),
-                    tooltip: "Add this subject to favourite",
-                  );
-                }),
+            LikeButton(
+              isLiked: favouriteId != null,
+              likeBuilder: (isLiked) {
+                if (isLiked) {
+                  return const Icon(Icons.favorite, color: Colors.redAccent);
+                } else {
+                  return const Icon(Icons.favorite_outline);
+                }
+              },
+              onTap: (isLiked) async {
+                if (isLiked) {
+                  isarService.removeFavouritesSubject(favouriteId!);
+                } else {
+                  int savedId = await isarService.addFavouritesSubject(
+                      widget.albiruni!, widget.kulliyyah!, widget.subject);
+                  setState(() => favouriteId = savedId);
+                }
+                return Future.value(!isLiked);
+              },
+            ),
           IconButton(
             onPressed: () {
               String text = '${widget.subject.title} (${widget.subject.code})';
