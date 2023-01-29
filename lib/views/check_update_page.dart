@@ -128,7 +128,7 @@ class _CheckUpdatePageState extends State<CheckUpdatePage> {
                 } else if (snapshot.hasError) {
                   return Text(
                     'Sorry. Check update requets has failed.\n${snapshot.error}',
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   );
                 } else {
                   return const Text('Checking update...');

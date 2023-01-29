@@ -22,7 +22,7 @@ class MyBottomSheet extends StatelessWidget {
             child: Text(
               title,
               textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           ...content

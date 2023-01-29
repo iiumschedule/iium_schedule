@@ -27,12 +27,12 @@ class SettingBottomSheet extends StatelessWidget {
             children: [
               Text(
                 'Customize your schedule',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 15),
               Text(
                 "Subject display",
-                style: Theme.of(context).textTheme.bodyText1!,
+                style: Theme.of(context).textTheme.bodyLarge!,
               ),
               const SizedBox(height: 10),
               CupertinoSegmentedControl<SubjectTitleSetting>(
