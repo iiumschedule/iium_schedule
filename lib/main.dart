@@ -13,6 +13,7 @@ import 'hive_model/saved_schedule.dart';
 import 'hive_model/saved_subject.dart';
 import 'providers/schedule_layout_setting_provider.dart';
 import 'providers/schedule_notifier_provider.dart';
+import 'providers/settings_provider.dart';
 import 'util/migrate_hive_to_isar.dart';
 import 'views/body.dart';
 
@@ -54,36 +55,40 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => ScheduleLayoutSettingProvider()),
         ChangeNotifierProvider(create: (_) => ScheduleNotifierProvider()),
+        ChangeNotifierProvider(create: (_) => SettingsProvider()),
       ],
       child: DynamicColorBuilder(builder:
           (ColorScheme? lightColorScheme, ColorScheme? darkColorScheme) {
-        return MaterialApp(
-          title: 'IIUM Schedule',
-          theme: ThemeData(
-            colorScheme: lightColorScheme ?? const ColorScheme.light(),
-            useMaterial3: true,
-            fontFamily: 'Inter',
-          ),
-          darkTheme: ThemeData.dark().copyWith(
-            // cupertinoOverrideTheme:
-            //     const CupertinoThemeData(primaryColor: Color(0xFF23682B)),
-            // textButtonTheme: TextButtonThemeData(
-            //   style:
-            //       TextButton.styleFrom(foregroundColor: Colors.purple.shade200),
-            // ),
-            // outlinedButtonTheme: OutlinedButtonThemeData(
-            //   style: OutlinedButton.styleFrom(
-            //       foregroundColor: Colors.purple.shade200),
-            // ),
-            useMaterial3: true,
-            textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
-            primaryTextTheme:
-                ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
-            colorScheme: darkColorScheme ?? const ColorScheme.dark(),
-          ),
-          themeMode: ThemeMode.system,
-          home: const MyBody(),
-        );
+        return Consumer<SettingsProvider>(
+            builder: (context, settingsProvider, _) {
+          return MaterialApp(
+            title: 'IIUM Schedule',
+            theme: ThemeData(
+              colorScheme: lightColorScheme ?? const ColorScheme.light(),
+              useMaterial3: true,
+              fontFamily: 'Inter',
+            ),
+            darkTheme: ThemeData.dark().copyWith(
+              // cupertinoOverrideTheme:
+              //     const CupertinoThemeData(primaryColor: Color(0xFF23682B)),
+              // textButtonTheme: TextButtonThemeData(
+              //   style:
+              //       TextButton.styleFrom(foregroundColor: Colors.purple.shade200),
+              // ),
+              // outlinedButtonTheme: OutlinedButtonThemeData(
+              //   style: OutlinedButton.styleFrom(
+              //       foregroundColor: Colors.purple.shade200),
+              // ),
+              useMaterial3: true,
+              textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
+              primaryTextTheme:
+                  ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
+              colorScheme: darkColorScheme ?? const ColorScheme.dark(),
+            ),
+            themeMode: settingsProvider.themeMode,
+            home: const MyBody(),
+          );
+        });
       }),
     );
   }

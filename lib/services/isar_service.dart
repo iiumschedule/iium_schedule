@@ -1,4 +1,5 @@
 import 'package:albiruni/albiruni.dart';
+import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 
 import '../isar_models/favourite_subject.dart';
@@ -6,6 +7,7 @@ import '../isar_models/gh_responses.dart';
 import '../isar_models/saved_daytime.dart';
 import '../isar_models/saved_schedule.dart';
 import '../isar_models/saved_subject.dart';
+import '../isar_models/settings_data.dart';
 
 class IsarService {
   late Future<Isar> db;
@@ -13,6 +15,10 @@ class IsarService {
   IsarService() {
     db = openDB();
   }
+
+// **************************************************************************
+// Schedule & Subject
+// **************************************************************************
 
   // TODO: Make function for save new schedule
   // for save new schedule, view [ScheduleLayout]'s save() function
@@ -117,6 +123,10 @@ class IsarService {
     }
   }
 
+// **************************************************************************
+// Favourites
+// **************************************************************************
+
   /// Add new Favourites subject, returns the saved id
   Future<int> addFavouritesSubject(
       Albiruni albiruni, String kuliyyah, Subject subject) async {
@@ -179,6 +189,31 @@ class IsarService {
     });
   }
 
+// **************************************************************************
+// Settings
+// **************************************************************************
+
+  Future<ThemeMode> retrieveThemeMode() async {
+    final isar = await db;
+
+    var res = await isar.settingsDatas.get(0);
+    return res?.themeSetting ?? ThemeMode.system;
+  }
+
+  Future<void> saveThemeMode(ThemeMode newMode) async {
+    final isar = await db;
+
+    isar.writeTxn(() => isar.settingsDatas.put(
+          SettingsData()
+            ..id = 0
+            ..themeSetting = newMode,
+        ));
+  }
+
+// **************************************************************************
+// Check for Update (Github)
+// **************************************************************************
+
   /// Save the [GhResponses] object to the database
   Future<void> addGhResponse(GhResponses response) async {
     final isar = await db;
@@ -209,6 +244,7 @@ class IsarService {
           SavedDaytimeSchema,
           GhResponsesSchema,
           FavouriteSubjectSchema,
+          SettingsDataSchema,
         ],
         inspector: true,
       );

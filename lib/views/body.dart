@@ -18,6 +18,7 @@ import 'course browser/browser.dart';
 import 'saved_schedule/saved_schedule_layout.dart';
 import 'saved_schedule_selector.dart';
 import 'scheduler/schedule_maker_entry.dart';
+import 'settings_page.dart';
 
 class MyBody extends StatefulWidget {
   const MyBody({
@@ -81,7 +82,7 @@ class _MyBodyState extends State<MyBody> {
                 );
               }),
           actions: [
-            PopupMenuButton(
+            PopupMenuButton<String>(
               elevation: 1.0,
               color: Theme.of(context).colorScheme.secondaryContainer,
               shape: RoundedRectangleBorder(
@@ -97,6 +98,12 @@ class _MyBodyState extends State<MyBody> {
                     LauncherUrl.open(
                         "https://iiumschedule.iqfareez.com/feedback");
                     break;
+                  case "settings":
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const SettingsPage()));
+                    break;
                   default:
                 }
               },
@@ -104,6 +111,11 @@ class _MyBodyState extends State<MyBody> {
                 Icons.more_vert_outlined,
               ),
               itemBuilder: (context) => const [
+                PopupMenuItem(
+                  value: "settings",
+                  child: Text("Settings"),
+                ),
+                PopupMenuDivider(),
                 PopupMenuItem(
                   value: "website",
                   child: Text("Website"),
