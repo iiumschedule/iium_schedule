@@ -357,7 +357,10 @@ class _SimpleAboutDialog extends StatelessWidget {
                 'This app enables students to make & check their schedules, specially tailoired for IIUM Students.'),
           ),
           SimpleDialogOption(
-            child: const Text('\u00a9 2023 Muhammad Fareez'),
+            child: const Text(
+              '\u00a9 2023 Muhammad Fareez',
+              style: TextStyle(fontWeight: FontWeight.w500),
+            ),
             onPressed: () => LauncherUrl.open('https://iqfareez.com'),
           ),
           SimpleDialogOption(
