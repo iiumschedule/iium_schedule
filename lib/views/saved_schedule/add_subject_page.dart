@@ -8,8 +8,7 @@ import '../../util/subject_fetcher.dart';
 import '../scheduler/course_validator.dart';
 
 // TODO: add default kulliyyah based on savedschedule killiyyah
-// TODO: Prevent refetching when textfield unfocus
-// TODO: make sure lowercase if also accepted etc
+// TODO: Prevent refetching when textfield unfocus (its quite hard, I need to track which value didn't change etc.)
 
 class AddSubjectPage extends StatefulWidget {
   const AddSubjectPage(
@@ -25,6 +24,7 @@ class AddSubjectPage extends StatefulWidget {
 class _AddSubjectPageState extends State<AddSubjectPage> {
   final TextEditingController _courseCodeController = TextEditingController();
   final TextEditingController _sectionController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   String? _selectedKulliyah;
   int? _selectedSection;
   bool hasManuallySelectedKulliyah = false;
@@ -43,6 +43,7 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
             child: Padding(
               padding: const EdgeInsets.all(18.0),
               child: Form(
+                key: _formKey,
                 child: Column(
                   children: [
                     TextFormField(
@@ -52,6 +53,12 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
                         hintText: "eg: UNGS 2080",
                         border: OutlineInputBorder(),
                       ),
+                      onTapOutside: (event) {
+                        if (_courseCodeController.text.isNotEmpty) {
+                          _courseCodeController.text =
+                              _courseCodeController.text.toAlbiruniFormat();
+                        }
+                      },
                       onChanged: (value) {
                         if (!hasManuallySelectedKulliyah) {
                           setState(() {
@@ -110,7 +117,8 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
                               semester: widget.semester),
                           kulliyyah: _selectedKulliyah!,
                           section: _selectedSection!,
-                          courseCode: _courseCodeController.text,
+                          courseCode:
+                              _courseCodeController.text.toAlbiruniFormat(),
                         ),
                         builder: (context, AsyncSnapshot<Subject> snapshot) {
                           if (snapshot.connectionState ==
