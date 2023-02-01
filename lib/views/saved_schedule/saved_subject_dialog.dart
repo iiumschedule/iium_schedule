@@ -49,6 +49,10 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
             child: Text('Loading...'),
           ));
         }
+
+        // to prevent null safety error when deleting subject with no more occurances
+        if (snapshot.data == null) return const SizedBox.shrink();
+
         TextEditingController venueController =
             TextEditingController(text: snapshot.data?.venue ?? "No venue");
         var startTime = TimeOfDay(
