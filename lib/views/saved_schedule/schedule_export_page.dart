@@ -59,7 +59,7 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                     child: Container(
                       // container to add bg colour & top padding
                       padding: const EdgeInsets.only(top: 18),
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: Theme.of(context).colorScheme.background,
                       child: ClipRect(
                         // cliprect to remove schedule 'leaking' out of the container
                         child: TimetableViewWidget(
