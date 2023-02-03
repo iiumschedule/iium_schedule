@@ -37,7 +37,7 @@ dependencies:
   permission_handler: ^10.0.0
   quick_actions: ^1.0.0
   share_plus: ^6.0.1
-  intl: ^0.17.0
+  intl: ^0.18.0
   http: ^0.13.5
   version: ^3.0.2
   flutter_colorpicker:
@@ -48,7 +48,7 @@ dependencies:
   admonitions: ^1.0.0
   pull_to_refresh: ^2.0.0
   dynamic_color: ^1.5.4
-  flutter_displaymode: ^0.4.1
+  flutter_displaymode: ^0.5.0
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.5
   flutter_inappwebview: ^5.7.2+3

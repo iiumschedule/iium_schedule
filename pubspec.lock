@@ -23,7 +23,7 @@ packages:
       path: "../../Dart App/albiruni"
       relative: true
     source: path
-    version: "1.2.1"
+    version: "1.2.2"
   analyzer:
     dependency: transitive
     description:
@@ -315,10 +315,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_displaymode
-      sha256: fdeaceb35d84ed000625ae0666bbec5b015407d1f90135cdd1bbfdb4ca73de1a
+      sha256: "136b0314fdc78fe995b0b75061fe9ff8210dffca84f8f8110f8f71029479db3b"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.1"
+    version: "0.5.0"
   flutter_inappwebview:
     dependency: "direct main"
     description:
@@ -468,10 +468,10 @@ packages:
     dependency: "direct main"
     description:
       name: intl
-      sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
+      sha256: a3715e3bc90294e971cb7dc063fbf3cd9ee0ebf8604ffeafabd9e6f16abbdbe6
       url: "https://pub.dev"
     source: hosted
-    version: "0.17.0"
+    version: "0.18.0"
   io:
     dependency: transitive
     description:
@@ -1117,5 +1117,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=2.18.0 <4.0.0"
+  dart: ">=2.18.0 <3.0.0"
   flutter: ">=3.3.0"
