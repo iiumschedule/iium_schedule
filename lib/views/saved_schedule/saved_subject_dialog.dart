@@ -175,6 +175,7 @@ class _SavedSubjectDialogState extends State<SavedSubjectDialog> {
                       setState(() {
                         isEdtingEnabled = !isEdtingEnabled;
                         isEditingVenue = false;
+                        isDeleting = false;
                       });
                     },
                     icon: Icon(!isEdtingEnabled ? Icons.edit : Icons.edit_off)),

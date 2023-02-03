@@ -120,12 +120,10 @@ class _ImaluumWebViewState extends State<ImaluumWebView> {
               const Positioned(
                 bottom: 30,
                 right: 20,
-                child: Material(
-                  child: SizedBox(
-                    height: 40,
-                    width: 40,
-                    child: CircularProgressIndicator(),
-                  ),
+                child: SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: CircularProgressIndicator(),
                 ),
               ),
             if (readerState == ReaderState.success)
