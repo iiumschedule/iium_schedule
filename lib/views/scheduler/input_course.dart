@@ -4,12 +4,13 @@ import 'package:albiruni/albiruni.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../../model/basic_subject_model.dart';
+import '../../providers/schedule_maker_provider.dart';
 import '../../util/extensions.dart';
 import 'imaluum_webview.dart';
 import 'json_import_dialog.dart';
-import 'schedule_maker_data.dart';
 import 'schedule_steps.dart';
 
 enum ImportMethod { json, imaluum }
@@ -59,7 +60,9 @@ class _InputCourseState extends State<InputCourse>
                               duration: const Duration(milliseconds: 200),
                               curve: Curves.bounceInOut);
 
-                          ScheduleMakerData.subjects = _inputCourses;
+                          Provider.of<ScheduleMakerProvider>(context,
+                                  listen: false)
+                              .subjects = _inputCourses;
                         },
                   child: const Text("Next"),
                 ),

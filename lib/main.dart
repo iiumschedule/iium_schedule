@@ -12,6 +12,7 @@ import 'hive_model/saved_daytime.dart';
 import 'hive_model/saved_schedule.dart';
 import 'hive_model/saved_subject.dart';
 import 'providers/schedule_layout_setting_provider.dart';
+import 'providers/schedule_maker_provider.dart';
 import 'providers/schedule_notifier_provider.dart';
 import 'providers/settings_provider.dart';
 import 'util/migrate_hive_to_isar.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => ScheduleLayoutSettingProvider()),
         ChangeNotifierProvider(create: (_) => ScheduleNotifierProvider()),
+        ChangeNotifierProvider(create: (_) => ScheduleMakerProvider()),
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
       ],
       child: DynamicColorBuilder(builder:

@@ -1,10 +1,11 @@
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants.dart' as constants;
+import '../../providers/schedule_maker_provider.dart';
 import '../../util/kulliyyahs.dart';
-import 'schedule_maker_data.dart';
 import 'schedule_steps.dart';
 
 class InputScope extends StatefulWidget {
@@ -49,8 +50,10 @@ class _InputScopeState extends State<InputScope>
                                 ))
                             .toList(),
                         key: dropdownKey,
-                        decoration:
-                            const InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15.0)))),
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15.0)))),
                         value: _selectedKulliyah,
                         selectedItemBuilder: (_) => Kuliyyahs.all
                             .map((e) => Text(e.shortName))
@@ -64,8 +67,10 @@ class _InputScopeState extends State<InputScope>
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: CupertinoSegmentedControl(
-                        unselectedColor: Theme.of(context).colorScheme.background,
-                        borderColor: Theme.of(context).colorScheme.secondaryContainer,
+                        unselectedColor:
+                            Theme.of(context).colorScheme.background,
+                        borderColor:
+                            Theme.of(context).colorScheme.secondaryContainer,
                         groupValue: _session,
                         children: {
                           for (var session in constants.kSessions)
@@ -79,8 +84,10 @@ class _InputScopeState extends State<InputScope>
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: CupertinoSegmentedControl(
-                        unselectedColor: Theme.of(context).colorScheme.background,
-                        borderColor: Theme.of(context).colorScheme.secondaryContainer,
+                        unselectedColor:
+                            Theme.of(context).colorScheme.background,
+                        borderColor:
+                            Theme.of(context).colorScheme.secondaryContainer,
                         groupValue: _semester - 1,
                         children: List.generate(
                           3,
@@ -95,7 +102,8 @@ class _InputScopeState extends State<InputScope>
                     cursor: SystemMouseCursors.click,
                     child: CupertinoSegmentedControl(
                       unselectedColor: Theme.of(context).colorScheme.background,
-                      borderColor: Theme.of(context).colorScheme.secondaryContainer,
+                      borderColor:
+                          Theme.of(context).colorScheme.secondaryContainer,
                       groupValue: _selectedStudyGrad,
                       children: const {
                         StudyGrad.ug: Text('Undergraduate'),
@@ -127,30 +135,34 @@ class _InputScopeState extends State<InputScope>
                           : SystemMouseCursors.click,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          backgroundColor: Theme.of(context).colorScheme.primaryContainer
-                        ),
+                            elevation: 0,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primaryContainer),
                         onPressed: _selectedKulliyah == null
-                          ? null
-                          : () {
-                              // Redo the same thing as in onEditingComplete above. Just in case.
-                              FocusScope.of(context).unfocus();
+                            ? null
+                            : () {
+                                // Redo the same thing as in onEditingComplete above. Just in case.
+                                FocusScope.of(context).unfocus();
 
-                              ScheduleSteps.of(context)
-                                  .pageController
-                                  .nextPage(
-                                      duration:
-                                          const Duration(milliseconds: 200),
-                                      curve: Curves.bounceInOut);
+                                ScheduleSteps.of(context)
+                                    .pageController
+                                    .nextPage(
+                                        duration:
+                                            const Duration(milliseconds: 200),
+                                        curve: Curves.bounceInOut);
 
-                              Albiruni albiruni = Albiruni(
-                                  semester: _semester,
-                                  session: _session,
-                                  studyGrade: _selectedStudyGrad);
+                                Albiruni albiruni = Albiruni(
+                                    semester: _semester,
+                                    session: _session,
+                                    studyGrade: _selectedStudyGrad);
 
-                              ScheduleMakerData.albiruni = albiruni;
-                              ScheduleMakerData.kulliyah = _selectedKulliyah!;
-                            },
+                                Provider.of<ScheduleMakerProvider>(context,
+                                        listen: false)
+                                    .albiruni = albiruni;
+                                Provider.of<ScheduleMakerProvider>(context,
+                                        listen: false)
+                                    .kulliyah = _selectedKulliyah!;
+                              },
                         child: const Text('Next'),
                       ),
                       // child: CupertinoButton.filled(

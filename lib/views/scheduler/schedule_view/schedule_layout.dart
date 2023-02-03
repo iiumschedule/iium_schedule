@@ -12,6 +12,7 @@ import '../../../enums/subject_title_setting_enum.dart';
 import '../../../isar_models/saved_daytime.dart';
 import '../../../isar_models/saved_schedule.dart';
 import '../../../isar_models/saved_subject.dart';
+import '../../../providers/schedule_maker_provider.dart';
 import '../../../util/colour_palletes.dart';
 import '../../../providers/schedule_layout_setting_provider.dart';
 import '../../../util/extensions.dart';
@@ -19,7 +20,6 @@ import '../../../util/lane_events_util.dart';
 import '../../../util/my_ftoast.dart';
 import '../../saved_schedule/saved_schedule_layout.dart';
 import '../../saved_schedule/schedule_export_page.dart';
-import '../schedule_maker_data.dart';
 import 'rename_dialog.dart';
 import 'setting_bottom_sheet.dart';
 import 'subject_dialog.dart';
@@ -71,10 +71,15 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     Isar isar = Isar.getInstance()!;
     late int savedId;
 
+    var albiruni =
+        Provider.of<ScheduleMakerProvider>(context, listen: false).albiruni!;
+    var kulliyah =
+        Provider.of<ScheduleMakerProvider>(context, listen: false).kulliyah;
+
     await isar.writeTxn(() async {
       var isarSchedule = SavedSchedule(
-        session: ScheduleMakerData.albiruni!.session,
-        semester: ScheduleMakerData.albiruni!.semester,
+        session: albiruni.session,
+        semester: albiruni.semester,
         title: name,
         lastModified: DateTime.now(),
         dateCreated: DateTime.now(),
@@ -83,7 +88,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         subjectTitleSetting:
             Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)
                 .subjectTitleSetting!,
-        kuliyyah: ScheduleMakerData.kulliyah,
+        kuliyyah: kulliyah,
       );
 
       savedId = await isar.savedSchedules.put(isarSchedule);
