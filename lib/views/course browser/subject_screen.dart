@@ -50,9 +50,11 @@ class _SubjectScreenState extends State<SubjectScreen> {
     super.initState();
 
     // check subject if it is already added to favourites
-    isarService
-        .checkFavourite(widget.albiruni!, widget.kulliyyah!, widget.subject)
-        .then((value) => setState(() => favouriteId = value));
+    if (!widget.isCached) {
+      isarService
+          .checkFavourite(widget.albiruni!, widget.kulliyyah!, widget.subject)
+          .then((value) => setState(() => favouriteId = value));
+    }
   }
 
   @override
@@ -109,6 +111,8 @@ class _SubjectScreenState extends State<SubjectScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // TODO: Reevaluate this as this is may not needed
+              // Mendatangkan rasa eh boleh percaya ke jadual ni
               if (widget.isCached)
                 PastelAdmonition.info(
                   color: Theme.of(context).colorScheme.secondaryContainer,
