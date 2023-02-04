@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../model/basic_subject_model.dart';
 import '../../providers/schedule_maker_provider.dart';
 import '../../util/extensions.dart';
+import '../../util/my_snackbar.dart';
 import 'imaluum_webview.dart';
 import 'json_import_dialog.dart';
 import 'schedule_steps.dart';
@@ -87,63 +88,24 @@ class _InputCourseState extends State<InputCourse>
                           .toList(),
                       rows: List.generate(
                         _inputCourses.length,
-                        (index) => DataRow(
-                          cells: [
-                            DataCell(
-                              Text('${index + 1}.'),
-                            ),
-                            DataCell(Text(_inputCourses[index].courseCode!)),
-                            DataCell(Text(
-                              _inputCourses[index].section != null
-                                  ? _inputCourses[index].section.toString()
-                                  : '-',
-                            )),
-                            DataCell(
-                              Row(
-                                children: [
-                                  IconButton(
-                                      tooltip: 'Edit',
-                                      onPressed: () {
-                                        setState(
-                                          () {
-                                            _editingIndex = index;
-                                            _courseCodeInputController.text =
-                                                _inputCourses[index]
-                                                    .courseCode!;
-                                            _sectionInputController.text =
-                                                _inputCourses[index].section !=
-                                                        null
-                                                    ? _inputCourses[index]
-                                                        .section
-                                                        .toString()
-                                                    : '';
-                                          },
-                                        );
-                                      },
-                                      icon: const Icon(Icons.edit_outlined)),
-                                  IconButton(
-                                    tooltip: 'Delete',
-                                    onPressed: () {
-                                      setState(() {
-                                        _inputCourses.removeAt(index);
-                                      });
-                                      ScaffoldMessenger.of(context)
-                                          .removeCurrentSnackBar();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        content: Text('Deleted successfully'),
-                                        behavior: SnackBarBehavior.floating,
-                                        backgroundColor: Colors.purple,
-                                      ));
-                                    },
-                                    icon: const Icon(Icons.delete_outline,
-                                        color: Colors.red),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                        (index) => _rowItem(index, _inputCourses[index], () {
+                          setState(
+                            () {
+                              _editingIndex = index;
+                              _courseCodeInputController.text =
+                                  _inputCourses[index].courseCode!;
+                              _sectionInputController.text =
+                                  _inputCourses[index].section != null
+                                      ? _inputCourses[index].section.toString()
+                                      : '';
+                            },
+                          );
+                        }, () {
+                          setState(() {
+                            _inputCourses.removeAt(index);
+                          });
+                          MySnackbar.showOk(context, 'Deleted successfully');
+                        }),
                       ).toList(),
                     ),
                     Container(
@@ -206,56 +168,7 @@ class _InputCourseState extends State<InputCourse>
                             ),
                           ),
                           TextButton(
-                            onPressed: () {
-                              FocusScope.of(context).unfocus();
-                              var courseCode = _courseCodeInputController.text;
-                              var section =
-                                  int.tryParse(_sectionInputController.text);
-
-                              if (courseCode.isEmpty) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content:
-                                      Text('Can\'t add. Course code is empty'),
-                                  behavior: SnackBarBehavior.floating,
-                                  backgroundColor: Colors.red,
-                                ));
-                                return;
-                              }
-
-                              // to make sure the format is <string><space><number>
-                              courseCode = courseCode.toAlbiruniFormat();
-
-                              // Check if the code already exist in table
-                              bool subjectExist = _inputCourses.every(
-                                  (element) =>
-                                      element.courseCode != courseCode);
-
-                              if (!subjectExist && _editingIndex == null) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Text('Course already added'),
-                                  behavior: SnackBarBehavior.floating,
-                                  backgroundColor: Colors.red,
-                                ));
-                                // cancel the operation if it does
-                                return;
-                              }
-
-                              var inputedCourse = BasicSubjectModel(
-                                  courseCode: courseCode, section: section);
-                              setState(() {
-                                if (_editingIndex != null) {
-                                  _inputCourses[_editingIndex!] = inputedCourse;
-                                  _editingIndex = null;
-                                } else {
-                                  _inputCourses.add(inputedCourse);
-                                }
-                              });
-
-                              _courseCodeInputController.clear();
-                              _sectionInputController.clear();
-                            },
+                            onPressed: _addManualSubject,
                             child: _editingIndex == null
                                 ? const Text('Add')
                                 : const Text('Done'),
@@ -281,14 +194,8 @@ class _InputCourseState extends State<InputCourse>
                             // Inappwebview is supported on Android only
                             // so, show unsupported message on other platforms
                             if (kIsWeb || !Platform.isAndroid) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      'Unsupported on this platform. Available on Android only'),
-                                  behavior: SnackBarBehavior.floating,
-                                  backgroundColor: Colors.purpleAccent,
-                                ),
-                              );
+                              MySnackbar.showWarn(context,
+                                  'Unsupported on this platform. Available on Android only');
                               return;
                             }
 
@@ -298,7 +205,7 @@ class _InputCourseState extends State<InputCourse>
                                   builder: (_) => const ImaluumWebView()),
                             );
                             if (res != null) {
-                              importSubjects(res);
+                              _importSubjects(res);
                             }
                             break;
                           case ImportMethod.json:
@@ -306,7 +213,7 @@ class _InputCourseState extends State<InputCourse>
                                 context: context,
                                 builder: ((_) => const JsonImportDialog()));
                             if (res != null) {
-                              importSubjects(res);
+                              _importSubjects(res);
                             }
                             break;
                         }
@@ -350,7 +257,7 @@ class _InputCourseState extends State<InputCourse>
   @override
   bool get wantKeepAlive => true;
 
-  void importSubjects(List<dynamic> decodedJson) {
+  void _importSubjects(List<dynamic> decodedJson) {
     var jsonSubjects =
         decodedJson.map((item) => BasicSubjectModel.fromJson(item));
 
@@ -378,18 +285,83 @@ class _InputCourseState extends State<InputCourse>
       });
     }
 
-    String itemSkippkedMessage = '';
     if (itemCountAdded < jsonSubjects.length) {
-      itemSkippkedMessage =
-          ' (${jsonSubjects.length - itemCountAdded} subject(s) already exists)';
+      var itemSkippkedMessage =
+          '(${jsonSubjects.length - itemCountAdded} subject(s) already exists)';
+
+      MySnackbar.showOk(
+          context, 'Added $itemCountAdded subjects. $itemSkippkedMessage');
+      return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Added $itemCountAdded subjects. $itemSkippkedMessage'),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.purple,
-      ),
-    );
+    MySnackbar.showSuccess(context, 'Added $itemCountAdded subjects');
   }
+
+  void _addManualSubject() {
+    FocusScope.of(context).unfocus();
+    var courseCode = _courseCodeInputController.text;
+    var section = int.tryParse(_sectionInputController.text);
+
+    if (courseCode.isEmpty) {
+      MySnackbar.showError(context, "Can't add. Course code is empty");
+      return;
+    }
+
+    // to make sure the format is <string><space><number>
+    courseCode = courseCode.toAlbiruniFormat();
+
+    // Check if the code already exist in table
+    bool subjectExist =
+        _inputCourses.every((element) => element.courseCode != courseCode);
+
+    if (!subjectExist && _editingIndex == null) {
+      MySnackbar.showError(context, 'Course already added');
+      // cancel the operation if it does
+      return;
+    }
+
+    var inputedCourse =
+        BasicSubjectModel(courseCode: courseCode, section: section);
+    setState(() {
+      if (_editingIndex != null) {
+        _inputCourses[_editingIndex!] = inputedCourse;
+        _editingIndex = null;
+      } else {
+        _inputCourses.add(inputedCourse);
+      }
+    });
+
+    _courseCodeInputController.clear();
+    _sectionInputController.clear();
+  }
+}
+
+DataRow _rowItem(int index, BasicSubjectModel subject, VoidCallback onEditTap,
+    VoidCallback onDeleteTap) {
+  return DataRow(
+    cells: [
+      DataCell(
+        Text('${index + 1}.'),
+      ),
+      DataCell(Text(subject.courseCode!)),
+      DataCell(Text(
+        subject.section != null ? subject.section.toString() : '-',
+      )),
+      DataCell(
+        Row(
+          children: [
+            IconButton(
+                tooltip: 'Edit',
+                onPressed: onEditTap,
+                icon: const Icon(Icons.edit_outlined)),
+            IconButton(
+              tooltip: 'Delete',
+              onPressed: onDeleteTap,
+              icon: const Icon(Icons.delete_outline, color: Colors.red),
+            ),
+          ],
+        ),
+      )
+    ],
+  );
 }

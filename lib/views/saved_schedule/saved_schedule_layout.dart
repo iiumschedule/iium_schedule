@@ -22,6 +22,7 @@ import '../../services/isar_service.dart';
 import '../../util/course_validator_pass.dart';
 import '../../util/kulliyyah_suggestions.dart';
 import '../../util/lane_events_util.dart';
+import '../../util/my_snackbar.dart';
 import '../../util/subject_fetcher.dart';
 import '../scheduler/schedule_view/rename_dialog.dart';
 import '../scheduler/schedule_view/setting_bottom_sheet.dart';
@@ -104,9 +105,8 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
     });
 
     if (!courseValidator.isClearToProceed()) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'We\'re facing some issues while fetching latest data. Try again later.')));
+      MySnackbar.showWarn(context,
+          "We're facing some issues while fetching latest data. Try again later.");
       return;
     }
 
