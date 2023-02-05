@@ -3,10 +3,11 @@ description: IIUM Schedule Maker
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
+# See https://github.com/iqfareez/iium_schedule/wiki/Versioning
 # When changing this version, also change the versions in
 # - msix block (msix_version)
 # - Inno setup (MyAppVersion)
-version: 1.1.0-pre.2+20
+version: 1.1.0+21
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -111,7 +112,7 @@ msix_config:
   display_name: IIUM Schedule
   publisher_display_name: Muhammad Fareez Iqmal
   identity_name: fareez.flutter.iiumschedule
-  msix_version: 1.1.0.2 # same as inno setup (MyAppVersion)
+  msix_version: 1.1.0.0 # same as inno setup (MyAppVersion)
   logo_path: ".\\assets\\logo\\app-logo.png"
   capabilities: "internetClient"
   certificate_path: ".\\windows\\CERTIFICATE.pfx"
