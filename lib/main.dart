@@ -1,10 +1,11 @@
 import 'dart:io';
 
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 
 import 'constants.dart';
 import 'enums/subject_title_setting_enum.dart';
@@ -17,8 +18,6 @@ import 'providers/schedule_notifier_provider.dart';
 import 'providers/settings_provider.dart';
 import 'util/migrate_hive_to_isar.dart';
 import 'views/body.dart';
-
-import 'package:flutter_displaymode/flutter_displaymode.dart';
 
 void main() async {
   await Hive.initFlutter('IIUM Schedule Data');
@@ -61,12 +60,16 @@ class MyApp extends StatelessWidget {
       ],
       child: DynamicColorBuilder(builder:
           (ColorScheme? lightColorScheme, ColorScheme? darkColorScheme) {
+        // for platform that doesn't support dynamic color (eg. Android < 12)
+        // use the colour generated from seed
+        // avoid using ColorScheme.light() or ColorScheme.dark() directly
         return Consumer<SettingsProvider>(
             builder: (context, settingsProvider, _) {
           return MaterialApp(
             title: 'IIUM Schedule',
             theme: ThemeData(
-              colorScheme: lightColorScheme ?? const ColorScheme.light(),
+              colorScheme: lightColorScheme ??
+                  ColorScheme.fromSeed(seedColor: Colors.orange),
               useMaterial3: true,
               fontFamily: 'Inter',
             ),
@@ -85,7 +88,9 @@ class MyApp extends StatelessWidget {
               textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
               primaryTextTheme:
                   ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
-              colorScheme: darkColorScheme ?? const ColorScheme.dark(),
+              colorScheme: darkColorScheme ??
+                  ColorScheme.fromSeed(
+                      seedColor: Colors.orange, brightness: Brightness.dark),
             ),
             themeMode: settingsProvider.themeMode,
             home: const MyBody(),

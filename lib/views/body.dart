@@ -107,8 +107,9 @@ class _MyBodyState extends State<MyBody> {
                   default:
                 }
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.more_vert_outlined,
+                color: Theme.of(context).colorScheme.primary,
               ),
               itemBuilder: (context) => const [
                 PopupMenuItem(
@@ -168,8 +169,8 @@ class _MyBodyState extends State<MyBody> {
                               "Your saved schedule will appear here",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.black),
+                                fontWeight: FontWeight.w300,
+                              ),
                             ),
                           );
                         }
