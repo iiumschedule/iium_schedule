@@ -18,7 +18,9 @@ Just provide the app with your kulliyyah, course codes and section. It'll handle
 
 Feel free to open up [issues](https://github.com/iqfareez/iium_schedule/issues) and/or submit [pull requests](https://github.com/iqfareez/iium_schedule/pulls).
 
-For other types of contributions, kindly refer [wiki](https://github.com/iqfareez/iium_schedule/wiki). More proper guides will be written soon.
+<!-- For other types of contributions, kindly refer [wiki](https://github.com/iqfareez/iium_schedule/wiki).  -->
+
+More proper guides will be written soon.
 
 ## Getting started
 
@@ -55,7 +57,7 @@ App is available for Android, Windows and Web. Check it out [here](https://iiums
 - To make a tool that can generate a beautiful, lockscreen-worthy schedule for IIUM students that **require minimal effort**.
 - and maybe others, read more [here](https://iiumschedule.iqfareez.com/changelog/2022/10/8/first-release).
 
-<sub>Actually, I'm pretty lazy to make my schedule manually for every semester</sub>
+<sub>Actually, I'm pretty lazy to make my schedule manually for every semester. So, as a wise developer, we always do [this](https://i.redd.it/0cm6yx27tez21.jpg).</sub>
 
 ## Website
 
