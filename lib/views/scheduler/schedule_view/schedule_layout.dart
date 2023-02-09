@@ -299,7 +299,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                               if (!mounted) return;
                               MyFtoast.show(
                                 context,
-                                'Saved. The schedule can the found from the main menu. ${kDebugMode ? '$key*' : ''}}',
+                                'Saved. The schedule can the found from the main menu. ${kDebugMode ? '$key*' : ''}',
                               );
                               Navigator.pushAndRemoveUntil(
                                 context,
