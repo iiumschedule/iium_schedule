@@ -33,239 +33,285 @@ class _MyBodyState extends State<MyBody> {
   final IsarService _isarService = IsarService();
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
   int selectedIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    configureQuickAction(context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    configureQuickAction(context);
-
     return Scaffold(
-        // extendBodyBehindAppBar: true,
-        backgroundColor: Theme.of(context).colorScheme.background,
-        appBar: AppBar(
-          systemOverlayStyle: Theme.of(context).brightness == Brightness.light
-              ? SystemUiOverlayStyle.dark
-                  .copyWith(statusBarColor: Colors.grey.withAlpha(90))
-              : SystemUiOverlayStyle.light
-                  .copyWith(statusBarColor: Colors.grey.withAlpha(90)),
-          // systemOverlayStyle: SystemUiOverlayStyle.light
-          //     .copyWith(statusBarColor: Colors.transparent),
-          // shadowColor: Colors.transparent,
-          // backgroundColor: Colors.transparent,
-          // foregroundColor: Colors.transparent,
-          titleSpacing: 0,
-          centerTitle:
-              false, // prevent the version render at the center of the screen for iphone/ipad
-          titleTextStyle: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w300,
-              color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.black
-                  : Colors.white),
-          title: FutureBuilder(
-              future: PackageInfo.fromPlatform(),
-              builder: (_, AsyncSnapshot<PackageInfo> snapshot) {
-                return TextButton(
-                  // don't want to be as attractive like a button
-                  style: TextButton.styleFrom(
-                      textStyle: Theme.of(context).textTheme.bodySmall,
-                      foregroundColor:
-                          Theme.of(context).colorScheme.onBackground),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => const _SimpleAboutDialog(),
-                    );
-                  },
-                  child: Text(
-                    'v${snapshot.data?.version}',
-                  ),
-                );
-              }),
-          actions: [
-            PopupMenuButton<String>(
-              elevation: 1.0,
-              color: Theme.of(context).colorScheme.secondaryContainer,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              tooltip: "Menu",
-              onSelected: (value) async {
-                switch (value) {
-                  case "website":
-                    LauncherUrl.open("https://iiumschedule.iqfareez.com/");
-                    break;
-                  case "feedback":
-                    LauncherUrl.open(
-                        "https://iiumschedule.iqfareez.com/feedback");
-                    break;
-                  case "settings":
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const SettingsPage()));
-                    break;
-                  default:
-                }
-              },
-              icon: Icon(
-                Icons.more_vert_outlined,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              itemBuilder: (context) => const [
-                PopupMenuItem(
-                  value: "settings",
-                  child: Text("Settings"),
+      // extendBodyBehindAppBar: true,
+      backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        systemOverlayStyle: Theme.of(context).brightness == Brightness.light
+            ? SystemUiOverlayStyle.dark
+                .copyWith(statusBarColor: Colors.grey.withAlpha(90))
+            : SystemUiOverlayStyle.light
+                .copyWith(statusBarColor: Colors.grey.withAlpha(90)),
+        // systemOverlayStyle: SystemUiOverlayStyle.light
+        //     .copyWith(statusBarColor: Colors.transparent),
+        // shadowColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
+        // foregroundColor: Colors.transparent,
+        titleSpacing: 0,
+        centerTitle:
+            false, // prevent the version render at the center of the screen for iphone/ipad
+        titleTextStyle: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w300,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white),
+        title: FutureBuilder(
+            future: PackageInfo.fromPlatform(),
+            builder: (_, AsyncSnapshot<PackageInfo> snapshot) {
+              return TextButton(
+                // don't want to be as attractive like a button
+                style: TextButton.styleFrom(
+                    textStyle: Theme.of(context).textTheme.bodySmall,
+                    foregroundColor:
+                        Theme.of(context).colorScheme.onBackground),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => const _SimpleAboutDialog(),
+                  );
+                },
+                child: Text(
+                  'v${snapshot.data?.version}',
                 ),
-                PopupMenuDivider(),
-                PopupMenuItem(
-                  value: "website",
-                  child: Text("Website"),
-                ),
-                PopupMenuItem(
-                  value: "feedback",
-                  child: Text("Send feedback"),
-                ),
-              ],
+              );
+            }),
+        actions: [
+          PopupMenuButton<String>(
+            elevation: 1.0,
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
             ),
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: <Widget>[
-            SingleChildScrollView(
-              physics: const BouncingScrollPhysics(
-                  decelerationRate: ScrollDecelerationRate.normal),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'IIUM Schedule',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontSize: 36.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+            tooltip: "Menu",
+            onSelected: (value) async {
+              switch (value) {
+                case "website":
+                  LauncherUrl.open("https://iiumschedule.iqfareez.com/");
+                  break;
+                case "feedback":
+                  LauncherUrl.open(
+                      "https://iiumschedule.iqfareez.com/feedback");
+                  break;
+                case "settings":
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => const SettingsPage()));
+                  break;
+                default:
+              }
+            },
+            icon: Icon(
+              Icons.more_vert_outlined,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            itemBuilder: (context) => const [
+              PopupMenuItem(
+                value: "settings",
+                child: Text("Settings"),
+              ),
+              PopupMenuDivider(),
+              PopupMenuItem(
+                value: "website",
+                child: Text("Website"),
+              ),
+              PopupMenuItem(
+                value: "feedback",
+                child: Text("Send feedback"),
+              ),
+            ],
+          ),
+        ],
+      ),
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (MediaQuery.of(context).size.width > 600)
+            NavigationRail(
+                onDestinationSelected: (value) {
+                  setState(() => selectedIndex = value);
+                },
+                extended: MediaQuery.of(context).size.width > 800,
+                destinations: const [
+                  NavigationRailDestination(
+                    icon: Icon(Icons.home_outlined),
+                    selectedIcon: Icon(Icons.home_rounded),
+                    label: Text('Schedule'),
                   ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  StreamBuilder(
-                      stream: _isarService.listenToAllSchedulesChanges(),
-                      builder: (_, __) {
-                        var data = _isarService.getAllSchedule();
-                        // check the current size of AnimatedList
-                        // if different that data.length, rebuild the list
-                        if (_listKey.currentState != null &&
-                            _listKey.currentState!.widget.initialItemCount <
-                                data.length) {
-                          _listKey.currentState!.insertItem(data.length - 1);
-                        }
-
-                        if (data.isEmpty) {
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 4),
-                            child: Text(
-                              "Your saved schedule will appear here",
-                              textAlign: TextAlign.center,
+                  NavigationRailDestination(
+                    selectedIcon: Icon(Icons.book_rounded),
+                    icon: Icon(Icons.book_outlined),
+                    label: Text('Course Browser'),
+                  )
+                ],
+                selectedIndex: selectedIndex),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: selectedIndex == 0
+                    ? SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(
+                            decelerationRate: ScrollDecelerationRate.normal),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              'IIUM Schedule',
+                              textAlign: TextAlign.left,
                               style: TextStyle(
-                                fontWeight: FontWeight.w300,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                                fontSize: 36.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          );
-                        }
-                        // return const Text('Hey');
-                        return AnimatedList(
-                          key: _listKey,
-                          initialItemCount: data.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index, animation) {
-                            var item = data[index];
-                            return _CardItem(
-                              item: item,
-                              animation: animation,
-                              onTap: () async {
-                                await Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (_) => SavedScheduleLayout(
-                                      id: item.id!,
+                            const SizedBox(height: 20.0),
+                            StreamBuilder(
+                                stream:
+                                    _isarService.listenToAllSchedulesChanges(),
+                                builder: (_, __) {
+                                  var data = _isarService.getAllSchedule();
+                                  // check the current size of AnimatedList
+                                  // if different that data.length, rebuild the list
+                                  if (_listKey.currentState != null &&
+                                      _listKey.currentState!.widget
+                                              .initialItemCount <
+                                          data.length) {
+                                    _listKey.currentState!
+                                        .insertItem(data.length - 1);
+                                  }
+
+                                  if (data.isEmpty) {
+                                    return const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 4),
+                                      child: Text(
+                                        "Your saved schedule will appear here",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                    );
+                                  }
+
+                                  return AnimatedList(
+                                    key: _listKey,
+                                    initialItemCount: data.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index, animation) {
+                                      var item = data[index];
+                                      return _CardItem(
+                                        item: item,
+                                        animation: animation,
+                                        onTap: () async {
+                                          await Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                              builder: (_) =>
+                                                  SavedScheduleLayout(
+                                                id: item.id!,
+                                              ),
+                                            ),
+                                          );
+
+                                          SystemChrome.setEnabledSystemUIMode(
+                                              SystemUiMode.edgeToEdge);
+                                        },
+                                        onDeleteAction: () async {
+                                          var res = await showDialog(
+                                            context: context,
+                                            builder: (_) =>
+                                                const _DeleteDialog(),
+                                          );
+
+                                          if (res ?? false) {
+                                            // ignore: use_build_context_synchronously
+                                            AnimatedList.of(context).removeItem(
+                                                index,
+                                                (context, animation) =>
+                                                    _CardItem(
+                                                      item: item,
+                                                      animation: animation,
+                                                    ));
+                                            await _isarService
+                                                .deleteSchedule(item.id!);
+                                            setState(() {}); // refresh list
+                                          }
+                                        },
+                                      );
+                                    },
+                                  );
+                                }),
+                            if (kDebugMode)
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          const SavedScheduleSelector(),
                                     ),
-                                  ),
-                                );
-
-                                SystemChrome.setEnabledSystemUIMode(
-                                    SystemUiMode.edgeToEdge);
-                              },
-                              onDeleteAction: () async {
-                                var res = await showDialog(
-                                  context: context,
-                                  builder: (_) => const _DeleteDialog(),
-                                );
-
-                                if (res ?? false) {
-                                  // ignore: use_build_context_synchronously
-                                  AnimatedList.of(context).removeItem(
-                                      index,
-                                      (context, animation) => _CardItem(
-                                            item: item,
-                                            animation: animation,
-                                          ));
-                                  await _isarService.deleteSchedule(item.id!);
-                                  setState(() {}); // refresh list
-                                }
-                              },
-                            );
-                          },
-                        );
-                      }),
-                  if (kDebugMode)
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const SavedScheduleSelector(),
-                          ),
-                        );
-                      },
-                      child: const Text('Go to legacy selector*'),
-                    ),
-                ],
+                                  );
+                                },
+                                child: const Text(
+                                  'Go to legacy selector*',
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                          ],
+                        ),
+                      )
+                    : const Browser(),
               ),
             ),
-            const Browser()
-          ][selectedIndex],
-        ),
-        floatingActionButton: selectedIndex == 0
-            ? FloatingActionButton.extended(
-                onPressed: () async {
-                  await Navigator.of(context).push(
-                      CupertinoPageRoute(builder: (_) => ScheduleMakerEntry()));
-                  // setState(() {});
-                },
-                icon: const Icon(Icons.add),
-                label: const Text('Create'),
-              )
-            : null,
-        bottomNavigationBar: NavigationBar(
-          onDestinationSelected: (index) {
-            setState(() {
-              selectedIndex = index;
-            });
-          },
-          selectedIndex: selectedIndex,
-          destinations: const <Widget>[
-            NavigationDestination(
-              icon: Icon(Icons.home),
-              label: 'Schedule',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.book),
-              label: 'Course Browser',
+          ),
+        ],
+      ),
+      floatingActionButton: selectedIndex == 0
+          ? FloatingActionButton.extended(
+              onPressed: () async {
+                await Navigator.of(context).push(
+                    CupertinoPageRoute(builder: (_) => ScheduleMakerEntry()));
+                // setState(() {});
+              },
+              icon: const Icon(Icons.add),
+              label: const Text('Create'),
             )
-          ],
-        ));
+          : null,
+
+      bottomNavigationBar: MediaQuery.of(context).size.width <= 600
+          ? NavigationBar(
+              onDestinationSelected: (index) {
+                setState(() {
+                  selectedIndex = index;
+                });
+              },
+              selectedIndex: selectedIndex,
+              destinations: const <Widget>[
+                NavigationDestination(
+                  icon: Icon(Icons.home_outlined),
+                  selectedIcon: Icon(Icons.home_rounded),
+                  label: 'Schedule',
+                ),
+                NavigationDestination(
+                  selectedIcon: Icon(Icons.book_rounded),
+                  icon: Icon(Icons.book_outlined),
+                  label: 'Course Browser',
+                )
+              ],
+            )
+          : null,
+    );
   }
 }
 
