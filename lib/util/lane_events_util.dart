@@ -7,6 +7,7 @@ import '../isar_models/saved_subject.dart';
 import '../isar_models/saved_daytime.dart';
 import '../providers/schedule_layout_setting_provider.dart';
 import '../views/saved_schedule/saved_subject_dialog.dart';
+import '../views/saved_schedule/saved_subject_page.dart';
 import 'extensions.dart';
 
 // Perhaps this will no longer neede when Dart's new Records are landed
@@ -79,14 +80,24 @@ class LaneEventsUtil {
             backgroundColor: e.color,
             start: TableEventTime(hour: start.hour, minute: start.minute),
             end: TableEventTime(hour: end.hour, minute: end.minute),
+            heroTag:
+                '${e.subjectId}-${e.dayTimes.first.id}', // unique tag to differentiate between subjects
             onTap: () async {
-              await showDialog(
-                context: context,
-                builder: (_) => SavedSubjectDialog(
+              await Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return SavedSubjectPage(
+                  title: e.title,
+                  subjectColor: e.color,
                   subjectId: e.subjectId,
                   dayTimesId: e.dayTimes.first.id!,
-                ),
-              );
+                );
+              }));
+              // await showDialog(
+              //   context: context,
+              //   builder: (_) => SavedSubjectDialog(
+              //     subjectId: e.subjectId,
+              //     dayTimesId: e.dayTimes.first.id!,
+              //   ),
+              // );
 
               // clean up residue if any
               // Provider.of<SavedSubjectsProvider>(context, listen: false)
