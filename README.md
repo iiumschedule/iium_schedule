@@ -69,6 +69,7 @@ https://iiumschedule.iqfareez.com
 
 - https://github.com/asdacap/iiumschedule
 - https://github.com/PlashSpeed-Aiman/IIUMCourseScheduleApp
+- https://proreg.vercel.app
 
 _Open PR to add your project here_
 
@@ -90,6 +91,13 @@ _Open PR to add your project here_
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+## Related repositories
+
+- Website: https://github.com/iqfareez/iiumscwebsite
+- Firebase Function: https://github.com/iqfareez/iiumschedule-functions
+- `recase`: https://github.com/iqfareez/recase
+- `flutter_timetable_view`: https://github.com/iqfareez/flutter_timetable_view
 
 ## Acknowledgment
 
