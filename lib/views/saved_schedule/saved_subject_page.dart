@@ -1,8 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../isar_models/saved_subject.dart';
 import '../../providers/schedule_notifier_provider.dart';
@@ -31,54 +29,6 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
   final IsarService isarService = IsarService();
 
   Color? newColor; // track selected new colour from colour picker
-
-  Offset _tapPosition = Offset.zero;
-
-  /// https://protocoderspoint.com/flutter-long-press-on-widget-show-context-popup-menu-item/
-  void _getTapPosition(TapDownDetails tapPosition) {
-    final RenderBox referenceBox = context.findRenderObject() as RenderBox;
-    _tapPosition = referenceBox.globalToLocal(tapPosition.globalPosition);
-    // no setState needed, [StreamBuilder] taking care of it
-  }
-
-  void _copyToClipboard(String text) {
-    final data = ClipboardData(text: text);
-    Clipboard.setData(data);
-  }
-
-  void _shareText(String text) => Share.share(text);
-
-  /// Show menu to copy or share texts
-  void _showCopyShareMenu(String textToCopy) async {
-    final RenderObject? overlay =
-        Overlay.of(context).context.findRenderObject();
-
-    final result = await showMenu(
-        context: context,
-        position: RelativeRect.fromRect(
-            Rect.fromLTWH(_tapPosition.dx, _tapPosition.dy, 100, 100),
-            Rect.fromLTWH(0, 0, overlay!.paintBounds.size.width,
-                overlay.paintBounds.size.height)),
-        items: [
-          const PopupMenuItem(
-            value: "copy",
-            child: Text('Copy'),
-          ),
-          const PopupMenuItem(
-            value: "share",
-            child: Text('Share'),
-          )
-        ]);
-    // perform action on selected menu item
-    switch (result) {
-      case 'copy':
-        _copyToClipboard(textToCopy);
-        break;
-      case 'share':
-        _shareText(textToCopy);
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,102 +65,90 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                 seedColor: newColor ?? widget.subjectColor,
                 brightness: Theme.of(context).brightness);
 
-            return CustomScrollView(
-              slivers: [
-                SliverPersistentHeader(
-                  delegate: MySliverPersistentHeaderDelegate(
-                    tag: '${widget.subjectId}-${widget.dayTimesId}',
-                    // subjectCustomScheme.primary,
-                    bgColor: newColor ?? widget.subjectColor,
-                    title: subjectTitle,
-                    onDeleteCallback: () async {
-                      // show alert dialog
-                      var res = await showDialog(
-                          context: context,
-                          builder: (_) => const _DeleteSubjectDialog());
+            // TODO: Row layout for big screen
+            // https://github.com/flutter/flutter/issues/56756
+            return SelectionArea(
+              child: CustomScrollView(
+                slivers: [
+                  SliverPersistentHeader(
+                    delegate: MySliverPersistentHeaderDelegate(
+                      tag: '${widget.subjectId}-${widget.dayTimesId}',
+                      // subjectCustomScheme.primary,
+                      bgColor: newColor ?? widget.subjectColor,
+                      title: subjectTitle,
+                      onDeleteCallback: () async {
+                        // show alert dialog
+                        var res = await showDialog(
+                            context: context,
+                            builder: (_) => const _DeleteSubjectDialog());
 
-                      if (res == null) return;
+                        if (res == null) return;
 
-                      await isarService.deleteSingleSubject(
-                          subjectId: widget.subjectId,
-                          dayTimesId: widget.dayTimesId);
-                      if (!mounted) return;
-                      Navigator.pop(context);
-                      Provider.of<ScheduleNotifierProvider>(context,
-                              listen: false)
-                          .notify();
-                    },
-                    onColourPickerCallback: () async {
-                      Color? selectedColour = await showModalBottomSheet(
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (_) => ColourPickerSheet(
-                              color: newColor ?? widget.subjectColor));
+                        await isarService.deleteSingleSubject(
+                            subjectId: widget.subjectId,
+                            dayTimesId: widget.dayTimesId);
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                        Provider.of<ScheduleNotifierProvider>(context,
+                                listen: false)
+                            .notify();
+                      },
+                      onColourPickerCallback: () async {
+                        Color? selectedColour = await showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            builder: (_) => ColourPickerSheet(
+                                color: newColor ?? widget.subjectColor));
 
-                      if (selectedColour == null) return;
+                        if (selectedColour == null) return;
 
-                      snapshot.data!.hexColor = selectedColour.value;
-                      newColor = selectedColour;
+                        snapshot.data!.hexColor = selectedColour.value;
+                        newColor = selectedColour;
 
-                      isarService.updateSubject(snapshot.data!);
-                      // notify the schedule behind the dialog to reflect the
-                      // new information
-                      Provider.of<ScheduleNotifierProvider>(context,
-                              listen: false)
-                          .notify();
-                    },
+                        isarService.updateSubject(snapshot.data!);
+                        // notify the schedule behind the dialog to reflect the
+                        // new information
+                        Provider.of<ScheduleNotifierProvider>(context,
+                                listen: false)
+                            .notify();
+                      },
+                    ),
+                    pinned: true,
                   ),
-                  pinned: true,
-                ),
-                SliverList(
-                    delegate: SliverChildListDelegate(
-                  [
-                    const SizedBox(height: 8),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTapDown: (details) => _getTapPosition(details),
+                  SliverList(
+                      delegate: SliverChildListDelegate(
+                    [
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
                               child: _MiniInfoCard(
                                 colourScheme: subjectCustomScheme,
                                 title: courseCode,
                                 subtitle: 'Course Code',
-                                onLongPressCallback: () {
-                                  _showCopyShareMenu(courseCode);
-                                },
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTapDown: (details) => _getTapPosition(details),
+                            Expanded(
                               child: _MiniInfoCard(
                                 colourScheme: subjectCustomScheme,
                                 title: section.toString(),
                                 subtitle: 'Section',
-                                onLongPressCallback: () {
-                                  _showCopyShareMenu('Section $section');
-                                },
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: GestureDetector(
-                        onTapDown: (details) => _getTapPosition(details),
+                      const SizedBox(height: 4),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: _MiniEditCard(
                           colourScheme: subjectCustomScheme,
                           title: venue ?? 'No venue',
                           subtitle: 'Venue',
                           onEditPressed: () async {
                             // show dialog with textfield
-
                             String? res = await showDialog(
                                 context: context,
                                 builder: (_) {
@@ -229,42 +167,32 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                             //         listen: false)
                             //     .notify();
                           },
-                          onLongPressCallback: () {
-                            _showCopyShareMenu(venue ?? 'No venue');
-                          },
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: _MiniInfoTimeCard(
-                        colourScheme: subjectCustomScheme,
-                        startTime: startTime,
-                        endTime: endTime,
-                        onLongPressCallback: () {
-                          _showCopyShareMenu(
-                              '${startTime.format(context)} - ${endTime.format(context)}');
-                        },
+                      const SizedBox(height: 4),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: _MiniInfoTimeCard(
+                          colourScheme: subjectCustomScheme,
+                          startTime: startTime,
+                          endTime: endTime,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: _MiniInfoListCard(
-                        colourScheme: subjectCustomScheme,
-                        items: lecturers,
-                        subtitle:
-                            lecturers.length > 1 ? 'Lecturers' : 'Lecturer',
-                        onLongPressCallback: () {
-                          _showCopyShareMenu(lecturers.join(', '));
-                        },
+                      const SizedBox(height: 4),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: _MiniInfoListCard(
+                          colourScheme: subjectCustomScheme,
+                          items: lecturers,
+                          subtitle:
+                              lecturers.length > 1 ? 'Lecturers' : 'Lecturer',
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                  ],
-                ))
-              ],
+                      const SizedBox(height: 4),
+                    ],
+                  )),
+                ],
+              ),
             );
           }),
     );
@@ -340,37 +268,30 @@ class _MiniInfoCard extends StatelessWidget {
     required this.colourScheme,
     required this.title,
     required this.subtitle,
-    required this.onLongPressCallback,
   }) : super(key: key);
 
   final ColorScheme colourScheme;
   final String title;
   final String subtitle;
-  final VoidCallback? onLongPressCallback;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
       color: colourScheme.secondaryContainer,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onLongPress: onLongPressCallback,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Text(
-                title,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                subtitle,
-                style: const TextStyle(fontWeight: FontWeight.w300),
-              ),
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              subtitle,
+              style: const TextStyle(fontWeight: FontWeight.w300),
+            ),
+          ],
         ),
       ),
     );
@@ -385,46 +306,40 @@ class _MiniEditCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onEditPressed,
-    required this.onLongPressCallback,
   }) : super(key: key);
 
   final ColorScheme colourScheme;
   final String title;
   final String subtitle;
   final VoidCallback onEditPressed;
-  final VoidCallback? onLongPressCallback;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
       color: colourScheme.secondaryContainer,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onLongPress: onLongPressCallback,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // empty space
-              const IconButton(onPressed: null, icon: SizedBox.shrink()),
-              Column(
-                children: [
-                  SelectableText(
-                    title,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(fontWeight: FontWeight.w300),
-                  ),
-                ],
-              ),
-              IconButton(onPressed: onEditPressed, icon: const Icon(Icons.edit))
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // empty space
+            const IconButton(onPressed: null, icon: SizedBox.shrink()),
+            Column(
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  subtitle,
+                  style: const TextStyle(fontWeight: FontWeight.w300),
+                ),
+              ],
+            ),
+            IconButton(onPressed: onEditPressed, icon: const Icon(Icons.edit))
+          ],
         ),
       ),
     );
@@ -439,57 +354,51 @@ class _MiniInfoListCard extends StatelessWidget {
     required this.colourScheme,
     required this.items,
     required this.subtitle,
-    required this.onLongPressCallback,
   }) : super(key: key);
 
   final ColorScheme colourScheme;
   final List<String> items;
   final String subtitle;
-  final VoidCallback onLongPressCallback;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
       color: colourScheme.secondaryContainer,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onLongPress: onLongPressCallback,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              if (items.length == 1)
-                AutoSizeText(
-                  items.first,
-                  minFontSize: 12,
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-
-              /// If map to an individual [AutoSizeText], the font size may be
-              ///  different from each other
-              if (items.length > 1)
-                AutoSizeText(
-                  items
-                      .asMap()
-                      .map((i, name) => MapEntry(i, "${i + 1}. $name"))
-                      .values
-                      .join("\n"),
-                  minFontSize: 12,
-                  maxLines: items.length,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              Text(
-                subtitle,
-                style: const TextStyle(fontWeight: FontWeight.w300),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            if (items.length == 1)
+              AutoSizeText(
+                items.first,
+                minFontSize: 12,
+                maxLines: 1,
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-            ],
-          ),
+
+            /// If map to an individual [AutoSizeText], the font size may be
+            ///  different from each other
+            if (items.length > 1)
+              AutoSizeText(
+                items
+                    .asMap()
+                    .map((i, name) => MapEntry(i, "${i + 1}. $name"))
+                    .values
+                    .join("\n"),
+                minFontSize: 12,
+                maxLines: items.length,
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            Text(
+              subtitle,
+              style: const TextStyle(fontWeight: FontWeight.w300),
+            ),
+          ],
         ),
       ),
     );
@@ -504,13 +413,11 @@ class _MiniInfoTimeCard extends StatelessWidget {
     required this.colourScheme,
     required this.startTime,
     required this.endTime,
-    required this.onLongPressCallback,
   }) : super(key: key);
 
   final ColorScheme colourScheme;
   final TimeOfDay startTime;
   final TimeOfDay endTime;
-  final VoidCallback onLongPressCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -518,42 +425,38 @@ class _MiniInfoTimeCard extends StatelessWidget {
     return Card(
       elevation: 0,
       color: colourScheme.secondaryContainer,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onLongPress: onLongPressCallback,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  const Spacer(),
-                  Expanded(
-                      flex: 2,
-                      child: Text(
-                        startTime.toRealString(),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      )),
-                  Expanded(child: Divider(color: colourScheme.secondary)),
-                  Expanded(
-                      flex: 2,
-                      child: Text(
-                        endTime.toRealString(),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      )),
-                  const Spacer(),
-                ],
-              ),
-              const Text(
-                'Time',
-                style: TextStyle(fontWeight: FontWeight.w300),
-              ),
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const Spacer(),
+                Expanded(
+                    flex: 2,
+                    child: Text(
+                      startTime.toRealString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    )),
+                Expanded(child: Divider(color: colourScheme.secondary)),
+                Expanded(
+                    flex: 2,
+                    child: Text(
+                      endTime.toRealString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    )),
+                const Spacer(),
+              ],
+            ),
+            const Text(
+              'Time',
+              style: TextStyle(fontWeight: FontWeight.w300),
+            ),
+          ],
         ),
       ),
     );
@@ -591,6 +494,9 @@ class _DeleteSubjectDialog extends StatelessWidget {
   }
 }
 
+/// Had to do seperate widget like this because there is issue when wrapping
+/// `Hero` widget directly around `SliverAppBar.large` etc.
+///
 /// https://stackoverflow.com/a/75434707/13617136
 /// https://github.com/iqfareez/flutter_hero_sliver/pull/1
 class MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
