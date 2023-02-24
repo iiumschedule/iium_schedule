@@ -43,16 +43,11 @@ class _MyBodyState extends State<MyBody> {
       // extendBodyBehindAppBar: true,
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        systemOverlayStyle: Theme.of(context).brightness == Brightness.light
-            ? SystemUiOverlayStyle.dark
-                .copyWith(statusBarColor: Colors.grey.withAlpha(90))
-            : SystemUiOverlayStyle.light
-                .copyWith(statusBarColor: Colors.grey.withAlpha(90)),
-        // systemOverlayStyle: SystemUiOverlayStyle.light
-        //     .copyWith(statusBarColor: Colors.transparent),
-        // shadowColor: Colors.transparent,
-        // backgroundColor: Colors.transparent,
-        // foregroundColor: Colors.transparent,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.grey.withAlpha(90),
+          systemNavigationBarColor:
+              Theme.of(context).colorScheme.surfaceVariant,
+        ),
         titleSpacing: 0,
         centerTitle:
             false, // prevent the version render at the center of the screen for iphone/ipad
