@@ -16,14 +16,11 @@ import '../util/my_ftoast.dart';
 import 'check_update_page.dart';
 import 'course browser/browser.dart';
 import 'saved_schedule/saved_schedule_layout.dart';
-import 'saved_schedule_selector.dart';
 import 'scheduler/schedule_maker_entry.dart';
 import 'settings_page.dart';
 
 class MyBody extends StatefulWidget {
-  const MyBody({
-    Key? key,
-  }) : super(key: key);
+  const MyBody({Key? key}) : super(key: key);
 
   @override
   State<MyBody> createState() => _MyBodyState();
@@ -33,6 +30,7 @@ class _MyBodyState extends State<MyBody> {
   final IsarService _isarService = IsarService();
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
   int selectedIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -176,98 +174,79 @@ class _MyBodyState extends State<MyBody> {
                             ),
                             const SizedBox(height: 20.0),
                             StreamBuilder(
-                                stream:
-                                    _isarService.listenToAllSchedulesChanges(),
-                                builder: (_, __) {
-                                  var data = _isarService.getAllSchedule();
-                                  // check the current size of AnimatedList
-                                  // if different that data.length, rebuild the list
-                                  if (_listKey.currentState != null &&
-                                      _listKey.currentState!.widget
-                                              .initialItemCount <
-                                          data.length) {
-                                    _listKey.currentState!
-                                        .insertItem(data.length - 1);
-                                  }
+                              stream:
+                                  _isarService.listenToAllSchedulesChanges(),
+                              builder: (_, __) {
+                                var data = _isarService.getAllSchedule();
+                                // check the current size of AnimatedList
+                                // if different that data.length, rebuild the list
+                                if (_listKey.currentState != null &&
+                                    _listKey.currentState!.widget
+                                            .initialItemCount <
+                                        data.length) {
+                                  _listKey.currentState!
+                                      .insertItem(data.length - 1);
+                                }
 
-                                  if (data.isEmpty) {
-                                    return const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 4),
-                                      child: Text(
-                                        "Your saved schedule will appear here",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w300,
-                                        ),
+                                if (data.isEmpty) {
+                                  return const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 4),
+                                    child: Text(
+                                      "Your saved schedule will appear here",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w300,
                                       ),
-                                    );
-                                  }
-
-                                  return AnimatedList(
-                                    key: _listKey,
-                                    initialItemCount: data.length,
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index, animation) {
-                                      var item = data[index];
-                                      return _CardItem(
-                                        item: item,
-                                        animation: animation,
-                                        onTap: () async {
-                                          await Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                              builder: (_) =>
-                                                  SavedScheduleLayout(
-                                                id: item.id!,
-                                              ),
-                                            ),
-                                          );
-
-                                          SystemChrome.setEnabledSystemUIMode(
-                                              SystemUiMode.edgeToEdge);
-                                        },
-                                        onDeleteAction: () async {
-                                          var res = await showDialog(
-                                            context: context,
-                                            builder: (_) =>
-                                                const _DeleteDialog(),
-                                          );
-
-                                          if (res ?? false) {
-                                            // ignore: use_build_context_synchronously
-                                            AnimatedList.of(context).removeItem(
-                                                index,
-                                                (context, animation) =>
-                                                    _CardItem(
-                                                      item: item,
-                                                      animation: animation,
-                                                    ));
-                                            await _isarService
-                                                .deleteSchedule(item.id!);
-                                            setState(() {}); // refresh list
-                                          }
-                                        },
-                                      );
-                                    },
-                                  );
-                                }),
-                            if (kDebugMode)
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) =>
-                                          const SavedScheduleSelector(),
                                     ),
                                   );
-                                },
-                                child: const Text(
-                                  'Go to legacy selector*',
-                                  textAlign: TextAlign.start,
-                                ),
-                              ),
+                                }
+
+                                return AnimatedList(
+                                  key: _listKey,
+                                  initialItemCount: data.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index, animation) {
+                                    var item = data[index];
+                                    return _CardItem(
+                                      item: item,
+                                      animation: animation,
+                                      onTap: () async {
+                                        await Navigator.push(
+                                          context,
+                                          CupertinoPageRoute(
+                                            builder: (_) => SavedScheduleLayout(
+                                              id: item.id!,
+                                            ),
+                                          ),
+                                        );
+
+                                        SystemChrome.setEnabledSystemUIMode(
+                                            SystemUiMode.edgeToEdge);
+                                      },
+                                      onDeleteAction: () async {
+                                        var res = await showDialog(
+                                          context: context,
+                                          builder: (_) => const _DeleteDialog(),
+                                        );
+
+                                        if (res ?? false) {
+                                          // ignore: use_build_context_synchronously
+                                          AnimatedList.of(context).removeItem(
+                                              index,
+                                              (context, animation) => _CardItem(
+                                                    item: item,
+                                                    animation: animation,
+                                                  ));
+                                          await _isarService
+                                              .deleteSchedule(item.id!);
+                                          setState(() {}); // refresh list
+                                        }
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            ),
                           ],
                         ),
                       )
@@ -481,7 +460,8 @@ class _SimpleAboutDialog extends StatelessWidget {
   }
 }
 
-/// COnfigure the quick action if running on Android only
+/// Configure the quick action if running on Android only
+/// TODO: Add recent schedules https://github.com/iqfareez/iium_schedule/issues/43
 void configureQuickAction(BuildContext context) {
   // check if running on Android only
   if (kIsWeb || !Platform.isAndroid) return;
@@ -497,11 +477,6 @@ void configureQuickAction(BuildContext context) {
     if (shortcutType == 'action_create') {
       Navigator.push(
           context, MaterialPageRoute(builder: (_) => ScheduleMakerEntry()));
-    }
-
-    if (shortcutType == 'action_view_saved') {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (_) => const SavedScheduleSelector()));
     }
   });
   // setup quick actions
