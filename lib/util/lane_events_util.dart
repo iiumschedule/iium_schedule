@@ -6,7 +6,6 @@ import '../enums/subject_title_setting_enum.dart';
 import '../isar_models/saved_subject.dart';
 import '../isar_models/saved_daytime.dart';
 import '../providers/schedule_layout_setting_provider.dart';
-import '../views/saved_schedule/saved_subject_dialog.dart';
 import '../views/saved_schedule/saved_subject_page.dart';
 import 'extensions.dart';
 
