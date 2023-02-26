@@ -485,10 +485,6 @@ void configureQuickAction(BuildContext context) {
           type: 'action_create',
           localizedTitle: 'Create new',
           icon: 'ic_shortcut_plus_square_outline'),
-      const ShortcutItem(
-          type: 'action_view_saved',
-          localizedTitle: 'View saved schedule',
-          icon: 'ic_shortcut_layout_outline')
     ],
   );
 }
