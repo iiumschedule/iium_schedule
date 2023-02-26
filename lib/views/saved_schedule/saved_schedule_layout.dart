@@ -285,26 +285,16 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                               });
                             },
                           ),
-                          if (kIsWeb || !Platform.isAndroid) ...[
+                          if (MediaQuery.of(context).size.width > 600) ...[
                             IconButton(
                               tooltip: 'Increase text sizes',
-                              onPressed: () {
-                                setState(() {
-                                  snapshot.data!.fontSize--;
-                                  isarService.updateSchedule(snapshot.data!);
-                                });
-                              },
-                              icon: const Icon(Icons.text_decrease_rounded),
+                              onPressed: () => increaseTextSize(snapshot),
+                              icon: const Icon(Icons.text_increase_rounded),
                             ),
                             IconButton(
                               tooltip: 'Reduce text sizes',
-                              onPressed: () {
-                                setState(() {
-                                  snapshot.data!.fontSize++;
-                                  isarService.updateSchedule(snapshot.data!);
-                                });
-                              },
-                              icon: const Icon(Icons.text_increase_rounded),
+                              onPressed: () => decreaseTextSize(snapshot),
+                              icon: const Icon(Icons.text_decrease_rounded),
                             ),
                           ],
                           IconButton(
@@ -320,6 +310,18 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                           PopupMenuButton(
                               itemBuilder: (context) {
                                 return <PopupMenuEntry>[
+                                  if (MediaQuery.of(context).size.width <
+                                      600) ...[
+                                    const PopupMenuItem(
+                                      value: 'text+',
+                                      child: Text('Text size +'),
+                                    ),
+                                    const PopupMenuItem(
+                                      value: 'text-',
+                                      child: Text('Text size -'),
+                                    ),
+                                    const PopupMenuDivider(),
+                                  ],
                                   PopupMenuItem(
                                     value: 'save',
                                     // when changing the item below
@@ -407,6 +409,20 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
         },
       ),
     );
+  }
+
+  void increaseTextSize(AsyncSnapshot snapshot) {
+    setState(() {
+      snapshot.data!.fontSize++;
+      isarService.updateSchedule(snapshot.data!);
+    });
+  }
+
+  void decreaseTextSize(AsyncSnapshot snapshot) {
+    setState(() {
+      snapshot.data!.fontSize--;
+      isarService.updateSchedule(snapshot.data!);
+    });
   }
 
   void popupMenuHandler(value) async {
