@@ -306,10 +306,13 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                                           savedSchedule: snapshot.data,
                                         ));
                               },
+                              tooltip: 'Settings',
                               icon: const Icon(Icons.settings_outlined)),
                           PopupMenuButton(
                               itemBuilder: (context) {
                                 return <PopupMenuEntry>[
+                                  // zoom tezt will show in app bar if screen width is large enough
+                                  // otherwise, it will be shown in the popup menu
                                   if (MediaQuery.of(context).size.width <
                                       600) ...[
                                     const PopupMenuItem(
