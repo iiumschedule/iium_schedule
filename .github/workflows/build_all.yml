@@ -196,7 +196,9 @@ jobs:
         run: |
           echo :white_check_mark: Packaged into .exe file >> $GITHUB_STEP_SUMMARY
 
+      # skip MSIX packaging if it's a pre-release
       - name: Decoding CERTIFICATE.pfx
+        if: "!github.event.release.prerelease"
         shell: cmd
         # certutil [options] -decode infile outfile
         # Read cert base64 from env secrets, write it in a file
@@ -206,17 +208,20 @@ jobs:
           certutil -decode certBase64.txt windows/CERTIFICATE.pfx
 
       - name: Packaging to msix
+        if: "!github.event.release.prerelease"
         # Pipe 'Y' (positive), preceeding command
         # will ask if comfirmation to install certificate
         run: echo 'Y' | flutter pub run msix:create
 
       - name: Adding markdown
+        if: "!github.event.release.prerelease"
         run: |
           echo :white_check_mark: Packaged into .msix file >> $GITHUB_STEP_SUMMARY
 
       # Upload the msix to the released release
       - name: Upload file to the assets release
         uses: softprops/action-gh-release@v1
+        if: "!github.event.release.prerelease"
         with:
           files: build/windows/runner/Release/iium_schedule.msix
 
