@@ -8,6 +8,8 @@ import '../../services/isar_service.dart';
 import '../../util/extensions.dart';
 import 'colour_picker_sheet.dart';
 
+const _cardPadding = EdgeInsets.symmetric(horizontal: 8, vertical: 16);
+
 class SavedSubjectPage extends StatefulWidget {
   const SavedSubjectPage(
       {super.key,
@@ -67,132 +69,130 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
 
             // TODO: Row layout for big screen
             // https://github.com/flutter/flutter/issues/56756
-            return SelectionArea(
-              child: CustomScrollView(
-                slivers: [
-                  SliverPersistentHeader(
-                    delegate: MySliverPersistentHeaderDelegate(
-                      tag: '${widget.subjectId}-${widget.dayTimesId}',
-                      // subjectCustomScheme.primary,
-                      bgColor: newColor ?? widget.subjectColor,
-                      title: subjectTitle,
-                      onDeleteCallback: () async {
-                        // show alert dialog
-                        var res = await showDialog(
-                            context: context,
-                            builder: (_) => const _DeleteSubjectDialog());
+            return CustomScrollView(
+              slivers: [
+                SliverPersistentHeader(
+                  delegate: MySliverPersistentHeaderDelegate(
+                    tag: '${widget.subjectId}-${widget.dayTimesId}',
+                    // subjectCustomScheme.primary,
+                    bgColor: newColor ?? widget.subjectColor,
+                    title: subjectTitle,
+                    onDeleteCallback: () async {
+                      // show alert dialog
+                      var res = await showDialog(
+                          context: context,
+                          builder: (_) => const _DeleteSubjectDialog());
 
-                        if (res == null) return;
+                      if (res == null) return;
 
-                        await isarService.deleteSingleSubject(
-                            subjectId: widget.subjectId,
-                            dayTimesId: widget.dayTimesId);
-                        if (!mounted) return;
-                        Navigator.pop(context);
-                        Provider.of<ScheduleNotifierProvider>(context,
-                                listen: false)
-                            .notify();
-                      },
-                      onColourPickerCallback: () async {
-                        Color? selectedColour = await showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            builder: (_) => ColourPickerSheet(
-                                color: newColor ?? widget.subjectColor));
+                      await isarService.deleteSingleSubject(
+                          subjectId: widget.subjectId,
+                          dayTimesId: widget.dayTimesId);
+                      if (!mounted) return;
+                      Navigator.pop(context);
+                      Provider.of<ScheduleNotifierProvider>(context,
+                              listen: false)
+                          .notify();
+                    },
+                    onColourPickerCallback: () async {
+                      Color? selectedColour = await showModalBottomSheet(
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (_) => ColourPickerSheet(
+                              color: newColor ?? widget.subjectColor));
 
-                        if (selectedColour == null) return;
+                      if (selectedColour == null) return;
 
-                        snapshot.data!.hexColor = selectedColour.value;
-                        newColor = selectedColour;
+                      snapshot.data!.hexColor = selectedColour.value;
+                      newColor = selectedColour;
 
-                        isarService.updateSubject(snapshot.data!);
-                        // notify the schedule behind the dialog to reflect the
-                        // new information
-                        Provider.of<ScheduleNotifierProvider>(context,
-                                listen: false)
-                            .notify();
-                      },
-                    ),
-                    pinned: true,
+                      isarService.updateSubject(snapshot.data!);
+                      // notify the schedule behind the dialog to reflect the
+                      // new information
+                      Provider.of<ScheduleNotifierProvider>(context,
+                              listen: false)
+                          .notify();
+                    },
                   ),
-                  SliverList(
-                      delegate: SliverChildListDelegate(
-                    [
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _MiniInfoCard(
-                                colourScheme: subjectCustomScheme,
-                                title: courseCode,
-                                subtitle: 'Course Code',
-                              ),
+                  pinned: true,
+                ),
+                SliverList(
+                    delegate: SliverChildListDelegate(
+                  [
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _MiniInfoCard(
+                              colourScheme: subjectCustomScheme,
+                              title: courseCode,
+                              subtitle: 'Course Code',
                             ),
-                            Expanded(
-                              child: _MiniInfoCard(
-                                colourScheme: subjectCustomScheme,
-                                title: section.toString(),
-                                subtitle: 'Section',
-                              ),
+                          ),
+                          Expanded(
+                            child: _MiniInfoCard(
+                              colourScheme: subjectCustomScheme,
+                              title: section.toString(),
+                              subtitle: 'Section',
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 4),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: _MiniEditCard(
-                          colourScheme: subjectCustomScheme,
-                          title: venue ?? 'No venue',
-                          subtitle: 'Venue',
-                          onEditPressed: () async {
-                            // show dialog with textfield
-                            String? res = await showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return _EditDialog(
-                                    colourScheme: subjectCustomScheme,
-                                    currentVenue: venue ?? '',
-                                  );
-                                });
+                    ),
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: _MiniEditCard(
+                        colourScheme: subjectCustomScheme,
+                        title: venue ?? 'No venue',
+                        subtitle: 'Venue',
+                        onEditPressed: () async {
+                          // show dialog with textfield
+                          String? res = await showDialog(
+                              context: context,
+                              builder: (_) {
+                                return _EditDialog(
+                                  colourScheme: subjectCustomScheme,
+                                  currentVenue: venue ?? '',
+                                );
+                              });
 
-                            if (res == null) return;
+                          if (res == null) return;
 
-                            // update venue in db
-                            snapshot.data!.venue = res;
-                            isarService.updateSubject(snapshot.data!);
-                            // Provider.of<ScheduleNotifierProvider>(context,
-                            //         listen: false)
-                            //     .notify();
-                          },
-                        ),
+                          // update venue in db
+                          snapshot.data!.venue = res;
+                          isarService.updateSubject(snapshot.data!);
+                          // Provider.of<ScheduleNotifierProvider>(context,
+                          //         listen: false)
+                          //     .notify();
+                        },
                       ),
-                      const SizedBox(height: 4),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: _MiniInfoTimeCard(
-                          colourScheme: subjectCustomScheme,
-                          startTime: startTime,
-                          endTime: endTime,
-                        ),
+                    ),
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: _MiniInfoTimeCard(
+                        colourScheme: subjectCustomScheme,
+                        startTime: startTime,
+                        endTime: endTime,
                       ),
-                      const SizedBox(height: 4),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: _MiniInfoListCard(
-                          colourScheme: subjectCustomScheme,
-                          items: lecturers,
-                          subtitle:
-                              lecturers.length > 1 ? 'Lecturers' : 'Lecturer',
-                        ),
+                    ),
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: _MiniInfoListCard(
+                        colourScheme: subjectCustomScheme,
+                        items: lecturers,
+                        subtitle:
+                            lecturers.length > 1 ? 'Lecturers' : 'Lecturer',
                       ),
-                      const SizedBox(height: 4),
-                    ],
-                  )),
-                ],
-              ),
+                    ),
+                    const SizedBox(height: 4),
+                  ],
+                )),
+              ],
             );
           }),
     );
@@ -280,10 +280,10 @@ class _MiniInfoCard extends StatelessWidget {
       elevation: 0,
       color: colourScheme.secondaryContainer,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: _cardPadding,
         child: Column(
           children: [
-            Text(
+            SelectableText(
               title,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
@@ -319,7 +319,7 @@ class _MiniEditCard extends StatelessWidget {
       elevation: 0,
       color: colourScheme.secondaryContainer,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: _cardPadding,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -327,7 +327,7 @@ class _MiniEditCard extends StatelessWidget {
             const IconButton(onPressed: null, icon: SizedBox.shrink()),
             Column(
               children: [
-                Text(
+                SelectableText(
                   title,
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.bold),
@@ -366,33 +366,37 @@ class _MiniInfoListCard extends StatelessWidget {
       elevation: 0,
       color: colourScheme.secondaryContainer,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: _cardPadding,
         child: Column(
           children: [
             if (items.length == 1)
-              AutoSizeText(
-                items.first,
-                minFontSize: 12,
-                maxLines: 1,
-                textAlign: TextAlign.center,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              SelectionArea(
+                child: AutoSizeText(
+                  items.first,
+                  minFontSize: 12,
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ),
 
             /// If map to an individual [AutoSizeText], the font size may be
             ///  different from each other
             if (items.length > 1)
-              AutoSizeText(
-                items
-                    .asMap()
-                    .map((i, name) => MapEntry(i, "${i + 1}. $name"))
-                    .values
-                    .join("\n"),
-                minFontSize: 12,
-                maxLines: items.length,
-                textAlign: TextAlign.center,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              SelectionArea(
+                child: AutoSizeText(
+                  items
+                      .asMap()
+                      .map((i, name) => MapEntry(i, "${i + 1}. $name"))
+                      .values
+                      .join("\n"),
+                  minFontSize: 12,
+                  maxLines: items.length,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ),
             Text(
               subtitle,
@@ -426,7 +430,7 @@ class _MiniInfoTimeCard extends StatelessWidget {
       elevation: 0,
       color: colourScheme.secondaryContainer,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: _cardPadding,
         child: Column(
           children: [
             Row(
@@ -551,21 +555,23 @@ class MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                   ),
                 ),
                 Align(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                        12, kToolbarHeight - 20, 12, 8),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: AutoSizeText(
-                        title,
-                        minFontSize: 14,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            color: foregroundAppbarColor,
-                            fontSize: 30,
-                            overflow: TextOverflow.ellipsis,
-                            fontWeight: FontWeight.w600),
-                        maxLines: 4,
+                  child: SelectionArea(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                          12, kToolbarHeight - 20, 12, 8),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: AutoSizeText(
+                          title,
+                          minFontSize: 14,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: foregroundAppbarColor,
+                              fontSize: 30,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.w600),
+                          maxLines: 4,
+                        ),
                       ),
                     ),
                   ),
