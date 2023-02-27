@@ -456,6 +456,14 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                   savedScheduleId: schedule!.id!,
                 ));
         break;
+      case 'text+':
+        increaseTextSize(
+            AsyncSnapshot.withData(ConnectionState.done, schedule));
+        break;
+      case 'text-':
+        decreaseTextSize(
+            AsyncSnapshot.withData(ConnectionState.done, schedule));
+        break;
       case 'delete':
         // TODO: Implement delete
         Fluttertoast.showToast(msg: "Not implemented yet");
