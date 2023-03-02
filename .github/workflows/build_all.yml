@@ -192,7 +192,7 @@ jobs:
         shell: cmd
 
       # Upload the exe to artifacts
-      - name: Upload file to the assets release
+      - name: Upload artifact (.exe)
         uses: actions/upload-artifact@v3
         with:
           name: windows installer exe
@@ -224,8 +224,7 @@ jobs:
         run: |
           echo :white_check_mark: Packaged into .msix file >> $GITHUB_STEP_SUMMARY
 
-      # Upload the msix to the released release
-      - name: Upload file to the assets release
+      - name: Upload artifact (.msix)
         uses: actions/upload-artifact@v3
         if: "!github.event.release.prerelease"
         with:
@@ -237,20 +236,24 @@ jobs:
           echo :rocket: **Added outputs** to release assets **todo: Publish to winget** >> $GITHUB_STEP_SUMMARY
 
   upload_assets:
-    name: Upload artifacts to release aseets
+    name: Upload artifacts to release assets
     needs: [build_android, build_windows]
     runs-on: ubuntu-latest
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v3
 
-      - name: Upload file to the assets release
+      # If the name input parameter is not provided, all artifacts will be downloaded.
+      # To differentiate between downloaded artifacts, a directory denoted by the
+      # artifacts name will be created for each individual artifact.
+      # https://github.com/marketplace/actions/download-a-build-artifact#download-all-artifacts
+      - name: Upload files
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            *.apk
-            iium_schedule.msix
-            iiumschedulesetup.exe
+            apks artifact/*.apk
+            windows installer msix/iium_schedule.msix
+            windows installer exe/iiumschedulesetup.exe
 
   upload_playstore:
     name: Upload aab bundle to Play Store
@@ -267,8 +270,8 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
-          packageName: com.iium.schedule
-          releaseFile: app-release.aab
+          packageName: com.iqfareez.iiumschedule
+          releaseFiles: app-release.aab
           track: production
           changesNotSentForReview: true
           status: draft
