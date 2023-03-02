@@ -9,6 +9,9 @@ import '../providers/schedule_layout_setting_provider.dart';
 import '../views/saved_schedule/saved_subject_page.dart';
 import 'extensions.dart';
 
+// TODO: This implementation need serious refactoring. Duplicate of this implementation
+// is also found in `schedule_layout.dart`.
+
 /// Extra info to replace the time in the event
 /// none = default
 enum ExtraInfo { venue, section, none }

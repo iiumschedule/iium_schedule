@@ -57,22 +57,12 @@ class SubjectDialog extends StatelessWidget {
       ),
       actions: [
         TextButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => SubjectScreen(_subject)));
-            },
-            child: Text(
-              'View details',
-              style: TextStyle(color: actionButtonColour),
-            )),
-        TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(
-              'Close',
-              style: TextStyle(color: actionButtonColour),
-            ))
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            'Close',
+            style: TextStyle(color: actionButtonColour),
+          ),
+        )
       ],
     );
   }

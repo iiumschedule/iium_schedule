@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:admonitions/admonitions.dart';
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,18 +17,11 @@ IsarService isarService = IsarService();
 
 /// Subject detail viewer
 class SubjectScreen extends StatefulWidget {
-  const SubjectScreen(this.subject,
-      {Key? key, this.isCached = false, this.albiruni, this.kulliyyah})
+  const SubjectScreen(this.subject, {Key? key, this.albiruni, this.kulliyyah})
       : super(key: key);
 
   /// Subject information from albiruni
   final Subject subject;
-
-  /// Marked the subject is fresh or cached
-  ///
-  /// eg: it is live when loaded from course browser page
-  /// and it is cached when loaded from saved schedule page
-  final bool isCached;
 
   /// Pass this from Course Browser, as a context to save to Favourites
   final Albiruni? albiruni;
@@ -50,11 +42,9 @@ class _SubjectScreenState extends State<SubjectScreen> {
     super.initState();
 
     // check subject if it is already added to favourites
-    if (!widget.isCached) {
-      isarService
-          .checkFavourite(widget.albiruni!, widget.kulliyyah!, widget.subject)
-          .then((value) => setState(() => favouriteId = value));
-    }
+    isarService
+        .checkFavourite(widget.albiruni!, widget.kulliyyah!, widget.subject)
+        .then((value) => setState(() => favouriteId = value));
   }
 
   @override
@@ -111,14 +101,6 @@ class _SubjectScreenState extends State<SubjectScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // TODO: Reevaluate this as this is may not needed
-              // Mendatangkan rasa eh boleh percaya ke jadual ni
-              if (widget.isCached)
-                PastelAdmonition.info(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  text:
-                      'This is cached version as of the creation of the schedule',
-                ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: SelectableText(
