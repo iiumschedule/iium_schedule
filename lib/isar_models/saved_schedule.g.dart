@@ -22,44 +22,50 @@ const SavedScheduleSchema = CollectionSchema(
       name: r'dateCreated',
       type: IsarType.dateTime,
     ),
-    r'fontSize': PropertySchema(
+    r'extraInfo': PropertySchema(
       id: 1,
+      name: r'extraInfo',
+      type: IsarType.byte,
+      enumMap: _SavedScheduleextraInfoEnumValueMap,
+    ),
+    r'fontSize': PropertySchema(
+      id: 2,
       name: r'fontSize',
       type: IsarType.double,
     ),
     r'heightFactor': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'heightFactor',
       type: IsarType.double,
     ),
     r'kuliyyah': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'kuliyyah',
       type: IsarType.string,
     ),
     r'lastModified': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'lastModified',
       type: IsarType.dateTime,
     ),
     r'semester': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'semester',
       type: IsarType.byte,
     ),
     r'session': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'session',
       type: IsarType.string,
     ),
     r'subjectTitleSetting': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'subjectTitleSetting',
       type: IsarType.byte,
       enumMap: _SavedSchedulesubjectTitleSettingEnumValueMap,
     ),
     r'title': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'title',
       type: IsarType.string,
     )
@@ -114,14 +120,15 @@ void _savedScheduleSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeDateTime(offsets[0], object.dateCreated);
-  writer.writeDouble(offsets[1], object.fontSize);
-  writer.writeDouble(offsets[2], object.heightFactor);
-  writer.writeString(offsets[3], object.kuliyyah);
-  writer.writeDateTime(offsets[4], object.lastModified);
-  writer.writeByte(offsets[5], object.semester);
-  writer.writeString(offsets[6], object.session);
-  writer.writeByte(offsets[7], object.subjectTitleSetting.index);
-  writer.writeString(offsets[8], object.title);
+  writer.writeByte(offsets[1], object.extraInfo.index);
+  writer.writeDouble(offsets[2], object.fontSize);
+  writer.writeDouble(offsets[3], object.heightFactor);
+  writer.writeString(offsets[4], object.kuliyyah);
+  writer.writeDateTime(offsets[5], object.lastModified);
+  writer.writeByte(offsets[6], object.semester);
+  writer.writeString(offsets[7], object.session);
+  writer.writeByte(offsets[8], object.subjectTitleSetting.index);
+  writer.writeString(offsets[9], object.title);
 }
 
 SavedSchedule _savedScheduleDeserialize(
@@ -132,16 +139,19 @@ SavedSchedule _savedScheduleDeserialize(
 ) {
   final object = SavedSchedule(
     dateCreated: reader.readDateTime(offsets[0]),
-    fontSize: reader.readDouble(offsets[1]),
-    heightFactor: reader.readDouble(offsets[2]),
-    kuliyyah: reader.readStringOrNull(offsets[3]),
-    lastModified: reader.readDateTime(offsets[4]),
-    semester: reader.readByte(offsets[5]),
-    session: reader.readString(offsets[6]),
+    extraInfo: _SavedScheduleextraInfoValueEnumMap[
+            reader.readByteOrNull(offsets[1])] ??
+        ExtraInfo.venue,
+    fontSize: reader.readDouble(offsets[2]),
+    heightFactor: reader.readDouble(offsets[3]),
+    kuliyyah: reader.readStringOrNull(offsets[4]),
+    lastModified: reader.readDateTime(offsets[5]),
+    semester: reader.readByte(offsets[6]),
+    session: reader.readString(offsets[7]),
     subjectTitleSetting: _SavedSchedulesubjectTitleSettingValueEnumMap[
-            reader.readByteOrNull(offsets[7])] ??
+            reader.readByteOrNull(offsets[8])] ??
         SubjectTitleSetting.title,
-    title: reader.readStringOrNull(offsets[8]),
+    title: reader.readStringOrNull(offsets[9]),
   );
   object.id = id;
   return object;
@@ -157,28 +167,42 @@ P _savedScheduleDeserializeProp<P>(
     case 0:
       return (reader.readDateTime(offset)) as P;
     case 1:
-      return (reader.readDouble(offset)) as P;
+      return (_SavedScheduleextraInfoValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          ExtraInfo.venue) as P;
     case 2:
       return (reader.readDouble(offset)) as P;
     case 3:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDouble(offset)) as P;
     case 4:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readByte(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 6:
-      return (reader.readString(offset)) as P;
+      return (reader.readByte(offset)) as P;
     case 7:
+      return (reader.readString(offset)) as P;
+    case 8:
       return (_SavedSchedulesubjectTitleSettingValueEnumMap[
               reader.readByteOrNull(offset)] ??
           SubjectTitleSetting.title) as P;
-    case 8:
+    case 9:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
+const _SavedScheduleextraInfoEnumValueMap = {
+  'venue': 0,
+  'section': 1,
+  'none': 2,
+};
+const _SavedScheduleextraInfoValueEnumMap = {
+  0: ExtraInfo.venue,
+  1: ExtraInfo.section,
+  2: ExtraInfo.none,
+};
 const _SavedSchedulesubjectTitleSettingEnumValueMap = {
   'title': 0,
   'courseCode': 1,
@@ -334,6 +358,62 @@ extension SavedScheduleQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'dateCreated',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      extraInfoEqualTo(ExtraInfo value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'extraInfo',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      extraInfoGreaterThan(
+    ExtraInfo value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'extraInfo',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      extraInfoLessThan(
+    ExtraInfo value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'extraInfo',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      extraInfoBetween(
+    ExtraInfo lower,
+    ExtraInfo upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'extraInfo',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1240,6 +1320,19 @@ extension SavedScheduleQuerySortBy
     });
   }
 
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy> sortByExtraInfo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'extraInfo', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy>
+      sortByExtraInfoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'extraInfo', Sort.desc);
+    });
+  }
+
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy> sortByFontSize() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fontSize', Sort.asc);
@@ -1358,6 +1451,19 @@ extension SavedScheduleQuerySortThenBy
       thenByDateCreatedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dateCreated', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy> thenByExtraInfo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'extraInfo', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy>
+      thenByExtraInfoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'extraInfo', Sort.desc);
     });
   }
 
@@ -1488,6 +1594,12 @@ extension SavedScheduleQueryWhereDistinct
     });
   }
 
+  QueryBuilder<SavedSchedule, SavedSchedule, QDistinct> distinctByExtraInfo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'extraInfo');
+    });
+  }
+
   QueryBuilder<SavedSchedule, SavedSchedule, QDistinct> distinctByFontSize() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'fontSize');
@@ -1555,6 +1667,12 @@ extension SavedScheduleQueryProperty
       dateCreatedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dateCreated');
+    });
+  }
+
+  QueryBuilder<SavedSchedule, ExtraInfo, QQueryOperations> extraInfoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'extraInfo');
     });
   }
 

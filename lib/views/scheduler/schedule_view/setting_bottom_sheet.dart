@@ -6,9 +6,10 @@ import '../../../enums/subject_title_setting_enum.dart';
 import '../../../isar_models/saved_schedule.dart';
 import '../../../providers/schedule_layout_setting_provider.dart';
 import '../../../services/isar_service.dart';
+import '../../../util/lane_events_util.dart';
 
 /// Pass `savedSchedule` for saved schedule layout only
-/// For save to the hive object
+/// For save to the isar object
 class SettingBottomSheet extends StatelessWidget {
   const SettingBottomSheet({Key? key, this.savedSchedule}) : super(key: key);
 
@@ -31,7 +32,7 @@ class SettingBottomSheet extends StatelessWidget {
               ),
               const SizedBox(height: 15),
               Text(
-                "Subject display",
+                "Subject title",
                 style: Theme.of(context).textTheme.bodyLarge!,
               ),
               const SizedBox(height: 10),
@@ -41,9 +42,9 @@ class SettingBottomSheet extends StatelessWidget {
                 onValueChanged: (SubjectTitleSetting newValue) async {
                   value.subjectTitleSetting = newValue;
 
-                  // save to hive for saved schedule layout
+                  // for schedule that was already saved, update its data
+                  if (savedSchedule == null) return;
                   savedSchedule?.subjectTitleSetting = newValue;
-
                   isarService.updateSchedule(savedSchedule!);
                 },
                 children: const <SubjectTitleSetting, Widget>{
@@ -54,6 +55,37 @@ class SettingBottomSheet extends StatelessWidget {
                   SubjectTitleSetting.courseCode: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Text('Course code'),
+                  ),
+                },
+              ),
+              const SizedBox(height: 15),
+              Text(
+                "Subject subtitle",
+                style: Theme.of(context).textTheme.bodyLarge!,
+              ),
+              const SizedBox(height: 10),
+              CupertinoSegmentedControl<ExtraInfo>(
+                padding: EdgeInsets.zero,
+                groupValue: value.extraInfo,
+                onValueChanged: (ExtraInfo newValue) async {
+                  value.extraInfo = newValue;
+
+                  if (savedSchedule == null) return;
+                  savedSchedule?.extraInfo = newValue;
+                  isarService.updateSchedule(savedSchedule!);
+                },
+                children: const <ExtraInfo, Widget>{
+                  ExtraInfo.none: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text('Default'),
+                  ),
+                  ExtraInfo.section: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text('Section'),
+                  ),
+                  ExtraInfo.venue: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text('Venue'),
                   ),
                 },
               ),

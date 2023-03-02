@@ -66,7 +66,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         .initialConditionSubjectTitle(SubjectTitleSetting.title);
   }
 
-  // Save the generated schedule data to the database (Hive)
+  // Save the generated schedule data to the database (Isar)
   Future<int> save() async {
     Isar isar = Isar.getInstance()!;
     late int savedId;
@@ -89,6 +89,9 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
             Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)
                 .subjectTitleSetting!,
         kuliyyah: kulliyah,
+        extraInfo:
+            Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)
+                .extraInfo,
       );
 
       savedId = await isar.savedSchedules.put(isarSchedule);
@@ -181,6 +184,23 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
             e.code: _colorPallete[subjIndex].value,
           });
 
+          var extraInfoType =
+              Provider.of<ScheduleLayoutSettingProvider>(context).extraInfo;
+
+          String? extra;
+
+          switch (extraInfoType) {
+            case ExtraInfo.section:
+              extra = 'Sect. ${e.sect}';
+              break;
+            case ExtraInfo.venue:
+              extra = e.venue ?? '-';
+              break;
+            case ExtraInfo.none:
+              extra = null;
+              break;
+          }
+
           return TableEvent(
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(15.0)),
@@ -195,6 +215,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                 ? e.title
                 : e.code,
             // backgroundColor: _colorPallete[subjIndex],
+            subtitle: extra,
             start: TableEventTime(hour: start.hour, minute: start.minute),
             end: TableEventTime(hour: end.hour, minute: end.minute),
             onTap: () => showDialog(

@@ -7,6 +7,7 @@ import '../isar_models/saved_schedule.dart' as isar_saved_schedule;
 import '../isar_models/saved_subject.dart' as isar_saved_subject;
 import '../services/isar_service.dart';
 import 'kulliyyahs.dart';
+import 'lane_events_util.dart';
 
 /// Handles migration from Hive to Isar from previous app version
 class MigrateHiveToIsar {
@@ -49,6 +50,7 @@ class MigrateHiveToIsar {
         heightFactor: schedule.heightFactor,
         subjectTitleSetting: schedule.subjectTitleSetting,
         kuliyyah: inferredKuliyyah,
+        extraInfo: ExtraInfo.none,
       );
       await isar.writeTxn(() async {
         await isar.savedSchedules.put(isarSchedule);

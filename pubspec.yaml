@@ -28,7 +28,9 @@ dependencies:
   url_launcher: ^6.0.17
   package_info_plus: ^3.0.1
   flutter_timetable_view:
-    git: https://github.com/iqfareez/flutter_timetable_view.git
+    git:
+      url: https://github.com/iqfareez/flutter_timetable_view.git
+      ref: 0486b731669a055b2c5d4924a0d2228f5e2968f7
   page_view_indicators: ^2.0.0
   hive: ^2.0.6
   hive_flutter: ^1.1.0

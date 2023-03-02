@@ -187,6 +187,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
           LaneEventsResponse laneEventsList = LaneEventsUtil(
                   context: context,
                   fontSize: snapshot.data!.fontSize,
+                  extraInfoType: snapshot.data!.extraInfo,
                   savedSubjectList: snapshot.data!.subjects.toList())
               .laneEvents();
           return GestureDetector(

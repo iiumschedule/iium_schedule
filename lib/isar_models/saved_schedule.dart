@@ -1,6 +1,7 @@
 import 'package:isar/isar.dart';
 
 import '../enums/subject_title_setting_enum.dart';
+import '../util/lane_events_util.dart';
 import 'saved_subject.dart';
 
 part 'saved_schedule.g.dart';
@@ -33,6 +34,9 @@ class SavedSchedule {
   // The main kuliyyah of the schedule
   String? kuliyyah;
 
+  @enumerated
+  ExtraInfo extraInfo = ExtraInfo.none;
+
   SavedSchedule({
     required this.session,
     required this.semester,
@@ -43,6 +47,7 @@ class SavedSchedule {
     required this.heightFactor,
     required this.subjectTitleSetting,
     required this.kuliyyah,
+    required this.extraInfo,
   });
 
   @override

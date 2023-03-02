@@ -9,11 +9,15 @@ import '../providers/schedule_layout_setting_provider.dart';
 import '../views/saved_schedule/saved_subject_page.dart';
 import 'extensions.dart';
 
-// Perhaps this will no longer neede when Dart's new Records are landed
+/// Extra info to replace the time in the event
+/// none = default
+enum ExtraInfo { venue, section, none }
+
 class LaneEventsUtil {
   final BuildContext context;
   final List<SavedSubject> savedSubjectList;
   final double fontSize;
+  final ExtraInfo extraInfoType;
   int _startHour = 10; // pukul 10 am;
   int _endHour = 17; // pukul 5 pm
 
@@ -22,6 +26,7 @@ class LaneEventsUtil {
     required this.context,
     required this.savedSubjectList,
     required this.fontSize,
+    this.extraInfoType = ExtraInfo.none,
   });
 
   LaneEventsResponse laneEvents() {
@@ -36,6 +41,20 @@ class LaneEventsUtil {
       for (var subject in savedSubjectList) {
         var dayTimes = subject.dayTimes.where((element) => element.day == i);
 
+        String? extra;
+
+        switch (extraInfoType) {
+          case ExtraInfo.section:
+            extra = 'Sect. ${subject.sect}';
+            break;
+          case ExtraInfo.venue:
+            extra = subject.venue ?? '-';
+            break;
+          case ExtraInfo.none:
+            extra = null;
+            break;
+        }
+
         subjectEvents.addAll(
           dayTimes.map((e) {
             return SubjectEvents(
@@ -43,6 +62,7 @@ class LaneEventsUtil {
               dayTimes: [e],
               title: subject.title,
               code: subject.code,
+              extras: extra,
               color: Color(subject.hexColor!),
             );
           }),
@@ -81,6 +101,7 @@ class LaneEventsUtil {
             end: TableEventTime(hour: end.hour, minute: end.minute),
             heroTag:
                 '${e.subjectId}-${e.dayTimes.first.id}', // unique tag to differentiate between subjects
+            subtitle: e.extras,
             onTap: () async {
               await Navigator.push(context, MaterialPageRoute(builder: (_) {
                 return SavedSubjectPage(
@@ -126,6 +147,8 @@ class LaneEventsUtil {
         break;
       }
     }
+
+    // TODO: Perhaps this will no longer needs when Dart's new Records are landed
     return LaneEventsResponse(
         laneEventsList: laneEventsList,
         startHour: _startHour,
@@ -136,6 +159,7 @@ class LaneEventsUtil {
   // int get scheduleEndHour => _endHour;
 }
 
+// TODO: Perhaps this will no longer needs when Dart's new Records are landed
 class LaneEventsResponse {
   final List<LaneEvents> laneEventsList;
   final int startHour;
@@ -155,11 +179,15 @@ class SubjectEvents {
   final int subjectId;
   final List<SavedDaytime> dayTimes;
 
+  /// Extra info eg venue, section etc. Used in `subtitle` in the `TableEvent`.
+  final String? extras;
+
   SubjectEvents({
     required this.subjectId,
     required this.dayTimes,
     required this.title,
     required this.code,
     required this.color,
+    this.extras,
   });
 }
