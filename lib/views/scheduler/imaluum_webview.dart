@@ -35,7 +35,9 @@ class _ImaluumWebViewState extends State<ImaluumWebView> {
     return WillPopScope(
       onWillPop: () {
         // dismiss the material banner on page pop
-        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+        // `clearMaterialBanners` is used to fix issue #71
+        // https://github.com/iqfareez/iium_schedule/issues/71
+        ScaffoldMessenger.of(context).clearMaterialBanners();
         return Future.value(true);
       },
       child: Scaffold(
