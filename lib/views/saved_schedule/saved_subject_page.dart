@@ -161,6 +161,10 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
 
                           if (res == null) return;
 
+                          // assume empty string ('') is same as null
+                          // so that subject pages will show 'No venue'
+                          if (res.isEmpty) res = null;
+
                           // update venue in db
                           snapshot.data!.venue = res;
                           isarService.updateSubject(snapshot.data!);
