@@ -532,28 +532,6 @@ class MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
           child: SafeArea(
             child: Stack(
               children: [
-                Positioned(
-                  top: 10,
-                  right: 10,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: onColourPickerCallback,
-                        icon: Icon(
-                          Icons.color_lens,
-                          color: foregroundAppbarColor,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: onDeleteCallback,
-                        icon: Icon(
-                          Icons.delete,
-                          color: foregroundAppbarColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 Align(
                   child: SelectionArea(
                     child: Padding(
@@ -586,6 +564,32 @@ class MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
                         Icons.arrow_back,
                         color: foregroundAppbarColor,
                       )),
+                ),
+                // Important: Keep these buttons at the end of the children
+                // so that they are on top of the other widgets, ie. not
+                // blocked by other widgets, so that they can be clicked
+                // Or this will happen: https://imgur.com/KdwvjHD
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: onColourPickerCallback,
+                        icon: Icon(
+                          Icons.color_lens,
+                          color: foregroundAppbarColor,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: onDeleteCallback,
+                        icon: Icon(
+                          Icons.delete,
+                          color: foregroundAppbarColor,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
