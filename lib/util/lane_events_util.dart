@@ -20,7 +20,6 @@ class LaneEventsUtil {
   final BuildContext context;
   final List<SavedSubject> savedSubjectList;
   final double fontSize;
-  final ExtraInfo extraInfoType;
   int _startHour = 10; // pukul 10 am;
   int _endHour = 17; // pukul 5 pm
 
@@ -29,7 +28,6 @@ class LaneEventsUtil {
     required this.context,
     required this.savedSubjectList,
     required this.fontSize,
-    this.extraInfoType = ExtraInfo.none,
   });
 
   LaneEventsResponse laneEvents() {
@@ -46,7 +44,7 @@ class LaneEventsUtil {
 
         String? extra;
 
-        switch (extraInfoType) {
+        switch (Provider.of<ScheduleLayoutSettingProvider>(context).extraInfo) {
           case ExtraInfo.section:
             extra = 'Sect. ${subject.sect}';
             break;
@@ -104,7 +102,11 @@ class LaneEventsUtil {
             end: TableEventTime(hour: end.hour, minute: end.minute),
             heroTag:
                 '${e.subjectId}-${e.dayTimes.first.id}', // unique tag to differentiate between subjects
-            subtitle: e.extras,
+            subtitle:
+                Provider.of<ScheduleLayoutSettingProvider>(context).extraInfo !=
+                        ExtraInfo.none
+                    ? e.extras
+                    : null,
             onTap: () async {
               await Navigator.push(context, MaterialPageRoute(builder: (_) {
                 return SavedSubjectPage(

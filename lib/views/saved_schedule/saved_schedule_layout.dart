@@ -181,13 +181,13 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
           }
 
           var name = snapshot.data!.title ?? "";
-          scheduleSetting
-              .initialConditionSubjectTitle(snapshot.data!.subjectTitleSetting);
+          scheduleSetting.initializeSetting(
+              titleSetting: snapshot.data!.subjectTitleSetting,
+              extraInfo: snapshot.data!.extraInfo);
 
           LaneEventsResponse laneEventsList = LaneEventsUtil(
                   context: context,
                   fontSize: snapshot.data!.fontSize,
-                  extraInfoType: snapshot.data!.extraInfo,
                   savedSubjectList: snapshot.data!.subjects.toList())
               .laneEvents();
           return GestureDetector(

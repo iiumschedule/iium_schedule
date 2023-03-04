@@ -63,7 +63,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
     name = widget.initialName;
 
     Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)
-        .initialConditionSubjectTitle(SubjectTitleSetting.title);
+        .initializeSetting();
   }
 
   // Save the generated schedule data to the database (Isar)
@@ -87,7 +87,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
         heightFactor: _itemHeight,
         subjectTitleSetting:
             Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)
-                .subjectTitleSetting!,
+                .subjectTitleSetting,
         kuliyyah: kulliyah,
         extraInfo:
             Provider.of<ScheduleLayoutSettingProvider>(context, listen: false)

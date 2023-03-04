@@ -4,17 +4,22 @@ import '../enums/subject_title_setting_enum.dart';
 import '../util/lane_events_util.dart';
 
 class ScheduleLayoutSettingProvider extends ChangeNotifier {
-  SubjectTitleSetting? _subjectTitleSetting;
-  ExtraInfo _extraInfo = ExtraInfo.none;
+  late SubjectTitleSetting _subjectTitleSetting;
+  late ExtraInfo _extraInfo;
 
-  SubjectTitleSetting? get subjectTitleSetting => _subjectTitleSetting;
+  SubjectTitleSetting get subjectTitleSetting => _subjectTitleSetting;
 
+  /// Update provider value from Isar settings
+  /// Used in [ScheduleLayout] & [SavedScheduleLayout]
   /// Set the value without call setState() or markNeedsBuild() called during build.
-  void initialConditionSubjectTitle(SubjectTitleSetting setting) {
-    _subjectTitleSetting = setting;
+  void initializeSetting(
+      {SubjectTitleSetting titleSetting = SubjectTitleSetting.title,
+      ExtraInfo extraInfo = ExtraInfo.none}) {
+    _subjectTitleSetting = titleSetting;
+    _extraInfo = extraInfo;
   }
 
-  set subjectTitleSetting(SubjectTitleSetting? value) {
+  set subjectTitleSetting(SubjectTitleSetting value) {
     _subjectTitleSetting = value;
     notifyListeners();
   }
