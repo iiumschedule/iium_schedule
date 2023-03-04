@@ -202,6 +202,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
           }
 
           return TableEvent(
+            padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                 color: _colorPallete[subjIndex]),
