@@ -210,6 +210,23 @@ class IsarService {
         ));
   }
 
+  Future<bool> getDeveloperModeStatus() async {
+    final isar = await db;
+
+    var res = await isar.settingsDatas.get(0);
+    return res?.developerMode ?? false;
+  }
+
+  Future<void> saveDeveloperModeStatus(bool status) async {
+    final isar = await db;
+
+    isar.writeTxn(() => isar.settingsDatas.put(
+          SettingsData()
+            ..id = 0
+            ..developerMode = status,
+        ));
+  }
+
 // **************************************************************************
 // Check for Update (Github)
 // **************************************************************************

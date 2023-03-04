@@ -9,4 +9,6 @@ class SettingsData {
 
   @enumerated
   ThemeMode themeSetting = ThemeMode.system;
+
+  bool developerMode = false;
 }

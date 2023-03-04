@@ -17,8 +17,13 @@ const SettingsDataSchema = CollectionSchema(
   name: r'SettingsData',
   id: -966610349317306745,
   properties: {
-    r'themeSetting': PropertySchema(
+    r'developerMode': PropertySchema(
       id: 0,
+      name: r'developerMode',
+      type: IsarType.bool,
+    ),
+    r'themeSetting': PropertySchema(
+      id: 1,
       name: r'themeSetting',
       type: IsarType.byte,
       enumMap: _SettingsDatathemeSettingEnumValueMap,
@@ -53,7 +58,8 @@ void _settingsDataSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeByte(offsets[0], object.themeSetting.index);
+  writer.writeBool(offsets[0], object.developerMode);
+  writer.writeByte(offsets[1], object.themeSetting.index);
 }
 
 SettingsData _settingsDataDeserialize(
@@ -63,9 +69,10 @@ SettingsData _settingsDataDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = SettingsData();
+  object.developerMode = reader.readBool(offsets[0]);
   object.id = id;
   object.themeSetting = _SettingsDatathemeSettingValueEnumMap[
-          reader.readByteOrNull(offsets[0])] ??
+          reader.readByteOrNull(offsets[1])] ??
       ThemeMode.system;
   return object;
 }
@@ -78,6 +85,8 @@ P _settingsDataDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
+      return (reader.readBool(offset)) as P;
+    case 1:
       return (_SettingsDatathemeSettingValueEnumMap[
               reader.readByteOrNull(offset)] ??
           ThemeMode.system) as P;
@@ -191,6 +200,16 @@ extension SettingsDataQueryWhere
 
 extension SettingsDataQueryFilter
     on QueryBuilder<SettingsData, SettingsData, QFilterCondition> {
+  QueryBuilder<SettingsData, SettingsData, QAfterFilterCondition>
+      developerModeEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'developerMode',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<SettingsData, SettingsData, QAfterFilterCondition> idEqualTo(
       Id value) {
     return QueryBuilder.apply(this, (query) {
@@ -309,6 +328,19 @@ extension SettingsDataQueryLinks
 
 extension SettingsDataQuerySortBy
     on QueryBuilder<SettingsData, SettingsData, QSortBy> {
+  QueryBuilder<SettingsData, SettingsData, QAfterSortBy> sortByDeveloperMode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'developerMode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SettingsData, SettingsData, QAfterSortBy>
+      sortByDeveloperModeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'developerMode', Sort.desc);
+    });
+  }
+
   QueryBuilder<SettingsData, SettingsData, QAfterSortBy> sortByThemeSetting() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'themeSetting', Sort.asc);
@@ -325,6 +357,19 @@ extension SettingsDataQuerySortBy
 
 extension SettingsDataQuerySortThenBy
     on QueryBuilder<SettingsData, SettingsData, QSortThenBy> {
+  QueryBuilder<SettingsData, SettingsData, QAfterSortBy> thenByDeveloperMode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'developerMode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SettingsData, SettingsData, QAfterSortBy>
+      thenByDeveloperModeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'developerMode', Sort.desc);
+    });
+  }
+
   QueryBuilder<SettingsData, SettingsData, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -353,6 +398,13 @@ extension SettingsDataQuerySortThenBy
 
 extension SettingsDataQueryWhereDistinct
     on QueryBuilder<SettingsData, SettingsData, QDistinct> {
+  QueryBuilder<SettingsData, SettingsData, QDistinct>
+      distinctByDeveloperMode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'developerMode');
+    });
+  }
+
   QueryBuilder<SettingsData, SettingsData, QDistinct> distinctByThemeSetting() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'themeSetting');
@@ -365,6 +417,12 @@ extension SettingsDataQueryProperty
   QueryBuilder<SettingsData, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<SettingsData, bool, QQueryOperations> developerModeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'developerMode');
     });
   }
 

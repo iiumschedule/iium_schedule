@@ -6,28 +6,33 @@ class SettingsProvider extends ChangeNotifier {
   final IsarService isarService = IsarService();
 
   ThemeMode _themeMode = ThemeMode.system;
+  bool _developerMode = false;
 
   SettingsProvider() {
-    // apply theme from storage on startup
-    readThemeData();
+    // apply setting from storage on startup
+    readSetings();
   }
 
   ThemeMode get themeMode => _themeMode;
 
   void setThemeMode(ThemeMode themeMode) {
     _themeMode = themeMode;
-    saveThemeData();
+    isarService.saveThemeMode(_themeMode);
     notifyListeners();
   }
 
-  // function to read the theme data from storage
-  Future<void> readThemeData() async {
+  // read settings on initialization
+  Future<void> readSetings() async {
     _themeMode = await isarService.retrieveThemeMode();
+    _developerMode = await isarService.getDeveloperModeStatus();
     notifyListeners();
   }
 
-  // function to save the theme data to storage
-  Future<void> saveThemeData() async {
-    await isarService.saveThemeMode(_themeMode);
+  bool get developerMode => _developerMode;
+
+  void setDeveloperMode(bool developerMode) {
+    _developerMode = developerMode;
+    isarService.saveDeveloperModeStatus(_developerMode);
+    notifyListeners();
   }
 }
