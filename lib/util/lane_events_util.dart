@@ -32,8 +32,6 @@ class LaneEventsUtil {
 
   LaneEventsResponse laneEvents() {
     List<LaneEvents> laneEventsList = [];
-    // var brightness = SchedulerBinding.instance.window.platformBrightness;
-    var brightness = Theme.of(context).brightness;
     // Find if there any subject in each day
     for (var i = 1; i <= 7; i++) {
       List<SubjectEvents?> subjectEvents = [];

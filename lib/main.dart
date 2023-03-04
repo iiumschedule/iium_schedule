@@ -73,24 +73,19 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
               fontFamily: 'Inter',
             ),
-            darkTheme: ThemeData.dark().copyWith(
-              // cupertinoOverrideTheme:
-              //     const CupertinoThemeData(primaryColor: Color(0xFF23682B)),
-              // textButtonTheme: TextButtonThemeData(
-              //   style:
-              //       TextButton.styleFrom(foregroundColor: Colors.purple.shade200),
-              // ),
-              // outlinedButtonTheme: OutlinedButtonThemeData(
-              //   style: OutlinedButton.styleFrom(
-              //       foregroundColor: Colors.purple.shade200),
-              // ),
-              useMaterial3: true,
-              textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
-              primaryTextTheme:
-                  ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
+            // Replaced ThemeData.dark().copyWith(...) because the text is rendered
+            // differently (i.e.: light mode will become slightly larger than dark mode)
+            // so, to make it consistent, we do as below.
+            // https://stackoverflow.com/a/68810576/13617136
+            darkTheme: ThemeData(
+              brightness: Brightness.dark,
               colorScheme: darkColorScheme ??
                   ColorScheme.fromSeed(
-                      seedColor: Colors.orange, brightness: Brightness.dark),
+                    seedColor: Colors.orange,
+                    brightness: Brightness.dark,
+                  ),
+              useMaterial3: true,
+              fontFamily: 'Inter',
             ),
             themeMode: settingsProvider.themeMode,
             home: const MyBody(),

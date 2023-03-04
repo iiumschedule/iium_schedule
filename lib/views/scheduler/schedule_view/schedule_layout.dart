@@ -134,10 +134,9 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
   @override
   Widget build(BuildContext context) {
     List<LaneEvents> laneEventsList = [];
-    // var _brightness = SchedulerBinding.instance!.window.platformBrightness;
     // below is something similar to `LaneEventsUtil.laneEvents()`, we need
     // to refactor this (combine with above implementation)
-    var brightness = Theme.of(context).brightness;
+
     // Find if there any subject in each day
     for (var i = 1; i <= 7; i++) {
       List<Subject?> extractedSubjects = [];

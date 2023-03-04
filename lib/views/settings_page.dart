@@ -21,11 +21,16 @@ class SettingsPage extends StatelessWidget {
               currentTheme: settings.themeMode,
               onThemeToggle: (themeMode) => settings.setThemeMode(themeMode),
             ),
-            const Spacer(),
-            _DeveloperModeButton(
-              isDeveloperModeEnabled: settings.developerMode,
-              onDevModeEnable: () => settings.setDeveloperMode(true),
-            ),
+            // const Spacer(),
+            // TODO: Add developer mode feature, such as
+            // zooming in webview: https://www.danrodney.com/blog/force-webpages-to-zoom/
+            // course json autofill
+            // clear isar db
+            if (settings.developerMode)
+              _DeveloperModeButton(
+                isDeveloperModeEnabled: settings.developerMode,
+                onDevModeEnable: () => settings.setDeveloperMode(true),
+              ),
           ],
         ),
       );

@@ -2,7 +2,6 @@ import 'package:albiruni/albiruni.dart';
 import 'package:flutter/material.dart';
 
 import '../../../util/extensions.dart';
-import '../../course browser/subject_screen.dart';
 
 class SubjectDialog extends StatelessWidget {
   const SubjectDialog({

@@ -41,54 +41,73 @@ class _ImaluumWebViewState extends State<ImaluumWebView> {
         return Future.value(true);
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Imaluum import')),
-        body: Stack(
-          children: [
-            InAppWebView(
-              key: webViewKey,
-              onWebViewCreated: (controller) {
-                webViewController = controller;
-              },
-              initialUrlRequest: URLRequest(
-                url: Uri.parse(
-                    'https://imaluum.iium.edu.my/MyAcademic/schedule'),
-              ),
-              // check if need login,
-              // after login, make sure the url matches the url above
-              onProgressChanged: (controller, progress) {
-                setState(() {
-                  readerState = progress == 100
-                      ? ReaderState.loading
-                      : ReaderState.unknown;
-                });
-              },
-              onLoadStop: (controller, url) async {
-                if (!url.toString().contains('MyAcademic/schedule')) {
-                  // when the url is not the schedule page, it means that the user
-                  // is not logged in
-                  setState(() => loginRequired = true);
-                  ScaffoldMessenger.of(context)
-                      .showMaterialBanner(MaterialBanner(
-                    content: const Text(
-                        'We do not have access to, or store, your login credentials entered through the site.'),
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context)
-                                .hideCurrentMaterialBanner();
-                          },
-                          child: const Text('Understood'))
-                    ],
-                  ));
-                }
-                if (url.toString().contains('/MyAcademic/schedule')) {
-                  ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+        appBar: AppBar(
+          title: const Text("i-Ma'luum importer"),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              tooltip: 'Refresh',
+              onPressed: () => webViewController?.reload(),
+            ),
+          ],
+        ),
+        floatingActionButton: Builder(builder: (_) {
+          if (!loginRequired && readerState == ReaderState.loading) {
+            return FloatingActionButton(
+              onPressed: () {},
+              child: const CircularProgressIndicator(),
+            );
+          }
+          if (readerState == ReaderState.success) {
+            return FloatingActionButton.extended(
+              onPressed: () => Navigator.pop(context, response),
+              icon: const Icon(Icons.download_outlined),
+              label: Text('Found ${response!.length} subjects. Tap to add'),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        }),
+        body: InAppWebView(
+          key: webViewKey,
+          onWebViewCreated: (controller) => webViewController = controller,
+          initialUrlRequest: URLRequest(
+            url: Uri.parse('https://imaluum.iium.edu.my/MyAcademic/schedule'),
+          ),
+          // check if need login,
+          // after login, make sure the url matches the url above
+          onProgressChanged: (_, progress) {
+            setState(() {
+              readerState =
+                  progress == 100 ? ReaderState.loading : ReaderState.unknown;
+            });
+          },
+          onLoadStop: (controller, url) async {
+            if (!url.toString().contains('MyAcademic/schedule')) {
+              // when the url is not the schedule page, it means that the user
+              // is not logged in
+              setState(() => loginRequired = true);
+              ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
+                content: const Text(
+                    'We do not have access to, or store, your login credentials entered through the site.'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        ScaffoldMessenger.of(context)
+                            .hideCurrentMaterialBanner();
+                      },
+                      child: const Text('Understood'))
+                ],
+              ));
+            }
+            if (url.toString().contains('/MyAcademic/schedule')) {
+              ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
 
-                  setState(() => loginRequired = false);
+              setState(() => loginRequired = false);
 
-                  // extract the data
-                  // https://iiumschedule.vercel.app/docs/extract/imaluum/#3-run-script
-                  var html = await controller.evaluateJavascript(source: """
+              // extract the data
+              // https://iiumschedule.vercel.app/docs/extract/imaluum/#3-run-script
+              var html = await controller.evaluateJavascript(source: """
       const tableBody = document.getElementsByClassName("table table-hover")[0];
       const data = tableBody.getElementsByTagName("tr");
       
@@ -107,41 +126,16 @@ class _ImaluumWebViewState extends State<ImaluumWebView> {
       }
       
       JSON.stringify(extractedData); 
-                          """);
+                      """);
 
-                  // parse the json
-                  var decoded = jsonDecode(html);
-                  setState(() {
-                    readerState = ReaderState.success;
-                    response = decoded;
-                  });
-                }
-              },
-            ),
-            if (!loginRequired && readerState == ReaderState.loading)
-              const Positioned(
-                bottom: 30,
-                right: 20,
-                child: SizedBox(
-                  height: 40,
-                  width: 40,
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-            if (readerState == ReaderState.success)
-              Positioned(
-                bottom: 40,
-                right: 10,
-                child: ElevatedButton.icon(
-                  onPressed: () => Navigator.pop(context, response),
-                  icon: const Icon(Icons.download_outlined),
-                  label: Text(
-                    'Found ${response!.length} subjects. Tap to add',
-                    // style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-          ],
+              // parse the json
+              var decoded = jsonDecode(html);
+              setState(() {
+                readerState = ReaderState.success;
+                response = decoded;
+              });
+            }
+          },
         ),
       ),
     );

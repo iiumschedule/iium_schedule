@@ -92,7 +92,11 @@ class _SubjectScreenState extends State<SubjectScreen> {
           )
         ],
       ),
-      // TODO: Maybe boleh letak SelectionArea widget to the whole child
+
+      // Tak letak `SelectionArea` wrap the whole widget sbb taknak label (eg 'Time',
+      // 'Lecturer') to be included in the selection
+      //
+      // tak pakai `showMenu` sbb entah, mcm tak kena
       body: Center(
         child: Container(
           width: double.infinity,
