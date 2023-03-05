@@ -273,5 +273,5 @@ jobs:
           packageName: com.iqfareez.iiumschedule
           releaseFiles: app-release.aab
           track: production
-          changesNotSentForReview: true
+          # changesNotSentForReview: true
           status: draft
