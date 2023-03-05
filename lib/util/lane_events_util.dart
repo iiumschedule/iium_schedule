@@ -79,7 +79,7 @@ class LaneEventsUtil {
 
           if (start.hour < _startHour) _startHour = start.hour;
 
-          if (end.hour > _endHour) _endHour = end.hour;
+          if (end.hour > _endHour) _endHour = end.hour + 1;
 
           // saved colour  - compute luminance & bg colour
           Color textColor =

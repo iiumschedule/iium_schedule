@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -230,6 +232,18 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                       ),
                     ),
                     const SizedBox(height: 4),
+                    // randomly show the schedule tip
+                    if (Random().nextBool())
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text(
+                          'Tip: You can use pull-to-refresh feature on schedule to update the subject venue',
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelSmall
+                              ?.copyWith(fontWeight: FontWeight.w200),
+                        ),
+                      ),
                   ],
                 )),
               ],
