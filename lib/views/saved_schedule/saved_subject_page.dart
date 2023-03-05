@@ -48,7 +48,11 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
             String? venue = snapshot.data?.venue;
             List<String> lecturers = snapshot.data?.lect ?? [];
 
-            SavedDaytime dayTime = snapshot.data?.dayTimes.first ??
+            // Important to check for ID, because we wanted to prevent the dayTime mixed together
+            // with same subject but in different day
+            // https://github.com/iqfareez/iium_schedule/discussions/73#discussioncomment-5207442
+            SavedDaytime dayTime = snapshot.data?.dayTimes
+                    .firstWhere((element) => element.id == widget.dayTimesId) ??
                 SavedDaytime(day: 0, startTime: '00:00', endTime: '00:00');
             TimeOfDay startTime = TimeOfDay(
                 hour: int.parse(dayTime.startTime.split(":").first),
@@ -163,6 +167,13 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                           // update venue in db
                           snapshot.data!.venue = res;
                           isarService.updateSubject(snapshot.data!);
+                          Future.delayed(const Duration(milliseconds: 200), () {
+                            // notify the schedule behind the dialog to reflect the
+                            // new information
+                            Provider.of<ScheduleNotifierProvider>(context,
+                                    listen: false)
+                                .notify();
+                          });
                           // Provider.of<ScheduleNotifierProvider>(context,
                           //         listen: false)
                           //     .notify();
@@ -183,6 +194,14 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                             initialTime: startTime,
                             helpText: 'Select start Time',
                             confirmText: 'Next',
+                            builder: (context, child) {
+                              // to make the picker dialog theme match the subject colour
+                              return Theme(
+                                data: Theme.of(context)
+                                    .copyWith(colorScheme: subjectCustomScheme),
+                                child: child!,
+                              );
+                            },
                           );
                           if (newStartTime == null) return;
 
@@ -192,6 +211,13 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                             context: context,
                             initialTime: endTime,
                             helpText: 'Select end Time',
+                            builder: (context, child) {
+                              return Theme(
+                                data: Theme.of(context)
+                                    .copyWith(colorScheme: subjectCustomScheme),
+                                child: child!,
+                              );
+                            },
                           );
                           if (newEndTime == null) return;
 
@@ -206,6 +232,7 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                           }
 
                           isarService.updateSubjectTime(dayTime
+                            ..id = widget.dayTimesId
                             ..startTime = newStartTime.toRealString()
                             ..endTime = newEndTime.toRealString());
 
@@ -305,7 +332,6 @@ class _EditDialogState extends State<_EditDialog> {
               child: const Text('Cancel')),
           TextButton(
               onPressed: () {
-                print(_venueTextController.text);
                 Navigator.pop(context, _venueTextController.text);
               },
               child: const Text('Save')),
