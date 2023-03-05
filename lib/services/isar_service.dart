@@ -90,6 +90,13 @@ class IsarService {
     });
   }
 
+  Future<void> updateSubjectTime(SavedDaytime newDayTime) async {
+    final isar = await db;
+    isar.writeTxnSync(() {
+      isar.savedDaytimes.putSync(newDayTime);
+    });
+  }
+
   Future<void> deleteSchedule(int id) async {
     final isar = await db;
     isar.writeTxnSync(() {

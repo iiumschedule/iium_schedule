@@ -2,10 +2,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../isar_models/saved_daytime.dart';
 import '../../isar_models/saved_subject.dart';
 import '../../providers/schedule_notifier_provider.dart';
 import '../../services/isar_service.dart';
 import '../../util/extensions.dart';
+import '../../util/my_ftoast.dart';
 import 'colour_picker_sheet.dart';
 
 const _cardPadding = EdgeInsets.symmetric(horizontal: 8, vertical: 16);
@@ -43,25 +45,16 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
             int section = snapshot.data?.sect ?? 0;
             String? venue = snapshot.data?.venue;
             List<String> lecturers = snapshot.data?.lect ?? [];
+
+            SavedDaytime dayTime = snapshot.data?.dayTimes.first ??
+                SavedDaytime(day: 0, startTime: '00:00', endTime: '00:00');
             TimeOfDay startTime = TimeOfDay(
-                hour: snapshot.data != null
-                    ? int.parse(snapshot.data!.dayTimes.first.startTime
-                        .split(":")
-                        .first)
-                    : 0,
-                minute: snapshot.data != null
-                    ? int.parse(
-                        snapshot.data!.dayTimes.first.startTime.split(":").last)
-                    : 0);
+                hour: int.parse(dayTime.startTime.split(":").first),
+                minute: int.parse(dayTime.startTime.split(":").last));
             TimeOfDay endTime = TimeOfDay(
-                hour: snapshot.data != null
-                    ? int.parse(
-                        snapshot.data!.dayTimes.first.endTime.split(":").first)
-                    : 0,
-                minute: snapshot.data != null
-                    ? int.parse(
-                        snapshot.data!.dayTimes.first.endTime.split(":").last)
-                    : 0);
+                hour: int.parse(dayTime.endTime.split(":").first),
+                minute: int.parse(dayTime.endTime.split(":").last));
+
             // generate custom color scheme based on subject color
             ColorScheme subjectCustomScheme = ColorScheme.fromSeed(
                 seedColor: newColor ?? widget.subjectColor,
@@ -181,6 +174,49 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                         colourScheme: subjectCustomScheme,
                         startTime: startTime,
                         endTime: endTime,
+                        onEditPressed: () async {
+                          // show start Time edit dialog
+                          var newStartTime = await showTimePicker(
+                            context: context,
+                            initialTime: startTime,
+                            helpText: 'Select start Time',
+                            confirmText: 'Next',
+                          );
+                          if (newStartTime == null) return;
+
+                          // TODO: Maybe can set the end time based on the original duration
+                          // ignore: use_build_context_synchronously
+                          var newEndTime = await showTimePicker(
+                            context: context,
+                            initialTime: endTime,
+                            helpText: 'Select end Time',
+                          );
+                          if (newEndTime == null) return;
+
+                          // check if endtime is before starttime
+                          if (newEndTime.hour < newStartTime.hour ||
+                              (newEndTime.hour == newStartTime.hour &&
+                                  newEndTime.minute < newStartTime.minute)) {
+                            // show error dialog
+                            MyFtoast.show(context,
+                                'End time cannot be before start time');
+                            return;
+                          }
+
+                          isarService.updateSubjectTime(dayTime
+                            ..startTime = newStartTime.toRealString()
+                            ..endTime = newEndTime.toRealString());
+
+                          setState(() {}); // to update the time in this page
+
+                          // to make sure the schedule behind this page can refresh
+                          // WITH the update time
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            Provider.of<ScheduleNotifierProvider>(context,
+                                    listen: false)
+                                .notify();
+                          });
+                        },
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -421,11 +457,13 @@ class _MiniInfoTimeCard extends StatelessWidget {
     required this.colourScheme,
     required this.startTime,
     required this.endTime,
+    required this.onEditPressed,
   }) : super(key: key);
 
   final ColorScheme colourScheme;
   final TimeOfDay startTime;
   final TimeOfDay endTime;
+  final VoidCallback onEditPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -435,35 +473,46 @@ class _MiniInfoTimeCard extends StatelessWidget {
       color: colourScheme.secondaryContainer,
       child: Padding(
         padding: _cardPadding,
-        child: Column(
+        child: Stack(
           children: [
-            Row(
+            Column(
               children: [
-                const Spacer(),
-                Expanded(
-                    flex: 2,
-                    child: Text(
-                      startTime.toRealString(),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    )),
-                Expanded(child: Divider(color: colourScheme.secondary)),
-                Expanded(
-                    flex: 2,
-                    child: Text(
-                      endTime.toRealString(),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    )),
-                const Spacer(),
+                Row(
+                  children: [
+                    const Spacer(),
+                    Expanded(
+                        flex: 2,
+                        child: Text(
+                          startTime.toRealString(),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        )),
+                    Expanded(child: Divider(color: colourScheme.secondary)),
+                    Expanded(
+                        flex: 2,
+                        child: Text(
+                          endTime.toRealString(),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        )),
+                    const Spacer(),
+                  ],
+                ),
+                const Text(
+                  'Time',
+                  style: TextStyle(fontWeight: FontWeight.w300),
+                ),
               ],
             ),
-            const Text(
-              'Time',
-              style: TextStyle(fontWeight: FontWeight.w300),
-            ),
+            Positioned(
+                child: IconButton(
+                  onPressed: onEditPressed,
+                  icon: const Icon(Icons.edit),
+                ),
+                right: 0,
+                top: 0)
           ],
         ),
       ),
