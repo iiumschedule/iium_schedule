@@ -21,16 +21,15 @@ class SettingsPage extends StatelessWidget {
               currentTheme: settings.themeMode,
               onThemeToggle: (themeMode) => settings.setThemeMode(themeMode),
             ),
-            // const Spacer(),
+            const Spacer(),
             // TODO: Add developer mode feature, such as
             // zooming in webview: https://www.danrodney.com/blog/force-webpages-to-zoom/
             // course json autofill
             // clear isar db
-            if (settings.developerMode)
-              _DeveloperModeButton(
-                isDeveloperModeEnabled: settings.developerMode,
-                onDevModeEnable: () => settings.setDeveloperMode(true),
-              ),
+            _DeveloperModeButton(
+              isDeveloperModeEnabled: settings.developerMode,
+              onDevModeEnable: () => settings.setDeveloperMode(true),
+            ),
           ],
         ),
       );
@@ -88,9 +87,6 @@ class _DeveloperModeButtonState extends State<_DeveloperModeButton> {
   int tapCount = 0;
   DateTime? lastTap;
 
-  // to allow user to tap the button once after developer mode is enabled
-  bool _isDeveloperModeEnabled = false;
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -106,35 +102,50 @@ class _DeveloperModeButtonState extends State<_DeveloperModeButton> {
               foregroundColor:
                   Theme.of(context).textTheme.bodySmall!.color!.withOpacity(.6),
             ),
-            onPressed: _isDeveloperModeEnabled
-                ? null
-                : () async {
-                    if (widget.isDeveloperModeEnabled) {
-                      MyFtoast.show(
-                          context, 'Developer mode is already enabled');
-                      setState(() => _isDeveloperModeEnabled = true);
-                    }
+            onPressed: () async {
+              if (widget.isDeveloperModeEnabled) {
+                showDialog(
+                  context: context,
+                  builder: (_) => const SimpleDialog(
+                    children: [
+                      SimpleDialogOption(
+                        child: Text(
+                          'Developer mode',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SimpleDialogOption(
+                        child: Text(
+                            'Quick JSON import in course add page to ease testing'),
+                      ),
+                      SimpleDialogOption(
+                        child: Text('Clear isar db (TODO)'),
+                      ),
+                    ],
+                  ),
+                );
+              }
 
-                    var diff =
-                        (lastTap ??= DateTime.now()).difference(DateTime.now());
+              var diff =
+                  (lastTap ??= DateTime.now()).difference(DateTime.now());
 
-                    // reset counter if taps are too far apart
-                    if (diff.abs().inSeconds > 2) tapCount = 0;
+              // reset counter if taps are too far apart
+              if (diff.abs().inSeconds > 2) tapCount = 0;
 
-                    lastTap = DateTime.now();
-                    tapCount++;
+              lastTap = DateTime.now();
+              tapCount++;
 
-                    if (tapCount > 4 && tapCount < 8) {
-                      MyFtoast.show(
-                          context, 'Tap ${8 - tapCount} more times to enable');
-                    }
+              if (tapCount > 4 && tapCount < 8) {
+                MyFtoast.show(context,
+                    'Tap ${8 - tapCount} more times to enable dev mode');
+              }
 
-                    if (tapCount == 8) {
-                      MyFtoast.show(context, 'Developer mode enabled');
-                      widget.onDevModeEnable();
-                      setState(() => _isDeveloperModeEnabled = true);
-                    }
-                  },
+              if (tapCount == 8) {
+                MyFtoast.show(context, 'Developer mode enabled');
+                widget.onDevModeEnable();
+              }
+            },
             child: const Text('(✿◠‿◠)'),
           ),
         ],

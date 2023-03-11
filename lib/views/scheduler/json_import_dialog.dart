@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/link.dart';
+
+import '../../providers/settings_provider.dart';
 
 class JsonImportDialog extends StatefulWidget {
   const JsonImportDialog({super.key});
@@ -38,7 +41,7 @@ class _JsonImportDialogState extends State<JsonImportDialog> {
                   try {
                     jsonDecode(value);
                   } on FormatException catch (e) {
-                    return 'Failed to decode JSON (${e.message})';
+                    return 'Failed to decode JSON. (${e.message})';
                   }
 
                   // check for other value error
@@ -51,6 +54,7 @@ class _JsonImportDialogState extends State<JsonImportDialog> {
                 decoration: InputDecoration(
                   labelText: 'JSON',
                   filled: true,
+                  errorMaxLines: 2,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide.none,
@@ -75,6 +79,14 @@ class _JsonImportDialogState extends State<JsonImportDialog> {
                 ),
               ),
             ),
+            if (Provider.of<SettingsProvider>(context).developerMode)
+              TextButton(
+                  onPressed: () {
+                    _jsonInputController.text = '''
+[{"courseCode":"CCRN 3152","section":1},{"courseCode":"MANU 4211","section":1},{"courseCode":"MCTE 4314","section":2},{"courseCode":"MCTE 4327","section":1},{"courseCode":"MCTE 4334","section":2},{"courseCode":"MCTE 4362","section":1},{"courseCode":"MCTE 4399","section":1}]
+''';
+                  },
+                  child: const Text('Paste sample JSON*')),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
