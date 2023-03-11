@@ -12,7 +12,12 @@ Generate a beautiful & clean IIUM Schedule quickly with automatic subject data f
 
 Just provide the app with your kulliyyah, course codes and section. It'll handle the rest :wink:.
 
-![IIUM Schedule Github Readme](https://user-images.githubusercontent.com/60868965/216872570-3ed6b8e4-f2cf-4811-a480-9c288e6ee6f5.png)
+<h1 align="center">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/60868965/224489381-77298896-2ce4-4267-ab98-393c5ed0eba1.png">
+      <img alt="IIUM Schedule" src="https://user-images.githubusercontent.com/60868965/216872570-3ed6b8e4-f2cf-4811-a480-9c288e6ee6f5.png">
+    </picture>
+ </h1>
 
 ## Contributions
 
