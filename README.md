@@ -10,7 +10,7 @@
 
 Generate a beautiful & clean IIUM Schedule quickly with automatic subject data fetching. View what courses are available to register at your fingertips.
 
-Just provide the app with your kulliyyah, course codes and section. It'll handle the rest :wink:.
+Load timetable I-Ma'luum and your schedule is ready/ As easy as that :wink:.
 
 <h1 align="center">
     <picture>
@@ -40,6 +40,7 @@ See [here](https://github.com/iqfareez/iium_schedule/wiki/Build-steps)
 ## Features
 
 - Generate schedule (ClassUp style)
+- Fetch timetable from I-Ma'luum (Android only)
 - Save schedule in-app.
 - Export as an image (so you can set it as lockscreen)
 - Customize schedule (ie: Change colours etc.)
@@ -58,7 +59,7 @@ App is available for Android, Windows and Web. Check it out [here](https://iiums
 
 ## Motivation
 
-- To contribute something to the university
+- To contribute something to the university and its people. [خير الناس أنفعهم للناس]
 - To make a tool that can generate a beautiful, lockscreen-worthy schedule for IIUM students that **require minimal effort**.
 - and maybe others, read more [here](https://iiumschedule.iqfareez.com/changelog/2022/10/8/first-release).
 
@@ -103,6 +104,12 @@ _Open PR to add your project here_
 - Firebase Function: https://github.com/iqfareez/iiumschedule-functions
 - `recase`: https://github.com/iqfareez/recase
 - `flutter_timetable_view`: https://github.com/iqfareez/flutter_timetable_view
+
+## Mentions
+
+- IIUM Today: https://news.iium.edu.my/?p=168911
+- IIUM Online Fb: https://www.facebook.com/groups/iiumonline/posts/5394953453874491
+- Twitter: https://twitter.com/iqfareez/status/1578755220674613250
 
 ## Acknowledgment
 
