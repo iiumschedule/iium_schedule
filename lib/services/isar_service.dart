@@ -63,6 +63,7 @@ class IsarService {
 
     yield* isar.savedSchedules.watchObject(id, fireImmediately: true);
   }
+  
 
   Future<SavedSchedule?> getSavedSchedule({required int id}) async {
     final isar = await db;

@@ -15,6 +15,7 @@ import '../util/launcher_url.dart';
 import '../util/my_ftoast.dart';
 import 'check_update_page.dart';
 import 'course browser/browser.dart';
+import 'final_exam/final_exam_page.dart';
 import 'saved_schedule/saved_schedule_layout.dart';
 import 'scheduler/schedule_maker_entry.dart';
 import 'settings_page.dart';
@@ -29,6 +30,8 @@ class MyBody extends StatefulWidget {
 class _MyBodyState extends State<MyBody> {
   final IsarService _isarService = IsarService();
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+
+  // page index (wether it is scheduke of course browser)
   int selectedIndex = 0;
 
   @override
@@ -168,6 +171,14 @@ class _MyBodyState extends State<MyBody> {
                               ),
                             ),
                             const SizedBox(height: 20.0),
+                            // HACK: Of course, this is not the actual location
+                            // of final exam button would be
+                            OutlinedButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => const FinalExamPage()));
+                                },
+                                child: const Text('Open final exam')),
                             StreamBuilder(
                               stream:
                                   _isarService.listenToAllSchedulesChanges(),
@@ -256,7 +267,6 @@ class _MyBodyState extends State<MyBody> {
               onPressed: () async {
                 await Navigator.of(context).push(
                     CupertinoPageRoute(builder: (_) => ScheduleMakerEntry()));
-                // setState(() {});
               },
               icon: const Icon(Icons.add),
               label: const Text('Create'),
