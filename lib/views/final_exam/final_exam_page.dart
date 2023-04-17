@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
-import '../../model/exam_date_time.dart';
-import '../../services/isar_service.dart';
-import '../../util/http_fetcher.dart';
+import '../../model/imaluum_exam.dart';
+import '../../util/relative_date.dart';
+import '../scheduler/json_import_dialog.dart';
+import 'exam_detail_page.dart';
+import 'fe_imaluum_importer.dart';
+import 'nearest_exam_card.dart';
 
 class FinalExamPage extends StatefulWidget {
   const FinalExamPage({super.key});
@@ -14,10 +16,20 @@ class FinalExamPage extends StatefulWidget {
 
 class _FinalExamPageState extends State<FinalExamPage> {
   // TODO: add banner please bring along matric card and exam slip
-  List<String>? courseCodes;
+  List<ImaluumExam>? finalExams;
+
+  /// Sort and set the final exams from imported data
+  /// Usually, it was already sorted from earliest to oldest from the Imaluum
+  /// but, just in case
+  void setFinalExams(List<ImaluumExam> exams) {
+    exams.sort((a, b) => a.date.compareTo(b.date));
+    print(exams);
+    setState(() => finalExams = exams);
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(courseCodes);
+    print(finalExams != null);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Final Exam'),
@@ -32,33 +44,34 @@ class _FinalExamPageState extends State<FinalExamPage> {
                   showDialog(
                       context: context,
                       builder: (_) {
-                        final IsarService isarService = IsarService();
-                        var schedules = isarService.getAllSchedule();
                         return SimpleDialog(
                           children: [
                             SimpleDialogOption(
-                              onPressed: () {},
+                              onPressed: () async {
+                                var data = await Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const FeImaluumImporter(),
+                                  ),
+                                );
+                                var dataParsed = ImaluumExam.fromList(data);
+                                setFinalExams(dataParsed);
+                              },
                               child: const Text("Import from I-Ma'Luum"),
                             ),
-                            const Divider(),
-                            if (schedules.isEmpty)
-                              const SimpleDialogOption(
-                                child: Text('No saved schedule to import'),
-                              ),
-                            for (var schedule in schedules)
-                              SimpleDialogOption(
-                                onPressed: () async {
-                                  schedule.subjects.loadSync();
-
-                                  setState(() {
-                                    courseCodes = schedule.subjects
-                                        .map((e) => e.code)
-                                        .toList();
-                                  });
-                                  Navigator.pop(context);
-                                },
-                                child: Text('Import from ${schedule.title!}'),
-                              ),
+                            SimpleDialogOption(
+                              onPressed: () async {
+                                Navigator.pop(context);
+                                var data = await showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return const JsonImportDialog();
+                                    });
+                                var dataParsed = ImaluumExam.fromList(data);
+                                setFinalExams(dataParsed);
+                              },
+                              child: const Text("Import from JSON"),
+                            ),
                           ],
                         );
                       });
@@ -85,102 +98,49 @@ class _FinalExamPageState extends State<FinalExamPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Card(
-              elevation: 0,
-              // color: Colors.black,
-              color: Theme.of(context).colorScheme.primaryContainer,
-              clipBehavior: Clip.hardEdge,
-              shape: const ContinuousRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(50.0),
-                ),
-              ),
-              child: InkWell(
-                onTap: () {},
-                child: SizedBox(
-                  height: 100,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Upcoming exam (In 1 day)',
-                                style: TextStyle(fontWeight: FontWeight.w100),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                "MANU 4313",
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondaryContainer,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const Text(
-                                '9.00 am',
-                                // style: TextStyle(fontWeight: FontWeight.w100),
-                              ),
-                            ],
+            if (finalExams != null && finalExams!.isNotEmpty)
+              Builder(builder: (context) {
+                // filter to exams that are in the future
+                var finalExams = this
+                    .finalExams!
+                    .where((element) => element.date.isAfter(DateTime.now()))
+                    .toList();
+
+                // latest upcoming final exams
+                var upcomingExam = finalExams.first;
+
+                // if the upcoming exam is in less than 2 weeks, show it
+                if (upcomingExam.date.difference(DateTime.now()).inDays > 14) {
+                  return const SizedBox.shrink();
+                }
+
+                return NearestExamCard(exam: upcomingExam);
+              }),
+            const SizedBox(height: 5),
+            if (finalExams != null)
+              ListView.builder(
+                itemCount: finalExams!.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: ((context, index) {
+                  return ListTile(
+                    title: Text(finalExams![index].title),
+                    subtitle:
+                        Text(RelativeDate.fromDate(finalExams![index].date)),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ExamDetailPage(
+                            exam: finalExams![index],
                           ),
                         ),
-                        // TODO: This banner is just mock as for now
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(Icons.chair_alt),
-                                const Text('194'),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Icon(Icons.location_on_outlined),
-                                const Text('Main Audi 3'),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 5),
-            if (courseCodes != null)
-              for (var courseCode in courseCodes!)
-                FutureBuilder<ExamDateTime>(
-                    future: HttpFetcher.fetchExam(courseCode, '2022/2023', 1),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const ListTile(
-                          leading: SizedBox(
-                              height: 30,
-                              width: 30,
-                              child: CircularProgressIndicator()),
-                        );
-                      }
-                      if (snapshot.hasError) {
-                        courseCodes!.remove(courseCode);
-                        return const SizedBox.shrink();
-                      }
-
-                      final format = DateFormat('dd-MMM-yy h.mm a');
-                      final dateTime = format.parse(snapshot.data!.toString());
-
-                      return ListTile(
-                        title: Text(courseCode.toUpperCase()),
-                        subtitle: Text(
-                            DateFormat('EEE, d MMMM yyyy').format(dateTime)),
                       );
-                    }),
+                    },
+                  );
+                }),
+              ),
           ],
         ),
       ),
