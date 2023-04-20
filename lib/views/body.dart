@@ -15,6 +15,7 @@ import '../util/launcher_url.dart';
 import '../util/my_ftoast.dart';
 import 'check_update_page.dart';
 import 'course browser/browser.dart';
+import 'final_exam/final_exam_page.dart';
 import 'saved_schedule/saved_schedule_layout.dart';
 import 'scheduler/schedule_maker_entry.dart';
 import 'settings_page.dart';
@@ -29,6 +30,8 @@ class MyBody extends StatefulWidget {
 class _MyBodyState extends State<MyBody> {
   final IsarService _isarService = IsarService();
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+
+  // page index (wether it is scheduke of course browser)
   int selectedIndex = 0;
 
   @override
@@ -142,6 +145,11 @@ class _MyBodyState extends State<MyBody> {
                     selectedIcon: Icon(Icons.book_rounded),
                     icon: Icon(Icons.book_outlined),
                     label: Text('Course Browser'),
+                  ),
+                  NavigationRailDestination(
+                    selectedIcon: Icon(Icons.history_edu_rounded),
+                    icon: Icon(Icons.history_edu_outlined),
+                    label: Text('Final Exam'),
                   )
                 ],
                 selectedIndex: selectedIndex),
@@ -149,104 +157,103 @@ class _MyBodyState extends State<MyBody> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: selectedIndex == 0
-                    ? SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(
-                            decelerationRate: ScrollDecelerationRate.normal),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              'IIUM Schedule',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                                fontSize: 36.0,
-                                fontWeight: FontWeight.bold,
-                              ),
+                  duration: const Duration(milliseconds: 300),
+                  child: [
+                    SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(
+                          decelerationRate: ScrollDecelerationRate.normal),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'IIUM Schedule',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onBackground,
+                              fontSize: 36.0,
+                              fontWeight: FontWeight.bold,
                             ),
-                            const SizedBox(height: 20.0),
-                            StreamBuilder(
-                              stream:
-                                  _isarService.listenToAllSchedulesChanges(),
-                              builder: (_, __) {
-                                var data = _isarService.getAllSchedule();
-                                // check the current size of AnimatedList
-                                // if different that data.length, rebuild the list
-                                if (_listKey.currentState != null &&
-                                    _listKey.currentState!.widget
-                                            .initialItemCount <
-                                        data.length) {
-                                  _listKey.currentState!
-                                      .insertItem(data.length - 1);
-                                }
+                          ),
+                          const SizedBox(height: 20.0),
+                          StreamBuilder(
+                            stream: _isarService.listenToAllSchedulesChanges(),
+                            builder: (_, __) {
+                              var data = _isarService.getAllSchedule();
+                              // check the current size of AnimatedList
+                              // if different that data.length, rebuild the list
+                              if (_listKey.currentState != null &&
+                                  _listKey.currentState!.widget
+                                          .initialItemCount <
+                                      data.length) {
+                                _listKey.currentState!
+                                    .insertItem(data.length - 1);
+                              }
 
-                                if (data.isEmpty) {
-                                  return const Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 4),
-                                    child: Text(
-                                      "Your saved schedule will appear here",
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w300,
-                                      ),
+                              if (data.isEmpty) {
+                                return const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 4),
+                                  child: Text(
+                                    "Your saved schedule will appear here",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w300,
                                     ),
-                                  );
-                                }
-
-                                return AnimatedList(
-                                  key: _listKey,
-                                  initialItemCount: data.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index, animation) {
-                                    var item = data[index];
-                                    return _CardItem(
-                                      item: item,
-                                      animation: animation,
-                                      onTap: () async {
-                                        await Navigator.push(
-                                          context,
-                                          CupertinoPageRoute(
-                                            builder: (_) => SavedScheduleLayout(
-                                              id: item.id!,
-                                            ),
-                                          ),
-                                        );
-
-                                        SystemChrome.setEnabledSystemUIMode(
-                                            SystemUiMode.edgeToEdge);
-                                      },
-                                      onDeleteAction: () async {
-                                        var res = await showDialog(
-                                          context: context,
-                                          builder: (_) => const _DeleteDialog(),
-                                        );
-
-                                        if (res ?? false) {
-                                          // ignore: use_build_context_synchronously
-                                          AnimatedList.of(context).removeItem(
-                                              index,
-                                              (context, animation) => _CardItem(
-                                                    item: item,
-                                                    animation: animation,
-                                                  ));
-                                          await _isarService
-                                              .deleteSchedule(item.id!);
-                                          setState(() {}); // refresh list
-                                        }
-                                      },
-                                    );
-                                  },
+                                  ),
                                 );
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    : const Browser(),
-              ),
+                              }
+
+                              return AnimatedList(
+                                key: _listKey,
+                                initialItemCount: data.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index, animation) {
+                                  var item = data[index];
+                                  return _CardItem(
+                                    item: item,
+                                    animation: animation,
+                                    onTap: () async {
+                                      await Navigator.push(
+                                        context,
+                                        CupertinoPageRoute(
+                                          builder: (_) => SavedScheduleLayout(
+                                            id: item.id!,
+                                          ),
+                                        ),
+                                      );
+
+                                      SystemChrome.setEnabledSystemUIMode(
+                                          SystemUiMode.edgeToEdge);
+                                    },
+                                    onDeleteAction: () async {
+                                      var res = await showDialog(
+                                        context: context,
+                                        builder: (_) => const _DeleteDialog(),
+                                      );
+
+                                      if (res ?? false) {
+                                        // ignore: use_build_context_synchronously
+                                        AnimatedList.of(context).removeItem(
+                                            index,
+                                            (context, animation) => _CardItem(
+                                                  item: item,
+                                                  animation: animation,
+                                                ));
+                                        await _isarService
+                                            .deleteSchedule(item.id!);
+                                        setState(() {}); // refresh list
+                                      }
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Browser(),
+                    const FinalExamPage(),
+                  ][selectedIndex]),
             ),
           ),
         ],
@@ -256,7 +263,6 @@ class _MyBodyState extends State<MyBody> {
               onPressed: () async {
                 await Navigator.of(context).push(
                     CupertinoPageRoute(builder: (_) => ScheduleMakerEntry()));
-                // setState(() {});
               },
               icon: const Icon(Icons.add),
               label: const Text('Create'),
@@ -281,6 +287,11 @@ class _MyBodyState extends State<MyBody> {
                   selectedIcon: Icon(Icons.book_rounded),
                   icon: Icon(Icons.book_outlined),
                   label: 'Course Browser',
+                ),
+                NavigationDestination(
+                  selectedIcon: Icon(Icons.history_edu_rounded),
+                  icon: Icon(Icons.history_edu_outlined),
+                  label: 'Final Exam',
                 )
               ],
             )

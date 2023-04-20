@@ -1,0 +1,10 @@
+{
+    "image": "cirrusci/flutter:stable",
+    "forwardPorts": [
+        3000
+    ],
+    "extensions": [
+        "Dart-Code.dart-code",
+        "Dart-Code.flutter"
+    ]
+}

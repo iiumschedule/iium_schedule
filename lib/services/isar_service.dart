@@ -4,6 +4,7 @@ import 'package:isar/isar.dart';
 
 import '../isar_models/favourite_subject.dart';
 import '../isar_models/gh_responses.dart';
+import '../isar_models/final_exam.dart';
 import '../isar_models/saved_daytime.dart';
 import '../isar_models/saved_schedule.dart';
 import '../isar_models/saved_subject.dart';
@@ -234,6 +235,29 @@ class IsarService {
         ));
   }
 
+  // **************************************************************************
+  // Final Exam
+  // **************************************************************************
+
+  Future<void> saveFinalExams(List<FinalExam> exam) async {
+    final isar = await db;
+
+    isar.writeTxn(() {
+      return isar.finalExams.putAll(exam);
+    });
+  }
+
+  Future<List<FinalExam>?> getFinalExams() async {
+    final isar = await db;
+    final exams = await isar.finalExams.where().findAll();
+    return exams.isEmpty ? null : exams;
+  }
+
+  Future<void> clearAllExams() async {
+    final isar = await db;
+    await isar.writeTxn(() => isar.finalExams.clear());
+  }
+
 // **************************************************************************
 // Check for Update (Github)
 // **************************************************************************
@@ -268,6 +292,7 @@ class IsarService {
           SavedDaytimeSchema,
           GhResponsesSchema,
           FavouriteSubjectSchema,
+          FinalExamSchema,
           SettingsDataSchema,
         ],
         inspector: true,
