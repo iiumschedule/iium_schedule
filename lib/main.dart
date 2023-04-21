@@ -4,30 +4,15 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'constants.dart';
-import 'enums/subject_title_setting_enum.dart';
-import 'hive_model/saved_daytime.dart';
-import 'hive_model/saved_schedule.dart';
-import 'hive_model/saved_subject.dart';
 import 'providers/schedule_layout_setting_provider.dart';
 import 'providers/schedule_maker_provider.dart';
 import 'providers/schedule_notifier_provider.dart';
 import 'providers/settings_provider.dart';
-import 'util/migrate_hive_to_isar.dart';
 import 'views/body.dart';
 
 void main() async {
-  await Hive.initFlutter('IIUM Schedule Data');
-  Hive
-    ..registerAdapter(SavedScheduleAdapter())
-    ..registerAdapter(SavedSubjectAdapter())
-    ..registerAdapter(SavedDaytimeAdapter())
-    ..registerAdapter(SubjectTitleSettingAdapter());
-  await Hive.openBox<SavedSchedule>(kHiveSavedSchedule);
-
   HttpOverrides.global = MyHttpOverrides();
 
   /**
@@ -37,8 +22,6 @@ void main() async {
   if (!kIsWeb && Platform.isAndroid) {
     await FlutterDisplayMode.setHighRefreshRate();
   }
-
-  await MigrateHiveToIsar.migrate();
 
   runApp(const MyApp());
 }

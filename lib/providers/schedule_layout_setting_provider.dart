@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-import '../enums/subject_title_setting_enum.dart';
+import '../isar_models/saved_schedule.dart';
 import '../util/lane_events_util.dart';
 
 class ScheduleLayoutSettingProvider extends ChangeNotifier {

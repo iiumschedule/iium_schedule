@@ -1,10 +1,11 @@
 import 'package:isar/isar.dart';
 
-import '../enums/subject_title_setting_enum.dart';
 import '../util/lane_events_util.dart';
 import 'saved_subject.dart';
 
 part 'saved_schedule.g.dart';
+
+enum SubjectTitleSetting { title, courseCode }
 
 @collection
 class SavedSchedule {

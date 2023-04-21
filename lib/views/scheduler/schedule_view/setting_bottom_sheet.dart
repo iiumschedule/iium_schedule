@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../enums/subject_title_setting_enum.dart';
 import '../../../isar_models/saved_schedule.dart';
 import '../../../providers/schedule_layout_setting_provider.dart';
 import '../../../services/isar_service.dart';

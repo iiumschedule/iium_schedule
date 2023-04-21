@@ -9,6 +9,3 @@ const String kDefaultSession = '2022/2023';
 
 /// Values must be between 1 and 3 (inclusive)
 const int kDefaultSemester = 2;
-
-// Hive boxes name (do not change)
-const kHiveSavedSchedule = "savedSchedule";

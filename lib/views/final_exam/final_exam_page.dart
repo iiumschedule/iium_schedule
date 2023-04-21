@@ -56,7 +56,6 @@ class _FinalExamPageState extends State<FinalExamPage> {
 
   void loadSavedExams() async {
     var savedExams = await isar.getFinalExams();
-    print('called');
     if (savedExams != null) {
       setState(() {
         finalExams = savedExams;

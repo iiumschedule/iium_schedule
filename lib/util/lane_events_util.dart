@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:provider/provider.dart';
 
-import '../enums/subject_title_setting_enum.dart';
+import '../isar_models/saved_schedule.dart';
 import '../isar_models/saved_subject.dart';
 import '../isar_models/saved_daytime.dart';
 import '../providers/schedule_layout_setting_provider.dart';

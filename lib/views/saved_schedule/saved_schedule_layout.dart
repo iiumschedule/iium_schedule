@@ -36,7 +36,6 @@ class SavedScheduleLayout extends StatefulWidget {
 
   // final SavedSchedule savedSchedule;
   final int id;
-  // final _box = Hive.box<SavedSchedule>(kHiveSavedSchedule);
 
   @override
   State<SavedScheduleLayout> createState() => _SavedScheduleLayoutState();
