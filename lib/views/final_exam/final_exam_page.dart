@@ -3,8 +3,11 @@ import 'package:recase/recase.dart';
 
 import '../../isar_models/final_exam.dart';
 import '../../services/isar_service.dart';
+import '../../util/calendar_ics.dart';
+import '../../util/my_snackbar.dart';
 import '../../util/relative_date.dart';
 import '../scheduler/json_import_dialog.dart';
+import 'calendar_chooser_dialog.dart';
 import 'exam_detail_page.dart';
 import 'fe_imaluum_importer.dart';
 import 'nearest_exam_card.dart';
@@ -33,6 +36,7 @@ class _FinalExamPageState extends State<FinalExamPage> {
     // The list is empty when the exams are in the past, so we can just set to the
     // empty list
     if (exams.isEmpty) {
+      MySnackbar.showWarn(context, 'No upcoming exams found');
       setState(() => finalExams = List.empty());
     }
     // clear existing and save new to db
@@ -80,20 +84,45 @@ class _FinalExamPageState extends State<FinalExamPage> {
           fontWeight: FontWeight.bold,
         ),
         actions: [
-          PopupMenuButton(
-            onSelected: (value) {
-              if (value == 'delete-all') {
-                isar.clearAllExams();
-                setState(() => finalExams = null);
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                child: Text('Clear all saved'),
-                value: 'delete-all',
-              )
-            ],
-          ),
+          // only show the menu when there is no exams added
+          if (finalExams != null && finalExams!.isNotEmpty)
+            PopupMenuButton(
+              onSelected: (value) async {
+                if (value == 'delete-all') {
+                  isar.clearAllExams();
+                  setState(() => finalExams = null);
+                }
+
+                if (value == 'add-to-cal') {
+                  if (finalExams == null) return;
+                  // get the calendar account to add th exams to
+                  var selectedAcc = await showDialog(
+                      context: context,
+                      builder: (_) => const CalendarChooserDialog());
+
+                  if (selectedAcc == null) return;
+
+                  try {
+                    await CalendarIcs.addFinalExamToCalendar(
+                        selectedAcc.id, finalExams!);
+                    MySnackbar.showSuccess(context, 'Added exams to calendar');
+                  } catch (e) {
+                    MySnackbar.showError(context, e.toString());
+                    return;
+                  }
+                }
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: 'delete-all',
+                  child: Text('Clear all saved'),
+                ),
+                const PopupMenuItem(
+                  value: 'add-to-cal',
+                  child: Text('Add exams to calendar'),
+                )
+              ],
+            ),
         ],
       ),
       body: Padding(
