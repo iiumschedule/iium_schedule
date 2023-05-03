@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:recase/recase.dart';
 
@@ -95,6 +98,12 @@ class _FinalExamPageState extends State<FinalExamPage> {
 
                 if (value == 'add-to-cal') {
                   if (finalExams == null) return;
+                  if (!kIsWeb && Platform.isWindows) {
+                    var filePath =
+                        await CalendarIcs.generateIcsFile(finalExams!);
+                    MySnackbar.showSuccess(context, 'Saved to $filePath');
+                    return;
+                  }
                   // get the calendar account to add th exams to
                   var selectedAcc = await showDialog(
                       context: context,

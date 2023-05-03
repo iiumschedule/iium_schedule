@@ -55,6 +55,8 @@ dependencies:
   like_button: ^2.0.5
   auto_size_text: ^3.0.0
   device_calendar: ^4.3.1
+  ical:
+    git: https://github.com/iqfareez/ical.git
 
 dev_dependencies:
   flutter_test:

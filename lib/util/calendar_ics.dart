@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:device_calendar/device_calendar.dart';
+import 'package:ical/serializer.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../isar_models/final_exam.dart';
 
@@ -28,7 +32,7 @@ class CalendarIcs {
         description: 'Final Exam for ${exam.courseCode} ${exam.title}',
         location: exam.venue,
         start: TZDateTime.from(exam.date, getLocation('Asia/Kuala_Lumpur')),
-        end: TZDateTime.from(exam.date.add(Duration(hours: 3)),
+        end: TZDateTime.from(exam.date.add(const Duration(hours: 3)),
             getLocation('Asia/Kuala_Lumpur')),
       );
       var res = await deviceCalendarPlugin.createOrUpdateEvent(event);
@@ -36,5 +40,32 @@ class CalendarIcs {
     }
 
     if (results.contains(false)) throw Exception('Error when adding events');
+  }
+
+  static Future<String> generateIcsFile(
+      List<FinalExam> upcomingFinalExams) async {
+    ICalendar cal = ICalendar();
+    for (var exam in upcomingFinalExams) {
+      cal.addElement(
+        IEvent(
+          uid: exam.courseCode,
+          start: exam.date,
+          end: exam.date.add(const Duration(hours: 3)),
+          status: IEventStatus.CONFIRMED,
+          location: exam.venue,
+          description: '${exam.title} exam',
+          summary: '${exam.courseCode} exam',
+        ),
+      );
+    }
+
+    // generate ics file
+    final directory = await getApplicationDocumentsDirectory();
+    var file = File('${directory.path}/calendar.ics');
+
+    String ics = cal.serialize();
+    file.writeAsString(ics);
+
+    return file.path;
   }
 }
