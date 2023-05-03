@@ -53,18 +53,27 @@ class CalendarIcs {
           end: exam.date.add(const Duration(hours: 3)),
           status: IEventStatus.CONFIRMED,
           location: exam.venue,
-          description: '${exam.title} exam',
-          summary: '${exam.courseCode} exam',
+          description: '${exam.title} final exam',
+          summary: '${exam.courseCode} Exam',
         ),
       );
     }
 
     // generate ics file
-    final directory = await getApplicationDocumentsDirectory();
-    var file = File('${directory.path}/calendar.ics');
-
     String ics = cal.serialize();
-    file.writeAsString(ics);
+    Directory? directory;
+
+    try {
+      // Windows
+      var dirs = await getExternalStorageDirectories();
+      directory = dirs?.first;
+    } on UnimplementedError {
+      // Android
+      directory = await getApplicationDocumentsDirectory();
+    }
+
+    var file =
+        await File('${directory?.path}/exam_calendar.ics').writeAsString(ics);
 
     return file.path;
   }

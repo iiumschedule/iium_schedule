@@ -5,7 +5,9 @@ import '../../util/calendar_ics.dart';
 
 /// Ask user which calendar account to add the exams to
 class CalendarChooserDialog extends StatefulWidget {
-  const CalendarChooserDialog({super.key});
+  const CalendarChooserDialog({super.key, required this.onExportIcsTapped});
+
+  final VoidCallback onExportIcsTapped;
 
   @override
   State<CalendarChooserDialog> createState() => _CalendarChooserDialogState();
@@ -41,6 +43,7 @@ class _CalendarChooserDialogState extends State<CalendarChooserDialog> {
 
             return Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text('Select the calendar to add the exams to'),
                 const SizedBox(height: 10),
@@ -51,6 +54,17 @@ class _CalendarChooserDialogState extends State<CalendarChooserDialog> {
                   items: accounts.map((e) {
                     return DropdownMenuItem(value: e, child: Text(e.name!));
                   }).toList(),
+                ),
+                const SizedBox(height: 2),
+                GestureDetector(
+                  onTap: widget.onExportIcsTapped,
+                  child: const Text(
+                    'Export to calendar file (ICS) instead',
+                    style: TextStyle(
+                      fontSize: 12,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(

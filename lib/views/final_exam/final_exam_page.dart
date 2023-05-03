@@ -13,6 +13,7 @@ import '../scheduler/json_import_dialog.dart';
 import 'calendar_chooser_dialog.dart';
 import 'exam_detail_page.dart';
 import 'fe_imaluum_importer.dart';
+import 'ics_generated_dialog.dart';
 import 'nearest_exam_card.dart';
 
 class FinalExamPage extends StatefulWidget {
@@ -76,6 +77,24 @@ class _FinalExamPageState extends State<FinalExamPage> {
     loadSavedExams();
   }
 
+  // after the ics file has been generated & saved, a dialog will be shown
+  // that allow user to share (because finding the file in file explorer) is kinda hard
+  void _saveIcsAndShowDialog() async {
+    late String filePath;
+    try {
+      filePath = await CalendarIcs.generateIcsFile(finalExams!);
+    } catch (e) {
+      MySnackbar.showError(context, 'Sorry. An error has occured. $e');
+      return;
+    }
+
+    // ignore: use_build_context_synchronously
+    showDialog(
+      context: context,
+      builder: (_) => IcsGeneratedDialog(icsSavedPath: filePath),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,16 +117,19 @@ class _FinalExamPageState extends State<FinalExamPage> {
 
                 if (value == 'add-to-cal') {
                   if (finalExams == null) return;
+                  // On Windows, default to export as ICS
                   if (!kIsWeb && Platform.isWindows) {
-                    var filePath =
-                        await CalendarIcs.generateIcsFile(finalExams!);
-                    MySnackbar.showSuccess(context, 'Saved to $filePath');
+                    _saveIcsAndShowDialog();
                     return;
                   }
-                  // get the calendar account to add th exams to
+                  // get the calendar account to add the exams to
                   var selectedAcc = await showDialog(
                       context: context,
-                      builder: (_) => const CalendarChooserDialog());
+                      builder: (_) =>
+                          CalendarChooserDialog(onExportIcsTapped: () {
+                            Navigator.pop(context);
+                            _saveIcsAndShowDialog();
+                          }));
 
                   if (selectedAcc == null) return;
 
