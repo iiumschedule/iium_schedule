@@ -10,7 +10,6 @@ import '../../util/calendar_ics.dart';
 import '../../util/my_snackbar.dart';
 import '../../util/relative_date.dart';
 import '../scheduler/json_import_dialog.dart';
-import 'calendar_chooser_dialog.dart';
 import 'exam_detail_page.dart';
 import 'fe_imaluum_importer.dart';
 import 'ics_generated_dialog.dart';
@@ -79,8 +78,15 @@ class _FinalExamPageState extends State<FinalExamPage> {
 
   // after the ics file has been generated & saved, a dialog will be shown
   // that allow user to share (because finding the file in file explorer) is kinda hard
-  void _saveIcsAndShowDialog() async {
-    late String filePath;
+  void _showSaveIcsDialog() async {
+    // TODO: Check web implementation
+    if (kIsWeb) {
+      CalendarIcs.downloadIcsFile(finalExams!);
+      // maybe show IcsGeneratedDialog but with download button instead
+      return;
+    }
+
+    late File filePath;
     try {
       filePath = await CalendarIcs.generateIcsFile(finalExams!);
     } catch (e) {
@@ -91,7 +97,7 @@ class _FinalExamPageState extends State<FinalExamPage> {
     // ignore: use_build_context_synchronously
     showDialog(
       context: context,
-      builder: (_) => IcsGeneratedDialog(icsSavedPath: filePath),
+      builder: (_) => IcsGeneratedDialog(icsSavedFile: filePath),
     );
   }
 
@@ -118,27 +124,8 @@ class _FinalExamPageState extends State<FinalExamPage> {
                 if (value == 'add-to-cal') {
                   if (finalExams == null) return;
                   // On Windows, default to export as ICS
-                  if (!kIsWeb && Platform.isWindows) {
-                    _saveIcsAndShowDialog();
-                    return;
-                  }
-                  // get the calendar account to add the exams to
-                  var selectedAcc = await showDialog(
-                      context: context,
-                      builder: (_) =>
-                          CalendarChooserDialog(onExportIcsTapped: () {
-                            Navigator.pop(context);
-                            _saveIcsAndShowDialog();
-                          }));
-
-                  if (selectedAcc == null) return;
-
-                  try {
-                    await CalendarIcs.addFinalExamToCalendar(
-                        selectedAcc.id, finalExams!);
-                    MySnackbar.showSuccess(context, 'Added exams to calendar');
-                  } catch (e) {
-                    MySnackbar.showError(context, e.toString());
+                  if (!kIsWeb) {
+                    _showSaveIcsDialog();
                     return;
                   }
                 }

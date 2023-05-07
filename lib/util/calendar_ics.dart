@@ -1,49 +1,19 @@
 import 'dart:io';
 
-import 'package:device_calendar/device_calendar.dart';
 import 'package:ical/serializer.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../isar_models/final_exam.dart';
 
 /// Calendar utility to add final exams to calendar
+///
+/// TODO: ICS for subjects
+/// https://github.com/iqfareez/iium_schedule/issues/65
+/// https://github.com/iqfareez/iium_schedule/pull/64
+/// See [lib/util/calTec.dart]
 class CalendarIcs {
-  /// Retrieve all calendars from the device
-  static Future<List<Calendar>> getCalendarAccounts() async {
-    DeviceCalendarPlugin deviceCalendarPlugin = DeviceCalendarPlugin();
-    var res = await deviceCalendarPlugin.retrieveCalendars();
-    if (res.isSuccess) return res.data!.map((e) => e).toList();
-    throw Exception('Error when retrieving calendars');
-  }
-
-  /// Add final exams to calendar
-  static Future<void> addFinalExamToCalendar(
-      String calendarId, List<FinalExam> upcomingFinalExams) async {
-    DeviceCalendarPlugin deviceCalendarPlugin = DeviceCalendarPlugin();
-
-    int subjectLength = upcomingFinalExams.length;
-    List<bool> results = List.filled(subjectLength, false);
-
-    for (int i = 0; i < upcomingFinalExams.length; i++) {
-      var exam = upcomingFinalExams[i];
-      final Event event = Event(
-        calendarId,
-        title: '${exam.courseCode} exam',
-        description: 'Final Exam for ${exam.courseCode} ${exam.title}',
-        location: exam.venue,
-        start: TZDateTime.from(exam.date, getLocation('Asia/Kuala_Lumpur')),
-        end: TZDateTime.from(exam.date.add(const Duration(hours: 3)),
-            getLocation('Asia/Kuala_Lumpur')),
-      );
-      var res = await deviceCalendarPlugin.createOrUpdateEvent(event);
-      if (res!.isSuccess) results[i] = true;
-    }
-
-    if (results.contains(false)) throw Exception('Error when adding events');
-  }
-
-  static Future<String> generateIcsFile(
-      List<FinalExam> upcomingFinalExams) async {
+  /// Generate ICS content for final exams
+  static String _generateIcsContent(List<FinalExam> upcomingFinalExams) {
     ICalendar cal = ICalendar();
     for (var exam in upcomingFinalExams) {
       cal.addElement(
@@ -59,8 +29,12 @@ class CalendarIcs {
       );
     }
 
-    // generate ics file
-    String ics = cal.serialize();
+    return cal.serialize();
+  }
+
+  /// Generate ICS File and save to diretory
+  static Future<File> generateIcsFile(
+      List<FinalExam> upcomingFinalExams) async {
     Directory? directory;
 
     try {
@@ -72,9 +46,14 @@ class CalendarIcs {
       directory = await getApplicationDocumentsDirectory();
     }
 
-    var file =
-        await File('${directory?.path}/exam_calendar.ics').writeAsString(ics);
+    var icsContent = _generateIcsContent(upcomingFinalExams);
 
-    return file.path;
+    return await File('${directory?.path}/exam_calendar.ics')
+        .writeAsString(icsContent);
+  }
+
+  /// TODO: For web, download the file to user's computer
+  static void downloadIcsFile(List<FinalExam> upcomingFinalExams) {
+    throw UnimplementedError();
   }
 }
