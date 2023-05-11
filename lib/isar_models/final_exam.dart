@@ -10,9 +10,15 @@ enum ExamTime { am, pm }
 class FinalExam {
   Id? id;
   late String courseCode;
+
+  /// Subject title
   late String title;
   late int section;
+
+  /// Exam date with start time
   late DateTime date;
+
+  /// am or pm
   @enumerated
   late ExamTime time;
   late String venue;
@@ -28,17 +34,25 @@ class FinalExam {
       required this.seat});
 
   FinalExam.fromJson(Map<String, dynamic> json) {
-    var format = DateFormat('dd/MM/yyyy');
     courseCode = json["courseCode"];
     title = json["title"];
     section = json["section"];
     time = json["time"] == 'AM' ? ExamTime.am : ExamTime.pm;
-    // If the exam is in evening, just set the time to 2pm
-    // this is useful when we want to sort these subjects
-    // based on their priority
-    date = format
-        .parse(json["date"])
-        .add(time == ExamTime.pm ? const Duration(hours: 14) : Duration.zero);
+
+    // This time component in this [date] is a start time
+    var format = DateFormat('dd/MM/yyyy');
+    date = format.parse(json["date"]);
+
+    // From https://github.com/iqfareez/iium_schedule/discussions/84#discussioncomment-5829274
+    // If morning (am), it starts at 9AM
+    // If evening (pm), it starts at 2.30 PM except for Friday (3PM)
+    if (time == ExamTime.am) {
+      date = date.add(const Duration(hours: 9)); // 9AM
+    } else {
+      date = date.add(
+        Duration(hours: 14, minutes: date.day == DateTime.friday ? 30 : 0),
+      ); // 2PM or 2.30PM
+    }
     venue = json["venue"];
     seat = json["seat"];
   }

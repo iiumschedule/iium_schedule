@@ -547,12 +547,13 @@ class _MiniInfoTimeCard extends StatelessWidget {
               ],
             ),
             Positioned(
-                child: IconButton(
-                  onPressed: onEditPressed,
-                  icon: const Icon(Icons.edit),
-                ),
-                right: 0,
-                top: 0)
+              right: 0,
+              top: 0,
+              child: IconButton(
+                onPressed: onEditPressed,
+                icon: const Icon(Icons.edit),
+              ),
+            )
           ],
         ),
       ),

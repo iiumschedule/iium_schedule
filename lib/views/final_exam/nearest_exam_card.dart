@@ -37,8 +37,11 @@ class NearestExamCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Upcoming exam (${RelativeDate.fromDate(exam.date)})',
-                      style: const TextStyle(fontWeight: FontWeight.w100),
+                      RelativeDate.isToday(exam.date)
+                          ? 'Goodluck for today! Bring your matric card and exam slip.'
+                          : 'Upcoming exam (${RelativeDate.fromDate(exam.date)})',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w100, fontSize: 12),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -48,17 +51,12 @@ class NearestExamCard extends StatelessWidget {
                           color: Theme.of(context)
                               .colorScheme
                               .onSecondaryContainer,
-                          fontSize: 16.0,
+                          fontSize: 17.0,
                           overflow: TextOverflow.ellipsis,
                           fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 3),
-                    Row(
-                      children: [
-                        const Icon(Icons.location_on_outlined),
-                        Text(exam.venue, maxLines: 2),
-                      ],
-                    ),
+                    Text(exam.venue, maxLines: 2),
                   ],
                 ),
               ),
@@ -71,7 +69,7 @@ class NearestExamCard extends StatelessWidget {
                       const Icon(Icons.chair_alt),
                       const SizedBox(width: 2),
                       Text(
-                        'Seat ${exam.seat}',
+                        exam.seat.toString(),
                         style: const TextStyle(fontSize: 21),
                       ),
                     ],

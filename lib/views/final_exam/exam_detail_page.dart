@@ -30,7 +30,7 @@ class ExamDetailPage extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             ListTile(
-              subtitle: const Text("Date & Time"),
+              subtitle: const Text("Date & Day"),
               title: Row(
                 children: [
                   Text(DateFormat('d MMM yy').format(exam.date),
@@ -44,7 +44,7 @@ class ExamDetailPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      exam.time.name.toUpperCase(),
+                      DateFormat('EEEE').format(exam.date),
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSecondary),
                     ),
@@ -53,6 +53,17 @@ class ExamDetailPage extends StatelessWidget {
               ),
               leading: Icon(
                 Icons.today_outlined,
+                size: 38,
+                color: Theme.of(context).colorScheme.surfaceTint,
+              ),
+            ),
+            const SizedBox(height: 4),
+            ListTile(
+              subtitle: const Text("Start Time"),
+              title: Text(DateFormat('h:mm a').format(exam.date),
+                  style: const TextStyle(fontSize: 24)),
+              leading: Icon(
+                Icons.schedule_outlined,
                 size: 38,
                 color: Theme.of(context).colorScheme.surfaceTint,
               ),

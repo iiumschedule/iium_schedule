@@ -17,4 +17,12 @@ class RelativeDate {
       return DateFormat('E, d MMM yyyy').format(dateTime);
     }
   }
+
+  /// Check if given day in same day as today
+  static bool isToday(DateTime dateTime) {
+    final now = DateTime.now();
+    return dateTime.day == now.day &&
+        dateTime.month == now.month &&
+        dateTime.year == now.year;
+  }
 }
