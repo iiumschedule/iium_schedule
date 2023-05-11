@@ -113,9 +113,9 @@ class _BrowserViewState extends State<BrowserView> {
               (BuildContext context, AsyncSnapshot<List<Subject>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               {
-                return Center(
+                return const Center(
                   child:
-                      Column(mainAxisSize: MainAxisSize.min, children: const [
+                      Column(mainAxisSize: MainAxisSize.min, children: [
                     Text('Please wait...'),
                     SizedBox(height: 10),
                     SizedBox(

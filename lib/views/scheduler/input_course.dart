@@ -234,9 +234,9 @@ class _InputCourseState extends State<InputCourse>
                           color: Theme.of(context).colorScheme.primaryContainer,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Row(
+                        child: const Row(
                           mainAxisSize: MainAxisSize.min,
-                          children: const [
+                          children: [
                             Text('Import from..'),
                             SizedBox(width: 5),
                             Icon(Icons.add)
