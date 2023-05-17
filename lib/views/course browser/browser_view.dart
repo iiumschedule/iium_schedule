@@ -74,6 +74,12 @@ class _BrowserViewState extends State<BrowserView> {
         ]));
   }
 
+  Future<List<Subject>> _getSubjects() async {
+    var (subjects, _) = await widget.albiruni.fetch(widget.kulliyah,
+        course: widget.courseCode, page: _page, useProxy: kIsWeb);
+    return subjects;
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -107,15 +113,13 @@ class _BrowserViewState extends State<BrowserView> {
           ],
         ),
         body: FutureBuilder(
-          future: widget.albiruni.fetch(widget.kulliyah,
-              course: widget.courseCode, page: _page, useProxy: kIsWeb),
+          future: _getSubjects(),
           builder:
               (BuildContext context, AsyncSnapshot<List<Subject>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               {
                 return const Center(
-                  child:
-                      Column(mainAxisSize: MainAxisSize.min, children: [
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
                     Text('Please wait...'),
                     SizedBox(height: 10),
                     SizedBox(

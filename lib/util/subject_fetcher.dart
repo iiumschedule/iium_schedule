@@ -10,7 +10,7 @@ class SubjectFetcher {
     // loop for every pages to find the subject, most of the time it
     // is in the first page, but for subject it isn't
     for (int i = 1;; i++) {
-      var fetchedSubjects = await albiruni.fetch(kulliyyah,
+      var (fetchedSubjects, _) = await albiruni.fetch(kulliyyah,
           page: i, course: courseCode, useProxy: kIsWeb);
       if (fetchedSubjects.isEmpty) break;
       try {

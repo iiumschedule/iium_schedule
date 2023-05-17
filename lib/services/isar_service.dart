@@ -1,6 +1,7 @@
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../isar_models/favourite_subject.dart';
 import '../isar_models/gh_responses.dart';
@@ -284,8 +285,11 @@ class IsarService {
   // }
 
   Future<Isar> openDB() async {
+    final dir = await getApplicationDocumentsDirectory();
+
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open(
+        directory: dir.path,
         [
           SavedScheduleSchema,
           SavedSubjectSchema,
