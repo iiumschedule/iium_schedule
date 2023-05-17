@@ -177,8 +177,9 @@ class _MyBodyState extends State<MyBody> {
                           const SizedBox(height: 20.0),
                           StreamBuilder(
                             stream: _isarService.listenToAllSchedulesChanges(),
-                            builder: (_, __) {
-                              var data = _isarService.getAllSchedule();
+                            builder: (_,
+                                AsyncSnapshot<List<SavedSchedule>> snapshot) {
+                              var data = snapshot.data ?? [];
                               // check the current size of AnimatedList
                               // if different that data.length, rebuild the list
                               if (_listKey.currentState != null &&

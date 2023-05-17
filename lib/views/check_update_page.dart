@@ -62,7 +62,6 @@ class _CheckUpdatePageState extends State<CheckUpdatePage> {
       final ghError = GhError.fromJson(data);
       throw Exception('(${response.statusCode}) ${ghError.message})');
     }
-    print(latest.tagName);
     return Version.parse(latest.tagName!);
   }
 

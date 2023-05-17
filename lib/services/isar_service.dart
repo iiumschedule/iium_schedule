@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
@@ -28,8 +30,8 @@ class IsarService {
   // TODO: Make function for save & add new subject to a schedule
   // for save new subject, view [SavedScheduleLayout] in manual add subject
 
-  List<SavedSchedule> getAllSchedule() {
-    final isar = Isar.getInstance()!;
+  Future<List<SavedSchedule>> _getAllSchedule() async {
+    final isar = await db;
     return isar.collection<SavedSchedule>().where().findAllSync();
   }
 
@@ -54,10 +56,24 @@ class IsarService {
     });
   }
 
-  Stream<void> listenToAllSchedulesChanges() async* {
+  Stream<List<SavedSchedule>> listenToAllSchedulesChanges() async* {
     final isar = await db;
+    final controller = StreamController<List<SavedSchedule>>();
 
-    yield* isar.savedSchedules.watchLazy();
+    controller.onListen = () {
+      final subscription = isar.savedSchedules.watchLazy().listen((_) async {
+        final schedules = await _getAllSchedule();
+        controller.add(schedules);
+      });
+
+      controller.onCancel = () {
+        subscription.cancel();
+      };
+    };
+
+    yield await _getAllSchedule();
+
+    yield* controller.stream;
   }
 
   Stream<SavedSchedule?> listenToSavedSchedule({required int id}) async* {
