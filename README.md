@@ -45,6 +45,7 @@ See [here](https://github.com/iqfareez/iium_schedule/wiki/Build-steps)
 - Export as an image (so you can set it as lockscreen)
 - Customize schedule (ie: Change colours etc.)
 - Browse for subjects.
+- Add final exam (and can be exported to calendar)
 - See more features in planned in [issues](https://github.com/iqfareez/iium_schedule/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement)
 
 ## Releases
@@ -56,6 +57,8 @@ App is available for Android, Windows and Web. Check it out [here](https://iiums
 [![Part 1](https://img.shields.io/badge/part%201-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTAxOTkzNjUzNDk0NDQ3)
 [![Part 2](https://img.shields.io/badge/part%202-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQ4MjM3NzQzNjk4NjMy)
 [![Part 3](https://img.shields.io/badge/part%203-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTY1ODMxMDE1ODM2MDg4)
+[![Part 4](https://img.shields.io/badge/part%203-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/stories/highlights/17965124656955811/)
+[![Part 5](https://img.shields.io/badge/part%203-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/stories/highlights/17938053524618277/)
 
 ## Motivation
 
