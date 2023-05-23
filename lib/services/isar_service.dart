@@ -301,7 +301,8 @@ class IsarService {
   // }
 
   Future<Isar> openDB() async {
-    final dir = await getApplicationDocumentsDirectory();
+    // https://github.com/isar/isar/issues/1219
+    final dir = await getApplicationSupportDirectory();
 
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open(
