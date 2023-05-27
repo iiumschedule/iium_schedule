@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/link.dart';
 
-import '../../providers/settings_provider.dart';
+import '../providers/settings_provider.dart';
 
 class JsonImportDialog extends StatefulWidget {
-  const JsonImportDialog({super.key});
+  const JsonImportDialog({super.key, required this.helpLink});
+
+  final String helpLink;
 
   @override
   State<JsonImportDialog> createState() => _JsonImportDialogState();
@@ -66,8 +68,7 @@ class _JsonImportDialogState extends State<JsonImportDialog> {
             Align(
               alignment: Alignment.centerLeft,
               child: Link(
-                uri:
-                    Uri.parse("https://iiumschedule.iqfareez.com/docs/extract"),
+                uri: Uri.parse(widget.helpLink),
                 target: LinkTarget.blank,
                 builder: (_, followLink) => TextButton(
                   onPressed: followLink,

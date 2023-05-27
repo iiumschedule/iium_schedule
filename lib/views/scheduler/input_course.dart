@@ -11,7 +11,7 @@ import '../../providers/schedule_maker_provider.dart';
 import '../../util/extensions.dart';
 import '../../util/my_snackbar.dart';
 import 'imaluum_webview.dart';
-import 'json_import_dialog.dart';
+import '../../widgets/json_import_dialog.dart';
 import 'schedule_steps.dart';
 
 enum ImportMethod { json, imaluum }
@@ -211,7 +211,10 @@ class _InputCourseState extends State<InputCourse>
                           case ImportMethod.json:
                             var res = await showDialog<List<dynamic>?>(
                                 context: context,
-                                builder: ((_) => const JsonImportDialog()));
+                                builder: ((_) => const JsonImportDialog(
+                                      helpLink:
+                                          "https://iiumschedule.iqfareez.com/docs/extract",
+                                    )));
                             if (res != null) {
                               _importSubjects(res);
                             }

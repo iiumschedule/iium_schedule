@@ -9,7 +9,7 @@ import '../../services/isar_service.dart';
 import '../../util/calendar_ics.dart';
 import '../../util/my_snackbar.dart';
 import '../../util/relative_date.dart';
-import '../scheduler/json_import_dialog.dart';
+import '../../widgets/json_import_dialog.dart';
 import 'exam_detail_page.dart';
 import 'export_to_ics_prompt_dialog.dart';
 import 'fe_imaluum_importer.dart';
@@ -209,7 +209,10 @@ class _FinalExamPageState extends State<FinalExamPage> {
               onPressed: () {
                 // if run on windows, just use the json import dialog
                 if (Theme.of(context).platform == TargetPlatform.windows) {
-                  _openImporter(const JsonImportDialog());
+                  _openImporter(const JsonImportDialog(
+                    helpLink:
+                        "https://iiumschedule.iqfareez.com/docs/final-exams/",
+                  ));
                   return;
                 }
                 showDialog(
@@ -228,7 +231,10 @@ class _FinalExamPageState extends State<FinalExamPage> {
                             onPressed: () async {
                               Navigator.pop(context);
 
-                              _openImporter(const JsonImportDialog());
+                              _openImporter(const JsonImportDialog(
+                                helpLink:
+                                    "https://iiumschedule.iqfareez.com/docs/final-exams/",
+                              ));
                             },
                             child: const Text("Import from JSON"),
                           ),
