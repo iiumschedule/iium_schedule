@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 enum ReaderState { unknown, loading, success }
 
@@ -131,9 +132,17 @@ const json = JSON.stringify(extractedData); // data
 json
                       """);
 
+              // if timetable is not ready eg finance issue etc. Show this message
+              if (html == null) {
+                Fluttertoast.showToast(
+                    msg:
+                        "Failed to extract data. Seems like there is no exam timetable exist yet?");
+                setState(() => readerState = ReaderState.unknown);
+                return;
+              }
+
               // parse the json
               var decoded = jsonDecode(html);
-              print(decoded);
               setState(() {
                 readerState = ReaderState.success;
                 response = decoded;
