@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 enum ReaderState { unknown, loading, success }
 
@@ -127,6 +128,16 @@ class _ImaluumWebViewState extends State<ImaluumWebView> {
       
       JSON.stringify(extractedData); 
                       """);
+
+              // if, for some reason, the schedule page is not there (even I think
+              // it will never happen unlike final exam timetable)
+              if (html == null) {
+                Fluttertoast.showToast(
+                    msg:
+                        "Failed to extract data. Seems like there is no timetable exist yet?");
+                setState(() => readerState = ReaderState.unknown);
+                return;
+              }
 
               // parse the json
               var decoded = jsonDecode(html);
