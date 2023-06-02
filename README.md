@@ -57,8 +57,8 @@ App is available for Android, Windows and Web. Check it out [here](https://iiums
 [![Part 1](https://img.shields.io/badge/part%201-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTAxOTkzNjUzNDk0NDQ3)
 [![Part 2](https://img.shields.io/badge/part%202-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTQ4MjM3NzQzNjk4NjMy)
 [![Part 3](https://img.shields.io/badge/part%203-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTY1ODMxMDE1ODM2MDg4)
-[![Part 4](https://img.shields.io/badge/part%203-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/stories/highlights/17965124656955811/)
-[![Part 5](https://img.shields.io/badge/part%203-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/stories/highlights/17938053524618277/)
+[![Part 4](https://img.shields.io/badge/part%204-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/stories/highlights/17965124656955811/)
+[![Part 5](https://img.shields.io/badge/part%205-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/stories/highlights/17938053524618277/)
 
 ## Motivation
 
