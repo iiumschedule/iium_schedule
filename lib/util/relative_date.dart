@@ -7,11 +7,21 @@ class RelativeDate {
     final now = DateTime.now();
     final diff = dateTime.difference(now);
 
+    // final timeDiff = diff.inDays + 1;
+
     if (diff.inDays == 0) {
-      return "today";
-    } else if (diff.inDays == 1) {
-      return "tomorrow";
+      var examTime = DateFormat('h:mm a').format(dateTime);
+      // The inDays is 0, can be today or tomorrow (0d 23 hours 59 mins 59 secs)
+      if (isToday(dateTime)) {
+        return "today, $examTime";
+      } else {
+        return "tomorrow, $examTime";
+      }
     } else if (diff.inDays < 7) {
+      // handle singular & plural
+      if (diff.inDays == 1) {
+        return "in ${diff.inDays} day";
+      }
       return "in ${diff.inDays} days";
     } else {
       return DateFormat('E, d MMM yyyy').format(dateTime);

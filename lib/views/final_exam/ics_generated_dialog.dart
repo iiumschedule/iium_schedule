@@ -79,6 +79,8 @@ class IcsGeneratedDialog extends StatelessWidget {
                       _openFile();
                       Navigator.pop(context);
                     },
+                    // missing icon: calendar_add_on?
+                    // https://github.com/flutter/flutter/issues/129880
                     child: const Icon(Icons.open_in_new),
                   ),
                 ),

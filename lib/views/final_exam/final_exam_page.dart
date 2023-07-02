@@ -16,6 +16,13 @@ import 'fe_imaluum_importer.dart';
 import 'ics_generated_dialog.dart';
 import 'nearest_exam_card.dart';
 
+class _MyFinalExam {
+  FinalExam finalExam;
+  bool isPast;
+
+  _MyFinalExam({required this.finalExam, required this.isPast});
+}
+
 class FinalExamPage extends StatefulWidget {
   const FinalExamPage({super.key});
 
@@ -26,29 +33,42 @@ class FinalExamPage extends StatefulWidget {
 class _FinalExamPageState extends State<FinalExamPage> {
   // TODO: add banner please bring along matric card and exam slip
   final IsarService isar = IsarService();
-  List<FinalExam>? finalExams;
+  List<_MyFinalExam>? finalExams;
 
   /// Sort and set the final exams from imported data
   /// Usually, it was already sorted from earliest to oldest from the Imaluum
   /// but, just in case
   void _setFinalExams(List<FinalExam> exams) async {
     exams.sort((a, b) => a.date.compareTo(b.date));
-    // filter to exams that are in the future
-    exams =
-        exams.where((element) => element.date.isAfter(DateTime.now())).toList();
 
-    // The list is empty when the exams are in the past, so we can just set to the
-    // empty list
-    if (exams.isEmpty) {
-      MySnackbar.showWarn(context, 'No upcoming exams found');
-      setState(() => finalExams = List.empty());
+    /// Create a list of _MyFinalExam objects
+    List<_MyFinalExam> myFinalExams = [];
+
+    // Iterate through the exams and set the isPast property
+    for (FinalExam exam in exams) {
+      print(DateTime.now());
+      print(exam.date);
+      bool isPast = DateTime.now().isAfter(exam.date);
+      myFinalExams.add(_MyFinalExam(finalExam: exam, isPast: isPast));
     }
+
+    setState(() {
+      finalExams = myFinalExams;
+    });
     // clear existing and save new to db
     isar.clearAllExams();
     isar.saveFinalExams(exams);
+  }
 
-    // refresh UI
-    setState(() => finalExams = exams);
+  void _processImport() async {
+    bool isAllPast = finalExams!.every((element) => element.isPast);
+
+    // The list is empty when the exams are in the past, so we can just set to the
+    // empty list
+    if (isAllPast) {
+      MySnackbar.showWarn(context, 'No upcoming exams found');
+      return;
+    }
 
     // lastly, show prompt to add exams to calendar
     var res = await showDialog(
@@ -62,14 +82,13 @@ class _FinalExamPageState extends State<FinalExamPage> {
     if (data == null) return;
     var dataParsed = FinalExam.fromList(data);
     _setFinalExams(dataParsed);
+    _processImport();
   }
 
   void _loadSavedExams() async {
     var savedExams = await isar.getFinalExams();
     if (savedExams != null) {
-      setState(() {
-        finalExams = savedExams;
-      });
+      _setFinalExams(savedExams);
     }
   }
 
@@ -93,14 +112,15 @@ class _FinalExamPageState extends State<FinalExamPage> {
   void _showSaveIcsDialog() async {
     // TODO: Check web implementation
     if (kIsWeb) {
-      CalendarIcs.downloadIcsFile(finalExams!);
+      CalendarIcs.downloadIcsFile(finalExams!.map((e) => e.finalExam).toList());
       // maybe show IcsGeneratedDialog but with download button instead
       return;
     }
 
     late File filePath;
     try {
-      filePath = await CalendarIcs.generateIcsFile(finalExams!);
+      filePath = await CalendarIcs.generateIcsFile(
+          finalExams!.map((e) => e.finalExam).toList());
     } catch (e) {
       MySnackbar.showError(context, 'Sorry. An error has occured. $e');
       return;
@@ -158,14 +178,22 @@ class _FinalExamPageState extends State<FinalExamPage> {
             if (finalExams != null && finalExams!.isNotEmpty)
               Builder(builder: (context) {
                 // latest upcoming final exams
-                var upcomingExam = finalExams!.first;
 
-                // if the upcoming exam is in less than 2 weeks, show it
-                if (upcomingExam.date.difference(DateTime.now()).inDays > 5) {
+                var upcomingExam =
+                    finalExams!.where((element) => !element.isPast);
+                if (upcomingExam.isEmpty) {
                   return const SizedBox.shrink();
                 }
 
-                return NearestExamCard(exam: upcomingExam);
+                // if the upcoming exam is in less than 2 weeks, show it
+                if (upcomingExam.first.finalExam.date
+                        .difference(DateTime.now())
+                        .inDays >
+                    5) {
+                  return const SizedBox.shrink();
+                }
+
+                return NearestExamCard(exam: upcomingExam.first.finalExam);
               }),
             const SizedBox(height: 5),
             // Show this notice when user add past final exams
@@ -181,25 +209,37 @@ class _FinalExamPageState extends State<FinalExamPage> {
                 itemCount: finalExams!.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: ((context, index) {
+                itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(finalExams![index].title),
-                    subtitle: Text(
-                        ReCase(RelativeDate.fromDate(finalExams![index].date))
-                            .titleCase),
-                    trailing: const Icon(Icons.chevron_right),
+                    enabled: !finalExams![index].isPast,
+                    title: Text(
+                      finalExams![index].finalExam.title,
+                      style: finalExams![index].isPast
+                          ? const TextStyle(
+                              decorationStyle: TextDecorationStyle.solid,
+                              decoration: TextDecoration.lineThrough)
+                          : null,
+                    ),
+                    subtitle: Text(!finalExams![index].isPast
+                        ? ReCase(RelativeDate.fromDate(
+                                finalExams![index].finalExam.date))
+                            .titleCase
+                        : 'Finished'),
+                    trailing: !finalExams![index].isPast
+                        ? const Icon(Icons.chevron_right)
+                        : null,
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => ExamDetailPage(
-                            exam: finalExams![index],
+                            exam: finalExams![index].finalExam,
                           ),
                         ),
                       );
                     },
                   );
-                }),
+                },
               ),
           ],
         ),
