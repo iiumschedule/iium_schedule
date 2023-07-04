@@ -3,14 +3,14 @@
 [![Web](<https://img.shields.io/badge/WEB%20(PWA)-5a0fc8?style=for-the-badge&logo=GoogleChrome&logoColor=white>)](https://iiumschedule.web.app/#/)
 [![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://iiumschedule.iqfareez.com/downloads/stable#windows)
 ![License](https://img.shields.io/github/license/iqfareez/iium_schedule?style=for-the-badge)
-[![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/iqfareez)
 [![PRs Welcome](https://img.shields.io/badge/PR-welcome-brightgreen.svg?style=for-the-badge)](https://makeapullrequest.com)
+[![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/iqfareez)
 
 # IIUM Schedule App
 
 Generate a beautiful & clean IIUM Schedule quickly with automatic subject data fetching. View what courses are available to register at your fingertips.
 
-Load timetable I-Ma'luum and your schedule is ready/ As easy as that :wink:.
+Load timetable I-Ma'luum and your schedule is ready. As easy as that :wink:
 
 <h1 align="center">
     <picture>
@@ -23,15 +23,13 @@ Load timetable I-Ma'luum and your schedule is ready/ As easy as that :wink:.
 
 Feel free to open up [issues](https://github.com/iqfareez/iium_schedule/issues) and/or submit [pull requests](https://github.com/iqfareez/iium_schedule/pulls).
 
-<!-- For other types of contributions, kindly refer [wiki](https://github.com/iqfareez/iium_schedule/wiki).  -->
-
-More proper guides will be written soon.
+Refer [Wiki/Contributing](https://github.com/iqfareez/iium_schedule/wiki/Contributing) for more info.
 
 ## Getting started
 
 ### Build the project locally
 
-See [here](https://github.com/iqfareez/iium_schedule/wiki/Build-steps)
+See [Wiki/Build](https://github.com/iqfareez/iium_schedule/wiki/Build)
 
 ### Cloud development environment
 

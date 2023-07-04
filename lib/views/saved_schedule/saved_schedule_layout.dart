@@ -184,7 +184,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
               titleSetting: snapshot.data!.subjectTitleSetting,
               extraInfo: snapshot.data!.extraInfo);
 
-          LaneEventsResponse laneEventsList = LaneEventsUtil(
+          var laneEventsData = LaneEventsUtil(
                   context: context,
                   fontSize: snapshot.data!.fontSize,
                   savedSubjectList: snapshot.data!.subjects.toList())
@@ -358,9 +358,9 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                           controller: _refreshController,
                           onRefresh: _onRefresh,
                           child: TimetableViewWidget(
-                            startHour: laneEventsList.startHour,
-                            endHour: laneEventsList.endHour,
-                            laneEventsList: laneEventsList.laneEventsList,
+                            laneEventsList: laneEventsData.laneEvents,
+                            startHour: laneEventsData.startHour,
+                            endHour: laneEventsData.endHour,
                             itemHeight: snapshot.data!.heightFactor,
                           ))),
                 ),
@@ -434,16 +434,20 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
       case 'save':
         if (!mounted) return;
 
+        var laneData = LaneEventsUtil(
+                context: context,
+                fontSize: schedule!.fontSize,
+                savedSubjectList: schedule.subjects.toList())
+            .laneEvents();
+
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (_) => ScheduleExportPage(
-                scheduleTitle: schedule!.title!,
-                laneEventsResponse: LaneEventsUtil(
-                        context: context,
-                        fontSize: schedule.fontSize,
-                        savedSubjectList: schedule.subjects.toList())
-                    .laneEvents(),
+                scheduleTitle: schedule.title!,
+                laneEventsList: laneData.laneEvents,
+                startHour: laneData.startHour,
+                endHour: laneData.endHour,
                 itemHeight: schedule.heightFactor),
           ),
         );

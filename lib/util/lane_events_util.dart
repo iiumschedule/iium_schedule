@@ -30,7 +30,7 @@ class LaneEventsUtil {
     required this.fontSize,
   });
 
-  LaneEventsResponse laneEvents() {
+  ({List<LaneEvents> laneEvents, int startHour, int endHour}) laneEvents() {
     List<LaneEvents> laneEventsList = [];
     // Find if there any subject in each day
     for (var i = 1; i <= 7; i++) {
@@ -152,28 +152,15 @@ class LaneEventsUtil {
       }
     }
 
-    // TODO: Perhaps this will no longer needs when Dart's new Records are landed
-    return LaneEventsResponse(
-        laneEventsList: laneEventsList,
-        startHour: _startHour,
-        endHour: _endHour);
+    return (
+      laneEvents: laneEventsList,
+      startHour: _startHour,
+      endHour: _endHour
+    );
   }
 
   // int get scheduleStartHour => _startHour;
   // int get scheduleEndHour => _endHour;
-}
-
-// TODO: Perhaps this will no longer needs when Dart's new Records are landed
-class LaneEventsResponse {
-  final List<LaneEvents> laneEventsList;
-  final int startHour;
-  final int endHour;
-
-  LaneEventsResponse({
-    required this.laneEventsList,
-    required this.startHour,
-    required this.endHour,
-  });
 }
 
 class SubjectEvents {

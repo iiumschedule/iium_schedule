@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../util/lane_events_util.dart';
 import '../../util/my_ftoast.dart';
 import '../../util/schedule_share.dart';
 import '../../util/screenshot_widget.dart';
@@ -13,10 +13,14 @@ import '../scheduler/schedule_view/timetable_view_widget.dart';
 class ScheduleExportPage extends StatefulWidget {
   const ScheduleExportPage(
       {super.key,
-      required this.laneEventsResponse,
       required this.scheduleTitle,
-      required this.itemHeight});
-  final LaneEventsResponse laneEventsResponse;
+      required this.itemHeight,
+      required this.laneEventsList,
+      required this.startHour,
+      required this.endHour});
+  final List<LaneEvents> laneEventsList;
+  final int startHour;
+  final int endHour;
   final double itemHeight;
   final String scheduleTitle;
 
@@ -63,10 +67,9 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                       child: ClipRect(
                         // cliprect to remove schedule 'leaking' out of the container
                         child: TimetableViewWidget(
-                          startHour: widget.laneEventsResponse.startHour,
-                          endHour: widget.laneEventsResponse.endHour,
-                          laneEventsList:
-                              widget.laneEventsResponse.laneEventsList,
+                          startHour: widget.startHour,
+                          endHour: widget.endHour,
+                          laneEventsList: widget.laneEventsList,
                           itemHeight: widget.itemHeight + 4,
                         ),
                       ),

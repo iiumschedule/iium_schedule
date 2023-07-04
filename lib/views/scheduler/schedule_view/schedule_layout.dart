@@ -344,10 +344,9 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                               navigator.push(
                                 MaterialPageRoute(
                                   builder: (_) => ScheduleExportPage(
-                                      laneEventsResponse: LaneEventsResponse(
-                                          laneEventsList: laneEventsList,
-                                          startHour: _startHour,
-                                          endHour: _endHour),
+                                      laneEventsList: laneEventsList,
+                                      startHour: _startHour,
+                                      endHour: _endHour,
                                       scheduleTitle: name,
                                       itemHeight: _itemHeight),
                                 ),
