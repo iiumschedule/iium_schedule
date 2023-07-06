@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:recase/recase.dart';
 
 import '../../isar_models/final_exam.dart';
 import '../../services/isar_service.dart';
@@ -46,8 +45,6 @@ class _FinalExamPageState extends State<FinalExamPage> {
 
     // Iterate through the exams and set the isPast property
     for (FinalExam exam in exams) {
-      print(DateTime.now());
-      print(exam.date);
       bool isPast = DateTime.now().isAfter(exam.date);
       myFinalExams.add(_MyFinalExam(finalExam: exam, isPast: isPast));
     }
@@ -221,9 +218,8 @@ class _FinalExamPageState extends State<FinalExamPage> {
                           : null,
                     ),
                     subtitle: Text(!finalExams![index].isPast
-                        ? ReCase(RelativeDate.fromDate(
-                                finalExams![index].finalExam.date))
-                            .titleCase
+                        ? RelativeDate.fromDate(
+                            finalExams![index].finalExam.date)
                         : 'Finished'),
                     trailing: !finalExams![index].isPast
                         ? const Icon(Icons.chevron_right)

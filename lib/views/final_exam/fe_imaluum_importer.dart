@@ -28,7 +28,10 @@ class _FeImaluumImporterState extends State<FeImaluumImporter> {
   );
 
   List<dynamic>? response;
+  // Track state to read and parse the schedule from html
   ReaderState readerState = ReaderState.unknown;
+  // track loading state of the webview
+  bool isLoading = false;
   bool loginRequired = false;
 
   @override
@@ -51,6 +54,11 @@ class _FeImaluumImporterState extends State<FeImaluumImporter> {
               onPressed: () => webViewController?.reload(),
             ),
           ],
+          bottom: isLoading
+              ? const PreferredSize(
+                  preferredSize: Size.fromHeight(1.5),
+                  child: LinearProgressIndicator())
+              : null,
         ),
         floatingActionButton: Builder(builder: (_) {
           if (!loginRequired && readerState == ReaderState.loading) {
@@ -78,10 +86,21 @@ class _FeImaluumImporterState extends State<FeImaluumImporter> {
           // check if need login,
           // after login, make sure the url matches the url above
           onProgressChanged: (_, progress) {
-            setState(() {
-              readerState =
-                  progress == 100 ? ReaderState.loading : ReaderState.unknown;
-            });
+            // even tho this callback wont be triggered at short interval, I'm still apply
+            // the if checks guard to prevent unnecessary setState calls
+            if (progress == 100) {
+              setState(() {
+                isLoading = false;
+                readerState = ReaderState.loading;
+              });
+            } else {
+              if (isLoading == false) {
+                setState(() {
+                  isLoading = true;
+                  readerState = ReaderState.unknown;
+                });
+              }
+            }
           },
           onLoadStop: (controller, url) async {
             if (!url.toString().contains('MyAcademic/final-exam')) {
@@ -107,30 +126,10 @@ class _FeImaluumImporterState extends State<FeImaluumImporter> {
               setState(() => loginRequired = false);
 
               // extract the data
-              // https://iiumschedule.vercel.app/docs/extract/imaluum/#3-run-script
-              var html = await controller.evaluateJavascript(source: """
-const tableBody = document.getElementsByClassName("table table-hover")[0];
-const data = tableBody.getElementsByTagName("tr");
-
-const extractedData = [];
-
-for (let i = 1; i < data.length; i++) {
-    const date = data[i].cells[3].innerText;
-    if (date === "No final") continue
-
-    const coursecode = data[i].cells[0].innerText;
-    const title = data[i].cells[1].innerText;
-    const sect = parseInt(data[i].cells[2].innerText);
-    const time = data[i].cells[4].innerText;
-    const venue = data[i].cells[5].innerText;
-    const seat = parseInt(data[i].cells[6].innerText);
-
-    extractedData.push({courseCode: coursecode, title: title, section: sect, date: date, time: time, venue: venue, seat: seat,});
-}
-
-const json = JSON.stringify(extractedData); // data
-json
-                      """);
+              // https://iiumschedule.vercel.app/docs/final-exams/#3-run-script (minified)
+              var html = await controller.evaluateJavascript(
+                  source:
+                      'const tableBody=document.getElementsByClassName("table table-hover")[0],data=tableBody.getElementsByTagName("tr"),extractedData=[];for(let i=1;i<data.length;i++){let e=data[i].cells[3].innerText;if("No final"===e)continue;let t=data[i].cells[0].innerText,a=data[i].cells[1].innerText,l=parseInt(data[i].cells[2].innerText),n=data[i].cells[4].innerText,s=data[i].cells[5].innerText,d=parseInt(data[i].cells[6].innerText);extractedData.push({courseCode:t,title:a,section:l,date:e,time:n,venue:s,seat:d})}const json=JSON.stringify(extractedData);json;');
 
               // if timetable is not ready eg finance issue etc. Show this message
               if (html == null) {

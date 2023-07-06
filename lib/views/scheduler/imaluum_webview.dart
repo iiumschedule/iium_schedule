@@ -28,7 +28,10 @@ class _ImaluumWebViewState extends State<ImaluumWebView> {
   );
 
   List<dynamic>? response;
+  // Track state to read and parse the schedule from html
   ReaderState readerState = ReaderState.unknown;
+  // track loading state of the webview
+  bool isLoading = false;
   bool loginRequired = false;
 
   @override
@@ -51,6 +54,11 @@ class _ImaluumWebViewState extends State<ImaluumWebView> {
               onPressed: () => webViewController?.reload(),
             ),
           ],
+          bottom: isLoading
+              ? const PreferredSize(
+                  preferredSize: Size.fromHeight(1.5),
+                  child: LinearProgressIndicator())
+              : null,
         ),
         floatingActionButton: Builder(builder: (_) {
           if (!loginRequired && readerState == ReaderState.loading) {
@@ -78,10 +86,21 @@ class _ImaluumWebViewState extends State<ImaluumWebView> {
           // check if need login,
           // after login, make sure the url matches the url above
           onProgressChanged: (_, progress) {
-            setState(() {
-              readerState =
-                  progress == 100 ? ReaderState.loading : ReaderState.unknown;
-            });
+            // even tho this callback wont be triggered at short interval, I'm still apply
+            // the if checks guard to prevent unnecessary setState calls
+            if (progress == 100) {
+              setState(() {
+                isLoading = false;
+                readerState = ReaderState.loading;
+              });
+            } else {
+              if (isLoading == false) {
+                setState(() {
+                  isLoading = true;
+                  readerState = ReaderState.unknown;
+                });
+              }
+            }
           },
           onLoadStop: (controller, url) async {
             if (!url.toString().contains('MyAcademic/schedule')) {
