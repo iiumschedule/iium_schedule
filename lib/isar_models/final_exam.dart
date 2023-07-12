@@ -49,8 +49,13 @@ class FinalExam {
     if (time == ExamTime.am) {
       date = date.add(const Duration(hours: 9)); // 9AM
     } else {
+      // on Friday, it starts at 3PM
+      // other day, it starts at 2.30PM
+      // Idk why I made this mistake: https://github.com/iqfareez/iium_schedule/issues/92#issue-1796026668
       date = date.add(
-        Duration(hours: 14, minutes: date.day == DateTime.friday ? 30 : 0),
+        date.day == DateTime.friday
+            ? const Duration(hours: 15)
+            : const Duration(hours: 14, minutes: 30),
       ); // 2PM or 2.30PM
     }
     venue = json["venue"];
