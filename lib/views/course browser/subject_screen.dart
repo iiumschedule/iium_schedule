@@ -172,7 +172,6 @@ class _DayTimeTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DataTable(
-      dataRowHeight: 32,
       showBottomBorder: true,
       columns: const ["Day", "Time"]
           .map(
