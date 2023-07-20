@@ -21,7 +21,7 @@ class ExamDetailPage extends StatelessWidget {
           children: [
             const SizedBox(height: 12),
             ListTile(
-              title: Text(exam.title, style: const TextStyle(fontSize: 24)),
+              title: Text(exam.title, style: const TextStyle(fontSize: 22.7)),
               leading: Icon(
                 Icons.book,
                 size: 38,
@@ -34,7 +34,7 @@ class ExamDetailPage extends StatelessWidget {
               title: Row(
                 children: [
                   Text(DateFormat('d MMM yy').format(exam.date),
-                      style: const TextStyle(fontSize: 24)),
+                      style: const TextStyle(fontSize: 22.7)),
                   const SizedBox(width: 8),
                   Container(
                     padding:
@@ -61,7 +61,7 @@ class ExamDetailPage extends StatelessWidget {
             ListTile(
               subtitle: const Text("Start Time"),
               title: Text(DateFormat('h:mm a').format(exam.date),
-                  style: const TextStyle(fontSize: 24)),
+                  style: const TextStyle(fontSize: 22.7)),
               leading: Icon(
                 Icons.schedule_outlined,
                 size: 38,
@@ -71,7 +71,7 @@ class ExamDetailPage extends StatelessWidget {
             const SizedBox(height: 4),
             ListTile(
               subtitle: const Text("Venue"),
-              title: Text(exam.venue, style: const TextStyle(fontSize: 24)),
+              title: Text(exam.venue, style: const TextStyle(fontSize: 22.7)),
               leading: Icon(
                 Icons.meeting_room,
                 size: 38,
