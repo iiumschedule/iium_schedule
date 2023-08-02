@@ -25,6 +25,8 @@ Feel free to open up [issues](https://github.com/iqfareez/iium_schedule/issues) 
 
 Refer [Wiki/Contributing](https://github.com/iqfareez/iium_schedule/wiki/Contributing) for more info.
 
+> [July 2023] Now that I'm graduated from IIUM, your contributions are very much needed. I'll do my best to maintain the project. InshaAllah.
+
 ## Getting started
 
 ### Build the project locally
