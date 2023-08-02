@@ -12,15 +12,16 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<SettingsProvider>(builder: (context, settings, _) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Settings'),
-        ),
+        appBar: AppBar(title: const Text('Settings')),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const _SettingHeader('General'),
             _ThemeSelectDialog(
               currentTheme: settings.themeMode,
               onThemeToggle: (themeMode) => settings.setThemeMode(themeMode),
             ),
+            const _SettingHeader('Timetable Setting'),
             _LaneDayHighlightSetting(
               currentValue: settings.highlightLaneCurrentDay,
               onValueToggle: (newValue) =>
@@ -39,6 +40,26 @@ class SettingsPage extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+class _SettingHeader extends StatelessWidget {
+  const _SettingHeader(this.text, {Key? key}) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 18),
+      child: Text(
+        text,
+        textAlign: TextAlign.left,
+        style: const TextStyle(
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
   }
 }
 
