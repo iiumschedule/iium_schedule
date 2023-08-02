@@ -235,6 +235,23 @@ class IsarService {
         ));
   }
 
+  Future<bool> getHighlightCurrentDaySetting() async {
+    final isar = await db;
+
+    var res = await isar.settingsDatas.get(0);
+    return res?.highlightCurrentDay ?? true;
+  }
+
+  Future<void> saveHighlightCurrentDaySetting(bool newValue) async {
+    final isar = await db;
+
+    isar.writeTxn(() => isar.settingsDatas.put(
+          SettingsData()
+            ..id = 0
+            ..highlightCurrentDay = newValue,
+        ));
+  }
+
   Future<bool> getDeveloperModeStatus() async {
     final isar = await db;
 

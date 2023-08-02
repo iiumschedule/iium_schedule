@@ -20,6 +20,7 @@ class LaneEventsUtil {
   final BuildContext context;
   final List<SavedSubject> savedSubjectList;
   final double fontSize;
+  final bool highlightCurrentDay;
   int _startHour = 10; // pukul 10 am;
   int _endHour = 17; // pukul 5 pm
 
@@ -28,9 +29,12 @@ class LaneEventsUtil {
     required this.context,
     required this.savedSubjectList,
     required this.fontSize,
+    this.highlightCurrentDay = false,
   });
 
   ({List<LaneEvents> laneEvents, int startHour, int endHour}) laneEvents() {
+    final settingProvider =
+        Provider.of<ScheduleLayoutSettingProvider>(context, listen: false);
     List<LaneEvents> laneEventsList = [];
     // Find if there any subject in each day
     for (var i = 1; i <= 7; i++) {
@@ -42,7 +46,7 @@ class LaneEventsUtil {
 
         String? extra;
 
-        switch (Provider.of<ScheduleLayoutSettingProvider>(context).extraInfo) {
+        switch (settingProvider.extraInfo) {
           case ExtraInfo.section:
             extra = 'Sect. ${subject.sect}';
             break;
@@ -91,21 +95,17 @@ class LaneEventsUtil {
                 borderRadius: const BorderRadius.all(Radius.circular(15.0)),
                 color: e.color),
             textStyle: TextStyle(fontSize: fontSize, color: textColor),
-            title: Provider.of<ScheduleLayoutSettingProvider>(context)
-                        .subjectTitleSetting ==
-                    SubjectTitleSetting.title
-                ? e.title
-                : e.code,
+            title:
+                settingProvider.subjectTitleSetting == SubjectTitleSetting.title
+                    ? e.title
+                    : e.code,
             backgroundColor: e.color,
             start: TableEventTime(hour: start.hour, minute: start.minute),
             end: TableEventTime(hour: end.hour, minute: end.minute),
             heroTag:
                 '${e.subjectId}-${e.dayTimes.first.id}', // unique tag to differentiate between subjects
             subtitle:
-                Provider.of<ScheduleLayoutSettingProvider>(context).extraInfo !=
-                        ExtraInfo.none
-                    ? e.extras
-                    : null,
+                settingProvider.extraInfo != ExtraInfo.none ? e.extras : null,
             onTap: () async {
               await Navigator.push(context, MaterialPageRoute(builder: (_) {
                 return SavedSubjectPage(
@@ -130,11 +130,22 @@ class LaneEventsUtil {
           );
         },
       );
+
+      // check if lane day is the same day as current day
+      // if true, the lane day will be highlighted
+      // if [highlightCurrentDay] is true, the isToday will be always false
+      final highlightLaneDay =
+          highlightCurrentDay && DateTime.now().weekday == i;
+
       Lane lane = Lane(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: highlightLaneDay
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.background,
         name: i.englishDay().substring(0, 3).toUpperCase(),
         textStyle: TextStyle(
-          color: Theme.of(context).colorScheme.onBackground,
+          color: highlightLaneDay
+              ? Theme.of(context).colorScheme.onPrimary
+              : Theme.of(context).colorScheme.onBackground,
         ),
       );
 

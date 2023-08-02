@@ -10,5 +10,9 @@ class SettingsData {
   @enumerated
   ThemeMode themeSetting = ThemeMode.system;
 
+  /// Developer mode on/off
   bool developerMode = false;
+
+  /// Setting to turn on background highlight if current lane is the current day
+  bool highlightCurrentDay = true;
 }

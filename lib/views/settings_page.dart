@@ -21,6 +21,11 @@ class SettingsPage extends StatelessWidget {
               currentTheme: settings.themeMode,
               onThemeToggle: (themeMode) => settings.setThemeMode(themeMode),
             ),
+            _LaneDayHighlightSetting(
+              currentValue: settings.highlightLaneCurrentDay,
+              onValueToggle: (newValue) =>
+                  settings.setHghlightLaneCurrentDay(newValue),
+            ),
             const Spacer(),
             // TODO: Add developer mode feature, such as
             // zooming in webview: https://www.danrodney.com/blog/force-webpages-to-zoom/
@@ -65,6 +70,24 @@ class _ThemeSelectDialog extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _LaneDayHighlightSetting extends StatelessWidget {
+  const _LaneDayHighlightSetting(
+      {Key? key, required this.onValueToggle, required this.currentValue})
+      : super(key: key);
+
+  final Function(bool) onValueToggle;
+  final bool currentValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return SwitchListTile(
+      title: const Text("Highlight current day"),
+      value: currentValue,
+      onChanged: (value) => onValueToggle(value),
     );
   }
 }

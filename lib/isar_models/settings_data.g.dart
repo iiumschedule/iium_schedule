@@ -22,8 +22,13 @@ const SettingsDataSchema = CollectionSchema(
       name: r'developerMode',
       type: IsarType.bool,
     ),
-    r'themeSetting': PropertySchema(
+    r'highlightCurrentDay': PropertySchema(
       id: 1,
+      name: r'highlightCurrentDay',
+      type: IsarType.bool,
+    ),
+    r'themeSetting': PropertySchema(
+      id: 2,
       name: r'themeSetting',
       type: IsarType.byte,
       enumMap: _SettingsDatathemeSettingEnumValueMap,
@@ -59,7 +64,8 @@ void _settingsDataSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeBool(offsets[0], object.developerMode);
-  writer.writeByte(offsets[1], object.themeSetting.index);
+  writer.writeBool(offsets[1], object.highlightCurrentDay);
+  writer.writeByte(offsets[2], object.themeSetting.index);
 }
 
 SettingsData _settingsDataDeserialize(
@@ -70,9 +76,10 @@ SettingsData _settingsDataDeserialize(
 ) {
   final object = SettingsData();
   object.developerMode = reader.readBool(offsets[0]);
+  object.highlightCurrentDay = reader.readBool(offsets[1]);
   object.id = id;
   object.themeSetting = _SettingsDatathemeSettingValueEnumMap[
-          reader.readByteOrNull(offsets[1])] ??
+          reader.readByteOrNull(offsets[2])] ??
       ThemeMode.system;
   return object;
 }
@@ -87,6 +94,8 @@ P _settingsDataDeserializeProp<P>(
     case 0:
       return (reader.readBool(offset)) as P;
     case 1:
+      return (reader.readBool(offset)) as P;
+    case 2:
       return (_SettingsDatathemeSettingValueEnumMap[
               reader.readByteOrNull(offset)] ??
           ThemeMode.system) as P;
@@ -205,6 +214,16 @@ extension SettingsDataQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'developerMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SettingsData, SettingsData, QAfterFilterCondition>
+      highlightCurrentDayEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'highlightCurrentDay',
         value: value,
       ));
     });
@@ -341,6 +360,20 @@ extension SettingsDataQuerySortBy
     });
   }
 
+  QueryBuilder<SettingsData, SettingsData, QAfterSortBy>
+      sortByHighlightCurrentDay() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'highlightCurrentDay', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SettingsData, SettingsData, QAfterSortBy>
+      sortByHighlightCurrentDayDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'highlightCurrentDay', Sort.desc);
+    });
+  }
+
   QueryBuilder<SettingsData, SettingsData, QAfterSortBy> sortByThemeSetting() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'themeSetting', Sort.asc);
@@ -367,6 +400,20 @@ extension SettingsDataQuerySortThenBy
       thenByDeveloperModeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'developerMode', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SettingsData, SettingsData, QAfterSortBy>
+      thenByHighlightCurrentDay() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'highlightCurrentDay', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SettingsData, SettingsData, QAfterSortBy>
+      thenByHighlightCurrentDayDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'highlightCurrentDay', Sort.desc);
     });
   }
 
@@ -405,6 +452,13 @@ extension SettingsDataQueryWhereDistinct
     });
   }
 
+  QueryBuilder<SettingsData, SettingsData, QDistinct>
+      distinctByHighlightCurrentDay() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'highlightCurrentDay');
+    });
+  }
+
   QueryBuilder<SettingsData, SettingsData, QDistinct> distinctByThemeSetting() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'themeSetting');
@@ -423,6 +477,13 @@ extension SettingsDataQueryProperty
   QueryBuilder<SettingsData, bool, QQueryOperations> developerModeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'developerMode');
+    });
+  }
+
+  QueryBuilder<SettingsData, bool, QQueryOperations>
+      highlightCurrentDayProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'highlightCurrentDay');
     });
   }
 

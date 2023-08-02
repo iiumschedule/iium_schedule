@@ -18,6 +18,7 @@ import '../../isar_models/saved_schedule.dart';
 import '../../isar_models/saved_subject.dart';
 import '../../providers/schedule_layout_setting_provider.dart';
 import '../../providers/schedule_notifier_provider.dart';
+import '../../providers/settings_provider.dart';
 import '../../services/isar_service.dart';
 import '../../util/course_validator_pass.dart';
 import '../../util/kulliyyah_suggestions.dart';
@@ -157,8 +158,9 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ScheduleNotifierProvider, ScheduleLayoutSettingProvider>(
-      builder: (_, __, scheduleSetting, ___) => StreamBuilder(
+    return Consumer3<ScheduleNotifierProvider, ScheduleLayoutSettingProvider,
+        SettingsProvider>(
+      builder: (_, __, scheduleSetting, appSetting, ___) => StreamBuilder(
         stream: isarService.listenToSavedSchedule(id: widget.id),
         builder: (context, AsyncSnapshot<SavedSchedule?> snapshot) {
           if (snapshot.hasError) {
@@ -185,10 +187,11 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
               extraInfo: snapshot.data!.extraInfo);
 
           var laneEventsData = LaneEventsUtil(
-                  context: context,
-                  fontSize: snapshot.data!.fontSize,
-                  savedSubjectList: snapshot.data!.subjects.toList())
-              .laneEvents();
+            context: context,
+            fontSize: snapshot.data!.fontSize,
+            savedSubjectList: snapshot.data!.subjects.toList(),
+            highlightCurrentDay: appSetting.highlightLaneCurrentDay,
+          ).laneEvents();
           return GestureDetector(
             onTap: _hideFab ? () => setState(() => _hideFab = !_hideFab) : null,
             // We want all the widgets to translate its position downwards as the student swipes

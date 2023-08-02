@@ -24,6 +24,7 @@ import 'setting_bottom_sheet.dart';
 import 'subject_dialog.dart';
 import 'timetable_view_widget.dart';
 
+/// Schedule to be shown after user finish add subject, ie not saved yet.
 class ScheduleLayout extends StatefulWidget {
   const ScheduleLayout(
       {Key? key, required this.initialName, required this.subjects})
@@ -229,6 +230,9 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
           );
         },
       );
+      // NOTE: Day highlight colour is not implemented here because
+      // if click export, then the day will be highlighted as well.
+      // Perhaps we need some refactoring first before proceeding
       Lane lane = Lane(
         backgroundColor: Theme.of(context).colorScheme.background,
         name: i.englishDay().substring(0, 3).toUpperCase(),

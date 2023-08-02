@@ -23,7 +23,7 @@ class TimetableViewWidget extends StatelessWidget {
         timetableStyle: TimetableStyle(
           timeItemTextColor: Theme.of(context).colorScheme.onBackground,
           timeItemWidth: 40,
-          laneHeight: 20,
+          laneHeight: 30,
           timeItemHeight: itemHeight,
           // responsive layout while providing little padding at the end
           laneWidth: constraints.maxWidth / (_laneEventsList.length + .8),

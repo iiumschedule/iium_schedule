@@ -6,6 +6,7 @@ class SettingsProvider extends ChangeNotifier {
   final IsarService isarService = IsarService();
 
   ThemeMode _themeMode = ThemeMode.system;
+  bool _highlightLaneCurrentDay = true;
   bool _developerMode = false;
 
   SettingsProvider() {
@@ -25,6 +26,16 @@ class SettingsProvider extends ChangeNotifier {
   Future<void> readSetings() async {
     _themeMode = await isarService.retrieveThemeMode();
     _developerMode = await isarService.getDeveloperModeStatus();
+    _highlightLaneCurrentDay =
+        await isarService.getHighlightCurrentDaySetting();
+    notifyListeners();
+  }
+
+  bool get highlightLaneCurrentDay => _highlightLaneCurrentDay;
+
+  void setHghlightLaneCurrentDay(bool newValue) {
+    _highlightLaneCurrentDay = newValue;
+    isarService.saveHighlightCurrentDaySetting(_highlightLaneCurrentDay);
     notifyListeners();
   }
 
