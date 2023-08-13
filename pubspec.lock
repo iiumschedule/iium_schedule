@@ -343,7 +343,7 @@ packages:
   flutter_timetable_view:
     dependency: "direct main"
     description:
-      path: "../Experiments/flutter_timetable_view"
+      path: "../flutter_timetable_view"
       relative: true
     source: path
     version: "0.3.0"
