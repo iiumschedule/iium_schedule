@@ -21,6 +21,7 @@ class SettingsPage extends StatelessWidget {
               currentTheme: settings.themeMode,
               onThemeToggle: (themeMode) => settings.setThemeMode(themeMode),
             ),
+            const SizedBox(height: 10),
             const _SettingHeader('Timetable Setting'),
             _LaneDayHighlightSetting(
               currentValue: settings.highlightLaneCurrentDay,
@@ -105,7 +106,7 @@ class _LaneDayHighlightSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SwitchListTile(
+    return SwitchListTile.adaptive(
       title: const Text("Highlight current day"),
       value: currentValue,
       onChanged: (value) => onValueToggle(value),
