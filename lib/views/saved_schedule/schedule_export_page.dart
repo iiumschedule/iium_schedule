@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../constants.dart';
 import '../../util/my_ftoast.dart';
 import '../../util/schedule_share.dart';
 import '../../util/screenshot_widget.dart';
@@ -31,9 +32,6 @@ class ScheduleExportPage extends StatefulWidget {
 
 class _ScheduleExportPageState extends State<ScheduleExportPage> {
   final GlobalKey _globalKey = GlobalKey();
-
-  // Check if app is running on macos or iphones/ipads
-  final isApple = Platform.isMacOS || Platform.isIOS;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +94,7 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                   // Show on all platforms except Apple devices
                   // There is an issue saving file to directory (permission issue)
                   // Fortunately, user still can save to system disk using share (button below)
-                  if (kIsWeb || !isApple)
+                  if (kIsWeb || !kIsApple)
                     TextButton.icon(
                         onPressed: () async {
                           String? path =
@@ -129,8 +127,8 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                             tempPath: true);
                         ScheduleShare.share(path!, widget.scheduleTitle);
                       },
-                      icon: Icon(isApple ? CupertinoIcons.share : Icons.share),
-                      label: Text(isApple ? 'Share/Save' : 'Share'),
+                      icon: Icon(kIsApple ? CupertinoIcons.share : Icons.share),
+                      label: Text(kIsApple ? 'Share/Save' : 'Share'),
                     ),
                 ],
               ),
