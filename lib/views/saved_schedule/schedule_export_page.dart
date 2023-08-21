@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
@@ -30,6 +31,9 @@ class ScheduleExportPage extends StatefulWidget {
 
 class _ScheduleExportPageState extends State<ScheduleExportPage> {
   final GlobalKey _globalKey = GlobalKey();
+
+  // Check if app is running on macos or iphones/ipads
+  final isApple = Platform.isMacOS || Platform.isIOS;
 
   @override
   Widget build(BuildContext context) {
@@ -89,29 +93,35 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  TextButton.icon(
-                      onPressed: () async {
-                        String? path = await ScreenshotWidget.screenshotAndSave(
-                            _globalKey, widget.scheduleTitle);
+                  // Show on all platforms except Apple devices
+                  // There is an issue saving file to directory (permission issue)
+                  // Fortunately, user still can save to system disk using share (button below)
+                  if (kIsWeb || !isApple)
+                    TextButton.icon(
+                        onPressed: () async {
+                          String? path =
+                              await ScreenshotWidget.screenshotAndSave(
+                                  _globalKey, widget.scheduleTitle);
 
-                        if (kIsWeb) {
-                          Fluttertoast.showToast(
-                              msg: "Schedule will be downloaded shortly..",
-                              webPosition: "left",
-                              timeInSecForIosWeb: 3);
-                          return;
-                        }
+                          if (kIsWeb) {
+                            Fluttertoast.showToast(
+                                msg: "Schedule will be downloaded shortly..",
+                                webPosition: "left",
+                                timeInSecForIosWeb: 3);
+                            return;
+                          }
 
-                        // show toast for windows and android
-                        if (mounted) {
-                          MyFtoast.show(context, 'Saved to $path');
-                        }
-                      },
-                      icon: const Icon(Icons.save_alt_outlined),
-                      label: const Text(kIsWeb
-                          ? 'Download (.png)'
-                          : 'Save to device (.png)')),
-                  if (!kIsWeb && Platform.isAndroid)
+                          // show toast for windows and android
+                          if (mounted) {
+                            MyFtoast.show(context, 'Saved to $path');
+                          }
+                        },
+                        icon: const Icon(Icons.save_alt_outlined),
+                        label: const Text(kIsWeb
+                            ? 'Download (.png)'
+                            : 'Save to device (.png)')),
+                  // Show share button on Android, iOS & MacOS
+                  if (!kIsWeb && !Platform.isWindows)
                     TextButton.icon(
                       onPressed: () async {
                         String? path = await ScreenshotWidget.screenshotAndSave(
@@ -119,8 +129,8 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                             tempPath: true);
                         ScheduleShare.share(path!, widget.scheduleTitle);
                       },
-                      icon: const Icon(Icons.share),
-                      label: const Text('Share'),
+                      icon: Icon(isApple ? CupertinoIcons.share : Icons.share),
+                      label: Text(isApple ? 'Share/Save' : 'Share'),
                     ),
                 ],
               ),

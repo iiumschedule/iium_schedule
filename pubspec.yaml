@@ -16,6 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  cupertino_icons: ^1.0.5
   html: ^0.15.0
   albiruni: ^1.4.0
   recase:
