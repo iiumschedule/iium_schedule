@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +13,14 @@ class ScheduleShare {
   static void share(String savedPath, String scheduleTitle) async {
     XFile xFilePath = XFile(savedPath);
 
-    Share.shareXFiles([xFilePath], subject: scheduleTitle);
+    // To make the schedule title as caption, set either [subject] or [text]
+    // On Android, set [text]
+    // On Ios, set [subject] (when set text, the share sheet display two files)
+    Share.shareXFiles(
+      [xFilePath],
+      subject: !Platform.isAndroid ? scheduleTitle : null,
+      text: !Platform.isIOS ? scheduleTitle : null,
+    );
   }
 
   /// TODO: Test with Firebase functions and use it (Not fully implemented yet)
