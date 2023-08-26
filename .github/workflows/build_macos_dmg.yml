@@ -2,7 +2,6 @@
 name: Build MacOS (.dmg)
 
 "on":
-  push:
   workflow_dispatch:
     inputs:
       flutterChannel:
@@ -44,7 +43,6 @@ jobs:
 
       - name: Building the installer
         run: |
-          ls
           appdmg appdmg/config.json appdmg/IIUMSchedule.dmg
 
       - name: Upload the installer as an artifact

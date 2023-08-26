@@ -13,6 +13,7 @@ jobs:
       buildWindows: ${{ steps.read-build-windows.outputs.data }}
       buildWeb: ${{ steps.read-build-web.outputs.data }}
       buildAndroid: ${{ steps.read-build-android.outputs.data }}
+      buildMacos: ${{ steps.read-build-macos.outputs.data }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -57,6 +58,16 @@ jobs:
 
       - id: set-build-android
         run: echo "data=${{ steps.read-build-android.outputs.data }}" >> $GITHUB_OUTPUT
+
+      - id: read-build-macos
+        name: Determine Flutter version from ci-config.yml
+        uses: jbutcher5/read-yaml@1.6
+        with:
+          file: "./ci-config.yml"
+          key-path: '["build_for", "macos"]'
+
+      - id: set-build-macos
+        run: echo "data=${{ steps.read-build-macos.outputs.data }}" >> $GITHUB_OUTPUT
 
   build_android:
     name: Build for Android
@@ -235,9 +246,46 @@ jobs:
         run: |
           echo :rocket: **Added outputs** to release assets **todo: Publish to winget** >> $GITHUB_STEP_SUMMARY
 
+    build_macos:
+      name: Build for Mac OS
+      needs: read_config
+      if: ${{ needs.read_config.outputs.buildMacos == 'true' }}
+      runs-on: macos-latest
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ inputs.flutterChannel }}
+          architecture: x64
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Flutter build for MacOS
+        run: |
+          flutter pub get
+          flutter build macos
+
+      - name: Install appdmg
+        run: |
+          npm install -g appdmg
+
+      - name: Building the installer
+        run: |
+          appdmg appdmg/config.json appdmg/IIUMSchedule.dmg
+
+      - name: Upload the installer as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: "appdmg/IIUMSchedule.dmg"
+
   upload_assets:
     name: Upload artifacts to release assets
-    needs: [build_android, build_windows]
+    needs: [build_android, build_windows, build_macos]
     runs-on: ubuntu-latest
     steps:
       - name: Download all artifacts
