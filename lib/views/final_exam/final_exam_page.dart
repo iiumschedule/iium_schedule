@@ -139,6 +139,7 @@ class _FinalExamPageState extends State<FinalExamPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Final Exam'),
+        centerTitle: false,
         titleTextStyle: TextStyle(
           color: Theme.of(context).colorScheme.onBackground,
           fontSize: 36.0,

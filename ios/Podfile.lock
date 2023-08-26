@@ -86,7 +86,7 @@ SPEC CHECKSUMS:
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
-  path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
+  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   quick_actions_ios: 9e80dcfadfbc5d47d9cf8f47bcf428b11cf383d4
   share_plus: 599aa54e4ea31d4b4c0e9c911bcc26c55e791028
