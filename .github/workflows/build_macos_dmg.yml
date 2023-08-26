@@ -44,7 +44,8 @@ jobs:
 
       - name: Building the installer
         run: |
-          "appdmg appdmg/config.json appdmg/IIUMSchedule.dmg"
+          ls
+          appdmg appdmg/config.json appdmg/IIUMSchedule.dmg
 
       - name: Upload the installer as an artifact
         uses: actions/upload-artifact@v3
