@@ -9,4 +9,5 @@ flutter_channel: stable
 build_for:
   windows: true
   android: true
+  macos: true
   web: false
