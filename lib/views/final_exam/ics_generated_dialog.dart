@@ -33,7 +33,7 @@ class IcsGeneratedDialog extends StatelessWidget {
       return;
     }
 
-    // on Android:
+    // on Android/ios/macos
     OpenFile.open(icsSavedFile.path, type: 'text/calendar');
   }
 
@@ -91,7 +91,7 @@ class IcsGeneratedDialog extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              if (!kIsWeb && Platform.isWindows)
+              if (!kIsWeb && (Platform.isWindows))
                 ElevatedButton.icon(
                   icon: const Icon(Icons.folder),
                   onPressed: () {

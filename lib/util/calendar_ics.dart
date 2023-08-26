@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:ical/serializer.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../constants.dart';
 import '../isar_models/final_exam.dart';
 
 /// Calendar utility to add final exams to calendar
@@ -39,8 +41,13 @@ class CalendarIcs {
 
     try {
       // Windows
-      var dirs = await getExternalStorageDirectories();
-      directory = dirs?.first;
+      if (!kIsWeb && Platform.isWindows) {
+        var dirs = await getExternalStorageDirectories();
+        directory = dirs?.first;
+      }
+      if (kIsApple) {
+        directory = await getApplicationDocumentsDirectory();
+      }
     } on UnimplementedError {
       // Android
       directory = await getApplicationDocumentsDirectory();

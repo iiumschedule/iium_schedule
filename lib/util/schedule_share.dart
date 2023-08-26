@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
 
 class ScheduleShare {
-  /// Share schedule image to external apps. Currently support for Android only
+  /// Share schedule image to external apps. Currently support for Android & ios
   ///
   /// Even the plugin already support sharing files on Windows, I've tested but there is not
   /// image shown. My share target is Mail app. Anyway, looks like the target app in sharesheet
@@ -12,7 +13,14 @@ class ScheduleShare {
   static void share(String savedPath, String scheduleTitle) async {
     XFile xFilePath = XFile(savedPath);
 
-    Share.shareXFiles([xFilePath], text: scheduleTitle);
+    // To make the schedule title as caption, set either [subject] or [text]
+    // On Android, set [text]
+    // On Ios, set [subject] (when set text, the share sheet display two files)
+    Share.shareXFiles(
+      [xFilePath],
+      subject: !Platform.isAndroid ? scheduleTitle : null,
+      text: !Platform.isIOS ? scheduleTitle : null,
+    );
   }
 
   /// TODO: Test with Firebase functions and use it (Not fully implemented yet)

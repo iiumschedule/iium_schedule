@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+
 /// Sessions (2-3 entries, I think 3 is enough)
 /// Eg: current semester & upcoming semester
 /// or: previous semester & current semester
@@ -10,3 +14,6 @@ const String kDefaultSession = '2022/2023';
 
 /// Values must be between 1 and 3 (inclusive)
 const int kDefaultSemester = 3;
+
+/// Check if app is running on macos or iphones/ipads
+final kIsApple = !kIsWeb && (Platform.isMacOS || Platform.isIOS);
