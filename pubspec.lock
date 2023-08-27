@@ -12,10 +12,9 @@ packages:
   albiruni:
     dependency: "direct main"
     description:
-      name: albiruni
-      sha256: "2c70eb15ce40d2cc8171a5f28f71cf2f9a380e7fbb64fa81c28f28df7b296cae"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../Dart App/albiruni"
+      relative: true
+    source: path
     version: "1.4.0"
   analyzer:
     dependency: transitive
@@ -352,11 +351,9 @@ packages:
   flutter_timetable_view:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "0486b731669a055b2c5d4924a0d2228f5e2968f7"
-      resolved-ref: "0486b731669a055b2c5d4924a0d2228f5e2968f7"
-      url: "https://github.com/iqfareez/flutter_timetable_view.git"
-    source: git
+      path: "../flutter_timetable_view"
+      relative: true
+    source: path
     version: "0.3.0"
   flutter_web_plugins:
     dependency: transitive
@@ -831,11 +828,9 @@ packages:
   recase:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "1e9c25cdf4828ce9d66430e4cd4deab6102e5722"
-      url: "https://github.com/iqfareez/recase.git"
-    source: git
+      path: "../../Dart App/recase"
+      relative: true
+    source: path
     version: "4.0.5"
   share_plus:
     dependency: "direct main"
