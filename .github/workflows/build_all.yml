@@ -246,12 +246,12 @@ jobs:
         run: |
           echo :rocket: **Added outputs** to release assets **todo: Publish to winget** >> $GITHUB_STEP_SUMMARY
 
-    build_macos:
-      name: Build for Mac OS
-      needs: read_config
-      if: ${{ needs.read_config.outputs.buildMacos == 'true' }}
-      runs-on: macos-latest
-      steps:
+  build_macos:
+    name: Build for Mac OS
+    needs: read_config
+    if: ${{ needs.read_config.outputs.buildMacos == 'true' }}
+    runs-on: macos-latest
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
 
