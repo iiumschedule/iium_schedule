@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -28,29 +29,24 @@ class MyBody extends StatelessWidget {
   Widget build(BuildContext context) {
     configureQuickAction(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Show material banner if app is launched from schedule.iium.online
-      // TODO: Remember to remove this implementation later
-      // after the domain expires
-      if (Uri.base.host == 'schedule.iium.online') {
-        ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
-          content: const Text(
-              "The domain 'schedule.iium.online' will expire soon in September. Please use 'iiumschedule.iqfareez.com/web' instead."),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Clipboard.setData(const ClipboardData(
-                          text: 'iiumschedule.iqfareez.com/web'))
-                      .then((value) => Fluttertoast.showToast(msg: 'Copied'));
-                },
-                child: const Text('Copy new URL')),
-            TextButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-                },
-                child: const Text('OK')),
-          ],
-        ));
-      }
+      // Show material banner notice about this web version
+      ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
+        content: const Text(
+            "This web version has not been updated quite a while now. Consider using Windows/Android/MacOS app instead to use the latest & greatest features and improvements."),
+        actions: [
+          TextButton(
+              onPressed: () {
+                LauncherUrl.open(
+                    'https://github.com/iqfareez/iium_schedule/issues/60');
+              },
+              child: const Text('Learn more')),
+          TextButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+              },
+              child: const Text('OK')),
+        ],
+      ));
     });
     var textStyle = TextStyle(
       color: Theme.of(context).brightness == Brightness.light

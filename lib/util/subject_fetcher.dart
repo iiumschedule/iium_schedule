@@ -12,10 +12,11 @@ class SubjectFetcher {
     for (int i = 1;; i++) {
       var fetchedSubjects = await albiruni.fetch(kulliyyah,
           page: i, course: courseCode, useProxy: kIsWeb);
-      if (fetchedSubjects.isEmpty) break;
+      if (fetchedSubjects.$1.isEmpty) break;
       try {
         // try finding the section
-        return fetchedSubjects.firstWhere((element) => element.sect == section);
+        return fetchedSubjects.$1
+            .firstWhere((element) => element.sect == section);
       } catch (e) {
         // catch and ignore the `Bad state: No element` error
         // and continue the loop

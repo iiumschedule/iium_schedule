@@ -108,13 +108,12 @@ class _BrowserViewState extends State<BrowserView> {
         body: FutureBuilder(
           future: widget.albiruni.fetch(widget.kulliyah,
               course: widget.courseCode, page: _page, useProxy: kIsWeb),
-          builder:
-              (BuildContext context, AsyncSnapshot<List<Subject>> snapshot) {
+          builder: (BuildContext context,
+              AsyncSnapshot<(List<Subject>, int)> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               {
-                return Center(
-                  child:
-                      Column(mainAxisSize: MainAxisSize.min, children: const [
+                return const Center(
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
                     Text('Please wait...'),
                     SizedBox(height: 10),
                     SizedBox(
@@ -171,19 +170,19 @@ class _BrowserViewState extends State<BrowserView> {
             }
 
             return ListView.builder(
-                itemCount: snapshot.data?.length,
+                itemCount: snapshot.data?.$1.length,
                 itemBuilder: (context, index) {
                   return ExpansionTile(
                     title: Text(
-                      ReCase(snapshot.data![index].title).titleCase,
+                      ReCase(snapshot.data!.$1[index].title).titleCase,
                     ),
                     subtitle: Text(
-                      "Section ${snapshot.data![index].sect}",
+                      "Section ${snapshot.data!.$1[index].sect}",
                     ),
                     leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(snapshot.data![index].code
+                          Text(snapshot.data!.$1[index].code
                               .toString()
                               .replaceAll(" ", "\n"))
                         ]),
@@ -197,7 +196,7 @@ class _BrowserViewState extends State<BrowserView> {
                           Navigator.of(context).push(
                             CupertinoPageRoute(
                               builder: (_) => SubjectScreen(
-                                snapshot.data![index],
+                                snapshot.data!.$1[index],
                               ),
                             ),
                           );
@@ -218,7 +217,8 @@ class _BrowserViewState extends State<BrowserView> {
                                 // Minus 1 on the day because list start with 0,
                                 // meanwhile in datetime, first day start with 1
                                 Builder(builder: (_) {
-                                  if (snapshot.data![index].dayTime.isEmpty) {
+                                  if (snapshot
+                                      .data!.$1[index].dayTime.isEmpty) {
                                     return const Opacity(
                                         opacity: 0.6,
                                         child: Text(
@@ -229,7 +229,7 @@ class _BrowserViewState extends State<BrowserView> {
                                   } else {
                                     return Text(
                                       and(
-                                        snapshot.data![index].dayTime
+                                        snapshot.data!.$1[index].dayTime
                                             .map((e) => ReCase(
                                                   e!.day.englishDay(),
                                                 ).titleCase)
@@ -249,16 +249,18 @@ class _BrowserViewState extends State<BrowserView> {
                                 const SizedBox(width: 5),
                                 Flexible(
                                   child: Builder(builder: (_) {
-                                    if (snapshot.data![index].lect.length > 1) {
+                                    if (snapshot.data!.$1[index].lect.length >
+                                        1) {
                                       return Text(
-                                        'Multiple lecturers (${snapshot.data![index].lect.length})',
+                                        'Multiple lecturers (${snapshot.data!.$1[index].lect.length})',
                                         style: const TextStyle(
                                           fontStyle: FontStyle.italic,
                                         ),
                                       );
                                     } else {
                                       return Text(
-                                        ReCase(snapshot.data![index].lect.first)
+                                        ReCase(snapshot
+                                                .data!.$1[index].lect.first)
                                             .titleCase,
                                         style: const TextStyle(
                                           overflow: TextOverflow.ellipsis,
@@ -276,7 +278,7 @@ class _BrowserViewState extends State<BrowserView> {
                                 ),
                                 const SizedBox(width: 5),
                                 Builder(builder: (_) {
-                                  if (snapshot.data![index].venue == null) {
+                                  if (snapshot.data!.$1[index].venue == null) {
                                     return const Opacity(
                                         opacity: 0.6,
                                         child: Text(
@@ -285,7 +287,8 @@ class _BrowserViewState extends State<BrowserView> {
                                               fontStyle: FontStyle.italic),
                                         ));
                                   } else {
-                                    return Text(snapshot.data![index].venue!);
+                                    return Text(
+                                        snapshot.data!.$1[index].venue!);
                                   }
                                 })
                               ],
@@ -298,7 +301,7 @@ class _BrowserViewState extends State<BrowserView> {
                                 const SizedBox(width: 5),
                                 // https://stackoverflow.com/a/55173692
                                 Text(
-                                  snapshot.data![index].chr
+                                  snapshot.data!.$1[index].chr
                                       .toString()
                                       .removeTrailingDotZero(),
                                 ),

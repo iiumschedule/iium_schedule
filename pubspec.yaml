@@ -6,10 +6,10 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # When changing this version, also change the versions in
 # - msix block (msix_version)
 # - Inno setup (MyAppVersion)
-version: 1.0.4+19
+version: 1.0.5+20
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -25,7 +25,7 @@ dependencies:
   and:
     git: https://github.com/iqfareez/and.git # null-safe
   url_launcher: ^6.0.17
-  package_info_plus: ^3.0.1
+  package_info_plus: ^4.1.0
   flutter_timetable_view:
     git: https://github.com/iqfareez/flutter_timetable_view.git
   page_view_indicators: ^2.0.0
@@ -36,15 +36,15 @@ dependencies:
   path_provider: ^2.0.11
   permission_handler: ^10.0.0
   quick_actions: ^1.0.0
-  share_plus: ^6.0.1
-  intl: ^0.17.0
-  http: ^0.13.5
+  share_plus: ^7.1.0
+  intl: ^0.18.1
+  http: ^1.1.0
   version: ^3.0.2
   flutter_colorpicker:
     # https://github.com/mchome/flutter_colorpicker/pull/85
     git: https://github.com/SayuruSandaru/flutter_colorpicker.git
   cross_file: ^0.3.3+2
-  device_info_plus: ^7.0.1
+  device_info_plus: ^9.0.3
   admonitions: ^1.0.0
   uuid: ^3.0.6
 
