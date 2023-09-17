@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart' as constants;
+import '../../util/academic_session.dart';
 import '../../util/kulliyyahs.dart';
 import '../favourites_page.dart';
 import 'browser_view.dart';
@@ -17,10 +18,22 @@ class Browser extends StatefulWidget {
 class _BrowserState extends State<Browser> {
   final GlobalKey dropdownKey = GlobalKey();
   final TextEditingController _searchController = TextEditingController();
-  String _session = constants.kDefaultSession;
-  int _semester = constants.kDefaultSemester;
+  late String _selectedSession;
+  int _selectedSemester = constants.kDefaultSemester;
   String? _selectedKulliyah;
   StudyGrad _selectedStudyGrad = StudyGrad.ug;
+
+  @override
+  void initState() {
+    super.initState();
+    // check if [constants.kDefaultSession] is in the list of sessions
+    // if not, set the first session in the list as the default session
+    if (!AcademicSession.session.contains(constants.kDefaultSession)) {
+      _selectedSession = AcademicSession.session.first;
+    } else {
+      _selectedSession = constants.kDefaultSession;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,26 +79,26 @@ class _BrowserState extends State<Browser> {
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: CupertinoSegmentedControl(
-                      groupValue: _session,
+                      groupValue: _selectedSession,
                       children: {
-                        for (var session in constants.kSessions)
+                        for (var session in AcademicSession.session)
                           session: Text(session)
                       },
                       onValueChanged: (String value) {
-                        setState(() => _session = value);
+                        setState(() => _selectedSession = value);
                       }),
                 ),
                 const SizedBox(height: 10),
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: CupertinoSegmentedControl(
-                      groupValue: _semester - 1,
+                      groupValue: _selectedSemester - 1,
                       children: List.generate(
                         3,
                         (index) => Text("Sem ${index + 1}"),
                       ).asMap(),
                       onValueChanged: (int value) {
-                        setState(() => _semester = value + 1);
+                        setState(() => _selectedSemester = value + 1);
                       }),
                 ),
                 const SizedBox(height: 10),
@@ -162,8 +175,8 @@ class _BrowserState extends State<Browser> {
                               }
 
                               Albiruni albiruni = Albiruni(
-                                  semester: _semester,
-                                  session: _session,
+                                  semester: _selectedSemester,
+                                  session: _selectedSession,
                                   studyGrade: _selectedStudyGrad);
                               Navigator.push(
                                 context,

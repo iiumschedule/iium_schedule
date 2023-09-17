@@ -2,14 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
-/// Sessions (2-3 entries, I think 3 is enough)
-/// Eg: current semester & upcoming semester
-/// or: previous semester & current semester
-/// https://albiruni.iium.edu.my/myapps/StudentOnline/schedule1.php
-const List<String> kSessions = ['2022/2023', '2023/2024'];
-
-/// default session & semester (current academic seesion)
-/// Values must exist in [kSessions]
+/// default session/current academic seesion
 const String kDefaultSession = '2023/2024';
 
 /// Values must be between 1 and 3 (inclusive)
