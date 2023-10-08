@@ -33,7 +33,7 @@ dependencies:
   provider: ^6.0.2
   fluttertoast: ^8.0.9
   path_provider: ^2.0.11
-  permission_handler: ^10.0.0
+  permission_handler: ^11.0.1
   quick_actions: ^1.0.0
   share_plus: ^7.0.2
   intl: ^0.18.0
