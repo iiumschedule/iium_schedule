@@ -105,12 +105,12 @@ class _CourseValidatorState extends State<CourseValidator>
 
 class SubjectCard extends StatefulWidget {
   const SubjectCard({
-    Key? key,
+    super.key,
     required this.albiruni,
     required this.kulliyah,
     required this.subject,
     required this.index,
-  }) : super(key: key);
+  });
 
   final BasicSubjectModel subject;
   final int index;
@@ -272,8 +272,8 @@ class _SubjectCardState extends State<SubjectCard> {
 class MiniSubjectInfo extends StatelessWidget {
   const MiniSubjectInfo(
     this.subject, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final BasicSubjectModel subject;
 

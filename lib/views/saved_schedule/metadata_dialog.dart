@@ -9,8 +9,7 @@ final IsarService isarService = IsarService();
 
 /// Show info about the save schedule
 class MetadataSheet extends StatelessWidget {
-  const MetadataSheet({Key? key, required this.savedScheduleId})
-      : super(key: key);
+  const MetadataSheet({super.key, required this.savedScheduleId});
 
   final int savedScheduleId;
 
@@ -130,7 +129,7 @@ class MetadataSheet extends StatelessWidget {
 }
 
 class _LeadingTextWidget extends StatelessWidget {
-  const _LeadingTextWidget(this.text, {Key? key}) : super(key: key);
+  const _LeadingTextWidget(this.text);
 
   final String text;
 

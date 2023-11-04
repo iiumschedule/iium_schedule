@@ -10,7 +10,7 @@ import '../../util/kulliyyahs.dart';
 import 'schedule_steps.dart';
 
 class InputScope extends StatefulWidget {
-  const InputScope({Key? key}) : super(key: key);
+  const InputScope({super.key});
 
   @override
   State<InputScope> createState() => _InputScopeState();

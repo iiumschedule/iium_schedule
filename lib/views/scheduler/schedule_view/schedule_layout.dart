@@ -27,8 +27,7 @@ import 'timetable_view_widget.dart';
 /// Schedule to be shown after user finish add subject, ie not saved yet.
 class ScheduleLayout extends StatefulWidget {
   const ScheduleLayout(
-      {Key? key, required this.initialName, required this.subjects})
-      : super(key: key);
+      {super.key, required this.initialName, required this.subjects});
 
   final String initialName;
   final List<Subject> subjects;

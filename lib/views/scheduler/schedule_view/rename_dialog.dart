@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 class RenameDialog extends StatelessWidget {
   const RenameDialog({
-    Key? key,
+    super.key,
     required TextEditingController scheduleNameController,
-  })  : _scheduleNameController = scheduleNameController,
-        super(key: key);
+  })  : _scheduleNameController = scheduleNameController;
 
   final TextEditingController _scheduleNameController;
 

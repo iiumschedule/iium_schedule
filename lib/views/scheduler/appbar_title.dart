@@ -10,10 +10,10 @@ class AppbarTitle extends StatefulWidget {
   final int itemCount;
 
   const AppbarTitle({
-    Key? key,
+    super.key,
     required this.currentPageNotifier,
     required this.itemCount,
-  }) : super(key: key);
+  });
 
   @override
   State<AppbarTitle> createState() => _AppbarTitleState();

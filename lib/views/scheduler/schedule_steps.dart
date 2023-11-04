@@ -3,11 +3,10 @@ import 'package:flutter/cupertino.dart';
 /// To be used together with the [NavigationController]
 class ScheduleSteps extends InheritedWidget {
   const ScheduleSteps(
-      {Key? key,
+      {super.key,
       required this.pageController,
       required this.pageNotifier,
-      required Widget child})
-      : super(key: key, child: child);
+      required super.child});
 
   final PageController pageController;
   final ValueNotifier<int> pageNotifier;

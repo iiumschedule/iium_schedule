@@ -10,7 +10,7 @@ import '../../../util/lane_events_util.dart';
 /// Pass `savedSchedule` for saved schedule layout only
 /// For save to the isar object
 class SettingBottomSheet extends StatelessWidget {
-  const SettingBottomSheet({Key? key, this.savedSchedule}) : super(key: key);
+  const SettingBottomSheet({super.key, this.savedSchedule});
 
   final SavedSchedule? savedSchedule;
 

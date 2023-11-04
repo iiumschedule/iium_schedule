@@ -5,15 +5,14 @@ import '../../../util/extensions.dart';
 
 class SubjectDialog extends StatelessWidget {
   const SubjectDialog({
-    Key? key,
+    super.key,
     required Subject subject,
     required Color color,
     required TimeOfDay start,
     required TimeOfDay end,
   })  : _subject = subject,
         _start = start,
-        _end = end,
-        super(key: key);
+        _end = end;
 
   final Subject _subject;
   final TimeOfDay _start;

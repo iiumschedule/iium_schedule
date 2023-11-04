@@ -12,11 +12,10 @@ import 'subject_screen.dart';
 
 class BrowserView extends StatefulWidget {
   const BrowserView(
-      {Key? key,
+      {super.key,
       required this.albiruni,
       required this.kulliyah,
-      this.courseCode})
-      : super(key: key);
+      this.courseCode});
 
   final Albiruni albiruni;
   final String kulliyah;

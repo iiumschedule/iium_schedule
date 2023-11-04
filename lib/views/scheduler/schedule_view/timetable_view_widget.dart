@@ -4,13 +4,12 @@ import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 /// Draw the actual timetable view you seen on screen
 class TimetableViewWidget extends StatelessWidget {
   const TimetableViewWidget(
-      {Key? key,
+      {super.key,
       required this.startHour,
       required this.endHour,
       required List<LaneEvents> laneEventsList,
       required this.itemHeight})
-      : _laneEventsList = laneEventsList,
-        super(key: key);
+      : _laneEventsList = laneEventsList;
 
   final int startHour;
   final int endHour;

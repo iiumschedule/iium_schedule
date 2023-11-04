@@ -17,7 +17,7 @@ import 'schedule_steps.dart';
 enum ImportMethod { json, imaluum }
 
 class InputCourse extends StatefulWidget {
-  const InputCourse({Key? key}) : super(key: key);
+  const InputCourse({super.key});
 
   @override
   State<InputCourse> createState() => _InputCourseState();

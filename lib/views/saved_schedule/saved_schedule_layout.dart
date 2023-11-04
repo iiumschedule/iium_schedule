@@ -33,7 +33,7 @@ import 'metadata_dialog.dart';
 import 'schedule_export_page.dart';
 
 class SavedScheduleLayout extends StatefulWidget {
-  const SavedScheduleLayout({Key? key, required this.id}) : super(key: key);
+  const SavedScheduleLayout({super.key, required this.id});
 
   // final SavedSchedule savedSchedule;
   final int id;

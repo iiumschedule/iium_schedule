@@ -17,7 +17,7 @@ import '../services/isar_service.dart';
 /// Currently the is an known issue for Windows
 /// version is not tally with pubspec.yaml
 class CheckUpdatePage extends StatefulWidget {
-  const CheckUpdatePage({Key? key}) : super(key: key);
+  const CheckUpdatePage({super.key});
 
   @override
   State<CheckUpdatePage> createState() => _CheckUpdatePageState();

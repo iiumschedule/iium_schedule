@@ -45,7 +45,7 @@ class SettingsPage extends StatelessWidget {
 }
 
 class _SettingHeader extends StatelessWidget {
-  const _SettingHeader(this.text, {Key? key}) : super(key: key);
+  const _SettingHeader(this.text);
 
   final String text;
 
@@ -66,8 +66,7 @@ class _SettingHeader extends StatelessWidget {
 
 class _ThemeSelectDialog extends StatelessWidget {
   const _ThemeSelectDialog(
-      {Key? key, required this.onThemeToggle, required this.currentTheme})
-      : super(key: key);
+      {required this.onThemeToggle, required this.currentTheme});
 
   final Function(ThemeMode) onThemeToggle;
   final ThemeMode currentTheme;
@@ -98,8 +97,7 @@ class _ThemeSelectDialog extends StatelessWidget {
 
 class _LaneDayHighlightSetting extends StatelessWidget {
   const _LaneDayHighlightSetting(
-      {Key? key, required this.onValueToggle, required this.currentValue})
-      : super(key: key);
+      {required this.onValueToggle, required this.currentValue});
 
   final Function(bool) onValueToggle;
   final bool currentValue;
@@ -116,10 +114,8 @@ class _LaneDayHighlightSetting extends StatelessWidget {
 
 class _DeveloperModeButton extends StatefulWidget {
   const _DeveloperModeButton(
-      {Key? key,
-      required this.isDeveloperModeEnabled,
-      required this.onDevModeEnable})
-      : super(key: key);
+      {required this.isDeveloperModeEnabled,
+      required this.onDevModeEnable});
 
   final bool isDeveloperModeEnabled;
   final VoidCallback onDevModeEnable;

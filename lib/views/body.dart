@@ -21,7 +21,7 @@ import 'scheduler/schedule_maker_entry.dart';
 import 'settings_page.dart';
 
 class MyBody extends StatefulWidget {
-  const MyBody({Key? key}) : super(key: key);
+  const MyBody({super.key});
 
   @override
   State<MyBody> createState() => _MyBodyState();
@@ -303,12 +303,10 @@ class _MyBodyState extends State<MyBody> {
 
 class _CardItem extends StatelessWidget {
   const _CardItem(
-      {Key? key,
-      required this.item,
+      {required this.item,
       required this.animation,
       this.onTap,
-      this.onDeleteAction})
-      : super(key: key);
+      this.onDeleteAction});
 
   final SavedSchedule item;
   final Animation<double> animation;
@@ -375,7 +373,7 @@ class _CardItem extends StatelessWidget {
 }
 
 class _SimpleAboutDialog extends StatelessWidget {
-  const _SimpleAboutDialog({Key? key}) : super(key: key);
+  const _SimpleAboutDialog();
 
   @override
   Widget build(BuildContext context) {
@@ -502,7 +500,7 @@ void configureQuickAction(BuildContext context) {
 }
 
 class _DeleteDialog extends StatelessWidget {
-  const _DeleteDialog({Key? key}) : super(key: key);
+  const _DeleteDialog();
 
   @override
   Widget build(BuildContext context) {

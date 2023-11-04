@@ -9,7 +9,7 @@ import 'input_scope.dart';
 import 'schedule_steps.dart';
 
 class ScheduleMakerEntry extends StatelessWidget {
-  ScheduleMakerEntry({Key? key}) : super(key: key);
+  ScheduleMakerEntry({super.key});
 
   final _pageController = PageController();
   final _currentPageNotifier = ValueNotifier<int>(0);

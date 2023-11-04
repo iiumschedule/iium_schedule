@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MyBottomSheet extends StatelessWidget {
-  const MyBottomSheet({Key? key, required this.title, required this.content})
-      : super(key: key);
+  const MyBottomSheet({super.key, required this.title, required this.content});
 
   final String title;
   final List<Widget> content;

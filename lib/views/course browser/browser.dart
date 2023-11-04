@@ -9,7 +9,7 @@ import '../favourites_page.dart';
 import 'browser_view.dart';
 
 class Browser extends StatefulWidget {
-  const Browser({Key? key}) : super(key: key);
+  const Browser({super.key});
 
   @override
   State<Browser> createState() => _BrowserState();

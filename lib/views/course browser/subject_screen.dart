@@ -17,8 +17,7 @@ IsarService isarService = IsarService();
 
 /// Subject detail viewer
 class SubjectScreen extends StatefulWidget {
-  const SubjectScreen(this.subject, {Key? key, this.albiruni, this.kulliyyah})
-      : super(key: key);
+  const SubjectScreen(this.subject, {super.key, this.albiruni, this.kulliyyah});
 
   /// Subject information from albiruni
   final Subject subject;
@@ -163,9 +162,7 @@ class _SubjectScreenState extends State<SubjectScreen> {
 
 class _DayTimeTable extends StatelessWidget {
   const _DayTimeTable(
-    this.dayTimes, {
-    Key? key,
-  }) : super(key: key);
+    this.dayTimes);
 
   final List<DayTime?> dayTimes;
 
@@ -206,11 +203,11 @@ class _DayTimeTable extends StatelessWidget {
 
 class TextBubble extends StatelessWidget {
   const TextBubble({
-    Key? key,
+    super.key,
     required this.text,
     required this.icon,
     required this.backgroundColor,
-  }) : super(key: key);
+  });
 
   final String text;
   final Color backgroundColor;

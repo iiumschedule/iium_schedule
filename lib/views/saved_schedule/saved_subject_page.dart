@@ -283,10 +283,9 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
 /// Dialog for editing value
 class _EditDialog extends StatefulWidget {
   const _EditDialog({
-    Key? key,
     required this.colourScheme,
     required this.currentVenue,
-  }) : super(key: key);
+  });
 
   final ColorScheme colourScheme;
   final String currentVenue;
@@ -344,11 +343,10 @@ class _EditDialogState extends State<_EditDialog> {
 /// Static mini card to display course code, section etc.
 class _MiniInfoCard extends StatelessWidget {
   const _MiniInfoCard({
-    Key? key,
     required this.colourScheme,
     required this.title,
     required this.subtitle,
-  }) : super(key: key);
+  });
 
   final ColorScheme colourScheme;
   final String title;
@@ -381,12 +379,11 @@ class _MiniInfoCard extends StatelessWidget {
 /// Same as [_MiniInfoCard], but have editing callback
 class _MiniEditCard extends StatelessWidget {
   const _MiniEditCard({
-    Key? key,
     required this.colourScheme,
     required this.title,
     required this.subtitle,
     required this.onEditPressed,
-  }) : super(key: key);
+  });
 
   final ColorScheme colourScheme;
   final String title;
@@ -430,11 +427,10 @@ class _MiniEditCard extends StatelessWidget {
 /// If one item, will not show numbering
 class _MiniInfoListCard extends StatelessWidget {
   const _MiniInfoListCard({
-    Key? key,
     required this.colourScheme,
     required this.items,
     required this.subtitle,
-  }) : super(key: key);
+  });
 
   final ColorScheme colourScheme;
   final List<String> items;
@@ -493,12 +489,11 @@ class _MiniInfoListCard extends StatelessWidget {
 /// If one item, will not show numbering
 class _MiniInfoTimeCard extends StatelessWidget {
   const _MiniInfoTimeCard({
-    Key? key,
     required this.colourScheme,
     required this.startTime,
     required this.endTime,
     required this.onEditPressed,
-  }) : super(key: key);
+  });
 
   final ColorScheme colourScheme;
   final TimeOfDay startTime;
@@ -563,7 +558,7 @@ class _MiniInfoTimeCard extends StatelessWidget {
 
 /// Similar to _DeleteDialog in [body.dart]
 class _DeleteSubjectDialog extends StatelessWidget {
-  const _DeleteSubjectDialog({Key? key}) : super(key: key);
+  const _DeleteSubjectDialog();
 
   @override
   Widget build(BuildContext context) {
