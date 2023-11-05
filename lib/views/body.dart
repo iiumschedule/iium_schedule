@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -31,8 +32,10 @@ class MyBody extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Show material banner notice about this web version
       ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
-        content: const Text(
-            "This web version has not been updated quite a while now. Consider using Windows/Android/MacOS app instead to use the latest & greatest features and improvements."),
+        content: MarkdownBody(
+            data:
+                "This web version has **not been updated** for quite a while now. Consider using [Windows/Android/MacOS](https://iiumschedule.iqfareez.com/downloads) app instead to enjoy the latest & greatest features and improvements.",
+            onTapLink: (_, href, __) => LauncherUrl.open(href!)),
         actions: [
           TextButton(
               onPressed: () {
@@ -44,7 +47,7 @@ class MyBody extends StatelessWidget {
               onPressed: () {
                 ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
               },
-              child: const Text('OK')),
+              child: const Text('Understood')),
         ],
       ));
     });
