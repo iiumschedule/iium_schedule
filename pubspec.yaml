@@ -55,6 +55,7 @@ dependencies:
   ical:
     git: https://github.com/dartclub/ical.git
   open_file: ^3.3.1
+  flutter_markdown: ^0.6.18
 
 dev_dependencies:
   flutter_test:

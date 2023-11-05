@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -12,6 +13,7 @@ import '../isar_models/gh_responses.dart';
 import '../model/gh_error.dart';
 import '../model/gh_releases_latest.dart';
 import '../services/isar_service.dart';
+import '../util/launcher_url.dart';
 
 /// Check for update for Android & Windows
 /// Currently the is an known issue for Windows
@@ -93,35 +95,98 @@ class _CheckUpdatePageState extends State<CheckUpdatePage> {
                     var version = snapshot.data!.toString().split('+').first;
                     return Center(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            'New version available! ($version)',
-                            style: const TextStyle(
+                          const Text(
+                            'New version available!',
+                            style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Colors.red,
                             ),
                           ),
                           const SizedBox(height: 15),
-                          Link(
-                              uri: Uri.parse(
-                                  'https://iiumschedule.iqfareez.com/downloads#upgrading'),
-                              builder: ((context, followLink) => TextButton(
-                                  onPressed: followLink,
-                                  child: const Text(
-                                      'Learn how to update the app'))))
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              // add glow effect when in dark mode
+                              if (Theme.of(context).brightness ==
+                                  Brightness.dark)
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.white.withOpacity(0.2),
+                                        blurRadius: 90.0,
+                                        spreadRadius: 70.0,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                              Image.asset(
+                                  'assets/icons/rocket-front-color.png'),
+                            ],
+                          ),
+                          const SizedBox(height: 30),
+                          Text(
+                            'v$version',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20,
+                            ),
+                          ),
+                          Text(
+                            'Current: v${currentVersion.toString().split('+').first}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w200,
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                          MarkdownBody(
+                            data:
+                                'Upgrade the app the same way you installed it. [Learn more...](https://iiumschedule.iqfareez.com/downloads)',
+                            onTapLink: (_, href, __) {
+                              LauncherUrl.open(href!);
+                            },
+                          ),
+                          const Spacer(),
+                          ElevatedButton(
+                              onPressed: () {
+                                LauncherUrl.open(
+                                    'https://iiumschedule.iqfareez.com/changelog');
+                              },
+                              child: const Text('What\'s new?')),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Update Later'))
                         ],
                       ),
                     );
                   } else {
-                    return const Text(
-                      'You are up to date!',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'This app is up to date!',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        Text(
+                          'Current version: v${currentVersion.toString().split('+').first}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w200,
+                          ),
+                        ),
+                      ],
                     );
                   }
                 } else if (snapshot.hasError) {

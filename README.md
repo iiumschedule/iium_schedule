@@ -120,3 +120,7 @@ _Open PR to add your project here_
 - Conditional importing that allows compilation to all platforms - https://gpalma.pt/blog/conditional-importing/
 - Inno installer setup - https://retroportalstudio.medium.com/creating-exe-executable-file-for-flutter-desktop-apps-windows-ea7c338465e
 - Build release Android app on GitHub Action (CI/CD) - https://gist.github.com/vinicioslc/b9bd073c8013a726033a999db68a45be
+
+## Attributions
+
+- 3DICons by [@realvjy(]https://twitter.com/realvjy) - https://3dicons.co/
