@@ -6,7 +6,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/link.dart';
 import 'package:version/version.dart';
 
 import '../isar_models/gh_responses.dart';
@@ -182,7 +181,7 @@ class _CheckUpdatePageState extends State<CheckUpdatePage> {
                         const SizedBox(height: 15),
                         Text(
                           'Current version: v${currentVersion.toString().split('+').first}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w200,
                           ),
                         ),
