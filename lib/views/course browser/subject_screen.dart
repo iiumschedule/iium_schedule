@@ -40,10 +40,13 @@ class _SubjectScreenState extends State<SubjectScreen> {
   void initState() {
     super.initState();
 
-    // check subject if it is already added to favourites
-    isarService
-        .checkFavourite(widget.albiruni!, widget.kulliyyah!, widget.subject)
-        .then((value) => setState(() => favouriteId = value));
+    // check subject if it is already added to favourites. If from schedule maker, I think we dont need
+    // to have the favourite subject yet
+    if (widget.albiruni != null && widget.kulliyyah != null) {
+      isarService
+          .checkFavourite(widget.albiruni!, widget.kulliyyah!, widget.subject)
+          .then((value) => setState(() => favouriteId = value));
+    }
   }
 
   @override
@@ -145,7 +148,9 @@ class _SubjectScreenState extends State<SubjectScreen> {
               ...List.generate(
                 widget.subject.lect.length,
                 (index) => SelectableText(
-                    '${index + 1}. ${ReCase(widget.subject.lect[index]).titleCase}'),
+                  '${index + 1}. ${ReCase(widget.subject.lect[index]).titleCase}',
+                  textAlign: TextAlign.center,
+                ),
               ),
               const Text(
                 '\nVenue',
@@ -161,8 +166,7 @@ class _SubjectScreenState extends State<SubjectScreen> {
 }
 
 class _DayTimeTable extends StatelessWidget {
-  const _DayTimeTable(
-    this.dayTimes);
+  const _DayTimeTable(this.dayTimes);
 
   final List<DayTime?> dayTimes;
 
