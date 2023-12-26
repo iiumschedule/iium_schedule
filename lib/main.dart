@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:provider/provider.dart';
 
-import 'providers/schedule_layout_setting_provider.dart';
-import 'providers/schedule_maker_provider.dart';
-import 'providers/schedule_notifier_provider.dart';
-import 'providers/settings_provider.dart';
-import 'services/isar_service.dart';
-import 'views/body.dart';
+import 'shared/providers/schedule_layout_setting_provider.dart';
+import 'shared/providers/schedule_maker_provider.dart';
+import 'shared/providers/schedule_notifier_provider.dart';
+import 'shared/providers/settings_provider.dart';
+import 'shared/services/isar_service.dart';
+import 'features/home/views/body.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

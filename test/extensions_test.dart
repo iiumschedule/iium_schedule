@@ -1,8 +1,10 @@
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iium_schedule/enums/day_enum.dart';
-import 'package:iium_schedule/util/extensions.dart';
+import 'package:iium_schedule/shared/enums/day_enum.dart';
+import 'package:iium_schedule/shared/extensions/int_extension.dart';
+import 'package:iium_schedule/shared/extensions/string_extension.dart';
+import 'package:iium_schedule/shared/extensions/time_of_day_extension.dart';
 
 void main() {
   test("Remove trailing zeros test", () {
