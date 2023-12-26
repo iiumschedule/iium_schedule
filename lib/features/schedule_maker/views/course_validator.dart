@@ -39,8 +39,8 @@ class _CourseValidatorState extends State<CourseValidator>
           child: ListView(
             children: [
               ListTile(
-                title: const Text(
-                    "Please ensure all the subject data is available"),
+                title: const Text("Collecting subject informations"),
+                contentPadding: const EdgeInsets.only(left: 16, right: 12),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -51,14 +51,25 @@ class _CourseValidatorState extends State<CourseValidator>
                               Theme.of(context).colorScheme.primaryContainer),
                       onPressed: () async {
                         if (!_validatorPass!.isClearToProceed()) {
-                          showDialog(
+                          final res = await showDialog(
                             context: context,
                             builder: (_) => AlertDialog(
                               content: Text(
-                                  "${_validatorPass!.countFailedToFetch()} subject failed to fetch. Please solve the error first"),
+                                  "${_validatorPass!.countFailedToFetch()} subject(s) information failed to fetch. Would you like to proceed anyway without the failed subjects?"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text("Cancel"),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: const Text("Proceed"),
+                                ),
+                              ],
                             ),
                           );
-                          return;
+                          // return if user select cancel or dismiss the dialog
+                          if (!(res ?? false)) return;
                         }
 
                         await Navigator.of(context)
@@ -83,6 +94,7 @@ class _CourseValidatorState extends State<CourseValidator>
                 shrinkWrap: true,
                 itemCount: scheduleMaker.subjects!.length,
                 physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
                 itemBuilder: (_, index) {
                   return SubjectCard(
                       // we need key to removed failed subject to 'fail' the next subject

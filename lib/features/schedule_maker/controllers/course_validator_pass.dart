@@ -25,7 +25,8 @@ class CourseValidatorPass {
     return _status.where((element) => !element).length;
   }
 
-  //TODO: Enhance this to prevent null check error (unconsistant)
+  // FIXME: Enhance this to prevent null check error (unconsistant, sometimes it happens & sometimes not)
   // To cast to List<Subject?>
-  List<Subject> fetchedSubjects() => _subjects.map((e) => e!).toList();
+  List<Subject> fetchedSubjects() =>
+      _subjects.where((element) => element != null).map((e) => e!).toList();
 }
