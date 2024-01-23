@@ -29,13 +29,7 @@ Refer [Wiki/Contributing](https://github.com/iqfareez/iium_schedule/wiki/Contrib
 
 ## Getting started
 
-### Build the project locally
-
 See [Wiki/Build](https://github.com/iqfareez/iium_schedule/wiki/Build)
-
-### Cloud development environment
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/iqfareez/iium_schedule)
 
 ## Features
 
@@ -50,7 +44,14 @@ See [Wiki/Build](https://github.com/iqfareez/iium_schedule/wiki/Build)
 
 ## Releases
 
-App is available for Android, Windows and Web. Check it out [here](https://iiumschedule.iqfareez.com/downloads)!
+App is available for Android, Windows, MacOS, iOS* and Web**. Check it out [here](https://iiumschedule.iqfareez.com/downloads)!
+
+> [!NOTE]
+> *You'll need to build it yourself
+
+> [!NOTE]
+> **Web support is discontinued (Issue #60). See [alternatives projects](#similar-project-like-this-one).
+
 
 ## Devlog
 
