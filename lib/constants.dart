@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 const String kDefaultSession = '2023/2024';
 
 /// Values must be between 1 and 3 (inclusive)
-const int kDefaultSemester = 1;
+const int kDefaultSemester = 2;
 
 /// Check if app is running on macos or iphones/ipads
 final kIsApple = !kIsWeb && (Platform.isMacOS || Platform.isIOS);
