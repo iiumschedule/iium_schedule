@@ -25,7 +25,7 @@ Feel free to open up [issues](https://github.com/iqfareez/iium_schedule/issues) 
 
 Refer [Wiki/Contributing](https://github.com/iqfareez/iium_schedule/wiki/Contributing) for more info.
 
-> [July 2023] Now that I'm graduated from IIUM, your contributions are very much needed. I'll do my best to maintain the project. InshaAllah.
+> [July 2023] Now that I'm graduated from IIUM, your contributions are very much needed since I'm no longrt have access to I-Ma'luum etc. I'll do my best to maintain the project. InshaAllah.
 
 ## Getting started
 
@@ -39,19 +39,17 @@ See [Wiki/Build](https://github.com/iqfareez/iium_schedule/wiki/Build)
 - Export as an image (so you can set it as lockscreen)
 - Customize schedule (ie: Change colours etc.)
 - Browse for subjects.
-- Add final exam (and can be exported to calendar)
-- See more features in planned in [issues](https://github.com/iqfareez/iium_schedule/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement)
+- Add final exam (and can be added to your favourite calendar)
 
 ## Releases
 
-App is available for Android, Windows, MacOS, iOS* and Web**. Check it out [here](https://iiumschedule.iqfareez.com/downloads)!
+App is available for Android, Windows, MacOS, iOS\* and Web\*\*. Check it out [here](https://iiumschedule.iqfareez.com/downloads)!
 
-> [!NOTE]
-> *You'll need to build it yourself
+> [!NOTE] 
+> \*You'll need to build it yourself
 
-> [!NOTE]
-> **Web support is discontinued (Issue #60). See [alternatives projects](#similar-project-like-this-one).
-
+> [!NOTE] 
+> \*\*Web support is discontinued (Issue #60). See [alternatives projects](#similar-project-like-this-one).
 
 ## Devlog
 
@@ -124,4 +122,4 @@ _Open PR to add your project here_
 
 ## Attributions
 
-- 3DICons by [@realvjy(]https://twitter.com/realvjy) - https://3dicons.co/
+- 3DICons by [@realvjy](https://twitter.com/realvjy) - https://3dicons.co/
