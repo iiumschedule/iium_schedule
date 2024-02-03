@@ -24,7 +24,7 @@ dependencies:
   and:
     git: https://github.com/iqfareez/and.git # null-safe
   url_launcher: ^6.0.17
-  package_info_plus: ^4.0.2
+  package_info_plus: ^5.0.1
   flutter_timetable_view:
     git:
       url: https://github.com/iqfareez/flutter_timetable_view.git
@@ -49,7 +49,9 @@ dependencies:
   flutter_displaymode: ^0.6.0
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.5
-  flutter_inappwebview: ^5.7.2+3
+  # Pined the the latest 5.x release, I'm not upgrading to 6.x because
+  # i can't test it (my ima'luum account is locked)
+  flutter_inappwebview: 5.8.0
   like_button: ^2.0.5
   auto_size_text: ^3.0.0
   ical:
