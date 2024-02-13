@@ -1,9 +1,11 @@
 import 'package:isar/isar.dart';
 
-import '../enums/subject_title_setting_enum.dart';
+import '../features/schedule_viewer/saved/utils/lane_events_util.dart';
 import 'saved_subject.dart';
 
 part 'saved_schedule.g.dart';
+
+enum SubjectTitleSetting { title, courseCode }
 
 @collection
 class SavedSchedule {
@@ -14,11 +16,10 @@ class SavedSchedule {
 
   final subjects = IsarLinks<SavedSubject>();
 
-  /// Datetime saved in to isoString
-  String lastModified;
+  /// when the schedule is last modified
+  DateTime lastModified;
 
-  /// Datetime saved in to isoString
-  String dateCreated;
+  DateTime dateCreated;
 
   double fontSize;
 
@@ -29,10 +30,13 @@ class SavedSchedule {
 
   String session;
 
-  int semester;
+  byte semester;
 
   // The main kuliyyah of the schedule
   String? kuliyyah;
+
+  @enumerated
+  ExtraInfo extraInfo = ExtraInfo.none;
 
   SavedSchedule({
     required this.session,
@@ -44,6 +48,7 @@ class SavedSchedule {
     required this.heightFactor,
     required this.subjectTitleSetting,
     required this.kuliyyah,
+    required this.extraInfo,
   });
 
   @override

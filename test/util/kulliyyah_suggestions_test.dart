@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:iium_schedule/util/kulliyyah_suggestions.dart';
+import 'package:iium_schedule/shared/utils/kulliyyah_suggestions.dart';
 
 void main() {
   test('Return correct kulliyyah suggestion', () {

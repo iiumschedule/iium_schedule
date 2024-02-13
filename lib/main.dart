@@ -1,32 +1,20 @@
 import 'dart:io';
 
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:dynamic_color/dynamic_color.dart';
-
-import 'constants.dart';
-import 'enums/subject_title_setting_enum.dart';
-import 'hive_model/saved_daytime.dart';
-import 'hive_model/saved_schedule.dart';
-import 'hive_model/saved_subject.dart';
-import 'providers/schedule_layout_setting_provider.dart';
-import 'providers/schedule_notifier_provider.dart';
-import 'util/migrate_hive_to_isar.dart';
-import 'views/body.dart';
-
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:provider/provider.dart';
+
+import 'shared/providers/schedule_layout_setting_provider.dart';
+import 'shared/providers/schedule_maker_provider.dart';
+import 'shared/providers/schedule_notifier_provider.dart';
+import 'shared/providers/settings_provider.dart';
+import 'shared/services/isar_service.dart';
+import 'features/home/views/body.dart';
 
 void main() async {
-  await Hive.initFlutter('IIUM Schedule Data');
-  Hive
-    ..registerAdapter(SavedScheduleAdapter())
-    ..registerAdapter(SavedSubjectAdapter())
-    ..registerAdapter(SavedDaytimeAdapter())
-    ..registerAdapter(SubjectTitleSettingAdapter());
-  await Hive.openBox<SavedSchedule>(kHiveSavedSchedule);
-
+  WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
 
   /**
@@ -37,7 +25,7 @@ void main() async {
     await FlutterDisplayMode.setHighRefreshRate();
   }
 
-  await MigrateHiveToIsar.migrate();
+  IsarService(); // initialize isar early when application starts
 
   runApp(const MyApp());
 }
@@ -54,34 +42,42 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => ScheduleLayoutSettingProvider()),
         ChangeNotifierProvider(create: (_) => ScheduleNotifierProvider()),
+        ChangeNotifierProvider(create: (_) => ScheduleMakerProvider()),
+        ChangeNotifierProvider(create: (_) => SettingsProvider()),
       ],
       child: DynamicColorBuilder(builder:
           (ColorScheme? lightColorScheme, ColorScheme? darkColorScheme) {
-        return MaterialApp(
-          title: 'IIUM Schedule',
-          theme: ThemeData(
-              colorScheme: lightColorScheme,
+        // for platform that doesn't support dynamic color (eg. Android < 12)
+        // use the colour generated from seed
+        // avoid using ColorScheme.light() or ColorScheme.dark() directly
+        return Consumer<SettingsProvider>(
+            builder: (context, settingsProvider, _) {
+          return MaterialApp(
+            title: 'IIUM Schedule',
+            theme: ThemeData(
+              colorScheme: lightColorScheme ??
+                  ColorScheme.fromSeed(seedColor: Colors.orange),
               useMaterial3: true,
-              fontFamily: 'Inter'),
-          darkTheme: ThemeData.dark().copyWith(
-              // cupertinoOverrideTheme:
-              //     const CupertinoThemeData(primaryColor: Color(0xFF23682B)),
-              // textButtonTheme: TextButtonThemeData(
-              //   style:
-              //       TextButton.styleFrom(foregroundColor: Colors.purple.shade200),
-              // ),
-              // outlinedButtonTheme: OutlinedButtonThemeData(
-              //   style: OutlinedButton.styleFrom(
-              //       foregroundColor: Colors.purple.shade200),
-              // ),
+              fontFamily: 'Inter',
+            ),
+            // Replaced ThemeData.dark().copyWith(...) because the text is rendered
+            // differently (i.e.: light mode will become slightly larger than dark mode)
+            // so, to make it consistent, we do as below.
+            // https://stackoverflow.com/a/68810576/13617136
+            darkTheme: ThemeData(
+              brightness: Brightness.dark,
+              colorScheme: darkColorScheme ??
+                  ColorScheme.fromSeed(
+                    seedColor: Colors.orange,
+                    brightness: Brightness.dark,
+                  ),
               useMaterial3: true,
-              textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
-              primaryTextTheme:
-                  ThemeData.dark().textTheme.apply(fontFamily: 'Inter'),
-              colorScheme: darkColorScheme),
-          themeMode: ThemeMode.system,
-          home: const MyBody(),
-        );
+              fontFamily: 'Inter',
+            ),
+            themeMode: settingsProvider.themeMode,
+            home: const MyBody(),
+          );
+        });
       }),
     );
   }

@@ -1,0 +1,56 @@
+# Build Flutter mac OS app and package as .dmg file
+name: Build MacOS (.dmg)
+
+"on":
+  workflow_dispatch:
+    inputs:
+      flutterChannel:
+        description: "Flutter channel"
+        default: stable
+        required: true
+        type: choice
+        options:
+          - stable
+          - beta
+          - master
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ inputs.flutterChannel }}
+          architecture: x64
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Flutter build for MacOS
+        run: |
+          flutter pub get
+          flutter build macos
+
+      - name: Install appdmg
+        run: |
+          npm install -g appdmg
+
+      - name: Building the installer
+        run: |
+          appdmg appdmg/config.json appdmg/IIUMSchedule.dmg
+
+      - name: Upload the installer as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: "appdmg/IIUMSchedule.dmg"
+
+      - name: Write summary
+        run: |
+          echo "Build setup"
+          echo ":blue_heart: Using **Flutter ${{ inputs.flutterChannel }}**" >> $GITHUB_STEP_SUMMARY

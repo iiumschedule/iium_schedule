@@ -1,14 +1,12 @@
-/// Sessions (2-3 entries, I think 3 is enough)
-/// Eg: current semester & upcoming semester
-/// or: previous semester & current semester
-const List<String> kSessions = ['2021/2022', '2022/2023'];
+import 'dart:io';
 
-/// default session & semester (current academic seesion)
-/// Values must exist in [sessions]
-const String kDefaultSession = '2022/2023';
+import 'package:flutter/foundation.dart';
+
+/// default session/current academic seesion
+const String kDefaultSession = '2023/2024';
 
 /// Values must be between 1 and 3 (inclusive)
 const int kDefaultSemester = 2;
 
-// Hive boxes name (do not change)
-const kHiveSavedSchedule = "savedSchedule";
+/// Check if app is running on macos or iphones/ipads
+final kIsApple = !kIsWeb && (Platform.isMacOS || Platform.isIOS);

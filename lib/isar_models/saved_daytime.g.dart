@@ -7,7 +7,7 @@ part of 'saved_daytime.dart';
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
 extension GetSavedDaytimeCollection on Isar {
   IsarCollection<SavedDaytime> get savedDaytimes => this.collection();
@@ -20,7 +20,7 @@ const SavedDaytimeSchema = CollectionSchema(
     r'day': PropertySchema(
       id: 0,
       name: r'day',
-      type: IsarType.long,
+      type: IsarType.byte,
     ),
     r'endTime': PropertySchema(
       id: 1,
@@ -49,7 +49,7 @@ const SavedDaytimeSchema = CollectionSchema(
   getId: _savedDaytimeGetId,
   getLinks: _savedDaytimeGetLinks,
   attach: _savedDaytimeAttach,
-  version: '3.0.5',
+  version: '3.1.0+1',
 );
 
 int _savedDaytimeEstimateSize(
@@ -69,7 +69,7 @@ void _savedDaytimeSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.day);
+  writer.writeByte(offsets[0], object.day);
   writer.writeString(offsets[1], object.endTime);
   writer.writeLong(offsets[2], object.hashCode);
   writer.writeString(offsets[3], object.startTime);
@@ -82,7 +82,7 @@ SavedDaytime _savedDaytimeDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = SavedDaytime(
-    day: reader.readLong(offsets[0]),
+    day: reader.readByte(offsets[0]),
     endTime: reader.readString(offsets[1]),
     startTime: reader.readString(offsets[3]),
   );
@@ -98,7 +98,7 @@ P _savedDaytimeDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLong(offset)) as P;
+      return (reader.readByte(offset)) as P;
     case 1:
       return (reader.readString(offset)) as P;
     case 2:

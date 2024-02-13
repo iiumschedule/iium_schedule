@@ -7,7 +7,7 @@ part of 'saved_schedule.dart';
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
 extension GetSavedScheduleCollection on Isar {
   IsarCollection<SavedSchedule> get savedSchedules => this.collection();
@@ -20,46 +20,52 @@ const SavedScheduleSchema = CollectionSchema(
     r'dateCreated': PropertySchema(
       id: 0,
       name: r'dateCreated',
-      type: IsarType.string,
+      type: IsarType.dateTime,
+    ),
+    r'extraInfo': PropertySchema(
+      id: 1,
+      name: r'extraInfo',
+      type: IsarType.byte,
+      enumMap: _SavedScheduleextraInfoEnumValueMap,
     ),
     r'fontSize': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'fontSize',
       type: IsarType.double,
     ),
     r'heightFactor': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'heightFactor',
       type: IsarType.double,
     ),
     r'kuliyyah': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'kuliyyah',
       type: IsarType.string,
     ),
     r'lastModified': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'lastModified',
-      type: IsarType.string,
+      type: IsarType.dateTime,
     ),
     r'semester': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'semester',
-      type: IsarType.long,
+      type: IsarType.byte,
     ),
     r'session': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'session',
       type: IsarType.string,
     ),
     r'subjectTitleSetting': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'subjectTitleSetting',
       type: IsarType.byte,
       enumMap: _SavedSchedulesubjectTitleSettingEnumValueMap,
     ),
     r'title': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'title',
       type: IsarType.string,
     )
@@ -82,7 +88,7 @@ const SavedScheduleSchema = CollectionSchema(
   getId: _savedScheduleGetId,
   getLinks: _savedScheduleGetLinks,
   attach: _savedScheduleAttach,
-  version: '3.0.5',
+  version: '3.1.0+1',
 );
 
 int _savedScheduleEstimateSize(
@@ -91,14 +97,12 @@ int _savedScheduleEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.dateCreated.length * 3;
   {
     final value = object.kuliyyah;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
   }
-  bytesCount += 3 + object.lastModified.length * 3;
   bytesCount += 3 + object.session.length * 3;
   {
     final value = object.title;
@@ -115,15 +119,16 @@ void _savedScheduleSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.dateCreated);
-  writer.writeDouble(offsets[1], object.fontSize);
-  writer.writeDouble(offsets[2], object.heightFactor);
-  writer.writeString(offsets[3], object.kuliyyah);
-  writer.writeString(offsets[4], object.lastModified);
-  writer.writeLong(offsets[5], object.semester);
-  writer.writeString(offsets[6], object.session);
-  writer.writeByte(offsets[7], object.subjectTitleSetting.index);
-  writer.writeString(offsets[8], object.title);
+  writer.writeDateTime(offsets[0], object.dateCreated);
+  writer.writeByte(offsets[1], object.extraInfo.index);
+  writer.writeDouble(offsets[2], object.fontSize);
+  writer.writeDouble(offsets[3], object.heightFactor);
+  writer.writeString(offsets[4], object.kuliyyah);
+  writer.writeDateTime(offsets[5], object.lastModified);
+  writer.writeByte(offsets[6], object.semester);
+  writer.writeString(offsets[7], object.session);
+  writer.writeByte(offsets[8], object.subjectTitleSetting.index);
+  writer.writeString(offsets[9], object.title);
 }
 
 SavedSchedule _savedScheduleDeserialize(
@@ -133,17 +138,20 @@ SavedSchedule _savedScheduleDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = SavedSchedule(
-    dateCreated: reader.readString(offsets[0]),
-    fontSize: reader.readDouble(offsets[1]),
-    heightFactor: reader.readDouble(offsets[2]),
-    kuliyyah: reader.readStringOrNull(offsets[3]),
-    lastModified: reader.readString(offsets[4]),
-    semester: reader.readLong(offsets[5]),
-    session: reader.readString(offsets[6]),
+    dateCreated: reader.readDateTime(offsets[0]),
+    extraInfo: _SavedScheduleextraInfoValueEnumMap[
+            reader.readByteOrNull(offsets[1])] ??
+        ExtraInfo.venue,
+    fontSize: reader.readDouble(offsets[2]),
+    heightFactor: reader.readDouble(offsets[3]),
+    kuliyyah: reader.readStringOrNull(offsets[4]),
+    lastModified: reader.readDateTime(offsets[5]),
+    semester: reader.readByte(offsets[6]),
+    session: reader.readString(offsets[7]),
     subjectTitleSetting: _SavedSchedulesubjectTitleSettingValueEnumMap[
-            reader.readByteOrNull(offsets[7])] ??
+            reader.readByteOrNull(offsets[8])] ??
         SubjectTitleSetting.title,
-    title: reader.readStringOrNull(offsets[8]),
+    title: reader.readStringOrNull(offsets[9]),
   );
   object.id = id;
   return object;
@@ -157,30 +165,44 @@ P _savedScheduleDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 1:
-      return (reader.readDouble(offset)) as P;
+      return (_SavedScheduleextraInfoValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          ExtraInfo.venue) as P;
     case 2:
       return (reader.readDouble(offset)) as P;
     case 3:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDouble(offset)) as P;
     case 4:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readLong(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 6:
-      return (reader.readString(offset)) as P;
+      return (reader.readByte(offset)) as P;
     case 7:
+      return (reader.readString(offset)) as P;
+    case 8:
       return (_SavedSchedulesubjectTitleSettingValueEnumMap[
               reader.readByteOrNull(offset)] ??
           SubjectTitleSetting.title) as P;
-    case 8:
+    case 9:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
+const _SavedScheduleextraInfoEnumValueMap = {
+  'venue': 0,
+  'section': 1,
+  'none': 2,
+};
+const _SavedScheduleextraInfoValueEnumMap = {
+  0: ExtraInfo.venue,
+  1: ExtraInfo.section,
+  2: ExtraInfo.none,
+};
 const _SavedSchedulesubjectTitleSettingEnumValueMap = {
   'title': 0,
   'courseCode': 1,
@@ -289,58 +311,49 @@ extension SavedScheduleQueryWhere
 extension SavedScheduleQueryFilter
     on QueryBuilder<SavedSchedule, SavedSchedule, QFilterCondition> {
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      dateCreatedEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+      dateCreatedEqualTo(DateTime value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'dateCreated',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
       dateCreatedGreaterThan(
-    String value, {
+    DateTime value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'dateCreated',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
       dateCreatedLessThan(
-    String value, {
+    DateTime value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'dateCreated',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
       dateCreatedBetween(
-    String lower,
-    String upper, {
+    DateTime lower,
+    DateTime upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -349,77 +362,62 @@ extension SavedScheduleQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      dateCreatedStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'dateCreated',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      dateCreatedEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'dateCreated',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      dateCreatedContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'dateCreated',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      dateCreatedMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'dateCreated',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      dateCreatedIsEmpty() {
+      extraInfoEqualTo(ExtraInfo value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'dateCreated',
-        value: '',
+        property: r'extraInfo',
+        value: value,
       ));
     });
   }
 
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      dateCreatedIsNotEmpty() {
+      extraInfoGreaterThan(
+    ExtraInfo value, {
+    bool include = false,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'dateCreated',
-        value: '',
+        include: include,
+        property: r'extraInfo',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      extraInfoLessThan(
+    ExtraInfo value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'extraInfo',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
+      extraInfoBetween(
+    ExtraInfo lower,
+    ExtraInfo upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'extraInfo',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -782,58 +780,49 @@ extension SavedScheduleQueryFilter
   }
 
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      lastModifiedEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+      lastModifiedEqualTo(DateTime value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'lastModified',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
       lastModifiedGreaterThan(
-    String value, {
+    DateTime value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'lastModified',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
       lastModifiedLessThan(
-    String value, {
+    DateTime value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'lastModified',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
       lastModifiedBetween(
-    String lower,
-    String upper, {
+    DateTime lower,
+    DateTime upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -842,77 +831,6 @@ extension SavedScheduleQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      lastModifiedStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'lastModified',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      lastModifiedEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'lastModified',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      lastModifiedContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'lastModified',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      lastModifiedMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'lastModified',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      lastModifiedIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'lastModified',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<SavedSchedule, SavedSchedule, QAfterFilterCondition>
-      lastModifiedIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'lastModified',
-        value: '',
       ));
     });
   }
@@ -1402,6 +1320,19 @@ extension SavedScheduleQuerySortBy
     });
   }
 
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy> sortByExtraInfo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'extraInfo', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy>
+      sortByExtraInfoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'extraInfo', Sort.desc);
+    });
+  }
+
   QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy> sortByFontSize() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fontSize', Sort.asc);
@@ -1520,6 +1451,19 @@ extension SavedScheduleQuerySortThenBy
       thenByDateCreatedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dateCreated', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy> thenByExtraInfo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'extraInfo', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QAfterSortBy>
+      thenByExtraInfoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'extraInfo', Sort.desc);
     });
   }
 
@@ -1643,10 +1587,16 @@ extension SavedScheduleQuerySortThenBy
 
 extension SavedScheduleQueryWhereDistinct
     on QueryBuilder<SavedSchedule, SavedSchedule, QDistinct> {
-  QueryBuilder<SavedSchedule, SavedSchedule, QDistinct> distinctByDateCreated(
-      {bool caseSensitive = true}) {
+  QueryBuilder<SavedSchedule, SavedSchedule, QDistinct>
+      distinctByDateCreated() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'dateCreated', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'dateCreated');
+    });
+  }
+
+  QueryBuilder<SavedSchedule, SavedSchedule, QDistinct> distinctByExtraInfo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'extraInfo');
     });
   }
 
@@ -1670,10 +1620,10 @@ extension SavedScheduleQueryWhereDistinct
     });
   }
 
-  QueryBuilder<SavedSchedule, SavedSchedule, QDistinct> distinctByLastModified(
-      {bool caseSensitive = true}) {
+  QueryBuilder<SavedSchedule, SavedSchedule, QDistinct>
+      distinctByLastModified() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'lastModified', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'lastModified');
     });
   }
 
@@ -1713,9 +1663,16 @@ extension SavedScheduleQueryProperty
     });
   }
 
-  QueryBuilder<SavedSchedule, String, QQueryOperations> dateCreatedProperty() {
+  QueryBuilder<SavedSchedule, DateTime, QQueryOperations>
+      dateCreatedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dateCreated');
+    });
+  }
+
+  QueryBuilder<SavedSchedule, ExtraInfo, QQueryOperations> extraInfoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'extraInfo');
     });
   }
 
@@ -1737,7 +1694,8 @@ extension SavedScheduleQueryProperty
     });
   }
 
-  QueryBuilder<SavedSchedule, String, QQueryOperations> lastModifiedProperty() {
+  QueryBuilder<SavedSchedule, DateTime, QQueryOperations>
+      lastModifiedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'lastModified');
     });

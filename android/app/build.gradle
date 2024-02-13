@@ -40,8 +40,8 @@ android {
 
     defaultConfig {
         applicationId "com.iqfareez.iiumschedule"
-        minSdkVersion 17
-        targetSdkVersion 31
+        minSdkVersion 21
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

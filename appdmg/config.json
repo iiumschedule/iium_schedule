@@ -1,0 +1,20 @@
+{
+  "title": "IIUM Schedule",
+  "background-color": "#FFF3DA",
+  "contents": [
+    { "x": 390, "y": 144, "type": "link", "path": "/Applications" },
+    {
+      "x": 130,
+      "y": 144,
+      "type": "file",
+      "path": "../build/macos/Build/Products/Release/IIUM Schedule.app"
+    }
+  ],
+  "icon-size": 120,
+  "window": {
+    "size": {
+      "width": 550,
+      "height": 300
+    }
+  }
+}

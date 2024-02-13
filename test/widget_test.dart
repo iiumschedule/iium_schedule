@@ -7,24 +7,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:iium_schedule/constants.dart';
-import 'package:iium_schedule/enums/subject_title_setting_enum.dart';
-import 'package:iium_schedule/hive_model/saved_daytime.dart';
-import 'package:iium_schedule/hive_model/saved_schedule.dart';
-import 'package:iium_schedule/hive_model/saved_subject.dart';
 import 'package:iium_schedule/main.dart';
 
 void main() async {
-  setUp(() async {
-    await Hive.initFlutter('IIUM Schedule Data');
-    Hive
-      ..registerAdapter(SavedScheduleAdapter())
-      ..registerAdapter(SavedSubjectAdapter())
-      ..registerAdapter(SavedDaytimeAdapter())
-      ..registerAdapter(SubjectTitleSettingAdapter());
-    await Hive.openBox<SavedSchedule>(kHiveSavedSchedule);
-  });
+  setUp(() async {});
 
   testWidgets('Smoke test Homepage', (WidgetTester tester) async {
     // Build our app and trigger a frame.
