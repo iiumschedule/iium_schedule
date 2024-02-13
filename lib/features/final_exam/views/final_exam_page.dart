@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:iium_schedule/shared/utils/calendar_utils.dart';
 
 import '../../../isar_models/final_exam.dart';
 import '../../../shared/extensions/date_time_extension.dart';

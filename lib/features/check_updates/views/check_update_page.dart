@@ -1,18 +1,13 @@
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:version/version.dart';
 
-import '../../../isar_models/gh_responses.dart';
 import '../../../shared/services/isar_service.dart';
 import '../../../shared/utils/launcher_url.dart';
-import '../models/gh_error.dart';
-import '../models/gh_releases_latest.dart';
+import '../service/update_service.dart';
 
 /// Check for update for Android & Windows
 /// Currently the is an known issue for Windows
@@ -26,49 +21,19 @@ class CheckUpdatePage extends StatefulWidget {
 
 class _CheckUpdatePageState extends State<CheckUpdatePage> {
   late Version currentVersion;
-  final IsarService isarService = IsarService();
+  late UpdateService updateService;
 
   /// Since this method is importing dart:io, it cannot be used on the web
   /// Also, the web seems like unsuitable to have a check for updates feature
   /// Despite that there have bene multiple issuew with web pwa caching
-  Future<Version> _checkLatestVersion() async {
-    GhReleasesLatest latest;
-    GhResponses? cachedResponses = await isarService.getGhResponse();
 
-    // API endpoint pointed to latest stable release
-    const latestRelease =
-        'https://api.github.com/repos/iqfareez/iium_schedule/releases/latest';
-    final response = await http.get(Uri.parse(latestRelease),
-        headers: cachedResponses != null
-            ? {
-                'If-None-Match': cachedResponses.etag,
-              }
-            : null);
-    // If the response is not modified, return the cached version
-    // https://docs.github.com/en/rest/overview/resources-in-the-rest-api#conditional-requests
-
-    if (response.statusCode == HttpStatus.ok) {
-      final ghReleasesLatest =
-          GhReleasesLatest.fromJson(json.decode(response.body));
-      // store the etag and the body of the response
-      isarService.addGhResponse(
-          GhResponses(etag: response.headers['etag']!, body: response.body));
-      latest = ghReleasesLatest;
-    } else if (response.statusCode == HttpStatus.notModified) {
-      // return the cached version
-      var body = jsonDecode(cachedResponses!.body);
-      latest = GhReleasesLatest.fromJson(body);
-    } else {
-      final data = json.decode(response.body);
-      final ghError = GhError.fromJson(data);
-      throw Exception('(${response.statusCode}) ${ghError.message})');
-    }
-    return Version.parse(latest.tagName!);
-  }
 
   @override
   void initState() {
     super.initState();
+    //construct service and inject isar service
+    updateService = UpdateService( isarService: IsarService());
+
     // determine current version
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
       currentVersion = Version.parse(packageInfo.version);
@@ -87,7 +52,7 @@ class _CheckUpdatePageState extends State<CheckUpdatePage> {
         padding: const EdgeInsets.all(32.0),
         child: Center(
           child: FutureBuilder(
-              future: _checkLatestVersion(),
+              future: updateService.checkLatestVersion(),
               builder: (context, AsyncSnapshot<Version> snapshot) {
                 if (snapshot.hasData) {
                   if (currentVersion.compareTo(snapshot.data) < 0) {
