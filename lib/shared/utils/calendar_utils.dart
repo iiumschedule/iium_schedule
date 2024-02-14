@@ -12,7 +12,7 @@ import '../../../isar_models/final_exam.dart';
 /// TODO: ICS for subjects
 /// https://github.com/iqfareez/iium_schedule/issues/65
 /// https://github.com/iqfareez/iium_schedule/pull/64
-/// See [lib/util/calTec.dart]
+/// See [lib/util/calendar_utils.dart]
 class CalendarIcs {
   /// Generate ICS content for final exams
   static String _generateIcsContent(List<FinalExam> upcomingFinalExams) {

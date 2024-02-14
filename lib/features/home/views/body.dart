@@ -20,6 +20,7 @@ import '../../final_exam/views/final_exam_page.dart';
 import '../../schedule_maker/views/schedule_maker_entry.dart';
 import '../../schedule_viewer/saved/views/saved_schedule_layout.dart';
 import '../../settings/view/settings_page.dart';
+import '../services/home_service.dart';
 
 class MyBody extends StatefulWidget {
   const MyBody({super.key});
@@ -73,7 +74,7 @@ class _MyBodyState extends State<MyBody> {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (_) => const _SimpleAboutDialog(),
+                    builder: (_) =>  _SimpleAboutDialog(),
                   );
                 },
                 child: Text(
@@ -374,7 +375,8 @@ class _CardItem extends StatelessWidget {
 }
 
 class _SimpleAboutDialog extends StatelessWidget {
-  const _SimpleAboutDialog();
+  final HomeService homeService = HomeService();
+  _SimpleAboutDialog();
 
   @override
   Widget build(BuildContext context) {
@@ -422,28 +424,8 @@ class _SimpleAboutDialog extends StatelessWidget {
             ),
           SimpleDialogOption(
             onPressed: () async {
-              var deviceInfo = await DeviceInfoPlugin().deviceInfo;
+              var deviceInfoData = await homeService.getDeviceInfo();
               var packageInfo = await PackageInfo.fromPlatform();
-
-              String deviceInfoData;
-
-              // check device info is android, windows or web
-              if (deviceInfo is AndroidDeviceInfo) {
-                var androidVersion = deviceInfo.version;
-                // eg: Android 11 (30)
-                deviceInfoData =
-                    'Android ${androidVersion.release} (${androidVersion.sdkInt})';
-              } else if (deviceInfo is WindowsDeviceInfo) {
-                var windowsVersion = deviceInfo.displayVersion;
-                // eg: Windows 22H2
-                deviceInfoData = 'Windows $windowsVersion';
-              } else {
-                // on web
-                var browserName = (deviceInfo as WebBrowserInfo).browserName;
-                var platform = deviceInfo.platform;
-                // eg: Web chrome Win32
-                deviceInfoData = 'Web ${browserName.name} $platform';
-              }
 
               final data = {
                 'device': deviceInfoData,
