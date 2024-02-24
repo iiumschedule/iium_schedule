@@ -45,11 +45,9 @@ See [Wiki/Build](https://github.com/iqfareez/iium_schedule/wiki/Build)
 
 App is available for Android, Windows, MacOS, iOS\* and Web\*\*. Check it out [here](https://iiumschedule.iqfareez.com/downloads)!
 
-> [!NOTE] 
-> \*You'll need to build it yourself
+> [!NOTE] > \*You'll need to build it yourself
 
-> [!NOTE] 
-> \*\*Web support is discontinued (Issue #60). See [alternatives projects](#similar-project-like-this-one).
+> [!NOTE] > \*\*Web support is discontinued (Issue #60). See [alternatives projects](#similar-project-like-this-one). Web version branch is `1.0.3-web`.
 
 ## Devlog
 
