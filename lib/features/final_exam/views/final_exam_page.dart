@@ -2,14 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:iium_schedule/shared/utils/calendar_utils.dart';
 
 import '../../../isar_models/final_exam.dart';
 import '../../../shared/extensions/date_time_extension.dart';
 import '../../../shared/services/isar_service.dart';
+import '../../../shared/utils/calendar_utils.dart';
 import '../../../shared/utils/my_snackbar.dart';
 import '../../../shared/widgets/json_import_dialog.dart';
-import '../utils/calendar_ics.dart';
 import 'exam_detail_page.dart';
 import 'export_to_ics_prompt_dialog.dart';
 import 'fe_imaluum_importer.dart';
