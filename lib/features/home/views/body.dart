@@ -391,7 +391,7 @@ class _SimpleAboutDialog extends StatelessWidget {
           ),
           SimpleDialogOption(
             child: const Text(
-              '\u00a9 2023 Muhammad Fareez',
+              '\u00a9 2024 Muhammad Fareez',
               style: TextStyle(fontWeight: FontWeight.w500),
             ),
             onPressed: () => LauncherUrl.open('https://iqfareez.com'),
