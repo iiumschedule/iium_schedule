@@ -38,4 +38,4 @@ jobs:
       - name: Upload msix
         uses: actions/upload-artifact@v3
         with:
-          path: build\windows\runner\Release\iium_schedule.msix
+          path: build\windows\x64\runner\Release\iium_schedule.msix

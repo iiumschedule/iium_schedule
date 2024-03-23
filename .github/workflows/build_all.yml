@@ -240,7 +240,7 @@ jobs:
         if: "!github.event.release.prerelease"
         with:
           name: windows installer msix
-          path: build/windows/runner/Release/iium_schedule.msix
+          path: build/windows/x64/runner/Release/iium_schedule.msix
 
       - name: Adding markdown
         run: |
