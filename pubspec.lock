@@ -12,10 +12,9 @@ packages:
   albiruni:
     dependency: "direct main"
     description:
-      name: albiruni
-      sha256: "2c70eb15ce40d2cc8171a5f28f71cf2f9a380e7fbb64fa81c28f28df7b296cae"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../Dart App/albiruni"
+      relative: true
+    source: path
     version: "1.4.0"
   analyzer:
     dependency: transitive
@@ -348,10 +347,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_markdown
-      sha256: a64c5323ac83ed2b7940d2b6288d160aa1753ff271ba9d9b2a86770414aa3eab
+      sha256: "87e11b9df25a42e2db315b8b7a51fae8e66f57a4b2f50ec4b822d0fa155e6b52"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.20+1"
+    version: "0.6.22"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -360,11 +359,9 @@ packages:
   flutter_timetable_view:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "0486b731669a055b2c5d4924a0d2228f5e2968f7"
-      resolved-ref: "0486b731669a055b2c5d4924a0d2228f5e2968f7"
-      url: "https://github.com/iqfareez/flutter_timetable_view.git"
-    source: git
+      path: "../flutter_timetable_view"
+      relative: true
+    source: path
     version: "0.3.0"
   flutter_web_plugins:
     dependency: transitive
@@ -576,10 +573,10 @@ packages:
     dependency: transitive
     description:
       name: markdown
-      sha256: "1b134d9f8ff2da15cb298efe6cd8b7d2a78958c1b00384ebcbdf13fe340a6c90"
+      sha256: ef2a1298144e3f985cc736b22e0ccdaf188b5b3970648f2d9dc13efd1d9df051
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.1"
+    version: "7.2.2"
   matcher:
     dependency: transitive
     description:
@@ -752,10 +749,10 @@ packages:
     dependency: transitive
     description:
       name: permission_handler_apple
-      sha256: bdafc6db74253abb63907f4e357302e6bb786ab41465e8635f362ee71fd8707b
+      sha256: "92861b0f0c2443dd8898398c2baa4f1ae925109b5909ae4a17d0108a6a788932"
       url: "https://pub.dev"
     source: hosted
-    version: "9.4.0"
+    version: "9.4.2"
   permission_handler_html:
     dependency: transitive
     description:
@@ -887,11 +884,9 @@ packages:
   recase:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "1e9c25cdf4828ce9d66430e4cd4deab6102e5722"
-      url: "https://github.com/iqfareez/recase.git"
-    source: git
+      path: "../../Dart App/recase"
+      relative: true
+    source: path
     version: "4.0.5"
   share_plus:
     dependency: "direct main"
@@ -905,10 +900,10 @@ packages:
     dependency: transitive
     description:
       name: share_plus_platform_interface
-      sha256: df08bc3a07d01f5ea47b45d03ffcba1fa9cd5370fb44b3f38c70e42cced0f956
+      sha256: "251eb156a8b5fa9ce033747d73535bf53911071f8d3b6f4f0b578505ce0d4496"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.1"
+    version: "3.4.0"
   shelf:
     dependency: transitive
     description:
@@ -1150,10 +1145,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "464f5674532865248444b4c3daca12bd9bf2d7c47f759ce2617986e7229494a8"
+      sha256: "8cb58b45c47dcb42ab3651533626161d6b67a2921917d8d429791f76972b3480"
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.0"
+    version: "5.3.0"
   win32_registry:
     dependency: transitive
     description:
