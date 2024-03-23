@@ -281,6 +281,7 @@ jobs:
       - name: Upload the installer as an artifact
         uses: actions/upload-artifact@v3
         with:
+          name: macOS installer DMG
           path: "appdmg/IIUMSchedule.dmg"
 
   upload_assets:
@@ -295,7 +296,7 @@ jobs:
         uses: actions/download-artifact@v3
 
       - name: Rename apk
-        run: curl -s https://gist.githubusercontent.com/iqfareez/f57405016cc8bcc51cdcd2879c88807a/raw/5d9bbed7231a9e56bf24b88ab5286cee73dae173/rename_apk.sh | bash -s IIUMSchedule .  
+        run: curl -s https://gist.githubusercontent.com/iqfareez/f57405016cc8bcc51cdcd2879c88807a/raw/5d9bbed7231a9e56bf24b88ab5286cee73dae173/rename_apk.sh | bash -s IIUMSchedule .
 
       # If the name input parameter is not provided, all artifacts will be downloaded.
       # To differentiate between downloaded artifacts, a directory denoted by the
@@ -308,6 +309,7 @@ jobs:
             apks artifact/*.apk
             windows installer msix/iium_schedule.msix
             windows installer exe/iiumschedulesetup.exe
+            macOS installer DMG/*.dmg
 
   upload_playstore:
     name: Upload aab bundle to Play Store
