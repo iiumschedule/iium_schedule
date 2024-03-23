@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -34,6 +33,16 @@ class ScheduleExportPage extends StatefulWidget {
 
 class _ScheduleExportPageState extends State<ScheduleExportPage> {
   final GlobalKey _globalKey = GlobalKey();
+
+  String get _getPlatformGalleryVerb {
+    if (Platform.isMacOS) {
+      return 'Photos';
+    } else if (Platform.isWindows) {
+      return 'Pictures';
+    } else {
+      return 'Gallery';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,30 +105,28 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                   // Show on all platforms except Apple devices
                   // There is an issue saving file to directory (permission issue)
                   // Fortunately, user still can save to system disk using share (button below)
-                  if (!kIsApple)
-                    TextButton.icon(
-                        onPressed: () async {
-                          Uint8List? imageBytes =
-                              await ScreenshotWidget.screenshotWidget(
-                                  _globalKey);
+                  TextButton.icon(
+                      onPressed: () async {
+                        Uint8List? imageBytes =
+                            await ScreenshotWidget.screenshotWidget(_globalKey);
 
-                          if (imageBytes == null) {
-                            MyFtoast.show(context,
-                                'Failed to capture schedule. Please try again.');
-                            return;
-                          }
-
-                          await SaveFile.saveToGallery(
-                              imageBytes, widget.scheduleTitle);
-
-                          // show toast for windows and android
+                        if (imageBytes == null) {
                           MyFtoast.show(context,
-                              'Saved to ${Platform.isWindows ? 'Pictures' : 'Gallery'}');
-                        },
-                        icon: const Icon(Icons.save_alt_outlined),
-                        label: Text(kIsWeb
-                            ? 'Download (.png)'
-                            : 'Save to ${Platform.isWindows ? 'Pictures' : 'Gallery'}')),
+                              'Failed to capture schedule. Please try again.');
+                          return;
+                        }
+
+                        await SaveFile.saveToGallery(
+                            imageBytes, widget.scheduleTitle);
+
+                        // show toast for windows and android
+                        MyFtoast.show(
+                            context, 'Saved to $_getPlatformGalleryVerb');
+                      },
+                      icon: const Icon(Icons.save_alt_outlined),
+                      label: Text(kIsWeb
+                          ? 'Download (.png)'
+                          : 'Save to $_getPlatformGalleryVerb')),
                   // Show share button on Android, iOS & MacOS
                   if (!Platform.isWindows)
                     TextButton.icon(

@@ -20,6 +20,9 @@ class SaveFile {
     // Request access permission.
     // On Android, permission is needed for Android >=23 && <=29 only. Else, it will
     // be allowed by default.
+    // There is an issue with MacOs don't show permission dialog when app from IDE feature
+    // https://github.com/natsuk4ze/gal?tab=readme-ov-file#macos
+    // https://github.com/flutter/flutter/issues/134191
     await Gal.requestAccess(toAlbum: true);
 
     // the maintainer said using putImage is better than putImageBytes
