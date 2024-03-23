@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../constants.dart';
 import '../../../../shared/utils/my_ftoast.dart';
@@ -14,13 +13,15 @@ import '../utils/schedule_share.dart';
 import '../utils/screenshot_widget.dart';
 
 class ScheduleExportPage extends StatefulWidget {
-  const ScheduleExportPage(
-      {super.key,
-      required this.scheduleTitle,
-      required this.itemHeight,
-      required this.laneEventsList,
-      required this.startHour,
-      required this.endHour});
+  const ScheduleExportPage({
+    super.key,
+    required this.scheduleTitle,
+    required this.itemHeight,
+    required this.laneEventsList,
+    required this.startHour,
+    required this.endHour,
+  });
+
   final List<LaneEvents> laneEventsList;
   final int startHour;
   final int endHour;
@@ -35,7 +36,7 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
   final GlobalKey _globalKey = GlobalKey();
 
   String get _getPlatformGalleryVerb {
-    if (Platform.isMacOS) {
+    if (kIsApple) {
       return 'Photos';
     } else if (Platform.isWindows) {
       return 'Pictures';
@@ -153,7 +154,7 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                         ScheduleShare.share(savedPath, widget.scheduleTitle);
                       },
                       icon: Icon(kIsApple ? CupertinoIcons.share : Icons.share),
-                      label: Text(kIsApple ? 'Share/Save' : 'Share'),
+                      label: const Text('Share'),
                     ),
                 ],
               ),
