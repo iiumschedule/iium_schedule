@@ -4,7 +4,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Permissions options for the `storage` group -->
     <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
+    <!-- Gal: For supporting API <= 29 :Gal-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+                 android:maxSdkVersion="29" />
+    <!-- Gal: For supporting API <= 29 :Gal-->
 
     <!-- Required by device_calendar -->
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
@@ -18,7 +22,8 @@
     </queries>
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="IIUM Schedule">
+        android:label="IIUM Schedule"
+        android:requestLegacyExternalStorage="true"> <!-- Gal: For saving to album in API 29 :Gal-->
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

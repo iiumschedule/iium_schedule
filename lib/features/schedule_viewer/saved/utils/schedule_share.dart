@@ -16,7 +16,7 @@ class ScheduleShare {
     // To make the schedule title as caption, set either [subject] or [text]
     // On Android, set [text]
     // On Ios, set [subject] (when set text, the share sheet display two files)
-    Share.shareXFiles(
+    await Share.shareXFiles(
       [xFilePath],
       subject: !Platform.isAndroid ? scheduleTitle : null,
       text: !Platform.isIOS ? scheduleTitle : null,

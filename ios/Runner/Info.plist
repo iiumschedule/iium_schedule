@@ -47,5 +47,13 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- gal: Required -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need access to save images to device's gallery</string>
+	<!-- gal: Required -->
+	<!-- gal: Required for ios < 14 or saving to album -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to save images to device's gallery</string>
+	<!-- gal: Required for ios < 14 or saving to album -->
 </dict>
 </plist>

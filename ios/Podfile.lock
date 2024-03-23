@@ -12,6 +12,9 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - gal (1.0.0):
+    - Flutter
+    - FlutterMacOS
   - isar_flutter_libs (1.0.0):
     - Flutter
   - open_file (0.0.1):
@@ -22,7 +25,7 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - permission_handler_apple (9.1.1):
+  - permission_handler_apple (9.3.0):
     - Flutter
   - quick_actions_ios (0.0.1):
     - Flutter
@@ -37,6 +40,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - gal (from `.symlinks/plugins/gal/darwin`)
   - isar_flutter_libs (from `.symlinks/plugins/isar_flutter_libs/ios`)
   - open_file (from `.symlinks/plugins/open_file/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -60,6 +64,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  gal:
+    :path: ".symlinks/plugins/gal/darwin"
   isar_flutter_libs:
     :path: ".symlinks/plugins/isar_flutter_libs/ios"
   open_file:
@@ -78,21 +84,22 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
-  fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
+  device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
+  fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
+  gal: 61e868295d28fe67ffa297fae6dacebf56fd53e1
   isar_flutter_libs: b69f437aeab9c521821c3f376198c4371fa21073
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
-  package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
-  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
-  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
-  quick_actions_ios: 9e80dcfadfbc5d47d9cf8f47bcf428b11cf383d4
-  share_plus: 599aa54e4ea31d4b4c0e9c911bcc26c55e791028
+  package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
+  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
+  permission_handler_apple: 036b856153a2b1f61f21030ff725f3e6fece2b78
+  quick_actions_ios: d24571db7345d2e48d094db8d077a015a568002d
+  share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
+  url_launcher_ios: 6116280ddcfe98ab8820085d8d76ae7449447586
 
-PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
+PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.15.2
