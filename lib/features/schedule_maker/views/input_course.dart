@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:albiruni/albiruni.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -95,9 +94,8 @@ class _InputCourseState extends State<InputCourse>
                               _courseCodeInputController.text =
                                   _inputCourses[index].courseCode!;
                               _sectionInputController.text =
-                                  _inputCourses[index].section != null
-                                      ? _inputCourses[index].section.toString()
-                                      : '';
+                                  _inputCourses[index].section?.toString() ??
+                                      '';
                             },
                           );
                         }, () {
@@ -191,11 +189,11 @@ class _InputCourseState extends State<InputCourse>
                       onSelected: (ImportMethod item) async {
                         switch (item) {
                           case ImportMethod.imaluum:
-                            // Inappwebview is supported on Android only
+                            // Inappwebview is supported on Android only. iOS should work but untested
                             // so, show unsupported message on other platforms
-                            if (kIsWeb || !Platform.isAndroid) {
+                            if (!Platform.isAndroid && !Platform.isIOS) {
                               MySnackbar.showWarn(context,
-                                  'Unsupported on this platform. Available on Android only');
+                                  'Unsupported on this platform. Available on mobile platforms only');
                               return;
                             }
 
