@@ -13,7 +13,7 @@ class ScreenshotWidget {
         globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary;
     // In debug mode Android sometimes will return !debugNeedsPrint error
     // TODO: this can be remove?
-    if (kDebugMode || boundary.debugNeedsPaint) {
+    if (kDebugMode && boundary.debugNeedsPaint) {
       print("Waiting for boundary to be painted.");
       await Future.delayed(const Duration(milliseconds: 20));
     }
