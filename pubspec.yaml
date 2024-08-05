@@ -39,9 +39,6 @@ dependencies:
   intl: ^0.18.0
   http: ^1.1.0
   version: ^3.0.2
-  flutter_colorpicker:
-    # https://github.com/mchome/flutter_colorpicker/pull/85
-    git: https://github.com/SayuruSandaru/flutter_colorpicker.git
   cross_file: ^0.3.3+2
   device_info_plus: ^9.0.2
   pull_to_refresh: ^2.0.0

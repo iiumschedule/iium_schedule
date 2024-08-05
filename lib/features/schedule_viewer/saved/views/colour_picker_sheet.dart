@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import '../../not_saved/utils/colour_palletes.dart';
 
@@ -27,37 +26,77 @@ class _ColourPickerSheetState extends State<ColourPickerSheet> {
         Navigator.pop(context, _choosenColor);
         return false;
       },
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * .4,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: BlockPicker(
-            pickerColor: _choosenColor,
-            availableColors: const [
-              ...ColourPalletes.pallete1,
-              ...ColourPalletes.pallete2,
-              ...ColourPalletes.pallete3
-            ],
-            onColorChanged: (color) {
-              setState(() => _choosenColor = color);
-            },
-            layoutBuilder: (context, colors, child) {
-              return GridView(
-                // physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 70,
-                  childAspectRatio: 1.0,
-                  crossAxisSpacing: 10,
-                  mainAxisExtent: 70,
-                  mainAxisSpacing: 10,
-                ),
-                children: [for (Color color in colors) child(color)],
-              );
-            },
-          ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 34, 16, 16),
+        child: _BlockPicker(
+          selectedColor: _choosenColor,
+          availableColors: const [
+            ...ColourPalletes.pallete1,
+            ...ColourPalletes.pallete2,
+            ...ColourPalletes.pallete3
+          ],
+          onColorChanged: (color) {
+            setState(() => _choosenColor = color);
+          },
         ),
       ),
+    );
+  }
+}
+
+class _BlockPicker extends StatelessWidget {
+  const _BlockPicker({
+    required this.selectedColor,
+    required this.availableColors,
+    required this.onColorChanged,
+  });
+  final Color selectedColor;
+  final List<Color> availableColors;
+  final ValueChanged<Color> onColorChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 70,
+        childAspectRatio: 1.0,
+        crossAxisSpacing: 2,
+        mainAxisExtent: 70,
+        mainAxisSpacing: 2,
+      ),
+      children: [
+        for (Color color in availableColors)
+          GestureDetector(
+            onTap: () => onColorChanged(color),
+            child: Stack(
+              alignment: Alignment.center,
+              fit: StackFit.expand,
+              children: [
+                ColoredBox(color: color),
+                // if (color == selectedColor)
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 270),
+                      curve: Curves.easeInQuad,
+                      width: color == selectedColor ? 30 : 0,
+                      height: color == selectedColor ? 30 : 0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white.withAlpha(200),
+                      ),
+                    ),
+                    if (color == selectedColor)
+                      const Icon(Icons.check, size: 20),
+                  ],
+                ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }
