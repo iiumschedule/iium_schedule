@@ -5,78 +5,12 @@ on:
     types: [published]
 
 jobs:
-  # Read config file to get the Flutter channel and build targets
-  read_config:
-    runs-on: ubuntu-latest
-    outputs:
-      flutterVer: ${{ steps.flutter-ver.outputs.data }}
-      buildWindows: ${{ steps.read-build-windows.outputs.data }}
-      buildWeb: ${{ steps.read-build-web.outputs.data }}
-      buildAndroid: ${{ steps.read-build-android.outputs.data }}
-      buildMacos: ${{ steps.read-build-macos.outputs.data }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - id: read-flutter-ver
-        name: Determine Flutter version from ci-config.yml
-        uses: jbutcher5/read-yaml@1.6
-        with:
-          file: "./ci-config.yml" # File to read from
-          key-path: '["flutter_channel"]' # Access the runs key then the using key and retuns the value.
-
-      - id: set-flutter-ver
-        name: Set Flutter version to be built against
-        run: echo "data=${{ steps.read-flutter-ver.outputs.data }}" >> $GITHUB_OUTPUT
-
-      - id: read-build-windows
-        name: Determine Flutter version from ci-config.yml
-        uses: jbutcher5/read-yaml@1.6
-        with:
-          file: "./ci-config.yml"
-          key-path: '["build_for", "windows"]'
-
-      - id: set-build-windows
-        run: echo "data=${{ steps.read-build-windows.outputs.data }}" >> $GITHUB_OUTPUT
-
-      - id: read-build-web
-        name: Determine Flutter version from ci-config.yml
-        uses: jbutcher5/read-yaml@1.6
-        with:
-          file: "./ci-config.yml"
-          key-path: '["build_for", "web"]'
-
-      - id: set-build-web
-        run: echo "data=${{ steps.read-build-web.outputs.data }}" >> $GITHUB_OUTPUT
-
-      - id: read-build-android
-        name: Determine Flutter version from ci-config.yml
-        uses: jbutcher5/read-yaml@1.6
-        with:
-          file: "./ci-config.yml"
-          key-path: '["build_for", "android"]'
-
-      - id: set-build-android
-        run: echo "data=${{ steps.read-build-android.outputs.data }}" >> $GITHUB_OUTPUT
-
-      - id: read-build-macos
-        name: Determine Flutter version from ci-config.yml
-        uses: jbutcher5/read-yaml@1.6
-        with:
-          file: "./ci-config.yml"
-          key-path: '["build_for", "macos"]'
-
-      - id: set-build-macos
-        run: echo "data=${{ steps.read-build-macos.outputs.data }}" >> $GITHUB_OUTPUT
-
   build_android:
     name: Build for Android
-    needs: read_config
-    if: ${{ needs.read_config.outputs.buildAndroid == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Java
         uses: actions/setup-java@v3.9.0
@@ -87,7 +21,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2.8.0
         with:
-          channel: "${{ needs.read_config.outputs.flutterVer }}"
+          channel: "stable"
 
       # File can be encoded to base64 on https://base64.guru/converter/encode/file
       - name: Decoding android/key.properties
@@ -133,63 +67,17 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo ":blue_heart: Using **`flutter --version`**" >> $GITHUB_STEP_SUMMARY
 
-  build_web:
-    name: Build for web & firebase deploy
-    needs: read_config
-    if: ${{ needs.read_config.outputs.buildWeb == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2.8.0
-        with:
-          channel: "${{ needs.read_config.outputs.flutterVer }}"
-
-      - name: Build release web
-        run: |
-          flutter pub get
-          flutter build web --web-renderer canvaskit
-
-      - name: Adding markdown
-        run: |
-          echo 'Build **web** :white_check_mark:' >> $GITHUB_STEP_SUMMARY
-
-      - name: Determine Hosting channel
-        uses: haya14busa/action-cond@v1
-        id: hostingChannel
-        with:
-          cond: ${{github.event.release.prerelease}}
-          if_true: "staging"
-          if_false: "live" # prod
-
-      - name: Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        id: firebaseDeploy
-        with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_IIUMSCHEDULE_AF71A }}"
-          channelId: ${{ steps.hostingChannel.outputs.value }}
-          projectId: iiumschedule-af71a
-
-      - name: Adding markdown
-        run: |
-          echo ':rocket: Deployed to Firebase **${{ steps.hostingChannel.outputs.value }} channel**. URL **${{ steps.firebaseDeploy.outputs.details_url }}**' >> $GITHUB_STEP_SUMMARY
-
   build_windows:
     name: Build for Windows
-    needs: read_config
-    if: ${{ needs.read_config.outputs.buildWindows == 'true' }}
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2.8.0
         with:
-          channel: "${{ needs.read_config.outputs.flutterVer }}"
+          channel: "stable"
 
       - name: Flutter build for Windows
         run: |
@@ -248,17 +136,15 @@ jobs:
 
   build_macos:
     name: Build for Mac OS
-    needs: read_config
-    if: ${{ needs.read_config.outputs.buildMacos == 'true' }}
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ inputs.flutterChannel }}
+          channel: "stable"
           architecture: x64
 
       - uses: actions/setup-node@v3
@@ -290,7 +176,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download all artifacts
         uses: actions/download-artifact@v3
