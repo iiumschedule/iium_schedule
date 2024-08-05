@@ -118,14 +118,12 @@ class _InputCourseState extends State<InputCourse>
                               // Initially 8, increased to give some space for whitespace
                               // character etc, so that text will not be truncated
                               maxLength: 10,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Course Code',
                                 counterText: '', // disable counter text
                                 filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide.none,
-                                ),
+                                border: OutlineInputBorder(),
+                                isDense: true,
                               ),
                               onEditingComplete: () {
                                 context
@@ -146,14 +144,12 @@ class _InputCourseState extends State<InputCourse>
                           Expanded(
                             child: TextField(
                               controller: _sectionInputController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Section',
                                 filled: true,
                                 counterText: "",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide.none,
-                                ),
+                                isDense: true,
+                                border: OutlineInputBorder(),
                               ),
                               textInputAction: TextInputAction.done,
                               keyboardType: TextInputType.number,
@@ -183,7 +179,7 @@ class _InputCourseState extends State<InputCourse>
                             fontSize: 12, fontWeight: FontWeight.w400),
                       ),
                     ),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 15),
                     PopupMenuButton<ImportMethod>(
                       initialValue: _importMethod,
                       onSelected: (ImportMethod item) async {
