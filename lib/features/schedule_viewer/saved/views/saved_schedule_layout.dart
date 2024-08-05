@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:albiruni/albiruni.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -333,11 +332,9 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                                     // when changing the item below
                                     // don't forget to also change
                                     // in schedule_layout.dart
-                                    child: Text(kIsWeb
-                                        ? 'Export'
-                                        : Platform.isAndroid
-                                            ? 'Export & share'
-                                            : 'Export'),
+                                    child: Text(Platform.isAndroid
+                                        ? 'Export & share'
+                                        : 'Export'),
                                   ),
                                   const PopupMenuDivider(),
                                   const PopupMenuItem(
@@ -383,8 +380,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                                       () => snapshot.data!.heightFactor += 2);
                                   isarService.updateSchedule(snapshot.data!);
                                 }),
-                          if (kIsWeb || !Platform.isAndroid)
-                            const SizedBox(height: 5),
+                          if (!Platform.isAndroid) const SizedBox(height: 5),
                           if (snapshot.data!.heightFactor >= 44)
                             FloatingActionButton(
                                 heroTag: "btnZoom-",
@@ -396,8 +392,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                                       () => snapshot.data!.heightFactor -= 2);
                                   isarService.updateSchedule(snapshot.data!);
                                 }),
-                          if (kIsWeb || !Platform.isAndroid)
-                            const SizedBox(height: 5),
+                          if (!Platform.isAndroid) const SizedBox(height: 5),
                           FloatingActionButton(
                             heroTag: "btnFull",
                             mini: true,

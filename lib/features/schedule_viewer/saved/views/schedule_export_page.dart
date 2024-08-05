@@ -125,9 +125,7 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                             context, 'Saved to $_getPlatformGalleryVerb');
                       },
                       icon: const Icon(Icons.save_alt_outlined),
-                      label: Text(kIsWeb
-                          ? 'Download (.png)'
-                          : 'Save to $_getPlatformGalleryVerb')),
+                      label: Text('Save to $_getPlatformGalleryVerb')),
                   // Show share button on Android, iOS & MacOS
                   if (!Platform.isWindows)
                     TextButton.icon(

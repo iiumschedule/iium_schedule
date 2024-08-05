@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:ical/serializer.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -41,7 +40,7 @@ class CalendarIcs {
 
     try {
       // Windows
-      if (!kIsWeb && Platform.isWindows) {
+      if (Platform.isWindows) {
         var dirs = await getExternalStorageDirectories();
         directory = dirs?.first;
       }
@@ -57,10 +56,5 @@ class CalendarIcs {
 
     return await File('${directory?.path}/exam_calendar.ics')
         .writeAsString(icsContent);
-  }
-
-  /// TODO: For web, download the file to user's computer
-  static void downloadIcsFile(List<FinalExam> upcomingFinalExams) {
-    throw UnimplementedError();
   }
 }

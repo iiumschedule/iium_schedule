@@ -408,19 +408,18 @@ class _SimpleAboutDialog extends StatelessWidget {
                 LauncherUrl.open('https://iiumschedule.iqfareez.com/downloads'),
           ),
           const Divider(),
-          if (!kIsWeb) // don't show this option when on web
-            SimpleDialogOption(
-              child: const Text('Check for updates...'),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    fullscreenDialog: true,
-                    builder: (_) => const CheckUpdatePage(),
-                  ),
-                );
-              },
-            ),
+          SimpleDialogOption(
+            child: const Text('Check for updates...'),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  fullscreenDialog: true,
+                  builder: (_) => const CheckUpdatePage(),
+                ),
+              );
+            },
+          ),
           SimpleDialogOption(
             onPressed: () async {
               var deviceInfoData = await homeService.getDeviceInfo();
@@ -451,7 +450,7 @@ class _SimpleAboutDialog extends StatelessWidget {
 /// TODO: Add recent schedules https://github.com/iqfareez/iium_schedule/issues/43
 void configureQuickAction(BuildContext context) {
   // check if running on Android only
-  if (kIsWeb || !Platform.isAndroid) return;
+  if (!Platform.isAndroid) return;
 
   const QuickActions quickActions = QuickActions();
 

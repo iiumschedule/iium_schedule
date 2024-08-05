@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 import 'package:share_plus/share_plus.dart';
@@ -20,10 +19,6 @@ class IcsGeneratedDialog extends StatelessWidget {
   }
 
   void _openFile() async {
-    if (kIsWeb) {
-      throw 'Unspported platform';
-    }
-
     if (Platform.isWindows) {
       var fileUri = Uri.file(icsSavedFile.path);
       var res = await canLaunchUrl(fileUri);
@@ -69,7 +64,7 @@ class IcsGeneratedDialog extends StatelessWidget {
             child: SelectionArea(
               child: ListTile(
                 title: Text(icsSavedFile.path.split('/').last),
-                subtitle: !kIsWeb && Platform.isWindows
+                subtitle: Platform.isWindows
                     ? Text(Uri.file(icsSavedFile.path).toFilePath())
                     : const Text('ICalendar file'),
                 trailing: Tooltip(
@@ -91,7 +86,7 @@ class IcsGeneratedDialog extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              if (!kIsWeb && (Platform.isWindows))
+              if (Platform.isWindows)
                 ElevatedButton.icon(
                   icon: const Icon(Icons.folder),
                   onPressed: () {
@@ -100,7 +95,7 @@ class IcsGeneratedDialog extends StatelessWidget {
                   },
                   label: const Text('Locate file'),
                 ),
-              if (!kIsWeb && Platform.isAndroid)
+              if (Platform.isAndroid)
                 ElevatedButton.icon(
                   icon: const Icon(Icons.share),
                   onPressed: () {
@@ -109,15 +104,6 @@ class IcsGeneratedDialog extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   label: const Text('Share'),
-                ),
-              if (kIsWeb)
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.download),
-                  onPressed: () {
-                    // TODO: Web implement download
-                    Navigator.pop(context);
-                  },
-                  label: const Text('Download'),
                 ),
             ],
           ),

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:albiruni/albiruni.dart';
 import 'package:and/and.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:recase/recase.dart';
 
@@ -75,8 +74,8 @@ class _BrowserViewState extends State<BrowserView> {
   }
 
   Future<List<Subject>> _getSubjects() async {
-    var (subjects, _) = await widget.albiruni.fetch(widget.kulliyah,
-        course: widget.courseCode, page: _page, useProxy: kIsWeb);
+    var (subjects, _) = await widget.albiruni
+        .fetch(widget.kulliyah, course: widget.courseCode, page: _page);
     return subjects;
   }
 

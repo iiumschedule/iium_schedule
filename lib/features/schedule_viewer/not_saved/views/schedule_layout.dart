@@ -291,7 +291,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                                     'To add more subjects, save the schedule first.\n\nTap on menu \u22EE then choose "Save to app"'),
                               )),
                     ),
-                    if (kIsWeb || !Platform.isAndroid) ...[
+                    if (!Platform.isAndroid) ...[
                       IconButton(
                         tooltip: 'Increase text sizes',
                         onPressed: () => setState(() => _fontSizeSubject--),
@@ -335,11 +335,9 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                             },
                           ),
                           PopupMenuItem(
-                            child: Text(kIsWeb
-                                ? 'Export'
-                                : Platform.isAndroid
-                                    ? 'Export & share'
-                                    : 'Export'),
+                            child: Text(Platform.isAndroid
+                                ? 'Export & share'
+                                : 'Export'),
                             onTap: () async {
                               final navigator = Navigator.of(context);
                               // needed as described in https://stackoverflow.com/a/69589313/13617136
@@ -392,8 +390,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                           onPressed: () {
                             setState(() => _itemHeight += 2);
                           }),
-                    if (kIsWeb || !Platform.isAndroid)
-                      const SizedBox(height: 5),
+                    if (!Platform.isAndroid) const SizedBox(height: 5),
                     if (_itemHeight >= 44)
                       FloatingActionButton(
                           heroTag: "btnZoom-",
@@ -403,8 +400,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                           onPressed: () {
                             setState(() => _itemHeight -= 2);
                           }),
-                    if (kIsWeb || !Platform.isAndroid)
-                      const SizedBox(height: 5),
+                    if (!Platform.isAndroid) const SizedBox(height: 5),
                     FloatingActionButton(
                       heroTag: "btnFull",
                       mini: true,

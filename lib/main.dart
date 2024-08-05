@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +20,7 @@ void main() async {
    * For certain type of phones, the refresh rate is limited at 60fps. (i.e.: OnePlus phones)
    * This line of code instructs the OS to use the highest refresh rate available for this app.
    **/
-  if (!kIsWeb && Platform.isAndroid) {
+  if (Platform.isAndroid) {
     await FlutterDisplayMode.setHighRefreshRate();
   }
 

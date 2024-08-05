@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:albiruni/albiruni.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -223,7 +222,7 @@ class TextBubble extends StatelessWidget {
     return GestureDetector(
       onLongPress: () {
         // for Android, long press to copy
-        if (!kIsWeb || Platform.isAndroid) {
+        if (Platform.isAndroid) {
           Clipboard.setData(ClipboardData(text: text)).then((_) {
             Fluttertoast.showToast(msg: 'Copied');
             HapticFeedback.lightImpact();
@@ -235,16 +234,11 @@ class TextBubble extends StatelessWidget {
         child: ActionChip(
           onPressed: () {
             // on Windows or Web, tap to copy
-            if (kIsWeb || Platform.isWindows) {
+            if (Platform.isWindows) {
               Clipboard.setData(ClipboardData(text: text)).then((_) {
                 HapticFeedback.lightImpact();
 
-                // handle toast based on platform
-                if (kIsWeb) {
-                  Fluttertoast.showToast(msg: 'Copied');
-                } else {
-                  MyFtoast.show(context, 'Copied');
-                }
+                MyFtoast.show(context, 'Copied');
               });
             }
           },

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../isar_models/final_exam.dart';
@@ -96,10 +95,7 @@ class _FinalExamPageState extends State<FinalExamPage> {
   void _generateIcs() {
     if (finalExams == null) return;
     // On Windows, default to export as ICS
-    if (!kIsWeb) {
-      _showSaveIcsDialog();
-      return;
-    }
+    _showSaveIcsDialog();
   }
 
   @override
@@ -111,13 +107,6 @@ class _FinalExamPageState extends State<FinalExamPage> {
   // after the ics file has been generated & saved, a dialog will be shown
   // that allow user to share (because finding the file in file explorer) is kinda hard
   void _showSaveIcsDialog() async {
-    // TODO: Check web implementation
-    if (kIsWeb) {
-      CalendarIcs.downloadIcsFile(finalExams!.map((e) => e.finalExam).toList());
-      // maybe show IcsGeneratedDialog but with download button instead
-      return;
-    }
-
     late File filePath;
     try {
       filePath = await CalendarIcs.generateIcsFile(
