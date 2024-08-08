@@ -56,8 +56,8 @@ class Kuliyyahs {
     ),
     Kuliyyah(
       code: "KLM",
-      fullName: "Kulliyyah of Languages and Management",
-      shortName: "KLM",
+      fullName: "Kulliyyah of Sustainable Tourism and Contemporary Languages",
+      shortName: "KSTCL KLM",
     ),
     Kuliyyah(
       code: "KAHS",
@@ -84,6 +84,11 @@ class Kuliyyahs {
       fullName: "Kulliyyah of Pharmacy",
       shortName: "KOP",
     ),
+    // Kuliyyah(
+    //   code: "PLNET",
+    //   fullName: "Planetary Survival For Sustainable Well-Being",
+    //   shortName: "Planetary",
+    // ),
     Kuliyyah(
       code: "KOS",
       fullName: "Kulliyyah of Science",
@@ -108,7 +113,14 @@ class Kuliyyahs {
 }
 
 class Kuliyyah {
-  String code, fullName, shortName;
+  /// Code used for Kulliyyah in Albiruni request
+  String code;
+
+  /// Full name of the kulliyyah
+  String fullName,
+
+      /// Kulliyyah name is shortform
+      shortName;
 
   Kuliyyah({
     required this.code,
