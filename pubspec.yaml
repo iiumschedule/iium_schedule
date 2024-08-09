@@ -7,7 +7,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # When changing this version, also change the versions in
 # - msix block (msix_version)
 # - Inno setup (MyAppVersion)
-version: 1.4.4+43
+version: 1.4.5+44
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -113,7 +113,7 @@ msix_config:
   display_name: IIUM Schedule
   publisher_display_name: Muhammad Fareez Iqmal
   identity_name: fareez.flutter.iiumschedule
-  msix_version: 1.4.4.0 # same as inno setup (MyAppVersion)
+  msix_version: 1.4.5.0 # same as inno setup (MyAppVersion)
   logo_path: ".\\assets\\logo\\app-logo.png"
   capabilities: "internetClient"
   certificate_path: ".\\windows\\CERTIFICATE.pfx"
