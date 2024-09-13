@@ -75,8 +75,8 @@ https://iiumschedule.iqfareez.com
 
 - https://github.com/asdacap/iiumschedule
 - https://github.com/PlashSpeed-Aiman/IIUMCourseScheduleApp
-- https://proreg.vercel.app
-- https://github.com/qryskalyst20/simplified-imaluum
+- https://proreg.vercel.app ([Android](https://play.google.com/store/apps/details?id=tech.forthify.ProReg&hl=en_US)/[iOS](https://apps.apple.com/my/app/proreg/id6477275292))
+- https://github.com/nrmnqdds/simplified-imaluum
 
 _Open PR to add your project here_
 
