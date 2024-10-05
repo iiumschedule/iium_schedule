@@ -48,7 +48,7 @@ dependencies:
   isar_flutter_libs: ^3.0.5
   # Pined the the latest 5.x release, I'm not upgrading to 6.x because
   # i can't test it (my ima'luum account is locked)
-  flutter_inappwebview: 5.8.0
+  flutter_inappwebview: <=5.8.0
   like_button: ^2.0.5
   auto_size_text: ^3.0.0
   ical:
