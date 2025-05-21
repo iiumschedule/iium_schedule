@@ -43,11 +43,12 @@ See [Wiki/Build](https://github.com/iqfareez/iium_schedule/wiki/Build)
 
 ## Releases
 
-App is available for Android, Windows, MacOS, iOS\* and Web\*\*. Check it out [here](https://iiumschedule.iqfareez.com/downloads)!
+Builds are available for Android, Windows, macOS, and Web. Check them out [here](https://iiumschedule.iqfareez.com/downloads)!
 
-> [!NOTE] > \*You'll need to build it yourself
+If you're interested in running the app on iOS, you'll need to [build it](https://github.com/iqfareez/iium_schedule/wiki/Build) yourself or try the [alternatives](#similar-project-like-this-one).
 
-> [!NOTE] > \*\*Web support is discontinued (Issue #60). See [alternatives projects](#similar-project-like-this-one). Web version branch is `1.0.3-web`.
+> [!NOTE]
+> Web support has been discontinued (see Issue #60). The Web version is maintained on the `1.0.3-web` branch. Check out the [alternative projects!](#similar-project-like-this-one).
 
 ## Devlog
 
@@ -73,10 +74,10 @@ https://iiumschedule.iqfareez.com
 
 ## Similar project like this one
 
-- https://github.com/asdacap/iiumschedule
-- https://github.com/PlashSpeed-Aiman/IIUMCourseScheduleApp
-- https://proreg.vercel.app ([Android](https://play.google.com/store/apps/details?id=tech.forthify.ProReg&hl=en_US)/[iOS](https://apps.apple.com/my/app/proreg/id6477275292))
+- https://linktr.ee/proreg
 - https://github.com/nrmnqdds/simplified-imaluum
+- https://github.com/PlashSpeed-Aiman/IIUMCourseScheduleApp
+- https://github.com/asdacap/iiumschedule
 
 _Open PR to add your project here_
 
