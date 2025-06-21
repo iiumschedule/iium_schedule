@@ -8,9 +8,9 @@
 
 # IIUM Schedule App
 
-Generate a beautiful & clean IIUM Schedule quickly with automatic subject data fetching. View what courses are available to register at your fingertips.
+Generate a beautiful and clean IIUM Schedule quickly with automatic subject data fetching. View the courses available for registration at your fingertips.
 
-Load timetable I-Ma'luum and your schedule is ready. As easy as that :wink:
+Load the timetable from I-Ma'luum, and your schedule is ready. It's as easy as that! :wink:
 
 <h1 align="center">
     <picture>
@@ -21,13 +21,13 @@ Load timetable I-Ma'luum and your schedule is ready. As easy as that :wink:
 
 ## Contributions
 
-Feel free to open up [issues](https://github.com/iqfareez/iium_schedule/issues) and/or submit [pull requests](https://github.com/iqfareez/iium_schedule/pulls).
+Feel free to open [issues](https://github.com/iqfareez/iium_schedule/issues) and/or submit [pull requests](https://github.com/iqfareez/iium_schedule/pulls).
 
-Refer [Wiki/Contributing](https://github.com/iqfareez/iium_schedule/wiki/Contributing) for more info.
+Refer to [Wiki/Contributing](https://github.com/iqfareez/iium_schedule/wiki/Contributing) for more information.
 
-> [July 2023] Now that I'm graduated from IIUM, your contributions are very much needed since I'm no longrt have access to I-Ma'luum etc. I'll do my best to maintain the project. InshaAllah.
+> [July 2023] Now that I've graduated from IIUM, your contributions are very much needed since I no longer have access to I-Ma'luum, etc. I'll do my best to maintain the project, InshaAllah.
 
-## Getting started
+## Getting Started
 
 See [Wiki/Build](https://github.com/iqfareez/iium_schedule/wiki/Build)
 
@@ -35,11 +35,11 @@ See [Wiki/Build](https://github.com/iqfareez/iium_schedule/wiki/Build)
 
 - Generate schedule (ClassUp style)
 - Fetch timetable from I-Ma'luum (Android only)
-- Save schedule in-app.
-- Export as an image (so you can set it as lockscreen)
-- Customize schedule (ie: Change colours etc.)
-- Browse for subjects.
-- Add final exam (and can be added to your favourite calendar)
+- Save schedule in-app
+- Export as an image (so you can set it as your lock screen)
+- Customize schedule (e.g., change colors, etc.)
+- Browse for subjects
+- Add final exams (and integrate them into your favorite calendar)
 
 ## Releases
 
@@ -61,25 +61,25 @@ If you're interested in running the app on iOS, you'll need to [build it](https:
 ## Motivation
 
 - To contribute something to the university and its people. [خير الناس أنفعهم للناس]
-- To make a tool that can generate a beautiful, lockscreen-worthy schedule for IIUM students that **require minimal effort**.
-- and maybe others, read more [here](https://iiumschedule.iqfareez.com/changelog/2022/10/8/first-release).
+- To create a tool that can generate a beautiful, lockscreen-worthy schedule for IIUM students that **requires minimal effort**.
+- And maybe other reasons; read more [here](https://iiumschedule.iqfareez.com/changelog/2022/10/8/first-release).
 
 <sub>Actually, I'm pretty lazy to make my schedule manually for every semester. So, as a wise developer, we always do [this](https://i.redd.it/0cm6yx27tez21.jpg).</sub>
 
 ## Website
 
-For guides extracting subjects, release notes, privacy policy etc. Go to the website at:
+For guides on extracting subjects, release notes, privacy policy, etc., visit the website at:
 
 https://iiumschedule.iqfareez.com
 
-## Similar project like this one
+## Similar Projects
 
 - https://linktr.ee/proreg
 - https://github.com/nrmnqdds/simplified-imaluum
 - https://github.com/PlashSpeed-Aiman/IIUMCourseScheduleApp
 - https://github.com/asdacap/iiumschedule
 
-_Open PR to add your project here_
+_Open a PR to add your project here._
 
 ## Contributors
 
@@ -100,7 +100,7 @@ _Open PR to add your project here_
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-## Related repositories
+## Related Repositories
 
 - Website: https://github.com/iqfareez/iiumscwebsite
 - Firebase Function: https://github.com/iqfareez/iiumschedule-functions
