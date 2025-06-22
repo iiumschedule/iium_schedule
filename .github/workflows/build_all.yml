@@ -35,7 +35,7 @@ jobs:
         run: flutter build appbundle
 
       - name: Upload aab
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: "!github.event.release.prerelease"
         with:
           name: aab artifact
@@ -56,7 +56,7 @@ jobs:
           echo ":white_check_mark: Build split apk" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload file to artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: apks artifact
           path: build/app/outputs/apk/release/*.apk
@@ -84,7 +84,7 @@ jobs:
           flutter pub get
           flutter build windows
 
-      - name: Add vcredist files tp Release
+      - name: Add vcredist files to Release
         run: |
           git clone https://github.com/iiumschedule/vcredist.git windows-x64-vc
           Copy-Item windows-x64-vc/msvcp140.dll build/windows/x64/runner/Release/
@@ -99,7 +99,7 @@ jobs:
 
       # Upload the exe to artifacts
       - name: Upload artifact (.exe)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows installer exe
           path: Inno/iiumschedulesetup.exe
@@ -131,7 +131,7 @@ jobs:
           echo :white_check_mark: Packaged into .msix file >> $GITHUB_STEP_SUMMARY
 
       - name: Upload artifact (.msix)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: "!github.event.release.prerelease"
         with:
           name: windows installer msix
@@ -172,7 +172,7 @@ jobs:
           appdmg appdmg/config.json appdmg/IIUMSchedule.dmg
 
       - name: Upload the installer as an artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macOS installer DMG
           path: "appdmg/IIUMSchedule.dmg"
@@ -186,7 +186,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: Rename apk
         run: curl -s https://gist.githubusercontent.com/iqfareez/f57405016cc8bcc51cdcd2879c88807a/raw/5d9bbed7231a9e56bf24b88ab5286cee73dae173/rename_apk.sh | bash -s IIUMSchedule .
@@ -211,7 +211,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download aab artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: aab artifact
 

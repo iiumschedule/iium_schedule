@@ -46,7 +46,7 @@ jobs:
           appdmg appdmg/config.json appdmg/IIUMSchedule.dmg
 
       - name: Upload the installer as an artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: "appdmg/IIUMSchedule.dmg"
 
