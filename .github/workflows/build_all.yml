@@ -49,7 +49,7 @@ jobs:
       - name: Build release APK(s)
         run: |
           flutter pub get
-          flutter build apk --split-per-abi -v
+          flutter build apk --split-per-abi
 
       - name: Adding markdown
         run: |
@@ -222,5 +222,4 @@ jobs:
           packageName: com.iqfareez.iiumschedule
           releaseFiles: app-release.aab
           track: production
-          # changesNotSentForReview: true
           status: draft
