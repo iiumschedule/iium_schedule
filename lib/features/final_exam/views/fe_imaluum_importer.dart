@@ -16,15 +16,10 @@ class FeImaluumImporter extends StatefulWidget {
 class _FeImaluumImporterState extends State<FeImaluumImporter> {
   final GlobalKey webViewKey = GlobalKey();
   InAppWebViewController? webViewController;
-  InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
-    crossPlatform: InAppWebViewOptions(
-      useShouldOverrideUrlLoading: true,
-      mediaPlaybackRequiresUserGesture: false,
-    ),
-    android: AndroidInAppWebViewOptions(
-      // TODO: Need to check the performance for Android <9
-      useHybridComposition: true,
-    ),
+  final options = InAppWebViewSettings(
+    useShouldOverrideUrlLoading: true,
+    mediaPlaybackRequiresUserGesture: false,
+    useHybridComposition: true,
   );
 
   List<dynamic>? response;
@@ -81,7 +76,7 @@ class _FeImaluumImporterState extends State<FeImaluumImporter> {
           key: webViewKey,
           onWebViewCreated: (controller) => webViewController = controller,
           initialUrlRequest: URLRequest(
-            url: Uri.parse('https://imaluum.iium.edu.my/MyAcademic/final-exam'),
+            url: WebUri('https://imaluum.iium.edu.my/MyAcademic/final-exam'),
           ),
           // check if need login,
           // after login, make sure the url matches the url above

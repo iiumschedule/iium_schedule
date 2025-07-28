@@ -24,7 +24,7 @@ dependencies:
   and:
     git: https://github.com/iqfareez/and.git # null-safe
   url_launcher: ^6.0.17
-  package_info_plus: ^5.0.1
+  package_info_plus: ^8.3.0
   flutter_timetable_view:
     git:
       url: https://github.com/iqfareez/flutter_timetable_view.git
@@ -33,28 +33,26 @@ dependencies:
   provider: ^6.0.2
   fluttertoast: ^8.0.9
   path_provider: ^2.0.11
-  permission_handler: ^11.0.1
+  permission_handler: ^12.0.1
   quick_actions: ^1.0.0
-  share_plus: ^7.0.2
+  share_plus: ^11.0.0
   intl: ^0.18.0
   http: ^1.1.0
   version: ^3.0.2
   cross_file: ^0.3.3+2
-  device_info_plus: ^9.0.2
+  device_info_plus: ^11.5.0
   pull_to_refresh: ^2.0.0
   dynamic_color: ^1.5.4
   flutter_displaymode: ^0.6.0
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.5
-  # Pined the the latest 5.x release, I'm not upgrading to 6.x because
-  # i can't test it (my ima'luum account is locked)
-  flutter_inappwebview: <=5.8.0
+  flutter_inappwebview: ^6.1.5
   like_button: ^2.0.5
   auto_size_text: ^3.0.0
   ical:
     git: https://github.com/dartclub/ical.git
   open_file: ^3.3.1
-  flutter_markdown: ^0.6.18
+  flutter_markdown: ^0.7.7+1
   gal: ^2.3.0
 
 dev_dependencies:
@@ -62,7 +60,7 @@ dev_dependencies:
     sdk: flutter
   msix: ^3.5.1
   build_runner: ^2.1.7
-  flutter_lints: ^3.0.1
+  flutter_lints: ^6.0.0
   isar_generator: ^3.0.5
 
 # For information on the generic Dart part of this file, see the
