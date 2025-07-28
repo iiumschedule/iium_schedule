@@ -1,6 +1,6 @@
 # Build fat apk
 
-name: Build Android (.apk(s))
+name: Build Android (fat apk)
 
 "on":
   workflow_dispatch:
