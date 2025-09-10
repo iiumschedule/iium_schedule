@@ -93,7 +93,7 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
                           .toList(),
                       decoration:
                           const InputDecoration(border: OutlineInputBorder()),
-                      value: _selectedKulliyah,
+                      initialValue: _selectedKulliyah,
                       selectedItemBuilder: (_) =>
                           Kuliyyahs.all.map((e) => Text(e.shortName)).toList(),
                       hint: const Text('Select kulliyyah'),

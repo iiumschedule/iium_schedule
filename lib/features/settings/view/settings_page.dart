@@ -139,8 +139,11 @@ class _DeveloperModeButtonState extends State<_DeveloperModeButton> {
               shape: const ContinuousRectangleBorder(
                 borderRadius: BorderRadius.zero,
               ),
-              foregroundColor:
-                  Theme.of(context).textTheme.bodySmall!.color!.withOpacity(.6),
+              foregroundColor: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .color!
+                  .withValues(alpha: .6),
             ),
             onPressed: () async {
               if (widget.isDeveloperModeEnabled) {

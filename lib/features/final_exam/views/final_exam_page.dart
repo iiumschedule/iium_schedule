@@ -130,7 +130,7 @@ class _FinalExamPageState extends State<FinalExamPage> {
         title: const Text('Final Exam'),
         centerTitle: false,
         titleTextStyle: TextStyle(
-          color: Theme.of(context).colorScheme.onBackground,
+          color: Theme.of(context).colorScheme.onSurface,
           fontSize: 36.0,
           fontWeight: FontWeight.bold,
         ),

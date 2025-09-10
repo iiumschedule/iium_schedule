@@ -140,12 +140,12 @@ class LaneEventsUtil {
       Lane lane = Lane(
         backgroundColor: highlightLaneDay
             ? Theme.of(context).colorScheme.primary
-            : Theme.of(context).colorScheme.background,
+            : Theme.of(context).colorScheme.surface,
         name: i.englishDay().substring(0, 3).toUpperCase(),
         textStyle: TextStyle(
           color: highlightLaneDay
               ? Theme.of(context).colorScheme.onPrimary
-              : Theme.of(context).colorScheme.onBackground,
+              : Theme.of(context).colorScheme.onSurface,
         ),
       );
 

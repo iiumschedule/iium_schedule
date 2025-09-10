@@ -43,7 +43,7 @@ class _InputScopeState extends State<InputScope>
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 500),
@@ -68,7 +68,7 @@ class _InputScopeState extends State<InputScope>
                             border: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15.0)))),
-                        value: _selectedKulliyah,
+                        initialValue: _selectedKulliyah,
                         selectedItemBuilder: (_) => Kuliyyahs.all
                             .map((e) => Text(e.shortName))
                             .toList(),
@@ -82,7 +82,7 @@ class _InputScopeState extends State<InputScope>
                     cursor: SystemMouseCursors.click,
                     child: CupertinoSegmentedControl(
                         unselectedColor:
-                            Theme.of(context).colorScheme.background,
+                            Theme.of(context).colorScheme.surface,
                         borderColor:
                             Theme.of(context).colorScheme.secondaryContainer,
                         groupValue: _selectedSession,
@@ -99,7 +99,7 @@ class _InputScopeState extends State<InputScope>
                     cursor: SystemMouseCursors.click,
                     child: CupertinoSegmentedControl(
                         unselectedColor:
-                            Theme.of(context).colorScheme.background,
+                            Theme.of(context).colorScheme.surface,
                         borderColor:
                             Theme.of(context).colorScheme.secondaryContainer,
                         groupValue: _selectedSemester - 1,
@@ -115,7 +115,7 @@ class _InputScopeState extends State<InputScope>
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: CupertinoSegmentedControl(
-                      unselectedColor: Theme.of(context).colorScheme.background,
+                      unselectedColor: Theme.of(context).colorScheme.surface,
                       borderColor:
                           Theme.of(context).colorScheme.secondaryContainer,
                       groupValue: _selectedStudyGrad,

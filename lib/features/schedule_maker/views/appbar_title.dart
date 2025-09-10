@@ -53,11 +53,11 @@ class _AppbarTitleState extends State<AppbarTitle> {
     }
   }
 
-  _handlePageIndex() {
+  void _handlePageIndex() {
     setState(_readCurrentPageIndex);
   }
 
-  _readCurrentPageIndex() {
+  void _readCurrentPageIndex() {
     _currentPageIndex = widget.currentPageNotifier.value;
   }
 }

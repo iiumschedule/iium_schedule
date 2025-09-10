@@ -102,7 +102,7 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
 
                       if (selectedColour == null) return;
 
-                      snapshot.data!.hexColor = selectedColour.value;
+                      snapshot.data!.hexColor = selectedColour.toARGB32();
                       newColor = selectedColour;
 
                       isarService.updateSubject(snapshot.data!);

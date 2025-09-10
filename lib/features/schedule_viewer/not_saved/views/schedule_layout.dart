@@ -179,7 +179,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
               : Colors.white;
 
           tempHexColour.addAll({
-            e.code: _colorPallete[subjIndex].value,
+            e.code: _colorPallete[subjIndex].toARGB32(),
           });
 
           var extraInfoType =
@@ -233,11 +233,11 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
       // if click export, then the day will be highlighted as well.
       // Perhaps we need some refactoring first before proceeding
       Lane lane = Lane(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         name: i.englishDay().substring(0, 3).toUpperCase(),
         textStyle: TextStyle(
           fontFamily: 'Inter',
-          color: Theme.of(context).colorScheme.onBackground,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
       );
 
@@ -259,7 +259,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
       child: GestureDetector(
         onTap: _hideFab ? () => setState(() => _hideFab = !_hideFab) : null,
         child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: _isFullScreen
               ? null
               : AppBar(

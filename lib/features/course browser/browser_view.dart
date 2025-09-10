@@ -87,7 +87,7 @@ class _BrowserViewState extends State<BrowserView> {
         return Future.value(true);
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           title: Text(
             "${widget.kulliyah} Sem ${widget.albiruni.semester} (${widget.albiruni.sesShort})",

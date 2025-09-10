@@ -66,7 +66,7 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                 // container for decoration only
                 decoration: BoxDecoration(boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(.2),
+                    color: Colors.black.withValues(alpha: .2),
                     blurRadius: 60,
                     spreadRadius: .1,
                   )
@@ -77,7 +77,7 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                     child: Container(
                       // container to add bg colour & top padding
                       padding: const EdgeInsets.only(top: 18),
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.surface,
                       child: ClipRect(
                         // cliprect to remove schedule 'leaking' out of the container
                         child: TimetableViewWidget(

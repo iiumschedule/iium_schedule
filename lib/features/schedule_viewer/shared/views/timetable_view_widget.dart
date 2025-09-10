@@ -20,16 +20,16 @@ class TimetableViewWidget extends StatelessWidget {
     return LayoutBuilder(builder: (_, constraints) {
       return TimetableView(
         timetableStyle: TimetableStyle(
-          timeItemTextColor: Theme.of(context).colorScheme.onBackground,
+          timeItemTextColor: Theme.of(context).colorScheme.onSurface,
           timeItemWidth: 40,
           laneHeight: 30,
           timeItemHeight: itemHeight,
           // responsive layout while providing little padding at the end
           laneWidth: constraints.maxWidth / (_laneEventsList.length + .8),
-          laneColor: Theme.of(context).colorScheme.background,
-          timelineColor: Theme.of(context).colorScheme.background,
-          mainBackgroundColor: Theme.of(context).colorScheme.background,
-          timelineItemColor: Theme.of(context).colorScheme.background,
+          laneColor: Theme.of(context).colorScheme.surface,
+          timelineColor: Theme.of(context).colorScheme.surface,
+          mainBackgroundColor: Theme.of(context).colorScheme.surface,
+          timelineItemColor: Theme.of(context).colorScheme.surface,
           startHour: startHour,
           endHour: endHour,
         ),

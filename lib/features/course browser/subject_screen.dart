@@ -52,10 +52,9 @@ class _SubjectScreenState extends State<SubjectScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: const Text('Subject details'),
-        // shadowColor: Colors.transparent,
         actions: [
           // only shows favourite button when the subject is loaded from course browser
           if (widget.albiruni != null && widget.kulliyyah != null)

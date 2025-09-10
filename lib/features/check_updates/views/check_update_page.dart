@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter/services.dart';
@@ -27,12 +26,11 @@ class _CheckUpdatePageState extends State<CheckUpdatePage> {
   /// Also, the web seems like unsuitable to have a check for updates feature
   /// Despite that there have bene multiple issuew with web pwa caching
 
-
   @override
   void initState() {
     super.initState();
     //construct service and inject isar service
-    updateService = UpdateService( isarService: IsarService());
+    updateService = UpdateService(isarService: IsarService());
 
     // determine current version
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
@@ -83,7 +81,8 @@ class _CheckUpdatePageState extends State<CheckUpdatePage> {
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.white.withOpacity(0.2),
+                                        color:
+                                            Colors.white.withValues(alpha: 0.2),
                                         blurRadius: 90.0,
                                         spreadRadius: 70.0,
                                       ),

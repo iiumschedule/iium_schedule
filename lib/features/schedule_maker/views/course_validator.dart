@@ -33,7 +33,7 @@ class _CourseValidatorState extends State<CourseValidator>
         builder: (context, scheduleMaker, _) {
       _validatorPass = CourseValidatorPass(scheduleMaker.subjects!.length);
       return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: ListView(

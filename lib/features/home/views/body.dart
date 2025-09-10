@@ -45,12 +45,12 @@ class _MyBodyState extends State<MyBody> {
   Widget build(BuildContext context) {
     return Scaffold(
       // extendBodyBehindAppBar: true,
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.grey.withAlpha(90),
           systemNavigationBarColor:
-              Theme.of(context).colorScheme.surfaceVariant,
+              Theme.of(context).colorScheme.surfaceContainerHighest,
         ),
         titleSpacing: 0,
         centerTitle:
@@ -69,7 +69,7 @@ class _MyBodyState extends State<MyBody> {
                 style: TextButton.styleFrom(
                     textStyle: Theme.of(context).textTheme.bodySmall,
                     foregroundColor:
-                        Theme.of(context).colorScheme.onBackground),
+                        Theme.of(context).colorScheme.onSurface),
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -170,7 +170,7 @@ class _MyBodyState extends State<MyBody> {
                             'IIUM Schedule',
                             textAlign: TextAlign.left,
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onBackground,
+                              color: Theme.of(context).colorScheme.onSurface,
                               fontSize: 36.0,
                               fontWeight: FontWeight.bold,
                             ),

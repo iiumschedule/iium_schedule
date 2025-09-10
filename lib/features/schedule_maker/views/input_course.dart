@@ -36,7 +36,7 @@ class _InputCourseState extends State<InputCourse>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SizedBox(
         width: double.infinity,
         child: Column(

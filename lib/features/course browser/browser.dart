@@ -40,12 +40,7 @@ class _BrowserState extends State<Browser> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        // appBar: AppBar(
-        //   systemOverlayStyle: SystemUiOverlayStyle.light
-        //       .copyWith(statusBarColor: Colors.transparent),
-        //   title: const Text('Course Browser'),
-        // ),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 500),
@@ -67,7 +62,7 @@ class _BrowserState extends State<Browser> {
                           border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15.0)))),
-                      value: _selectedKulliyah,
+                      initialValue: _selectedKulliyah,
                       hint: const Text('Select kulliyyah'),
                       selectedItemBuilder: (_) =>
                           Kuliyyahs.all.map((e) => Text(e.shortName)).toList(),
@@ -118,9 +113,6 @@ class _BrowserState extends State<Browser> {
                 const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14),
-                  // Removed [CupertinoTextField] to prevent the usage of
-                  // [CupertinoIcons] as they are not tree shaken when publish
-                  // to the web. https://github.com/flutter/flutter/issues/57181
                   child: TextField(
                     maxLength: 9,
                     controller: _searchController,
