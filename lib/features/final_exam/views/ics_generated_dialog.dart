@@ -99,8 +99,11 @@ class IcsGeneratedDialog extends StatelessWidget {
                 ElevatedButton.icon(
                   icon: const Icon(Icons.share),
                   onPressed: () {
-                    Share.shareXFiles([XFile(icsSavedFile.path)],
-                        text: 'IIUM exam calendar file');
+                    final shareParams = ShareParams(
+                      files: [XFile(icsSavedFile.path)],
+                      text: 'IIUM exam calendar file',
+                    );
+                    SharePlus.instance.share(shareParams);
                     Navigator.pop(context);
                   },
                   label: const Text('Share'),

@@ -80,13 +80,17 @@ class _SubjectScreenState extends State<SubjectScreen> {
             ),
           IconButton(
             onPressed: () {
-              String text = '${widget.subject.title} (${widget.subject.code})';
-              text += '\n';
-              text += '\nSection: ${widget.subject.sect}';
-              text += '\nCredit hour: ${widget.subject.chr}';
-              text += '\nLecturer(s): ${widget.subject.lect.join(', ')}';
-              text += '\nVenue: ${widget.subject.venue ?? '-'}';
-              Share.share(text);
+              StringBuffer sb = StringBuffer(
+                  '${widget.subject.title} (${widget.subject.code})');
+              sb.writeln();
+              sb.writeln();
+              sb.writeln('Section: ${widget.subject.sect}');
+              sb.writeln('Credit hour: ${widget.subject.chr}');
+              sb.writeln('Lecturer(s): ${widget.subject.lect.join(', ')}');
+              sb.writeln('Venue: ${widget.subject.venue ?? '-'}');
+
+              final shareParams = ShareParams(text: sb.toString());
+              SharePlus.instance.share(shareParams);
             },
             icon: const Icon(Icons.share_outlined),
             tooltip: "Share this subject",

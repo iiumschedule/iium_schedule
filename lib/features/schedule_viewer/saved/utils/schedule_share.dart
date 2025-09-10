@@ -16,11 +16,12 @@ class ScheduleShare {
     // To make the schedule title as caption, set either [subject] or [text]
     // On Android, set [text]
     // On Ios, set [subject] (when set text, the share sheet display two files)
-    await Share.shareXFiles(
-      [xFilePath],
+    final shareParams = ShareParams(
+      files: [xFilePath],
       subject: !Platform.isAndroid ? scheduleTitle : null,
-      text: !Platform.isIOS ? scheduleTitle : null,
+      text: Platform.isAndroid ? scheduleTitle : null,
     );
+    await SharePlus.instance.share(shareParams);
   }
 
   /// TODO: Test with Firebase functions and use it (Not fully implemented yet)
