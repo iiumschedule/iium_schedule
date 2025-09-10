@@ -1,7 +1,4 @@
 [![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev/)
-[![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://play.google.com/store/apps/details?id=com.iqfareez.iiumschedule)
-[![Web](<https://img.shields.io/badge/WEB%20(PWA)-5a0fc8?style=for-the-badge&logo=GoogleChrome&logoColor=white>)](https://iiumschedule.web.app/#/)
-[![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://iiumschedule.iqfareez.com/downloads/stable#windows)
 ![License](https://img.shields.io/github/license/iqfareez/iium_schedule?style=for-the-badge)
 [![PRs Welcome](https://img.shields.io/badge/PR-welcome-brightgreen.svg?style=for-the-badge)](https://makeapullrequest.com)
 [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/iqfareez)
@@ -48,7 +45,7 @@ Builds are available for Android, Windows, macOS, and Web. Check them out [here]
 If you're interested in running the app on iOS, you'll need to [build it](https://github.com/iqfareez/iium_schedule/wiki/Build) yourself or try the [alternatives](#similar-project-like-this-one).
 
 > [!NOTE]
-> Web support has been discontinued (see Issue #60). The Web version is maintained on the `1.0.3-web` branch. Check out the [alternative projects!](#similar-project-like-this-one).
+> Web support has been discontinued (see Issue #60). The Web version is maintained on the `1.0.3-web` branch. Check out the [alternative projects!](#similar-projects).
 
 ## Devlog
 
