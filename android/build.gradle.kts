@@ -21,6 +21,9 @@ subprojects {
                 if (androidExtension.namespace == null) {
                     androidExtension.namespace = project.group.toString()
                 }
+                // Fixes issue https://github.com/iiumschedule/iium_schedule/issues/115
+                androidExtension.compileSdkVersion = "android-35"
+                androidExtension.buildToolsVersion = "35.0.0"
             }
         }
     }
