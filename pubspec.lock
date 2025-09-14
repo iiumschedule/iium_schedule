@@ -25,15 +25,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.0"
-  and:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: c148d733fd2ec2c95d88e1a7b0014382b21aeb82
-      url: "https://github.com/iqfareez/and.git"
-    source: git
-    version: "1.0.0"
   archive:
     dependency: transitive
     description:

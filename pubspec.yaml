@@ -21,8 +21,6 @@ dependencies:
   albiruni: ^1.4.0
   recase:
     git: https://github.com/iqfareez/recase.git # Issue #2
-  and:
-    git: https://github.com/iqfareez/and.git # null-safe
   url_launcher: ^6.0.17
   package_info_plus: ^8.3.0
   flutter_timetable_view:

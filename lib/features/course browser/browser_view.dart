@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:albiruni/albiruni.dart';
-import 'package:and/and.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recase/recase.dart';
 
 import '../../shared/extensions/int_extension.dart';
 import '../../shared/extensions/string_extension.dart';
+import '../../shared/utils/and.dart';
 import 'subject_screen.dart';
 
 class BrowserView extends StatefulWidget {
