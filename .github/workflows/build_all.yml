@@ -94,6 +94,7 @@ jobs:
       # package the executable using Inno Setup
       - name: Building the installer (Inno)
         run: |
+          choco install innosetup -y
           "%programfiles(x86)%\Inno Setup 6\iscc.exe" "Inno\setup-script.iss"
         shell: cmd
 
