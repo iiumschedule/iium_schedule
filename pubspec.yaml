@@ -49,8 +49,7 @@ dependencies:
   auto_size_text: ^3.0.0
   ical:
     git:
-      url: https://github.com/iqfareez/ical.git
-      ref: feature/upgrade-deps
+      url: https://github.com/dartclub/ical.git
   open_file: ^3.3.1
   flutter_markdown: ^0.7.7+1
   gal: ^2.3.0

@@ -493,9 +493,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "feature/upgrade-deps"
-      resolved-ref: "1ac0995a769d7a70d3695cae86676ec4b9668fe7"
-      url: "https://github.com/iqfareez/ical.git"
+      ref: HEAD
+      resolved-ref: b31b16c8984cd8bcebea1582045174eab74a36ec
+      url: "https://github.com/dartclub/ical.git"
     source: git
     version: "0.4.0"
   image:
