@@ -1,103 +1,139 @@
+import 'package:albiruni/albiruni.dart';
+
 /// Kuliyyah code and full names
 class Kuliyyahs {
   static final List<Kuliyyah> _kulls = [
     Kuliyyah(
-      code: "BRIDG",
-      fullName: "BRIDGING PROGRAMME",
-      shortName: "BRIDG",
-    ),
-    Kuliyyah(
-      code: "CCAC",
-      fullName: "Credited Co-Curricular Department",
-      shortName: "COCU",
-    ),
-    Kuliyyah(
-      code: "CFL",
-      fullName: "Centre for Languages & Pre-University Academic Development",
-      shortName: "CELPAD",
-    ),
-    Kuliyyah(
-      code: "AED",
-      fullName: "Kulliyyah of Architecture & Environmental Design",
-      shortName: "KAED",
-    ),
-    Kuliyyah(
-      code: "EDUC",
-      fullName: "Kulliyyah of Education",
-      shortName: "KOED",
-    ),
-    Kuliyyah(
-      code: "ENGIN",
-      fullName: "Kulliyyah of Engineering",
-      shortName: "KOE",
-    ),
-    Kuliyyah(
-      code: "ECONS",
-      fullName: "Kulliyyah of Economics & Management Sciences",
-      shortName: "KENMS",
-    ),
-    Kuliyyah(
-      code: "KICT",
-      fullName: "Kulliyyah of Information & Communication Technology",
-      shortName: "KICT",
-    ),
-    // "IHART": "INTERNATIONAL INSTITUTE FOR HALAL RESEARCH AND TRAINING",
-    Kuliyyah(
-      code: "IRKHS",
+      code: "AHAS",
       fullName: "Kulliyyah of Islamic Reveal Knowledge And Human Sciences",
-      shortName: "KIRKHS",
-    ),
-    // "IIBF": "ISLAMIC BANKING AND FINANCE",
-    // "ISTAC": "ISTAC",
-    Kuliyyah(
-      code: "LAWS",
-      fullName: "Ahmad Ibrahim Kulliyyah of Laws",
-      shortName: "AIKOL",
-    ),
-    Kuliyyah(
-      code: "KLM",
-      fullName: "Kulliyyah of Sustainable Tourism and Contemporary Languages",
-      shortName: "KSTCL KLM",
+      moniker: "AHAS KIRKHS",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
     ),
     Kuliyyah(
       code: "KAHS",
       fullName: "Kulliyyah of Allied Health Science",
-      shortName: "KAHS",
+      moniker: "ALLIED HEALTH SCIENCES",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
+    ),
+    Kuliyyah(
+      code: "AED",
+      fullName: "Kulliyyah of Architecture & Environmental Design",
+      moniker: "ARCHITECTURE",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
+    ),
+    Kuliyyah(
+      code: "BRIDG",
+      fullName: "BRIDGING PROGRAMME",
+      moniker: "BRIDG",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
+    ),
+    Kuliyyah(
+      code: "CFL",
+      fullName: "Centre for Languages & Pre-University Academic Development",
+      moniker: "CELPAD",
+      scopes: [StudyGrad.ug],
+    ),
+    Kuliyyah(
+      code: "CCC",
+      fullName: "Credited Co-Curricular Department",
+      moniker: "CCC",
+      scopes: [StudyGrad.ug],
     ),
     Kuliyyah(
       code: "DENT",
       fullName: "Kulliyyah of Dentistry",
-      shortName: "KOD",
+      moniker: "DENTISTRY",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
+    ),
+    Kuliyyah(
+      code: "EDUC",
+      fullName: "Kulliyyah of Education",
+      moniker: "EDUCATION",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
+    ),
+    Kuliyyah(
+      code: "ENGIN",
+      fullName: "Kulliyyah of Engineering",
+      moniker: "ENGIN",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
+    ),
+    Kuliyyah(
+      code: "ECONS",
+      fullName: "Kulliyyah of Economics & Management Sciences",
+      moniker: "ENMS",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
+    ),
+    Kuliyyah(
+      code: "KICT",
+      fullName: "Kulliyyah of Information & Communication Technology",
+      moniker: "ICT",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
+    ),
+    Kuliyyah(
+      code: "IHART",
+      fullName: "International Institute For Halal Research And Training",
+      moniker: "IHART",
+      scopes: [StudyGrad.pg],
+    ),
+    Kuliyyah(
+      code: "IIBF",
+      fullName: "Islamic Banking And Finance",
+      moniker: "IIBF",
+      scopes: [StudyGrad.pg],
+    ),
+    Kuliyyah(
+      code: "ISTAC",
+      fullName: "ISTAC",
+      moniker: "ISTAC",
+      scopes: [StudyGrad.pg],
+    ),
+    Kuliyyah(
+      code: "KLM",
+      fullName: "Kulliyyah of Sustainable Tourism and Contemporary Languages",
+      moniker: "KSTCL",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
+    ),
+    Kuliyyah(
+      code: "LAWS",
+      fullName: "Ahmad Ibrahim Kulliyyah of Laws",
+      moniker: "LAWS",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
     ),
     Kuliyyah(
       code: "MEDIC",
-      fullName: "Kuliiyyah of Medicine",
-      shortName: "KOM",
+      fullName: "Kulliyyah of Medicine",
+      moniker: "MEDICINE",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
     ),
     Kuliyyah(
       code: "NURS",
       fullName: "Kulliyyah of Nursing",
-      shortName: "KON",
+      moniker: "NURSING",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
     ),
     Kuliyyah(
       code: "PHARM",
       fullName: "Kulliyyah of Pharmacy",
-      shortName: "KOP",
+      moniker: "PHARMACY",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
     ),
-    // Kuliyyah(
-    //   code: "PLNET",
-    //   fullName: "Planetary Survival For Sustainable Well-Being",
-    //   shortName: "Planetary",
-    // ),
+    Kuliyyah(
+      code: "PLNET",
+      fullName: "Planetary Survival For Sustainable Well-Being",
+      moniker: "PLNET",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
+    ),
     Kuliyyah(
       code: "KOS",
       fullName: "Kulliyyah of Science",
-      shortName: "KOS",
+      moniker: "SCIENCE",
+      scopes: [StudyGrad.ug, StudyGrad.pg],
     ),
     Kuliyyah(
       code: "SC4SH",
       fullName: "Sejahtera Centre for Sustainability & Humanity",
-      shortName: "SEJAHTERA",
+      moniker: "SEJAHTERA CENTRE FOR SUSTAINABILTY AND HUMANITY",
+      scopes: [StudyGrad.ug],
     ),
   ];
 
@@ -112,24 +148,28 @@ class Kuliyyahs {
   static List<String> get allCodes => _kulls.map((e) => e.code).toList();
 }
 
+/// The Kulliyyah model
 class Kuliyyah {
   /// Code used for Kulliyyah in Albiruni request
   String code;
 
   /// Full name of the kulliyyah
-  String fullName,
+  String fullName;
 
-      /// Kulliyyah name is shortform
-      shortName;
+  /// The display name in course schedule dropdown
+  String moniker;
+
+  List<StudyGrad> scopes = [];
 
   Kuliyyah({
     required this.code,
     required this.fullName,
-    required this.shortName,
+    required this.moniker,
+    this.scopes = const [],
   });
 
   @override
   String toString() {
-    return '$code - $shortName';
+    return '$code - $moniker';
   }
 }

@@ -199,7 +199,7 @@ class _SubjectCardState extends State<SubjectCard> {
                           radius: 10,
                           child: Icon(Icons.edit, size: 13),
                         ),
-                        label: Text(_selectedKulliyah.shortName),
+                        label: Text(_selectedKulliyah.moniker),
                         tooltip: "Change kuliyyah for this subject",
                         onPressed: () async {
                           var newKull = await showDialog(

@@ -95,7 +95,7 @@ class _AddSubjectPageState extends State<AddSubjectPage> {
                           const InputDecoration(border: OutlineInputBorder()),
                       initialValue: _selectedKulliyah,
                       selectedItemBuilder: (_) =>
-                          Kuliyyahs.all.map((e) => Text(e.shortName)).toList(),
+                          Kuliyyahs.all.map((e) => Text(e.moniker)).toList(),
                       hint: const Text('Select kulliyyah'),
                       onChanged: (String? value) {
                         hasManuallySelectedKulliyah = true;

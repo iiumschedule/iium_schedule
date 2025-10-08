@@ -69,9 +69,8 @@ class _InputScopeState extends State<InputScope>
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15.0)))),
                         initialValue: _selectedKulliyah,
-                        selectedItemBuilder: (_) => Kuliyyahs.all
-                            .map((e) => Text(e.shortName))
-                            .toList(),
+                        selectedItemBuilder: (_) =>
+                            Kuliyyahs.all.map((e) => Text(e.moniker)).toList(),
                         hint: const Text('Select main kulliyyah'),
                         onChanged: (String? value) {
                           setState(() => _selectedKulliyah = value);
@@ -81,8 +80,7 @@ class _InputScopeState extends State<InputScope>
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: CupertinoSegmentedControl(
-                        unselectedColor:
-                            Theme.of(context).colorScheme.surface,
+                        unselectedColor: Theme.of(context).colorScheme.surface,
                         borderColor:
                             Theme.of(context).colorScheme.secondaryContainer,
                         groupValue: _selectedSession,
@@ -98,8 +96,7 @@ class _InputScopeState extends State<InputScope>
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: CupertinoSegmentedControl(
-                        unselectedColor:
-                            Theme.of(context).colorScheme.surface,
+                        unselectedColor: Theme.of(context).colorScheme.surface,
                         borderColor:
                             Theme.of(context).colorScheme.secondaryContainer,
                         groupValue: _selectedSemester - 1,
