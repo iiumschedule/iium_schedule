@@ -82,7 +82,15 @@ class _AboutAppDialogState extends State<AboutAppDialog> {
           child: const Text('View licenses'),
           onPressed: () => showLicensePage(
               context: context,
-              applicationLegalese: '\u{a9} 2022-2025 Muhammad Fareez'),
+              applicationLegalese: '\u{a9} 2022-2025 Muhammad Fareez',
+              applicationIcon: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Image.asset(
+                  'assets/logo/app-logo.png',
+                  width: 68,
+                  height: 68,
+                ),
+              )),
         ),
       ],
     );
