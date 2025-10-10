@@ -11,15 +11,13 @@ import 'package:quick_actions/quick_actions.dart';
 import '../../../isar_models/saved_schedule.dart';
 import '../../../shared/services/isar_service.dart';
 import '../../../shared/utils/launcher_url.dart';
-import '../../../shared/utils/my_ftoast.dart';
-import '../../check_updates/views/check_update_page.dart';
 import '../../course browser/browser.dart';
 
 import '../../final_exam/views/final_exam_page.dart';
 import '../../schedule_maker/views/schedule_maker_entry.dart';
 import '../../schedule_viewer/saved/views/saved_schedule_layout.dart';
 import '../../settings/view/settings_page.dart';
-import '../services/home_service.dart';
+import 'components/about_app_dialog.dart';
 
 class MyBody extends StatefulWidget {
   const MyBody({super.key});
@@ -68,12 +66,11 @@ class _MyBodyState extends State<MyBody> {
                 // don't want to be as attractive like a button
                 style: TextButton.styleFrom(
                     textStyle: Theme.of(context).textTheme.bodySmall,
-                    foregroundColor:
-                        Theme.of(context).colorScheme.onSurface),
+                    foregroundColor: Theme.of(context).colorScheme.onSurface),
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (_) => _SimpleAboutDialog(),
+                    builder: (_) => const AboutAppDialog(),
                   );
                 },
                 child: Text(
@@ -370,79 +367,6 @@ class _CardItem extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _SimpleAboutDialog extends StatelessWidget {
-  final HomeService homeService = HomeService();
-  _SimpleAboutDialog();
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialog(
-        title: const Text(
-          'About',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        children: [
-          const SimpleDialogOption(
-            child: Text(
-                'This app enables students to make & check their schedules, specially tailoired for IIUM Students.'),
-          ),
-          SimpleDialogOption(
-            child: const Text(
-              '\u00a9 2024 Muhammad Fareez',
-              style: TextStyle(fontWeight: FontWeight.w500),
-            ),
-            onPressed: () => LauncherUrl.open('https://iqfareez.com'),
-          ),
-          SimpleDialogOption(
-            child: const Text('Thanks to awesome contributors!'),
-            onPressed: () => LauncherUrl.open(
-                'https://github.com/iqfareez/iium_schedule/#contributors'),
-          ),
-          const Divider(),
-          SimpleDialogOption(
-            child: const Text('Available on Android/Windows/Web'),
-            onPressed: () =>
-                LauncherUrl.open('https://iiumschedule.iqfareez.com/downloads'),
-          ),
-          const Divider(),
-          SimpleDialogOption(
-            child: const Text('Check for updates...'),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  fullscreenDialog: true,
-                  builder: (_) => const CheckUpdatePage(),
-                ),
-              );
-            },
-          ),
-          SimpleDialogOption(
-            onPressed: () async {
-              var deviceInfoData = await homeService.getDeviceInfo();
-              var packageInfo = await PackageInfo.fromPlatform();
-
-              final data = {
-                'device': deviceInfoData,
-                'version': packageInfo.version,
-              };
-
-              await Clipboard.setData(
-                  ClipboardData(text: data.values.join('; ')));
-              MyFtoast.show(context, 'Copied to clipboard');
-            },
-            child: const Text('Copy debug info'),
-          ),
-          SimpleDialogOption(
-            child: const Text('View licenses'),
-            onPressed: () => showLicensePage(
-                context: context,
-                applicationLegalese: '\u{a9} 2022 Muhammad Fareez'),
-          ),
-        ]);
   }
 }
 

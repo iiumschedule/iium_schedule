@@ -1,8 +1,10 @@
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
+///service class encapsulate the logic of getting device info
 class HomeService {
-  //service class encapsulate the logic of getting device info
-  Future<String> getDeviceInfo() async{
+  /// Get the device information
+  Future<String> getDeviceInfo() async {
     var deviceInfo = await DeviceInfoPlugin().deviceInfo;
 
     String deviceInfoData;
@@ -12,11 +14,15 @@ class HomeService {
       var androidVersion = deviceInfo.version;
       // eg: Android 11 (30)
       deviceInfoData =
-      'Android ${androidVersion.release} (${androidVersion.sdkInt})';
+          'Android ${androidVersion.release} (${androidVersion.sdkInt})';
     } else if (deviceInfo is WindowsDeviceInfo) {
       var windowsVersion = deviceInfo.displayVersion;
       // eg: Windows 22H2
       deviceInfoData = 'Windows $windowsVersion';
+    } else if (deviceInfo is MacOsDeviceInfo) {
+      var macVersion = deviceInfo.osRelease;
+      // eg: MacOS 13.4.1
+      deviceInfoData = 'MacOS $macVersion';
     } else {
       // on web
       var browserName = (deviceInfo as WebBrowserInfo).browserName;
@@ -26,5 +32,11 @@ class HomeService {
     }
 
     return deviceInfoData;
+  }
+
+  /// Get the package (app) info
+  Future<String> getPackageInfo() async {
+    var packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo.version;
   }
 }
