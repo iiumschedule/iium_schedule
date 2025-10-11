@@ -117,6 +117,20 @@ flutter:
           weight: 400
         - asset: assets/fonts/Barlow_Condensed/BarlowCondensed-Light.ttf
           weight: 300
+    - family: Barlow
+      fonts:
+        - asset: assets/fonts/Barlow/Barlow-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Barlow/Barlow-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Barlow/Barlow-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Barlow/Barlow-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Barlow/Barlow-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Barlow/Barlow-Light.ttf
+          weight: 300
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
