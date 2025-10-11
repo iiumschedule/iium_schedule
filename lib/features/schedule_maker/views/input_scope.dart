@@ -1,13 +1,11 @@
 import 'package:albiruni/albiruni.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../constants.dart' as constants;
 import '../../../shared/providers/schedule_maker_provider.dart';
 import '../../../shared/utils/academic_session.dart';
-import '../../../shared/utils/kulliyyahs.dart';
-import '../../../shared/widgets/study_grad_selector_widget.dart';
+import '../../../shared/widgets/kulliyyah_selection_widget.dart';
 import 'schedule_steps.dart';
 
 class InputScope extends StatefulWidget {
@@ -38,6 +36,31 @@ class _InputScopeState extends State<InputScope>
     }
   }
 
+  /// Callback when the kulliyah is changed
+  void onKulliyyahChanged(String? value) {
+    setState(() => _selectedKulliyah = value);
+  }
+
+  /// Callback when the session is changed
+  void onSessionChanged(String value) {
+    setState(() => _selectedSession = value);
+  }
+
+  /// Callback when the study grade is changed
+  void onStudyGradChanged(StudyGrad value) {
+    // reset kulliyah selection and dropdown state
+    setState(() {
+      _selectedKulliyah = null;
+      _selectedStudyGrad = value;
+    });
+    dropdownKey.currentState?.setState(() {});
+  }
+
+  /// Callback when the semester is changed
+  void onSemesterChanged(int value) {
+    setState(() => _selectedSemester = value);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -54,92 +77,16 @@ class _InputScopeState extends State<InputScope>
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: StudyGradSelectorWidget(
-                      selectedStudyGrad: _selectedStudyGrad,
-                      onChanged: (studyGrad) {
-                        setState(() => _selectedStudyGrad = studyGrad);
-                        // reset kulliyah selection
-                        _selectedKulliyah = null;
-                        // reset dropdown state
-                        dropdownKey.currentState?.setState(() {});
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: DropdownButtonFormField(
-                        isExpanded: true,
-                        borderRadius: BorderRadius.circular(15.0),
-                        items: Kuliyyahs.all
-                            .where((x) => x.scopes.contains(_selectedStudyGrad))
-                            .map((e) => DropdownMenuItem(
-                                  value: e.code,
-                                  child: ListTile(
-                                    contentPadding: EdgeInsets.zero,
-                                    title: Text(
-                                      e.fullName,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    subtitle: Text(
-                                      e.moniker,
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                  ),
-                                ))
-                            .toList(),
-                        key: dropdownKey,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15.0)))),
-                        initialValue: _selectedKulliyah,
-                        selectedItemBuilder: (_) => Kuliyyahs.all
-                            .where((x) => x.scopes.contains(_selectedStudyGrad))
-                            .map((e) => Text(
-                                  e.moniker,
-                                  overflow: TextOverflow.ellipsis,
-                                ))
-                            .toList(),
-                        hint: const Text('Select main kulliyyah'),
-                        onChanged: (String? value) {
-                          setState(() => _selectedKulliyah = value);
-                        },
-                      )),
-                  const SizedBox(height: 10),
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: CupertinoSegmentedControl(
-                        unselectedColor: Theme.of(context).colorScheme.surface,
-                        borderColor:
-                            Theme.of(context).colorScheme.secondaryContainer,
-                        groupValue: _selectedSession,
-                        children: {
-                          for (var session in AcademicSession.session)
-                            session: Text(session)
-                        },
-                        onValueChanged: (String value) {
-                          setState(() => _selectedSession = value);
-                        }),
-                  ),
-                  const SizedBox(height: 10),
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: CupertinoSegmentedControl(
-                        unselectedColor: Theme.of(context).colorScheme.surface,
-                        borderColor:
-                            Theme.of(context).colorScheme.secondaryContainer,
-                        groupValue: _selectedSemester - 1,
-                        children: List.generate(
-                          3,
-                          (index) => Text("Sem ${index + 1}"),
-                        ).asMap(),
-                        onValueChanged: (int value) {
-                          setState(() => _selectedSemester = value + 1);
-                        }),
+                  KulliyyahSelectionWidget(
+                    kulliyyahDropdownKey: dropdownKey,
+                    onKulliyyahChanged: onKulliyyahChanged,
+                    onSessionChanged: onSessionChanged,
+                    onSemesterChanged: onSemesterChanged,
+                    onStudyGradChanged: onStudyGradChanged,
+                    selectedStudyGrad: _selectedStudyGrad,
+                    selectedKulliyah: _selectedKulliyah,
+                    selectedSession: _selectedSession,
+                    selectedSemester: _selectedSemester,
                   ),
                   const SizedBox(height: 10),
                   Padding(
