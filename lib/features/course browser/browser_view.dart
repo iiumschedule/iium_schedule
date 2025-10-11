@@ -180,23 +180,26 @@ class _BrowserViewState extends State<BrowserView> {
                   return ExpansionTile(
                     title: Text(
                       ReCase(snapshot.data![index].title).titleCase,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     subtitle: Text(
                       "Section ${snapshot.data![index].sect}",
                     ),
-                    leading: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(snapshot.data![index].code
-                              .toString()
-                              .replaceAll(" ", "\n"))
-                        ]),
+                    leading: Text(
+                      snapshot.data![index].code.replaceAll(" ", "\n"),
+                      style: TextStyle(
+                        fontFamily: 'Barlow',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
                     childrenPadding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 12),
-                    // backgroundColor: Colors.grey.shade100,
                     children: [
                       InkWell(
-                        // splashColor: Colors.purple.shade100,
                         onTap: () {
                           Navigator.of(context).push(
                             CupertinoPageRoute(
