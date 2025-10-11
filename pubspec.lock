@@ -13,10 +13,10 @@ packages:
     dependency: "direct main"
     description:
       name: albiruni
-      sha256: "21eca644f982a7147c817e2fb912582900adaeccb3d4c544adbaf6830326f68e"
+      sha256: b6bf6125ae8ea8e2792dadd48c75252ad1f2311f12f23292b194b2c86b5d1834
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.3"
+    version: "1.4.4"
   analyzer:
     dependency: transitive
     description:
@@ -245,10 +245,10 @@ packages:
     dependency: "direct main"
     description:
       name: device_info_plus
-      sha256: "98f28b42168cc509abc92f88518882fd58061ea372d7999aecc424345c7bff6a"
+      sha256: "49413c8ca514dea7633e8def233b25efdf83ec8522955cc2c0e3ad802927e7c6"
       url: "https://pub.dev"
     source: hosted
-    version: "11.5.0"
+    version: "12.1.0"
   device_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -306,10 +306,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_displaymode
-      sha256: "42c5e9abd13d28ed74f701b60529d7f8416947e58256e6659c5550db719c57ef"
+      sha256: ecd44b1e902b0073b42ff5b55bf283f38e088270724cdbb7f7065ccf54aa60a8
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.0"
+    version: "0.7.0"
   flutter_inappwebview:
     dependency: "direct main"
     description:
@@ -413,10 +413,10 @@ packages:
     dependency: "direct main"
     description:
       name: fluttertoast
-      sha256: "25e51620424d92d3db3832464774a6143b5053f15e382d8ffbfd40b6e795dcf1"
+      sha256: "144ddd74d49c865eba47abe31cbc746c7b311c82d6c32e571fd73c4264b740e2"
       url: "https://pub.dev"
     source: hosted
-    version: "8.2.12"
+    version: "9.0.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -566,10 +566,10 @@ packages:
     dependency: transitive
     description:
       name: leak_tracker
-      sha256: "8dcda04c3fc16c14f48a7bb586d4be1f0d1572731b6d81d51772ef47c02081e0"
+      sha256: "33e2e26bdd85a0112ec15400c8cbffea70d0f9c3407491f672a2fad47915e2de"
       url: "https://pub.dev"
     source: hosted
-    version: "11.0.1"
+    version: "11.0.2"
   leak_tracker_flutter_testing:
     dependency: transitive
     description:
@@ -750,10 +750,10 @@ packages:
     dependency: "direct main"
     description:
       name: package_info_plus
-      sha256: "16eee997588c60225bda0488b6dcfac69280a6b7a3cf02c741895dd370a02968"
+      sha256: f69da0d3189a4b4ceaeb1a3defb0f329b3b352517f52bed4290f83d4f06bc08d
       url: "https://pub.dev"
     source: hosted
-    version: "8.3.1"
+    version: "9.0.0"
   package_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -790,10 +790,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: "993381400e94d18469750e5b9dcb8206f15bc09f9da86b9e44a9b0092a0066db"
+      sha256: "3b4c1fc3aa55ddc9cd4aa6759984330d5c8e66aa7702a6223c61540dc6380c37"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.18"
+    version: "2.2.19"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -902,10 +902,10 @@ packages:
     dependency: transitive
     description:
       name: pool
-      sha256: "20fe868b6314b322ea036ba325e6fc0711a22948856475e2c2b6306e8ab39c2a"
+      sha256: "978783255c543aa3586a1b3c21f6e9d720eb315376a915872c61ef8b5c20177d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.1"
+    version: "1.5.2"
   posix:
     dependency: transitive
     description:
@@ -958,10 +958,10 @@ packages:
     dependency: transitive
     description:
       name: quick_actions_android
-      sha256: "612c9d53364c641ddcdeafed83c68fc14efb1bf4f686979d755024fc976fc888"
+      sha256: e64862358d647dbde94deedd4f8e99a1a4762b3f836f48141c1c457529b83613
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.23"
+    version: "1.0.25"
   quick_actions_ios:
     dependency: transitive
     description:
@@ -983,18 +983,18 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "1e9c25cdf4828ce9d66430e4cd4deab6102e5722"
+      resolved-ref: "3173327328a5859bd23ca20e5155c85d07ca1529"
       url: "https://github.com/iqfareez/recase.git"
     source: git
-    version: "4.0.5"
+    version: "4.0.6"
   share_plus:
     dependency: "direct main"
     description:
       name: share_plus
-      sha256: d7dc0630a923883c6328ca31b89aa682bacbf2f8304162d29f7c6aaff03a27a1
+      sha256: "3424e9d5c22fd7f7590254ba09465febd6f8827c8b19a44350de4ac31d92d3a6"
       url: "https://pub.dev"
     source: hosted
-    version: "11.1.0"
+    version: "12.0.0"
   share_plus_platform_interface:
     dependency: transitive
     description:
@@ -1132,10 +1132,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_android
-      sha256: "07cffecb7d68cbc6437cd803d5f11a86fe06736735c3dfe46ff73bcb0f958eed"
+      sha256: "5c8b6c2d89a78f5a1cca70a73d9d5f86c701b36b42f9c9dac7bad592113c28e9"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.21"
+    version: "6.3.24"
   url_launcher_ios:
     dependency: transitive
     description:
@@ -1220,10 +1220,10 @@ packages:
     dependency: transitive
     description:
       name: watcher
-      sha256: "5bf046f41320ac97a469d506261797f35254fa61c641741ef32dacda98b7d39c"
+      sha256: "592ab6e2892f67760543fb712ff0177f4ec76c031f02f5b4ff8d3fc5eb9fb61a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.3"
+    version: "1.1.4"
   web:
     dependency: transitive
     description:
@@ -1252,10 +1252,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "66814138c3562338d05613a6e368ed8cfb237ad6d64a9e9334be3f309acfca03"
+      sha256: d7cb55e04cd34096cd3a79b3330245f54cb96a370a1c27adb3c84b917de8b08e
       url: "https://pub.dev"
     source: hosted
-    version: "5.14.0"
+    version: "5.15.0"
   win32_registry:
     dependency: transitive
     description:
