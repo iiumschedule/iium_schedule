@@ -7,6 +7,7 @@ import '../../../../constants.dart' as constants;
 import '../../../shared/providers/schedule_maker_provider.dart';
 import '../../../shared/utils/academic_session.dart';
 import '../../../shared/utils/kulliyyahs.dart';
+import '../../../shared/widgets/study_grad_selector_widget.dart';
 import 'schedule_steps.dart';
 
 class InputScope extends StatefulWidget {
@@ -54,13 +55,40 @@ class _InputScopeState extends State<InputScope>
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: StudyGradSelectorWidget(
+                      selectedStudyGrad: _selectedStudyGrad,
+                      onChanged: (studyGrad) {
+                        setState(() => _selectedStudyGrad = studyGrad);
+                        // reset kulliyah selection
+                        _selectedKulliyah = null;
+                        // reset dropdown state
+                        dropdownKey.currentState?.setState(() {});
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: DropdownButtonFormField(
+                        isExpanded: true,
                         borderRadius: BorderRadius.circular(15.0),
                         items: Kuliyyahs.all
+                            .where((x) => x.scopes.contains(_selectedStudyGrad))
                             .map((e) => DropdownMenuItem(
                                   value: e.code,
-                                  child: Text(e.fullName),
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text(
+                                      e.fullName,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    subtitle: Text(
+                                      e.moniker,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  ),
                                 ))
                             .toList(),
                         key: dropdownKey,
@@ -69,8 +97,13 @@ class _InputScopeState extends State<InputScope>
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15.0)))),
                         initialValue: _selectedKulliyah,
-                        selectedItemBuilder: (_) =>
-                            Kuliyyahs.all.map((e) => Text(e.moniker)).toList(),
+                        selectedItemBuilder: (_) => Kuliyyahs.all
+                            .where((x) => x.scopes.contains(_selectedStudyGrad))
+                            .map((e) => Text(
+                                  e.moniker,
+                                  overflow: TextOverflow.ellipsis,
+                                ))
+                            .toList(),
                         hint: const Text('Select main kulliyyah'),
                         onChanged: (String? value) {
                           setState(() => _selectedKulliyah = value);
@@ -109,34 +142,6 @@ class _InputScopeState extends State<InputScope>
                         }),
                   ),
                   const SizedBox(height: 10),
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: CupertinoSegmentedControl(
-                      unselectedColor: Theme.of(context).colorScheme.surface,
-                      borderColor:
-                          Theme.of(context).colorScheme.secondaryContainer,
-                      groupValue: _selectedStudyGrad,
-                      children: const {
-                        StudyGrad.ug: Text('Undergraduate'),
-                        StudyGrad.pg: Text('Postgraduate'),
-                      },
-                      onValueChanged: (StudyGrad value) {
-                        setState(() => _selectedStudyGrad = value);
-                      },
-                    ),
-                    // child: CupertinoSlidingSegmentedControl<StudyGrad>(
-                    //   backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-                    //   thumbColor: Theme.of(context).colorScheme.primary,
-                    //   groupValue: _selectedStudyGrad,
-                    //   children: {
-                    //     StudyGrad.ug: Text('Undergraduate', style: TextStyle(color: Theme.of(context).colorScheme.onSecondaryContainer),),
-                    //     StudyGrad.pg: Text('Postgraduate', style: TextStyle(color: Theme.of(context).colorScheme.onSecondaryContainer),),
-                    //   },
-                    //   onValueChanged: (value) {
-                    //     setState(() => _selectedStudyGrad = value!);
-                    //   },
-                    // ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14, vertical: 10),
@@ -176,30 +181,6 @@ class _InputScopeState extends State<InputScope>
                               },
                         child: const Text('Next'),
                       ),
-                      // child: CupertinoButton.filled(
-                      //   onPressed: _selectedKulliyah == null
-                      //       ? null
-                      //       : () {
-                      //           // Redo the same thing as in onEditingComplete above. Just in case.
-                      //           FocusScope.of(context).unfocus();
-
-                      //           ScheduleSteps.of(context)
-                      //               .pageController
-                      //               .nextPage(
-                      //                   duration:
-                      //                       const Duration(milliseconds: 200),
-                      //                   curve: Curves.bounceInOut);
-
-                      //           Albiruni albiruni = Albiruni(
-                      //               semester: _semester,
-                      //               session: _session,
-                      //               studyGrade: _selectedStudyGrad);
-
-                      //           ScheduleMakerData.albiruni = albiruni;
-                      //           ScheduleMakerData.kulliyah = _selectedKulliyah!;
-                      //         },
-                      //   child: const Text('Next'),
-                      // ),
                     ),
                   )
                 ],

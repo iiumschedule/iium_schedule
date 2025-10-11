@@ -31,7 +31,7 @@ class _BrowserViewState extends State<BrowserView> {
   @override
   void initState() {
     super.initState();
-    if (widget.kulliyah == "CCAC") showInfoBanner();
+    if (widget.kulliyah == "CCC") showInfoBanner();
   }
 
   /// Inform user that they maybe be looking for usrah in action courses

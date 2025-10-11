@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../constants.dart' as constants;
 import '../../shared/utils/academic_session.dart';
 import '../../shared/utils/kulliyyahs.dart';
+import '../../shared/widgets/study_grad_selector_widget.dart';
 import '../favourites/views/favourites_page.dart';
 import 'browser_view.dart';
 
@@ -49,31 +50,64 @@ class _BrowserState extends State<Browser> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: DropdownButtonFormField(
-                      items: Kuliyyahs.all
-                          .map((e) => DropdownMenuItem(
-                                value: e.code,
-                                child: Text(e.fullName),
-                              ))
-                          .toList(),
-                      key: dropdownKey,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15.0)))),
-                      initialValue: _selectedKulliyah,
-                      hint: const Text('Select kulliyyah'),
-                      selectedItemBuilder: (_) =>
-                          Kuliyyahs.all.map((e) => Text(e.shortName)).toList(),
-                      onChanged: (String? value) {
-                        setState(() => _selectedKulliyah = value);
-                      },
-                    )),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: StudyGradSelectorWidget(
+                    selectedStudyGrad: _selectedStudyGrad,
+                    onChanged: (studyGrad) {
+                      setState(() => _selectedStudyGrad = studyGrad);
+                      // reset kulliyah selection
+                      _selectedKulliyah = null;
+                      // reset dropdown state
+                      dropdownKey.currentState?.setState(() {});
+                    },
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: DropdownButtonFormField(
+                    isExpanded: true,
+                    items: Kuliyyahs.all
+                        .where((x) => x.scopes.contains(_selectedStudyGrad))
+                        .map((e) => DropdownMenuItem(
+                              value: e.code,
+                              child: ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                title: Text(
+                                  e.fullName,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                subtitle: Text(
+                                  e.moniker,
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ),
+                            ))
+                        .toList(),
+                    key: dropdownKey,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15.0)))),
+                    initialValue: _selectedKulliyah,
+                    hint: const Text('Select kulliyyah'),
+                    selectedItemBuilder: (_) => Kuliyyahs.all
+                        .where((x) => x.scopes.contains(_selectedStudyGrad))
+                        .map((e) => Text(e.moniker))
+                        .toList(),
+                    onChanged: (String? value) {
+                      setState(() => _selectedKulliyah = value);
+                    },
+                  ),
+                ),
                 const SizedBox(height: 10),
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: CupertinoSegmentedControl(
+                      unselectedColor: Theme.of(context).colorScheme.surface,
+                      borderColor:
+                          Theme.of(context).colorScheme.secondaryContainer,
                       groupValue: _selectedSession,
                       children: {
                         for (var session in AcademicSession.session)
@@ -87,6 +121,9 @@ class _BrowserState extends State<Browser> {
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: CupertinoSegmentedControl(
+                      unselectedColor: Theme.of(context).colorScheme.surface,
+                      borderColor:
+                          Theme.of(context).colorScheme.secondaryContainer,
                       groupValue: _selectedSemester - 1,
                       children: List.generate(
                         3,
@@ -95,20 +132,6 @@ class _BrowserState extends State<Browser> {
                       onValueChanged: (int value) {
                         setState(() => _selectedSemester = value + 1);
                       }),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: CupertinoSlidingSegmentedControl<StudyGrad>(
-                    groupValue: _selectedStudyGrad,
-                    children: const {
-                      StudyGrad.ug: Text('Undergraduate'),
-                      StudyGrad.pg: Text('Postgraduate'),
-                    },
-                    onValueChanged: (value) {
-                      setState(() => _selectedStudyGrad = value!);
-                    },
-                  ),
                 ),
                 const SizedBox(height: 10),
                 Padding(
