@@ -91,17 +91,31 @@ flutter:
   fonts:
     - family: Inter
       fonts:
-        - asset: assets/fonts/Inter-ExtraBold.ttf
+        - asset: assets/fonts/Inter/Inter-ExtraBold.ttf
           weight: 800
-        - asset: assets/fonts/Inter-Bold.ttf
+        - asset: assets/fonts/Inter/Inter-Bold.ttf
           weight: 700
-        - asset: assets/fonts/Inter-SemiBold.ttf
+        - asset: assets/fonts/Inter/Inter-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/Inter-Medium.ttf
+        - asset: assets/fonts/Inter/Inter-Medium.ttf
           weight: 500
-        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter/Inter-Regular.ttf
           weight: 400
-        - asset: assets/fonts/Inter-Light.ttf
+        - asset: assets/fonts/Inter/Inter-Light.ttf
+          weight: 300
+    - family: Barlow_Condensed
+      fonts:
+        - asset: assets/fonts/Barlow_Condensed/BarlowCondensed-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Barlow_Condensed/BarlowCondensed-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Barlow_Condensed/BarlowCondensed-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Barlow_Condensed/BarlowCondensed-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Barlow_Condensed/BarlowCondensed-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Barlow_Condensed/BarlowCondensed-Light.ttf
           weight: 300
   #
   # For details regarding fonts from package dependencies,
