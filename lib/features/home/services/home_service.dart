@@ -4,10 +4,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 ///service class encapsulate the logic of getting device info
 class HomeService {
   /// Get the device information
-  Future<String> getDeviceInfo() async {
+  Future<String?> getDeviceInfo() async {
     var deviceInfo = await DeviceInfoPlugin().deviceInfo;
 
-    String deviceInfoData;
+    String? deviceInfoData;
 
     // check device info is android, windows or web
     if (deviceInfo is AndroidDeviceInfo) {
@@ -23,12 +23,6 @@ class HomeService {
       var macVersion = deviceInfo.osRelease;
       // eg: MacOS 13.4.1
       deviceInfoData = 'MacOS $macVersion';
-    } else {
-      // on web
-      var browserName = (deviceInfo as WebBrowserInfo).browserName;
-      var platform = deviceInfo.platform;
-      // eg: Web chrome Win32
-      deviceInfoData = 'Web ${browserName.name} $platform';
     }
 
     return deviceInfoData;
