@@ -1,5 +1,4 @@
 import 'package:albiruni/albiruni.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -74,7 +73,7 @@ class _CourseValidatorState extends State<CourseValidator>
 
                         if (!context.mounted) return;
                         await Navigator.of(context)
-                            .push(CupertinoPageRoute(builder: (_) {
+                            .push(MaterialPageRoute(builder: (_) {
                           var title =
                               '${scheduleMaker.kulliyah} ${scheduleMaker.albiruni!.semester} ${scheduleMaker.albiruni!.session}';
                           return ScheduleLayout(
@@ -272,7 +271,7 @@ class _SubjectCardState extends State<SubjectCard> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    CupertinoPageRoute(
+                    MaterialPageRoute(
                         builder: (_) => SubjectScreen(snapshot.data!)),
                   );
                 },

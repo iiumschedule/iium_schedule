@@ -1,5 +1,4 @@
 import 'package:albiruni/albiruni.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart' as constants;
@@ -146,7 +145,7 @@ class _BrowserState extends State<Browser> {
                                   studyGrade: _selectedStudyGrad);
                               Navigator.push(
                                 context,
-                                CupertinoPageRoute(
+                                MaterialPageRoute(
                                   builder: (_) => BrowserView(
                                       kulliyah: _selectedKulliyah!,
                                       albiruni: albiruni,

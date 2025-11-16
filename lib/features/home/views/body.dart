@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -213,7 +212,7 @@ class _MyBodyState extends State<MyBody> {
                                     onTap: () async {
                                       await Navigator.push(
                                         context,
-                                        CupertinoPageRoute(
+                                        MaterialPageRoute(
                                           builder: (_) => SavedScheduleLayout(
                                             id: item.id!,
                                           ),
@@ -261,7 +260,7 @@ class _MyBodyState extends State<MyBody> {
           ? FloatingActionButton.extended(
               onPressed: () async {
                 await Navigator.of(context).push(
-                    CupertinoPageRoute(builder: (_) => ScheduleMakerEntry()));
+                    MaterialPageRoute(builder: (_) => ScheduleMakerEntry()));
               },
               icon: const Icon(Icons.add),
               label: const Text('Create'),

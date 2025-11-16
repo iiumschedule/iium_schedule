@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:albiruni/albiruni.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recase/recase.dart';
 
@@ -203,7 +202,7 @@ class _BrowserViewState extends State<BrowserView> {
                       InkWell(
                         onTap: () {
                           Navigator.of(context).push(
-                            CupertinoPageRoute(
+                            MaterialPageRoute(
                               builder: (_) => SubjectScreen(
                                 snapshot.data![index],
                                 albiruni: widget.albiruni,
