@@ -38,6 +38,7 @@ class _BrowserViewState extends State<BrowserView> {
   /// at wrong place.
   void showInfoBanner() async {
     await Future.delayed(const Duration(milliseconds: 500));
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
         content: const Text.rich(
           TextSpan(

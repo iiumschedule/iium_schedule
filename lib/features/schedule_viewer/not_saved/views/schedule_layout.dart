@@ -319,7 +319,7 @@ class _ScheduleLayoutState extends State<ScheduleLayout> {
                             child: const Text('Save to app'),
                             onTap: () async {
                               var key = await save();
-                              if (!mounted) return;
+                              if (!context.mounted) return;
                               MyFtoast.show(
                                 context,
                                 'Saved. The schedule can the found from the main menu. ${kDebugMode ? '$key*' : ''}',

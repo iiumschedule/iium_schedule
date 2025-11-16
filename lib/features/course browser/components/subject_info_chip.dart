@@ -25,7 +25,7 @@ class SubjectInfoChip extends StatelessWidget {
         onPressed: () {
           Clipboard.setData(ClipboardData(text: text)).then((_) {
             HapticFeedback.lightImpact();
-
+            if (!context.mounted) return;
             MyFtoast.show(context, 'Copied');
           });
         },

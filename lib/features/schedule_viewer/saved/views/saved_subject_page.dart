@@ -170,13 +170,11 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                           Future.delayed(const Duration(milliseconds: 200), () {
                             // notify the schedule behind the dialog to reflect the
                             // new information
+                            if (!context.mounted) return;
                             Provider.of<ScheduleNotifierProvider>(context,
                                     listen: false)
                                 .notify();
                           });
-                          // Provider.of<ScheduleNotifierProvider>(context,
-                          //         listen: false)
-                          //     .notify();
                         },
                       ),
                     ),
@@ -206,8 +204,8 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                           if (newStartTime == null) return;
 
                           // TODO: Maybe can set the end time based on the original duration
-                          // ignore: use_build_context_synchronously
                           var newEndTime = await showTimePicker(
+                            // ignore: use_build_context_synchronously
                             context: context,
                             initialTime: endTime,
                             helpText: 'Select end Time',
@@ -226,6 +224,7 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                               (newEndTime.hour == newStartTime.hour &&
                                   newEndTime.minute < newStartTime.minute)) {
                             // show error dialog
+                            if (!context.mounted) return;
                             MyFtoast.show(context,
                                 'End time cannot be before start time');
                             return;
@@ -241,6 +240,7 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                           // to make sure the schedule behind this page can refresh
                           // WITH the update time
                           Future.delayed(const Duration(milliseconds: 100), () {
+                            if (!context.mounted) return;
                             Provider.of<ScheduleNotifierProvider>(context,
                                     listen: false)
                                 .notify();

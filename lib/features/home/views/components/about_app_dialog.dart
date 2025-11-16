@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -74,6 +73,7 @@ class _AboutAppDialogState extends State<AboutAppDialog> {
             var debugInfo = stringBuffer.toString();
 
             await Clipboard.setData(ClipboardData(text: debugInfo));
+            if (!context.mounted) return;
             MyFtoast.show(context, 'Copied to clipboard');
           },
           child: const Text('Copy debug info'),

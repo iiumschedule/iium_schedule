@@ -72,6 +72,7 @@ class _CourseValidatorState extends State<CourseValidator>
                           if (!(res ?? false)) return;
                         }
 
+                        if (!context.mounted) return;
                         await Navigator.of(context)
                             .push(CupertinoPageRoute(builder: (_) {
                           var title =

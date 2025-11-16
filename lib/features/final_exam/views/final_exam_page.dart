@@ -112,11 +112,12 @@ class _FinalExamPageState extends State<FinalExamPage> {
       filePath = await CalendarIcs.generateIcsFile(
           finalExams!.map((e) => e.finalExam).toList());
     } catch (e) {
+      if (!mounted) return;
       MySnackbar.showError(context, 'Sorry. An error has occured. $e');
       return;
     }
 
-    // ignore: use_build_context_synchronously
+    if (!mounted) return;
     showDialog(
       context: context,
       builder: (_) => IcsGeneratedDialog(icsSavedFile: filePath),

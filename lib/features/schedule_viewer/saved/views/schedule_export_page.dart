@@ -112,6 +112,7 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                             await ScreenshotWidget.screenshotWidget(_globalKey);
 
                         if (imageBytes == null) {
+                          if (!context.mounted) return;
                           MyFtoast.show(context,
                               'Failed to capture schedule. Please try again.');
                           return;
@@ -121,6 +122,7 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                             imageBytes, widget.scheduleTitle);
 
                         // show toast for windows and android
+                        if (!context.mounted) return;
                         MyFtoast.show(
                             context, 'Saved to $_getPlatformGalleryVerb');
                       },
@@ -134,6 +136,7 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                             await ScreenshotWidget.screenshotWidget(_globalKey);
 
                         if (imageBytes == null) {
+                          if (!context.mounted) return;
                           MyFtoast.show(context,
                               'Failed to capture schedule. Please try again.');
                           return;
@@ -142,6 +145,7 @@ class _ScheduleExportPageState extends State<ScheduleExportPage> {
                         String? savedPath = await SaveFile.saveTemp(imageBytes);
 
                         if (savedPath == null) {
+                          if (!context.mounted) return;
                           MyFtoast.show(context,
                               'Failed to save image. Please try again.');
                           return;

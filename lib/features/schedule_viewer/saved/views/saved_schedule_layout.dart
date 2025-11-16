@@ -104,6 +104,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
     });
 
     if (!courseValidator.isClearToProceed()) {
+      if (!mounted) return;
       MySnackbar.showWarn(context,
           "We're facing some issues while fetching latest data. Try again later.");
       return;
