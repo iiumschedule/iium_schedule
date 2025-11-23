@@ -32,7 +32,7 @@ OutputBaseFilename=iiumschedulesetup
 SetupIconFile=logo.ico
 Compression=lzma
 SolidCompression=yes
-WizardStyle=modern
+WizardStyle=modern dynamic
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
