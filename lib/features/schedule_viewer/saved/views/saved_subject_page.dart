@@ -87,7 +87,7 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                       await isarService.deleteSingleSubject(
                           subjectId: widget.subjectId,
                           dayTimesId: widget.dayTimesId);
-                      if (!mounted) return;
+                      if (!context.mounted) return;
                       Navigator.pop(context);
                       Provider.of<ScheduleNotifierProvider>(context,
                               listen: false)
@@ -101,6 +101,7 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
                               color: newColor ?? widget.subjectColor));
 
                       if (selectedColour == null) return;
+                      if (!context.mounted) return;
 
                       snapshot.data!.hexColor = selectedColour.toARGB32();
                       newColor = selectedColour;
