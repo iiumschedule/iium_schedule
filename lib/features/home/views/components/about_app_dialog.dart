@@ -27,11 +27,11 @@ class _AboutAppDialogState extends State<AboutAppDialog> {
       children: [
         const SimpleDialogOption(
           child: Text(
-              'This app enables students to make & check their schedules, specially tailored for IIUM Students.'),
+              'This app enables students to create and check their schedules, specifically tailored for IIUM students.'),
         ),
         SimpleDialogOption(
           child: const Text(
-            '\u00a9 2025 Muhammad Fareez',
+            '\u00a9 2026 Muhammad Fareez',
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
           onPressed: () => LauncherUrl.open('https://iqfareez.com'),
@@ -82,7 +82,7 @@ class _AboutAppDialogState extends State<AboutAppDialog> {
           child: const Text('View licenses'),
           onPressed: () => showLicensePage(
               context: context,
-              applicationLegalese: '\u{a9} 2022-2025 Muhammad Fareez',
+              applicationLegalese: '\u{a9} 2022-2026 Muhammad Fareez',
               applicationIcon: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Image.asset(
