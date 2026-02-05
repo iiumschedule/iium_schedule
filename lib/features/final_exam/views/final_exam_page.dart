@@ -46,7 +46,7 @@ class _FinalExamPageState extends State<FinalExamPage> {
     for (FinalExam exam in exams) {
       // the exam duration can be differs. Ie 2.5 hrs or 3 hrs. But, we set as 3 hours
       // in this case
-      // https://github.com/iqfareez/iium_schedule/issues/93
+      // https://github.com/iiumschedule/iium_schedule/issues/93
       bool isPast =
           DateTime.now().isAfter(exam.date.add(const Duration(hours: 2)));
       myFinalExams.add(_MyFinalExam(finalExam: exam, isPast: isPast));

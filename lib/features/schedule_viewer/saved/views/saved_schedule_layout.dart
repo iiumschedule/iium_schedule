@@ -129,7 +129,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
        * venue all by themselves, it is necessary to skip empty venue from i-Maluum
        * as it will override the current venue.
        *
-       * Refer https://github.com/iqfareez/iium_schedule/pull/51#pullrequestreview-1158961053
+       * Refer https://github.com/iiumschedule/iium_schedule/pull/51#pullrequestreview-1158961053
        */
 
       if (updatedSubject.venue == null) continue;
@@ -149,7 +149,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
     isarService.updateSchedule(currentSchedule);
 
     // Save changes to HiveDB
-    // https://github.com/iqfareez/iium_schedule/pull/51#discussion_r1007335660
+    // https://github.com/iiumschedule/iium_schedule/pull/51#discussion_r1007335660
     // currentSchedule.save();
 
     // Finish the refreshing state

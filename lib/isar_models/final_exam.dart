@@ -43,7 +43,7 @@ class FinalExam {
     var format = DateFormat('dd/MM/yyyy');
     date = format.parse(json["date"]);
 
-    // From https://github.com/iqfareez/iium_schedule/discussions/84#discussioncomment-5829274
+    // From https://github.com/iiumschedule/iium_schedule/discussions/84#discussioncomment-5829274
     // If morning (am), it starts at 9AM
     // If evening (pm), it starts at 2.30 PM except for Friday (3PM)
     if (time == ExamTime.am) {
@@ -51,7 +51,7 @@ class FinalExam {
     } else {
       // on Friday, it starts at 3PM
       // other day, it starts at 2.30PM
-      // Idk why I made this mistake: https://github.com/iqfareez/iium_schedule/issues/92#issue-1796026668
+      // Idk why I made this mistake: https://github.com/iiumschedule/iium_schedule/issues/92#issue-1796026668
       date = date.add(
         date.day == DateTime.friday
             ? const Duration(hours: 15)

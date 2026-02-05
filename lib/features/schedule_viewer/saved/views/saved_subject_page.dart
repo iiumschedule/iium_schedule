@@ -50,7 +50,7 @@ class _SavedSubjectPageState extends State<SavedSubjectPage> {
 
             // Important to check for ID, because we wanted to prevent the dayTime mixed together
             // with same subject but in different day
-            // https://github.com/iqfareez/iium_schedule/discussions/73#discussioncomment-5207442
+            // https://github.com/iiumschedule/iium_schedule/discussions/73#discussioncomment-5207442
             SavedDaytime dayTime = snapshot.data?.dayTimes
                     .firstWhere((element) => element.id == widget.dayTimesId) ??
                 SavedDaytime(day: 0, startTime: '00:00', endTime: '00:00');

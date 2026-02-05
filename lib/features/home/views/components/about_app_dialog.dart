@@ -39,7 +39,7 @@ class _AboutAppDialogState extends State<AboutAppDialog> {
         SimpleDialogOption(
           child: const Text('Thanks to awesome contributors!'),
           onPressed: () => LauncherUrl.open(
-              'https://github.com/iqfareez/iium_schedule/#contributors'),
+              'https://github.com/iiumschedule/iium_schedule/#contributors'),
         ),
         const Divider(),
         SimpleDialogOption(

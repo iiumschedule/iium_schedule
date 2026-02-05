@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
 }
 
 /// To avoid invalid Cert Error
-/// https://github.com/iqfareez/iium_schedule/issues/10
+/// https://github.com/iiumschedule/iium_schedule/issues/10
 /// https://stackoverflow.com/a/61312927/13617136
 class MyHttpOverrides extends HttpOverrides {
   @override

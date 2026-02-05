@@ -9,8 +9,8 @@ import '../../../isar_models/final_exam.dart';
 /// Calendar utility to add final exams to calendar
 ///
 /// TODO: ICS for subjects
-/// https://github.com/iqfareez/iium_schedule/issues/65
-/// https://github.com/iqfareez/iium_schedule/pull/64
+/// https://github.com/iiumschedule/iium_schedule/issues/65
+/// https://github.com/iiumschedule/iium_schedule/pull/64
 /// See [lib/util/calendar_utils.dart]
 class CalendarIcs {
   /// Generate ICS content for final exams

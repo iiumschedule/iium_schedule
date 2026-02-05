@@ -35,7 +35,7 @@ class _FeImaluumImporterState extends State<FeImaluumImporter> {
       onWillPop: () {
         // dismiss the material banner on page pop
         // `clearMaterialBanners` is used to fix issue #71
-        // https://github.com/iqfareez/iium_schedule/issues/71
+        // https://github.com/iiumschedule/iium_schedule/issues/71
         ScaffoldMessenger.of(context).clearMaterialBanners();
         return Future.value(true);
       },

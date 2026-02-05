@@ -370,7 +370,7 @@ class _CardItem extends StatelessWidget {
 }
 
 /// Configure the quick action if running on Android only
-/// TODO: Add recent schedules https://github.com/iqfareez/iium_schedule/issues/43
+/// TODO: Add recent schedules https://github.com/iiumschedule/iium_schedule/issues/43
 void configureQuickAction(BuildContext context) {
   // check if running on Android only
   if (!Platform.isAndroid) return;

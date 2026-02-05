@@ -18,15 +18,15 @@ Load the timetable from I-Ma'luum, and your schedule is ready. It's as easy as t
 
 ## Contributions
 
-Feel free to open [issues](https://github.com/iqfareez/iium_schedule/issues) and/or submit [pull requests](https://github.com/iqfareez/iium_schedule/pulls).
+Feel free to open [issues](https://github.com/iiumschedule/iium_schedule/issues) and/or submit [pull requests](https://github.com/iiumschedule/iium_schedule/pulls).
 
-Refer to [Wiki/Contributing](https://github.com/iqfareez/iium_schedule/wiki/Contributing) for more information.
+Refer to [Wiki/Contributing](https://github.com/iiumschedule/iium_schedule/wiki/Contributing) for more information.
 
 > [July 2023] Now that I've graduated from IIUM, your contributions are very much needed since I no longer have access to I-Ma'luum, etc. I'll do my best to maintain the project, InshaAllah.
 
 ## Getting Started
 
-See [Wiki/Build](https://github.com/iqfareez/iium_schedule/wiki/Build)
+See [Wiki/Build](https://github.com/iiumschedule/iium_schedule/wiki/Build)
 
 ## Features
 
@@ -42,7 +42,7 @@ See [Wiki/Build](https://github.com/iqfareez/iium_schedule/wiki/Build)
 
 Builds are available for Android, Windows, macOS, and Web. Check them out [here](https://iiumschedule.iqfareez.com/downloads)!
 
-If you're interested in running the app on iOS, you'll need to [build it](https://github.com/iqfareez/iium_schedule/wiki/Build) yourself or try the [alternatives](#similar-project-like-this-one).
+If you're interested in running the app on iOS, you'll need to [build it](https://github.com/iiumschedule/iium_schedule/wiki/Build) yourself or try the [alternatives](#similar-project-like-this-one).
 
 > [!NOTE]
 > Web support has been discontinued (see Issue #60). The Web version is maintained on the `1.0.3-web` branch. Check out the [alternative projects!](#similar-projects).
@@ -86,8 +86,8 @@ _Open a PR to add your project here._
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="https://github.com/PlashSpeed-Aiman"><img src="https://avatars.githubusercontent.com/u/62431177?v=4?s=80" width="80px;" alt="PlashSpeed-Aiman"/><br /><sub><b>PlashSpeed-Aiman</b></sub></a><br /><a href="https://github.com/iqfareez/iium_schedule/commits?author=PlashSpeed-Aiman" title="Code">💻</a></td>
-      <td align="center"><a href="https://github.com/ElyasAsmad"><img src="https://avatars.githubusercontent.com/u/78308067?v=4?s=80" width="80px;" alt="Elyas Asmad"/><br /><sub><b>Elyas Asmad</b></sub></a><br /><a href="https://github.com/iqfareez/iium_schedule/commits?author=ElyasAsmad" title="Code">💻</a> <a href="#design-ElyasAsmad" title="Design">🎨</a></td>
+      <td align="center"><a href="https://github.com/PlashSpeed-Aiman"><img src="https://avatars.githubusercontent.com/u/62431177?v=4?s=80" width="80px;" alt="PlashSpeed-Aiman"/><br /><sub><b>PlashSpeed-Aiman</b></sub></a><br /><a href="https://github.com/iiumschedule/iium_schedule/commits?author=PlashSpeed-Aiman" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/ElyasAsmad"><img src="https://avatars.githubusercontent.com/u/78308067?v=4?s=80" width="80px;" alt="Elyas Asmad"/><br /><sub><b>Elyas Asmad</b></sub></a><br /><a href="https://github.com/iiumschedule/iium_schedule/commits?author=ElyasAsmad" title="Code">💻</a> <a href="#design-ElyasAsmad" title="Design">🎨</a></td>
     </tr>
   </tbody>
 </table>
