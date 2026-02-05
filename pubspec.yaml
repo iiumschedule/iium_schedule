@@ -20,7 +20,7 @@ dependencies:
   html: ^0.15.0
   albiruni: ^1.4.0
   recase:
-    git: https://github.com/iqfareez/recase.git # Issue #2
+    path: packages/recase
   url_launcher: ^6.0.17
   package_info_plus: ^9.0.0
   flutter_timetable_view:
