@@ -13,6 +13,7 @@ subprojects {
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
 // Fix Isar namspace issue: https://github.com/isar/isar/issues/1470
+// And fix plugin that uses old compileSdkVersion.
 subprojects {
     afterEvaluate {
         if (project.hasProperty("android")) {
@@ -22,7 +23,7 @@ subprojects {
                     androidExtension.namespace = project.group.toString()
                 }
                 // Fixes issue https://github.com/iiumschedule/iium_schedule/issues/115
-                androidExtension.compileSdkVersion = "android-35"
+                androidExtension.compileSdkVersion = "android-36"
                 androidExtension.buildToolsVersion = "35.0.0"
             }
         }
