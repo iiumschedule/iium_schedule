@@ -9,12 +9,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: "stable"
+          cache: true
 
       - name: Flutter build for Windows
         run: |
@@ -43,6 +44,6 @@ jobs:
         run: echo 'Y' | flutter pub run msix:create
 
       - name: Upload msix
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           path: build\windows\x64\runner\Release\iium_schedule.msix

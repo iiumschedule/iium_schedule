@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Java
-        uses: actions/setup-java@v3.9.0
+        uses: actions/setup-java@v5.2.0
         with:
           distribution: "zulu"
           java-version: "17"
@@ -22,6 +22,7 @@ jobs:
         uses: subosito/flutter-action@v2.8.0
         with:
           channel: "stable"
+          cache: true
 
       # File can be encoded to base64 on https://base64.guru/converter/encode/file
       - name: Decoding android/key.properties
@@ -35,7 +36,7 @@ jobs:
         run: flutter build appbundle
 
       - name: Upload aab
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: "!github.event.release.prerelease"
         with:
           name: aab artifact
@@ -56,7 +57,7 @@ jobs:
           echo ":white_check_mark: Build split apk" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload file to artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: apks artifact
           path: build/app/outputs/apk/release/*.apk
@@ -72,12 +73,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2.8.0
         with:
           channel: "stable"
+          cache: true
 
       - name: Flutter build for Windows
         run: |
@@ -100,7 +102,7 @@ jobs:
 
       # Upload the exe to artifacts
       - name: Upload artifact (.exe)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: windows installer exe
           path: Inno/iiumschedulesetup.exe
@@ -132,7 +134,7 @@ jobs:
           echo :white_check_mark: Packaged into .msix file >> $GITHUB_STEP_SUMMARY
 
       - name: Upload artifact (.msix)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: "!github.event.release.prerelease"
         with:
           name: windows installer msix
@@ -147,15 +149,16 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: "stable"
           architecture: x64
+          cache: true
 
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: 18
 
@@ -173,7 +176,7 @@ jobs:
           appdmg appdmg/config.json appdmg/IIUMSchedule.dmg
 
       - name: Upload the installer as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: macOS installer DMG
           path: "appdmg/IIUMSchedule.dmg"
@@ -184,10 +187,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
 
       - name: Rename apk
         run: curl -s https://gist.githubusercontent.com/iqfareez/f57405016cc8bcc51cdcd2879c88807a/raw/5d9bbed7231a9e56bf24b88ab5286cee73dae173/rename_apk.sh | bash -s IIUMSchedule .
@@ -212,7 +215,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download aab artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: aab artifact
 

@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -32,6 +32,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ inputs.flutterChannel }}
+          cache: true
 
       - name: Decoding android/key.properties
         run: echo "${{ secrets.KEY_PROP }}" | base64 --decode > android/key.properties
@@ -46,7 +47,7 @@ jobs:
         run: flutter build apk --release
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: fat apk artifact
           path: build/app/outputs/apk/release/app-release.apk

@@ -20,15 +20,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: ${{ inputs.flutterChannel }}
           architecture: x64
+          cache: true
 
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: 18
 
@@ -46,7 +47,7 @@ jobs:
           appdmg appdmg/config.json appdmg/IIUMSchedule.dmg
 
       - name: Upload the installer as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           path: "appdmg/IIUMSchedule.dmg"
 
