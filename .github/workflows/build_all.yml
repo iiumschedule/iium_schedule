@@ -117,7 +117,7 @@ jobs:
         shell: cmd
         # certutil [options] -decode infile outfile
         # Read cert base64 from env secrets, write it in a file
-        # The, use the certutil command the decode and save in the cert file (pfx)
+        # Then, use the certutil command the decode and save in the cert file (pfx)
         run: |
           echo ${{ secrets.CERT_PFX }} > certBase64.txt 
           certutil -decode certBase64.txt windows/CERTIFICATE.pfx

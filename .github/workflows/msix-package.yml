@@ -22,7 +22,7 @@ jobs:
           flutter pub get
           flutter build windows
 
-      - name: Add vcredist files tp Release
+      - name: Add vcredist files to Release
         run: |
           git clone https://github.com/iiumschedule/vcredist.git windows-x64-vc
           Copy-Item windows-x64-vc/msvcp140.dll build/windows/x64/runner/Release/
@@ -33,7 +33,7 @@ jobs:
         shell: cmd
         # certutil [options] -decode infile outfile
         # Read cert base64 from env secrets, write it in a file
-        # The, use the certutil command the decode and save in the cert file (pfx)
+        # Then, use the certutil command the decode and save in the cert file (pfx)
         run: |
           echo ${{ secrets.CERT_PFX }} > certBase64.txt 
           certutil -decode certBase64.txt windows/CERTIFICATE.pfx
