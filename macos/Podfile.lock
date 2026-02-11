@@ -12,13 +12,10 @@ PODS:
     - FlutterMacOS
   - isar_flutter_libs (1.0.0):
     - FlutterMacOS
-  - open_file_mac (0.0.1):
+  - open_file_mac (1.0.3):
     - FlutterMacOS
   - OrderedSet (6.0.3)
   - package_info_plus (0.0.1):
-    - FlutterMacOS
-  - path_provider_foundation (0.0.1):
-    - Flutter
     - FlutterMacOS
   - share_plus (0.0.1):
     - FlutterMacOS
@@ -34,7 +31,6 @@ DEPENDENCIES:
   - isar_flutter_libs (from `Flutter/ephemeral/.symlinks/plugins/isar_flutter_libs/macos`)
   - open_file_mac (from `Flutter/ephemeral/.symlinks/plugins/open_file_mac/macos`)
   - package_info_plus (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos`)
-  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - share_plus (from `Flutter/ephemeral/.symlinks/plugins/share_plus/macos`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
 
@@ -59,8 +55,6 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/open_file_mac/macos
   package_info_plus:
     :path: Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos
-  path_provider_foundation:
-    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
   share_plus:
     :path: Flutter/ephemeral/.symlinks/plugins/share_plus/macos
   url_launcher_macos:
@@ -73,10 +67,9 @@ SPEC CHECKSUMS:
   FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
   gal: baecd024ebfd13c441269ca7404792a7152fde89
   isar_flutter_libs: a65381780401f81ad6bf3f2e7cd0de5698fb98c4
-  open_file_mac: 01874b6d6a2c1485ac9b126d7105b99102dea2cf
+  open_file_mac: 76f06c8597551249bdb5e8fd8827a98eae0f4585
   OrderedSet: e539b66b644ff081c73a262d24ad552a69be3a94
   package_info_plus: f0052d280d17aa382b932f399edf32507174e870
-  path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
   share_plus: 510bf0af1a42cd602274b4629920c9649c52f4cc
   url_launcher_macos: f87a979182d112f911de6820aefddaf56ee9fbfd
 
