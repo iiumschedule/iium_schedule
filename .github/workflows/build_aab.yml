@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-java@v5.2.0
         with:
           distribution: "zulu"
-          java-version: "11"
+          java-version: "17"
 
       - name: Setup Flutter stable
         uses: subosito/flutter-action@v2
