@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:albiruni/albiruni.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,6 +25,7 @@ import '../../../../shared/utils/kulliyyah_suggestions.dart';
 import '../../../../shared/utils/my_snackbar.dart';
 import '../../../../shared/utils/subject_fetcher.dart';
 import '../../../schedule_maker/controllers/course_validator_pass.dart';
+import '../../../schedule_maker/models/basic_subject_model.dart';
 import '../../../schedule_maker/views/add_subject_page.dart';
 import '../../shared/views/rename_dialog.dart';
 import '../../shared/views/setting_bottom_sheet.dart';
@@ -311,9 +314,9 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                               },
                               tooltip: 'Settings',
                               icon: const Icon(Icons.settings_outlined)),
-                          PopupMenuButton(
+                          PopupMenuButton<String>(
                               itemBuilder: (context) {
-                                return <PopupMenuEntry>[
+                                return <PopupMenuEntry<String>>[
                                   // zoom tezt will show in app bar if screen width is large enough
                                   // otherwise, it will be shown in the popup menu
                                   if (MediaQuery.of(context).size.width <
@@ -337,6 +340,12 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                                         ? 'Export & share'
                                         : 'Export'),
                                   ),
+                                  if (kDebugMode) ...[
+                                    const PopupMenuItem(
+                                      value: 'copy-json',
+                                      child: Text('Copy JSON*'),
+                                    ),
+                                  ],
                                   const PopupMenuDivider(),
                                   const PopupMenuItem(
                                       value: 'metadata',
@@ -427,7 +436,7 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
     });
   }
 
-  void popupMenuHandler(value) async {
+  void popupMenuHandler(String value) async {
     var schedule = await isarService.getSavedSchedule(id: widget.id);
     switch (value) {
       case 'save':
@@ -449,6 +458,27 @@ class _SavedScheduleLayoutState extends State<SavedScheduleLayout> {
                 endHour: laneData.endHour,
                 itemHeight: schedule.heightFactor),
           ),
+        );
+        break;
+      case 'copy-json':
+        // Convert schedule subjects to JSON format
+        final jsonList = schedule!.subjects.map((subject) {
+          return BasicSubjectModel(
+            courseCode: subject.code,
+            section: int.tryParse(subject.sect.toString()) ?? 0,
+          ).toJson();
+        }).toList();
+
+        final jsonString = jsonEncode(jsonList);
+
+        // Copy to clipboard
+        await Clipboard.setData(ClipboardData(text: jsonString));
+
+        if (!mounted) return;
+        Fluttertoast.showToast(
+          msg: 'JSON copied to clipboard',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
         );
         break;
       case 'metadata':
