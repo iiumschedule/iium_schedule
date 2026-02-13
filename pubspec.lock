@@ -406,12 +406,10 @@ packages:
   flutter_timetable_view:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "0486b731669a055b2c5d4924a0d2228f5e2968f7"
-      resolved-ref: "0486b731669a055b2c5d4924a0d2228f5e2968f7"
-      url: "https://github.com/iqfareez/flutter_timetable_view.git"
-    source: git
-    version: "0.3.0"
+      path: "packages/flutter_timetable_view"
+      relative: true
+    source: path
+    version: "0.4.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter

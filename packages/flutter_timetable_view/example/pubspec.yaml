@@ -1,0 +1,27 @@
+name: flutter_timetable_view_demo
+description: "A Demo Application of Flutter Timetable View"
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.8
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_timetable_view:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
