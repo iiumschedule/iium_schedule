@@ -1,5 +1,7 @@
 # Flutter Timetable View
 
+<img width="384" height="854" alt="Screenshot_1770987626 (Small)" src="https://github.com/user-attachments/assets/b2cef9ca-f2de-4573-b49c-b818f3286cf5" />
+
 Timetable Widget Package for Flutter
 
 # iqfareez's changes specifically for iium schedule app
