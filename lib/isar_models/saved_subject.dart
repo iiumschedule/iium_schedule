@@ -1,5 +1,5 @@
 import 'package:albiruni/albiruni.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 import 'saved_daytime.dart';
 

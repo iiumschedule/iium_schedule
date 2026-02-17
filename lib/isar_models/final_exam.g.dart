@@ -65,7 +65,7 @@ const FinalExamSchema = CollectionSchema(
   getId: _finalExamGetId,
   getLinks: _finalExamGetLinks,
   attach: _finalExamAttach,
-  version: '3.1.0+1',
+  version: '3.3.0',
 );
 
 int _finalExamEstimateSize(

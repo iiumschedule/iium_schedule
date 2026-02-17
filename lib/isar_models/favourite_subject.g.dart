@@ -59,7 +59,7 @@ const FavouriteSubjectSchema = CollectionSchema(
   getId: _favouriteSubjectGetId,
   getLinks: _favouriteSubjectGetLinks,
   attach: _favouriteSubjectAttach,
-  version: '3.1.0+1',
+  version: '3.3.0',
 );
 
 int _favouriteSubjectEstimateSize(

@@ -9,7 +9,7 @@ import device_info_plus
 import dynamic_color
 import flutter_inappwebview_macos
 import gal
-import isar_flutter_libs
+import isar_community_flutter_libs
 import open_file_mac
 import package_info_plus
 import share_plus

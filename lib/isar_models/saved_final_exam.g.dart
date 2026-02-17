@@ -54,7 +54,7 @@ const SavedFinalExamSchema = CollectionSchema(
   getId: _savedFinalExamGetId,
   getLinks: _savedFinalExamGetLinks,
   attach: _savedFinalExamAttach,
-  version: '3.1.0+1',
+  version: '3.3.0',
 );
 
 int _savedFinalExamEstimateSize(

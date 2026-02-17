@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../isar_models/favourite_subject.dart';

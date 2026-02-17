@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 part 'final_exam.g.dart';
 

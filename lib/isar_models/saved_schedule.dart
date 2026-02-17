@@ -1,4 +1,4 @@
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 import '../features/schedule_viewer/saved/utils/lane_events_util.dart';
 import 'saved_subject.dart';
