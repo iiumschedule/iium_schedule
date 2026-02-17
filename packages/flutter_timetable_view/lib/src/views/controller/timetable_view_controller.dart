@@ -38,8 +38,9 @@ mixin TimetableViewController {
   }
 
   void horizontalScrollListener() {
-    _horizontalPixelsStream.sink
-        .add(_horizontalScrollController.position.pixels);
+    _horizontalPixelsStream.sink.add(
+      _horizontalScrollController.position.pixels,
+    );
   }
 
   void verticalScrollListener() {

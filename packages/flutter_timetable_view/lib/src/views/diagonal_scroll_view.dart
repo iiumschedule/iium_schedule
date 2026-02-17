@@ -29,7 +29,7 @@ class DiagonalScrollView extends StatefulWidget {
   });
 
   @override
-  _DiagonalScrollViewState createState() => _DiagonalScrollViewState();
+  State<DiagonalScrollView> createState() => _DiagonalScrollViewState();
 }
 
 class _DiagonalScrollViewState extends State<DiagonalScrollView>
