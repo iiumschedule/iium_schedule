@@ -269,6 +269,23 @@ class IsarService {
         ));
   }
 
+  Future<bool> getUse24HourFormatSetting() async {
+    final isar = await db;
+
+    var res = await isar.settingsDatas.get(0);
+    return res?.use24HourFormat ?? true;
+  }
+
+  Future<void> saveUse24HourFormatSetting(bool newValue) async {
+    final isar = await db;
+
+    isar.writeTxn(() => isar.settingsDatas.put(
+          SettingsData()
+            ..id = 0
+            ..use24HourFormat = newValue,
+        ));
+  }
+
   // **************************************************************************
   // Final Exam
   // **************************************************************************

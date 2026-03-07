@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../isar_models/final_exam.dart';
 import '../../../shared/extensions/date_time_extension.dart';
+import '../../../shared/providers/settings_provider.dart';
 import 'exam_detail_page.dart';
 
 class NearestExamCard extends StatelessWidget {
@@ -11,6 +13,7 @@ class NearestExamCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final use24Hour = context.watch<SettingsProvider>().use24HourFormat;
     return Card(
       elevation: 0,
       // color: Colors.black,
@@ -39,7 +42,7 @@ class NearestExamCard extends StatelessWidget {
                     Text(
                       exam.date.isToday()
                           ? 'Goodluck for today! Bring your matric card and exam slip.'
-                          : 'Upcoming exam (${exam.date.toRelativeDate()})',
+                          : 'Upcoming exam (${exam.date.toRelativeDate(use24Hour: use24Hour)})',
                       style: const TextStyle(
                           fontWeight: FontWeight.w100, fontSize: 12),
                     ),

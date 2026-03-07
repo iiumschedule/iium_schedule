@@ -8,6 +8,7 @@ import '../../../../isar_models/saved_daytime.dart';
 import '../../../../isar_models/saved_subject.dart';
 import '../../../../shared/extensions/time_of_day_extension.dart';
 import '../../../../shared/providers/schedule_notifier_provider.dart';
+import '../../../../shared/providers/settings_provider.dart';
 import '../../../../shared/services/isar_service.dart';
 import '../../../../shared/utils/my_ftoast.dart';
 import 'colour_picker_sheet.dart';
@@ -503,6 +504,7 @@ class _MiniInfoTimeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final use24Hour = context.watch<SettingsProvider>().use24HourFormat;
     // TimeOfDay duration = endTime.difference(startTime);
     return Card(
       elevation: 0,
@@ -519,7 +521,7 @@ class _MiniInfoTimeCard extends StatelessWidget {
                     Expanded(
                         flex: 2,
                         child: Text(
-                          startTime.toRealString(),
+                          startTime.toRealString(use24Hour: use24Hour),
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
@@ -528,7 +530,7 @@ class _MiniInfoTimeCard extends StatelessWidget {
                     Expanded(
                         flex: 2,
                         child: Text(
-                          endTime.toRealString(),
+                          endTime.toRealString(use24Hour: use24Hour),
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),

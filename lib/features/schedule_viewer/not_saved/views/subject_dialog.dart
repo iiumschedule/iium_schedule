@@ -1,7 +1,9 @@
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../shared/extensions/time_of_day_extension.dart';
+import '../../../../shared/providers/settings_provider.dart';
 
 class SubjectDialog extends StatelessWidget {
   const SubjectDialog({
@@ -21,6 +23,7 @@ class SubjectDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var actionButtonColour = Theme.of(context).textTheme.bodyLarge!.color;
+    final use24Hour = context.read<SettingsProvider>().use24HourFormat;
 
     var duration = _end.difference(_start);
     return AlertDialog(
@@ -41,7 +44,7 @@ class SubjectDialog extends StatelessWidget {
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.schedule_outlined),
             title: Text(
-                "Starts ${_start.toRealString()}, ends ${_end.toRealString()}"),
+                "Starts ${_start.toRealString(use24Hour: use24Hour)}, ends ${_end.toRealString(use24Hour: use24Hour)}"),
             subtitle: Text(duration.minute == 0
                 ? 'Duration ${duration.hour}h'
                 : 'Duration ${duration.hour}h ${duration.minute}m'),

@@ -39,6 +39,8 @@ class TimetableStyle {
 
   final bool visibleDecorationBorder;
 
+  final bool use24Hour;
+
   const TimetableStyle({
     this.startHour = 0,
     this.endHour = 24,
@@ -59,5 +61,6 @@ class TimetableStyle {
     this.decorationLineDashSpaceWidth = 4,
     this.visibleTimeBorder = true,
     this.visibleDecorationBorder = false,
+    this.use24Hour = true,
   });
 }

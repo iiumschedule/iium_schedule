@@ -29,7 +29,8 @@ class EventView extends StatelessWidget {
           // because of UniqueKey is not constant
           tag: event.heroTag ?? UniqueKey(),
           child: Container(
-            decoration: event.decoration ??
+            decoration:
+                event.decoration ??
                 (BoxDecoration(color: event.backgroundColor)),
             margin: event.margin,
             padding: event.padding,
@@ -37,13 +38,17 @@ class EventView extends StatelessWidget {
               event,
               context,
               math.max(
-                  0.0, height() - (event.padding.top) - (event.padding.bottom)),
+                0.0,
+                height() - (event.padding.top) - (event.padding.bottom),
+              ),
               math.max(
-                  0.0,
-                  timetableStyle.laneWidth -
-                      (event.padding.left) -
-                      (event.padding.right)),
+                0.0,
+                timetableStyle.laneWidth -
+                    (event.padding.left) -
+                    (event.padding.right),
+              ),
               subtitle: event.subtitle,
+              use24Hour: timetableStyle.use24Hour,
             ),
           ),
         ),
@@ -52,22 +57,24 @@ class EventView extends StatelessWidget {
   }
 
   double top() {
-    return calculateTopOffset(event.start.hour, event.start.minute,
-            timetableStyle.timeItemHeight) -
+    return calculateTopOffset(
+          event.start.hour,
+          event.start.minute,
+          timetableStyle.timeItemHeight,
+        ) -
         timetableStyle.startHour * timetableStyle.timeItemHeight;
   }
 
   double height() {
-    return calculateTopOffset(0, event.end.difference(event.start).inMinutes,
-            timetableStyle.timeItemHeight) +
+    return calculateTopOffset(
+          0,
+          event.end.difference(event.start).inMinutes,
+          timetableStyle.timeItemHeight,
+        ) +
         1;
   }
 
-  double calculateTopOffset(
-    int hour, [
-    int minute = 0,
-    double? hourRowHeight,
-  ]) {
+  double calculateTopOffset(int hour, [int minute = 0, double? hourRowHeight]) {
     return (hour + (minute / 60)) * (hourRowHeight ?? 60);
   }
 }
