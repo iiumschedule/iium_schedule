@@ -32,6 +32,11 @@ const SettingsDataSchema = CollectionSchema(
       name: r'themeSetting',
       type: IsarType.byte,
       enumMap: _SettingsDatathemeSettingEnumValueMap,
+    ),
+    r'use24HourFormat': PropertySchema(
+      id: 3,
+      name: r'use24HourFormat',
+      type: IsarType.bool,
     )
   },
   estimateSize: _settingsDataEstimateSize,
@@ -66,6 +71,7 @@ void _settingsDataSerialize(
   writer.writeBool(offsets[0], object.developerMode);
   writer.writeBool(offsets[1], object.highlightCurrentDay);
   writer.writeByte(offsets[2], object.themeSetting.index);
+  writer.writeBool(offsets[3], object.use24HourFormat);
 }
 
 SettingsData _settingsDataDeserialize(
@@ -81,6 +87,7 @@ SettingsData _settingsDataDeserialize(
   object.themeSetting = _SettingsDatathemeSettingValueEnumMap[
           reader.readByteOrNull(offsets[2])] ??
       ThemeMode.system;
+  object.use24HourFormat = reader.readBool(offsets[3]);
   return object;
 }
 
@@ -99,6 +106,8 @@ P _settingsDataDeserializeProp<P>(
       return (_SettingsDatathemeSettingValueEnumMap[
               reader.readByteOrNull(offset)] ??
           ThemeMode.system) as P;
+    case 3:
+      return (reader.readBool(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -337,6 +346,16 @@ extension SettingsDataQueryFilter
       ));
     });
   }
+
+  QueryBuilder<SettingsData, SettingsData, QAfterFilterCondition>
+      use24HourFormatEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'use24HourFormat',
+        value: value,
+      ));
+    });
+  }
 }
 
 extension SettingsDataQueryObject
@@ -384,6 +403,20 @@ extension SettingsDataQuerySortBy
       sortByThemeSettingDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'themeSetting', Sort.desc);
+    });
+  }
+
+  QueryBuilder<SettingsData, SettingsData, QAfterSortBy>
+      sortByUse24HourFormat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'use24HourFormat', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SettingsData, SettingsData, QAfterSortBy>
+      sortByUse24HourFormatDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'use24HourFormat', Sort.desc);
     });
   }
 }
@@ -441,6 +474,20 @@ extension SettingsDataQuerySortThenBy
       return query.addSortBy(r'themeSetting', Sort.desc);
     });
   }
+
+  QueryBuilder<SettingsData, SettingsData, QAfterSortBy>
+      thenByUse24HourFormat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'use24HourFormat', Sort.asc);
+    });
+  }
+
+  QueryBuilder<SettingsData, SettingsData, QAfterSortBy>
+      thenByUse24HourFormatDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'use24HourFormat', Sort.desc);
+    });
+  }
 }
 
 extension SettingsDataQueryWhereDistinct
@@ -462,6 +509,13 @@ extension SettingsDataQueryWhereDistinct
   QueryBuilder<SettingsData, SettingsData, QDistinct> distinctByThemeSetting() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'themeSetting');
+    });
+  }
+
+  QueryBuilder<SettingsData, SettingsData, QDistinct>
+      distinctByUse24HourFormat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'use24HourFormat');
     });
   }
 }
@@ -491,6 +545,12 @@ extension SettingsDataQueryProperty
       themeSettingProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'themeSetting');
+    });
+  }
+
+  QueryBuilder<SettingsData, bool, QQueryOperations> use24HourFormatProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'use24HourFormat');
     });
   }
 }

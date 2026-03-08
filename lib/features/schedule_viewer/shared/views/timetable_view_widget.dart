@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../shared/providers/settings_provider.dart';
 
 /// Draw the actual timetable view you seen on screen
 class TimetableViewWidget extends StatelessWidget {
@@ -17,6 +20,7 @@ class TimetableViewWidget extends StatelessWidget {
   final double itemHeight;
   @override
   Widget build(BuildContext context) {
+    final use24Hour = context.watch<SettingsProvider>().use24HourFormat;
     return LayoutBuilder(builder: (_, constraints) {
       return TimetableView(
         timetableStyle: TimetableStyle(
@@ -32,6 +36,7 @@ class TimetableViewWidget extends StatelessWidget {
           timelineItemColor: Theme.of(context).colorScheme.surface,
           startHour: startHour,
           endHour: endHour,
+          use24Hour: use24Hour,
         ),
         laneEventsList: _laneEventsList,
       );

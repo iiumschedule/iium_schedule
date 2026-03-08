@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../isar_models/final_exam.dart';
+import '../../../shared/providers/settings_provider.dart';
 import 'seat_number_card.dart';
 
 class ExamDetailPage extends StatelessWidget {
@@ -11,6 +13,8 @@ class ExamDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final use24Hour = context.watch<SettingsProvider>().use24HourFormat;
+    final timeFormat = use24Hour ? DateFormat('HH:mm') : DateFormat('h:mm a');
     return Scaffold(
       appBar: AppBar(
         title: Text("Exam ${exam.courseCode}"),
@@ -60,7 +64,7 @@ class ExamDetailPage extends StatelessWidget {
             const SizedBox(height: 4),
             ListTile(
               subtitle: const Text("Start Time"),
-              title: Text(DateFormat('h:mm a').format(exam.date),
+              title: Text(timeFormat.format(exam.date),
                   style: const TextStyle(fontSize: 22.7)),
               leading: Icon(
                 Icons.schedule_outlined,

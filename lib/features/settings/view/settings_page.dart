@@ -21,6 +21,11 @@ class SettingsPage extends StatelessWidget {
               currentTheme: settings.themeMode,
               onThemeToggle: (themeMode) => settings.setThemeMode(themeMode),
             ),
+            _TimeFormatSelectDialog(
+              use24Hour: settings.use24HourFormat,
+              onFormatToggle: (newValue) =>
+                  settings.setUse24HourFormat(newValue),
+            ),
             const SizedBox(height: 10),
             const _SettingHeader('Timetable Setting'),
             _LaneDayHighlightSetting(
@@ -60,6 +65,45 @@ class _SettingHeader extends StatelessWidget {
           fontWeight: FontWeight.w600,
         ),
       ),
+    );
+  }
+}
+
+class _TimeFormatSelectDialog extends StatelessWidget {
+  const _TimeFormatSelectDialog(
+      {required this.use24Hour, required this.onFormatToggle});
+
+  final bool use24Hour;
+  final Function(bool) onFormatToggle;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: const Text('Time Format'),
+      trailing: Text(use24Hour ? '24-hour (08:30)' : '12-hour (8:30 am)'),
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (_) => SimpleDialog(
+            children: [
+              SimpleDialogOption(
+                onPressed: () {
+                  onFormatToggle(true);
+                  Navigator.pop(context);
+                },
+                child: const Text('24-hour (08:30)'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  onFormatToggle(false);
+                  Navigator.pop(context);
+                },
+                child: const Text('12-hour (8:30 am)'),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

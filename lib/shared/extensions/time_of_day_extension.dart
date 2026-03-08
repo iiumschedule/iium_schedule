@@ -6,12 +6,20 @@ extension TimeOfDayUtils on TimeOfDay {
     return value.toString();
   }
 
-  /// Similar to .toString(), but without the class name
-  String toRealString() {
-    final String hourLabel = _addLeadingZeroIfNeeded(hour);
-    final String minuteLabel = _addLeadingZeroIfNeeded(minute);
-
-    return '$hourLabel:$minuteLabel';
+  /// Similar to .toString(), but without the class name.
+  ///
+  /// Pass [use24Hour] = false to format in 12-hour style (e.g. "8:30 am").
+  String toRealString({bool use24Hour = true}) {
+    if (use24Hour) {
+      final String hourLabel = _addLeadingZeroIfNeeded(hour);
+      final String minuteLabel = _addLeadingZeroIfNeeded(minute);
+      return '$hourLabel:$minuteLabel';
+    } else {
+      final int displayHour = hour % 12 == 0 ? 12 : hour % 12;
+      final String minuteLabel = _addLeadingZeroIfNeeded(minute);
+      final String period = hour < 12 ? 'am' : 'pm';
+      return '$displayHour:$minuteLabel $period';
+    }
   }
 
   /// Calculate the difference between TimeOfDay

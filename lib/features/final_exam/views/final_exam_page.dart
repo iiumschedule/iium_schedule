@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../isar_models/final_exam.dart';
 import '../../../shared/extensions/date_time_extension.dart';
+import '../../../shared/providers/settings_provider.dart';
 import '../../../shared/services/isar_service.dart';
 import '../../../shared/utils/calendar_utils.dart';
 import '../../../shared/utils/my_snackbar.dart';
@@ -126,6 +128,7 @@ class _FinalExamPageState extends State<FinalExamPage> {
 
   @override
   Widget build(BuildContext context) {
+    final use24Hour = context.watch<SettingsProvider>().use24HourFormat;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Final Exam'),
@@ -213,7 +216,10 @@ class _FinalExamPageState extends State<FinalExamPage> {
                           : null,
                     ),
                     subtitle: Text(!finalExams![index].isPast
-                        ? finalExams![index].finalExam.date.toRelativeDate()
+                        ? finalExams![index]
+                            .finalExam
+                            .date
+                            .toRelativeDate(use24Hour: use24Hour)
                         : 'Finished'),
                     trailing: !finalExams![index].isPast
                         ? const Icon(Icons.chevron_right)

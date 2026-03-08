@@ -33,6 +33,7 @@ class DayTimeTableWidget extends StatelessWidget {
                 DataCell(
                   SelectableText(ReCase(e!.day.englishDay()).titleCase),
                 ),
+                // TODO: Update this once albiruni supports return Time object
                 DataCell(
                   SelectableText('${e.startTime} - ${e.endTime}'),
                 )

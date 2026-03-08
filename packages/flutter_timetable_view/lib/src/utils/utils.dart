@@ -24,10 +24,35 @@ class Utils {
     return '$year-${_addLeadingZero(month)}-${_addLeadingZero(day)}';
   }
 
-  static String hourFormatter(int hour, int minute, [bool showMinutes = true]) {
-    return showMinutes
-        ? '${_addLeadingZero(hour)}:${_addLeadingZero(minute)}'
-        : _addLeadingZero(hour);
+  /// Formats an [hour] and [minute] into a display string for the timetable.
+  ///
+  /// Set [showMinutes] to false to render hour-only labels (e.g. timeline axis).
+  /// Set [use24Hour] to false for 12-hour output.
+  ///
+  /// Examples:
+  /// ```
+  /// hourFormatter(8, 30)              → "08:30"
+  /// hourFormatter(14, 0, false)       → "14"
+  /// hourFormatter(8, 30, true, false) → "8:30 am"
+  /// hourFormatter(14, 0, false, false)→ "2 pm"
+  /// ```
+  static String hourFormatter(
+    int hour,
+    int minute, [
+    bool showMinutes = true,
+    bool use24Hour = true,
+  ]) {
+    if (use24Hour) {
+      return showMinutes
+          ? '${_addLeadingZero(hour)}:${_addLeadingZero(minute)}'
+          : _addLeadingZero(hour);
+    } else {
+      final int displayHour = hour % 12 == 0 ? 12 : hour % 12;
+      final String period = hour < 12 ? 'am' : 'pm';
+      return showMinutes
+          ? '$displayHour:${_addLeadingZero(minute)} $period'
+          : '$displayHour $period';
+    }
   }
 
   static Widget eventText(
@@ -36,6 +61,7 @@ class Utils {
     double height,
     double width, {
     String? subtitle,
+    bool use24Hour = true,
   }) {
     List<TextSpan> text = [
       TextSpan(
@@ -45,7 +71,7 @@ class Utils {
       TextSpan(
         text: subtitle != null
             ? ' $subtitle\n\n'
-            : ' ${Utils.hourFormatter(event.start.hour, event.start.minute)} - ${Utils.hourFormatter(event.end.hour, event.end.minute)}\n\n',
+            : ' ${Utils.hourFormatter(event.start.hour, event.start.minute, true, use24Hour)} - ${Utils.hourFormatter(event.end.hour, event.end.minute, true, use24Hour)}\n\n',
       ),
     ];
 
@@ -65,10 +91,7 @@ class Utils {
     }
 
     return RichText(
-      text: TextSpan(
-        children: text,
-        style: event.textStyle,
-      ),
+      text: TextSpan(children: text, style: event.textStyle),
     );
   }
 
@@ -77,7 +100,11 @@ class Utils {
   }
 
   static bool? _exceedHeight(
-      List<TextSpan> input, TextStyle textStyle, double height, double width) {
+    List<TextSpan> input,
+    TextStyle textStyle,
+    double height,
+    double width,
+  ) {
     double fontSize = textStyle.fontSize ?? 14;
     int maxLines = height ~/ ((textStyle.height ?? 1.2) * fontSize);
     if (maxLines == 0) {
@@ -85,10 +112,7 @@ class Utils {
     }
 
     TextPainter painter = TextPainter(
-      text: TextSpan(
-        children: input,
-        style: textStyle,
-      ),
+      text: TextSpan(children: input, style: textStyle),
       maxLines: maxLines,
       textDirection: TextDirection.ltr,
     );
@@ -119,13 +143,10 @@ class Utils {
       truncatedText = Utils.removeLastWord(text);
       truncatedText =
           truncatedText.substring(0, math.max(0, truncatedText.length - 2)) +
-              ellipse;
+          ellipse;
     }
 
-    input[input.length - 1] = TextSpan(
-      text: truncatedText,
-      style: last.style,
-    );
+    input[input.length - 1] = TextSpan(text: truncatedText, style: last.style);
 
     return true;
   }

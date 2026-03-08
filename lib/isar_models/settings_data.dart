@@ -15,4 +15,7 @@ class SettingsData {
 
   /// Setting to turn on background highlight if current lane is the current day
   bool highlightCurrentDay = true;
+
+  /// Whether to display times in 24-hour format (true) or 12-hour format (false)
+  bool use24HourFormat = true;
 }

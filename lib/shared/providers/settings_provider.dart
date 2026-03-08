@@ -8,6 +8,7 @@ class SettingsProvider extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
   bool _highlightLaneCurrentDay = true;
   bool _developerMode = false;
+  bool _use24HourFormat = true;
 
   SettingsProvider() {
     // apply setting from storage on startup
@@ -28,6 +29,7 @@ class SettingsProvider extends ChangeNotifier {
     _developerMode = await isarService.getDeveloperModeStatus();
     _highlightLaneCurrentDay =
         await isarService.getHighlightCurrentDaySetting();
+    _use24HourFormat = await isarService.getUse24HourFormatSetting();
     notifyListeners();
   }
 
@@ -44,6 +46,14 @@ class SettingsProvider extends ChangeNotifier {
   void setDeveloperMode(bool developerMode) {
     _developerMode = developerMode;
     isarService.saveDeveloperModeStatus(_developerMode);
+    notifyListeners();
+  }
+
+  bool get use24HourFormat => _use24HourFormat;
+
+  void setUse24HourFormat(bool newValue) {
+    _use24HourFormat = newValue;
+    isarService.saveUse24HourFormatSetting(_use24HourFormat);
     notifyListeners();
   }
 }
