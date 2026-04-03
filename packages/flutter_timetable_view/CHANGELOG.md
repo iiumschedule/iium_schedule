@@ -1,3 +1,7 @@
+## [0.4.1] - 2026-04-03
+
+- The time format on the left side of the timetable always shows 24 hour. This is to prevent weird overflow if use 12 hour format (with the am/pm visible).
+
 ## [0.4.0] - 2026-02-15
 
 - Modernized implementations

@@ -169,7 +169,12 @@ class TimelineList extends StatelessWidget {
                   color: timetableStyle.timelineItemColor,
                 ),
                 child: Text(
-                  Utils.hourFormatter(hour, 0, false, timetableStyle.use24Hour),
+                  Utils.hourFormatter(
+                    hour,
+                    0,
+                    false, // hide minutes
+                    true, // always use 24-hour format. Prevent bad formatting
+                  ),
                   style: TextStyle(color: timetableStyle.timeItemTextColor),
                   textAlign: TextAlign.center,
                 ),

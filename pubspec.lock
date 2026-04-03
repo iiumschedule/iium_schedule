@@ -393,7 +393,7 @@ packages:
       path: "packages/flutter_timetable_view"
       relative: true
     source: path
-    version: "0.4.0"
+    version: "0.4.1"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
