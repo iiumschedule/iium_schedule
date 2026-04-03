@@ -97,13 +97,6 @@ _Open a PR to add your project here._
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-## Related Repositories
-
-- Website: https://github.com/iqfareez/iiumscwebsite
-- Firebase Function: https://github.com/iqfareez/iiumschedule-functions
-- `recase`: https://github.com/iqfareez/recase
-- `flutter_timetable_view`: https://github.com/iqfareez/flutter_timetable_view
-
 ## Mentions
 
 - IIUM Today: https://news.iium.edu.my/?p=168911
