@@ -10,11 +10,12 @@ import '../../shared/utils/and.dart';
 import 'subject_screen.dart';
 
 class BrowserView extends StatefulWidget {
-  const BrowserView(
-      {super.key,
-      required this.albiruni,
-      required this.kulliyah,
-      this.courseCode});
+  const BrowserView({
+    super.key,
+    required this.albiruni,
+    required this.kulliyah,
+    this.courseCode,
+  });
 
   final Albiruni albiruni;
   final String kulliyah;
@@ -25,6 +26,8 @@ class BrowserView extends StatefulWidget {
 }
 
 class _BrowserViewState extends State<BrowserView> {
+  int currentCourseTotalPage =
+      double.maxFinite.toInt(); // start with 'infinity' value
   int _page = 1;
 
   @override
@@ -74,8 +77,9 @@ class _BrowserViewState extends State<BrowserView> {
   }
 
   Future<List<Subject>> _getSubjects() async {
-    var (subjects, _) = await widget.albiruni
+    var (subjects, totalPage) = await widget.albiruni
         .fetch(widget.kulliyah, course: widget.courseCode, page: _page);
+    currentCourseTotalPage = totalPage;
     return subjects;
   }
 
@@ -105,9 +109,11 @@ class _BrowserViewState extends State<BrowserView> {
             Center(child: Text(_page.toString())),
             IconButton(
                 tooltip: "Next page",
-                onPressed: () {
-                  setState(() => _page++);
-                },
+                onPressed: _page >= currentCourseTotalPage
+                    ? null
+                    : () {
+                        setState(() => _page++);
+                      },
                 icon: const Icon(Icons.navigate_next_outlined))
           ],
         ),
