@@ -81,7 +81,7 @@ const SavedSubjectSchema = CollectionSchema(
   getId: _savedSubjectGetId,
   getLinks: _savedSubjectGetLinks,
   attach: _savedSubjectAttach,
-  version: '3.3.0',
+  version: '3.3.2',
 );
 
 int _savedSubjectEstimateSize(

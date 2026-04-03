@@ -50,7 +50,7 @@ const SettingsDataSchema = CollectionSchema(
   getId: _settingsDataGetId,
   getLinks: _settingsDataGetLinks,
   attach: _settingsDataAttach,
-  version: '3.3.0',
+  version: '3.3.2',
 );
 
 int _settingsDataEstimateSize(

@@ -49,7 +49,7 @@ const SavedDaytimeSchema = CollectionSchema(
   getId: _savedDaytimeGetId,
   getLinks: _savedDaytimeGetLinks,
   attach: _savedDaytimeAttach,
-  version: '3.3.0',
+  version: '3.3.2',
 );
 
 int _savedDaytimeEstimateSize(

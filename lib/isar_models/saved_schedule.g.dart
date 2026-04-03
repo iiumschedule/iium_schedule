@@ -88,7 +88,7 @@ const SavedScheduleSchema = CollectionSchema(
   getId: _savedScheduleGetId,
   getLinks: _savedScheduleGetLinks,
   attach: _savedScheduleAttach,
-  version: '3.3.0',
+  version: '3.3.2',
 );
 
 int _savedScheduleEstimateSize(

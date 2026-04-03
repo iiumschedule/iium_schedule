@@ -39,7 +39,7 @@ const GhResponsesSchema = CollectionSchema(
   getId: _ghResponsesGetId,
   getLinks: _ghResponsesGetLinks,
   attach: _ghResponsesAttach,
-  version: '3.3.0',
+  version: '3.3.2',
 );
 
 int _ghResponsesEstimateSize(
