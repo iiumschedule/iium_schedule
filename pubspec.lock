@@ -13,10 +13,10 @@ packages:
     dependency: "direct main"
     description:
       name: albiruni
-      sha256: "71682edd5752c73614497d261975c52f2cd6b148693680db8fcb80eae6600e8b"
+      sha256: d925143a7a4fdacfde3df25768682dbd5706ff6600a65ffd8bb7c105bd631f3f
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.0"
+    version: "1.5.1"
   analyzer:
     dependency: transitive
     description:
