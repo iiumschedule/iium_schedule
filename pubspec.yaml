@@ -7,7 +7,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # When changing this version, also change the versions in
 # - msix block (msix_version)
 # - Inno setup (MyAppVersion)
-version: 1.4.11+50
+version: 1.4.12+51
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -22,7 +22,7 @@ dependencies:
   recase:
     path: packages/recase
   url_launcher: ^6.0.17
-  package_info_plus: ^9.0.0
+  package_info_plus: ^10.1.0
   flutter_timetable_view:
     path: packages/flutter_timetable_view
   page_view_indicators: ^2.0.0
@@ -31,12 +31,12 @@ dependencies:
   path_provider: ^2.0.11
   permission_handler: ^12.0.1
   quick_actions: ^1.0.0
-  share_plus: ^12.0.0
+  share_plus: ^13.1.0
   intl: ^0.20.2
   http: ^1.1.0
   version: ^3.0.2
   cross_file: ^0.3.3+2
-  device_info_plus: ^12.1.0
+  device_info_plus: ^13.1.0
   pull_to_refresh: ^2.0.0
   dynamic_color: ^1.5.4
   flutter_displaymode: ^0.7.0
@@ -126,7 +126,7 @@ msix_config:
   display_name: IIUM Schedule
   publisher_display_name: Muhammad Fareez Iqmal
   identity_name: fareez.flutter.iiumschedule
-  msix_version: 1.4.11.0 # same as inno setup (MyAppVersion)
+  msix_version: 1.4.12.0 # same as inno setup (MyAppVersion)
   logo_path: ".\\assets\\logo\\app-logo.png"
   capabilities: "internetClient"
   certificate_path: ".\\windows\\CERTIFICATE.pfx"
