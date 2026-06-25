@@ -3,6 +3,10 @@ name: Build Windows (.msix)
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  artifact-metadata: write
+
 jobs:
   build_windows:
     name: Build windows and package exe

@@ -15,6 +15,10 @@ name: Build Android (.apk(s))
           - beta
           - master
 
+permissions:
+  contents: read
+  artifact-metadata: write
+
 jobs:
   build_android:
     runs-on: ubuntu-latest
