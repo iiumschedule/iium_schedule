@@ -61,6 +61,10 @@ class _JsonImportDialogState extends State<JsonImportDialog> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide.none,
                   ),
+                  fillColor: Theme.of(context)
+                      .colorScheme
+                      .secondaryContainer
+                      .withAlpha(90),
                 ),
                 maxLines: 5,
               ),

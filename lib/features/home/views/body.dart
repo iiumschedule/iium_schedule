@@ -40,14 +40,16 @@ class _MyBodyState extends State<MyBody> {
 
   @override
   Widget build(BuildContext context) {
+    // color for navigation rail and bottom navigation bar
+    final navigationBarBackgroundColor =
+        Theme.of(context).colorScheme.secondaryContainer.withAlpha(90);
     return Scaffold(
       // extendBodyBehindAppBar: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.grey.withAlpha(90),
-          systemNavigationBarColor:
-              Theme.of(context).colorScheme.surfaceContainerHighest,
+          systemNavigationBarColor: navigationBarBackgroundColor,
         ),
         titleSpacing: 0,
         centerTitle:
@@ -126,8 +128,10 @@ class _MyBodyState extends State<MyBody> {
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Show navigation rail on wide-screen
           if (MediaQuery.of(context).size.width > 600)
             NavigationRail(
+                backgroundColor: navigationBarBackgroundColor,
                 onDestinationSelected: (value) {
                   setState(() => selectedIndex = value);
                 },
@@ -267,8 +271,13 @@ class _MyBodyState extends State<MyBody> {
             )
           : null,
 
+      // show bottom navigation bar on non wide screen
       bottomNavigationBar: MediaQuery.of(context).size.width <= 600
           ? NavigationBar(
+              backgroundColor: Theme.of(context)
+                  .colorScheme
+                  .secondaryContainer
+                  .withAlpha(90),
               onDestinationSelected: (index) {
                 setState(() {
                   selectedIndex = index;
