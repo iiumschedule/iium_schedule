@@ -1,4 +1,4 @@
-package com.iqfareez.flutter_iium_schedule
+package com.iqfareez.iium_schedule
 
 import io.flutter.embedding.android.FlutterActivity
 

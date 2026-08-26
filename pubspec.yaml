@@ -27,9 +27,9 @@ dependencies:
     path: packages/flutter_timetable_view
   page_view_indicators: ^2.0.0
   provider: ^6.0.2
-  fluttertoast: ^9.0.0
+  fluttertoast: ^10.0.0
   path_provider: ^2.0.11
-  permission_handler: ^12.0.1
+  permission_handler: ^12.0.3
   quick_actions: ^1.0.0
   share_plus: ^13.1.0
   intl: ^0.20.2
@@ -42,15 +42,15 @@ dependencies:
   flutter_displaymode: ^0.7.0
   isar_community: ^3.3.2
   isar_community_flutter_libs: ^3.3.2
-  flutter_inappwebview: ^6.1.5
   like_button: ^2.0.5
   auto_size_text: ^3.0.0
   ical:
     git:
       url: https://github.com/dartclub/ical.git
-  open_file: ^3.3.1
+  open_file: ^4.0.0
   flutter_markdown: ^0.7.7+1
   gal: ^2.3.0
+  zikzak_inappwebview: ^4.9.0
 
 dev_dependencies:
   flutter_test:

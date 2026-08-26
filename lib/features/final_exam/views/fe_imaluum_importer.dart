@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:zikzak_inappwebview/zikzak_inappwebview.dart';
 
 enum ReaderState { unknown, loading, success }
 
