@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
-import '../../isar_models/saved_schedule.dart';
 import '../../features/schedule_viewer/saved/utils/lane_events_util.dart';
+import '../../isar_models/saved_schedule.dart';
 
 class ScheduleLayoutSettingProvider extends ChangeNotifier {
   late SubjectTitleSetting _subjectTitleSetting;

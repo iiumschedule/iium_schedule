@@ -1,5 +1,5 @@
 import 'package:albiruni/albiruni.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../shared/utils/kulliyyah_suggestions.dart';
 import '../../../shared/utils/kulliyyahs.dart';

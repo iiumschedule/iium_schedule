@@ -14,6 +14,8 @@ dependencies:
   flutter_timetable_view:
     path: ../
 
+  material_ui: any
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:flutter_timetable_view/src/utils/utils.dart';
 import 'package:flutter_timetable_view/src/views/controller/timetable_view_controller.dart';

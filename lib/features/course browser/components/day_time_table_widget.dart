@@ -1,5 +1,5 @@
 import 'package:albiruni/albiruni.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:recase/recase.dart';
 
 import '../../../shared/extensions/int_extension.dart';

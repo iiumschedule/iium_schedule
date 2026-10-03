@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:albiruni/albiruni.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_timetable_view/flutter_timetable_view.dart';
 import 'package:isar_community/isar.dart';

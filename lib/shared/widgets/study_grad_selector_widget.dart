@@ -1,5 +1,5 @@
 import 'package:albiruni/albiruni.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 const String undergraduateLabel = 'Undergraduate';
 const String postgraduateLabel = 'Postgraduate';

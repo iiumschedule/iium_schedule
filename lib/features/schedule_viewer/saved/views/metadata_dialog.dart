@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../isar_models/saved_schedule.dart';
 import '../../../../shared/services/isar_service.dart';

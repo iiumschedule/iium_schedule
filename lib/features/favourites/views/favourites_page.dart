@@ -1,5 +1,5 @@
 import 'package:albiruni/albiruni.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../isar_models/favourite_subject.dart';
 import '../../../shared/services/isar_service.dart';

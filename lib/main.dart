@@ -1,16 +1,16 @@
 import 'dart:io';
 
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
+import 'features/home/views/body.dart';
 import 'shared/providers/schedule_layout_setting_provider.dart';
 import 'shared/providers/schedule_maker_provider.dart';
 import 'shared/providers/schedule_notifier_provider.dart';
 import 'shared/providers/settings_provider.dart';
 import 'shared/services/isar_service.dart';
-import 'features/home/views/body.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

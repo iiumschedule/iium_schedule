@@ -1,5 +1,5 @@
 import 'package:albiruni/albiruni.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../shared/extensions/time_of_day_extension.dart';

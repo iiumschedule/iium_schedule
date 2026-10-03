@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_timetable_view/src/models/table_event.dart';
 import 'package:flutter_timetable_view/src/styles/background_painter.dart';
 import 'package:flutter_timetable_view/src/styles/timetable_style.dart';

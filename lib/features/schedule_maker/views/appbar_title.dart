@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Taken and modified from StepPageIndicator class
 /// Display title and the indicator dots based on the current page
