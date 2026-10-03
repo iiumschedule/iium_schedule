@@ -1,10 +1,10 @@
 import 'dart:io';
 
 /// default session/current academic seesion
-const String kDefaultSession = '2025/2026';
+const String kDefaultSession = '2026/2027';
 
 /// Values must be between 1 and 3 (inclusive)
-const int kDefaultSemester = 3;
+const int kDefaultSemester = 1;
 
 /// Check if app is running on macos or iphones/ipads
 final kIsApple = Platform.isMacOS || Platform.isIOS;
