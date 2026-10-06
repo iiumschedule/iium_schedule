@@ -88,7 +88,7 @@ class Kuliyyahs {
       scopes: [StudyGrad.pg],
     ),
     Kuliyyah(
-      code: "KLM",
+      code: "KSTCL",
       fullName: "Kulliyyah of Sustainable Tourism and Contemporary Languages",
       moniker: "KSTCL",
       scopes: [StudyGrad.ug, StudyGrad.pg],
