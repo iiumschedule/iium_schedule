@@ -6,7 +6,8 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../shared/extensions/string_extension.dart';
 import '../../shared/services/isar_service.dart';
-import 'components/day_time_table_widget.dart';
+import '../../shared/extensions/int_extension.dart';
+import 'components/detail_card.dart';
 import 'components/subject_info_chip.dart';
 
 IsarService isarService = IsarService();
@@ -47,10 +48,15 @@ class _SubjectScreenState extends State<SubjectScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final sessions = widget.subject.dayTime.whereType<DayTime>().toList();
+    final lecturers =
+        widget.subject.lect.where((name) => name.trim().isNotEmpty).toList();
+    final venue = widget.subject.venue?.trim();
+
     return GestureDetector(
       onTap: () {
         // to dismiss text selection when tapped outside
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(context).unfocus();
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
@@ -98,79 +104,134 @@ class _SubjectScreenState extends State<SubjectScreen> {
             )
           ],
         ),
-
-        // Tak letak `SelectionArea` wrap the whole widget sbb taknak label (eg 'Time',
-        // 'Lecturer') to be included in the selection
-        //
-        // tak pakai `showMenu` sbb entah, mcm tak kena
-        body: Center(
-          child: Container(
-            width: double.infinity,
-            constraints: const BoxConstraints(maxWidth: 500),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: SelectableText(
-                    widget.subject.title,
-                    style: const TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.w600),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Wrap(
+        body: SafeArea(
+          top: false,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SubjectInfoChip(
-                      text: widget.subject.code,
-                      icon: Icons.label_outline,
-                      foregroundColor:
-                          Theme.of(context).colorScheme.onPrimaryContainer,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.primaryContainer,
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SelectableText(
+                            widget.subject.title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                ),
+                          ),
+                          const SizedBox(height: 6),
+                          Wrap(
+                            spacing: 4.0,
+                            children: [
+                              SubjectInfoChip(text: widget.subject.code),
+                              SubjectInfoChip(
+                                text:
+                                    '${widget.subject.chr.toString().removeTrailingDotZero()} CH',
+                              ),
+                              SubjectInfoChip(
+                                text: 'Section ${widget.subject.sect}',
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    SubjectInfoChip(
-                      text:
-                          'Chr ${widget.subject.chr.toString().removeTrailingDotZero()}',
-                      icon: Icons.class_outlined,
-                      foregroundColor:
-                          Theme.of(context).colorScheme.onSecondaryContainer,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.secondaryContainer,
+                    const SizedBox(height: 24),
+                    DetailCard(
+                      title: 'Sessions',
+                      icon: Icons.calendar_today_outlined,
+                      children: [
+                        if (sessions.isEmpty)
+                          const Text('No sessions available'),
+                        for (var index = 0;
+                            index < sessions.length;
+                            index++) ...[
+                          if (index > 0) const Divider(height: 20),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: SelectableText(
+                                  ReCase(sessions[index].day.englishDay())
+                                      .titleCase,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: SelectableText(
+                                  '${sessions[index].startTime} - ${sessions[index].endTime}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ],
                     ),
-                    SubjectInfoChip(
-                      text: 'Section ${widget.subject.sect}',
-                      icon: Icons.group_outlined,
-                      foregroundColor:
-                          Theme.of(context).colorScheme.onTertiaryContainer,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.tertiaryContainer,
+                    const SizedBox(height: 16),
+                    DetailCard(
+                      title: lecturers.length == 1 ? 'Lecturer' : 'Lecturers',
+                      icon: Icons.person_outline,
+                      children: [
+                        if (lecturers.isEmpty)
+                          const Text('No lecturer information available'),
+                        for (var index = 0;
+                            index < lecturers.length;
+                            index++) ...[
+                          if (index > 0) const SizedBox(height: 12),
+                          SelectableText(
+                            ReCase(lecturers[index]).titleCase,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    DetailCard(
+                      title: 'Venue',
+                      icon: Icons.location_on_outlined,
+                      children: [
+                        SelectableText(
+                          venue == null || venue.isEmpty
+                              ? 'No venue information available'
+                              : venue,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                const Text(
-                  '\nSession(s)',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-                DayTimeTableWidget(dayTimes: widget.subject.dayTime),
-                const Text(
-                  '\nLecturer(s)',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-                ...List.generate(
-                  widget.subject.lect.length,
-                  (index) => SelectableText(
-                    '${index + 1}. ${ReCase(widget.subject.lect[index]).titleCase}',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const Text(
-                  '\nVenue',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-                Text(widget.subject.venue ?? '-')
-              ],
+              ),
             ),
           ),
         ),
