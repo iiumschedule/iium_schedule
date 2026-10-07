@@ -221,9 +221,7 @@ class _BrowserViewState extends State<BrowserView> {
                           children: [
                             Row(
                               children: [
-                                const Icon(
-                                  Icons.date_range_outlined,
-                                ),
+                                const Icon(Icons.date_range_outlined),
                                 const SizedBox(width: 5),
                                 // Whoaa a lot going on here
                                 // First, from the snapshot data,
@@ -258,9 +256,7 @@ class _BrowserViewState extends State<BrowserView> {
                             ),
                             Row(
                               children: [
-                                const Icon(
-                                  Icons.person_outline_outlined,
-                                ),
+                                const Icon(Icons.person_outline_outlined),
                                 const SizedBox(width: 5),
                                 Flexible(
                                   child: Builder(builder: (_) {
@@ -286,9 +282,7 @@ class _BrowserViewState extends State<BrowserView> {
                             ),
                             Row(
                               children: [
-                                const Icon(
-                                  Icons.meeting_room_outlined,
-                                ),
+                                const Icon(Icons.meeting_room_outlined),
                                 const SizedBox(width: 5),
                                 Builder(builder: (_) {
                                   if (snapshot.data![index].venue == null) {
@@ -307,15 +301,11 @@ class _BrowserViewState extends State<BrowserView> {
                             ),
                             Row(
                               children: [
-                                const Icon(
-                                  Icons.class_outlined,
-                                ),
+                                const Icon(Icons.class_outlined),
                                 const SizedBox(width: 5),
                                 // https://stackoverflow.com/a/55173692
                                 Text(
-                                  snapshot.data![index].chr
-                                      .toString()
-                                      .removeTrailingDotZero(),
+                                  '${snapshot.data![index].chr.toString().removeTrailingDotZero()} CH',
                                 ),
                               ],
                             ),
